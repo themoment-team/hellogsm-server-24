@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: 버그에 대해 알려주세요!
 title: ''
 labels: ''
 assignees: ''
