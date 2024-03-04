@@ -75,4 +75,5 @@ public class GlobalExceptionHandler {
 
         return new JSONObject(globalResults).toString().replace("\"", "'");
     }
+
 }
