@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import team.themoment.hellogsmv3.global.exception.error.HelloException;
+import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import team.themoment.hellogsmv3.global.exception.model.ExceptionResponseEntity;
 
 import java.util.HashMap;
@@ -22,8 +22,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(HelloException.class)
-    private ResponseEntity<ExceptionResponseEntity> expectedException(HelloException ex) {
+    @ExceptionHandler(ExpectedException.class)
+    private ResponseEntity<ExceptionResponseEntity> expectedException(ExpectedException ex) {
         log.warn("ExpectedException : {} ", ex.getMessage());
         log.trace("ExpectedException Details : ", ex);
         return ResponseEntity.status(ex.getStatusCode().value())

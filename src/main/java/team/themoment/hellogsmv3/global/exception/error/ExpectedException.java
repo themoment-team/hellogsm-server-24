@@ -2,7 +2,7 @@ package team.themoment.hellogsmv3.global.exception.error;
 
 import org.springframework.http.HttpStatus;
 
-public class HelloException extends RuntimeException {
+public class ExpectedException extends RuntimeException {
 
     private final HttpStatus statusCode;
 
@@ -10,12 +10,12 @@ public class HelloException extends RuntimeException {
         return statusCode;
     }
 
-    public HelloException(String message, HttpStatus statusCode) {
+    public ExpectedException(String message, HttpStatus statusCode) {
         super(message);
         this.statusCode = statusCode;
     }
 
-    public HelloException(HttpStatus statusCode) {
+    public ExpectedException(HttpStatus statusCode) {
         this(statusCode.getReasonPhrase(), statusCode);
     }
 
