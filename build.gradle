@@ -11,13 +11,28 @@ java {
     sourceCompatibility = '17'
 }
 
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
+    /* spring app */
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    /* test */
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    /** lombok **/
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
 }
 
 tasks.named('bootBuildImage') {
