@@ -17,7 +17,6 @@ import java.time.LocalDate;
 public class Applicant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "applicant_id")
     private Long id;
 
     @NotNull
