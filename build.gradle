@@ -22,15 +22,29 @@ repositories {
 }
 
 dependencies {
-    /* spring app */
+    /** spring app **/
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    /* test */
+    /** security **/
+    implementation 'org.springframework.session:spring-session-data-redis'
+
+    /** persistence **/
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    /** test **/
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    /** validation **/
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     /** lombok **/
     compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'\
+
+    /** gson **/
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
 }
