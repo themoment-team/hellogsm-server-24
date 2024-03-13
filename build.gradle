@@ -43,9 +43,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'\
 
-    /** gson **/
+    /** object serialize **/
     implementation 'com.google.code.gson:gson:2.10.1'
-
     implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
 }
 
