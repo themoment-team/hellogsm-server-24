@@ -16,7 +16,7 @@ public class AbstractPersonalInformationParameter {
 
     private final GraduationStatus graduation;
 
-    private final String telephone;
+    private final String phoneNumber;
 
     private final String guardianName;
 
@@ -28,14 +28,14 @@ public class AbstractPersonalInformationParameter {
             @NonNull String address,
             @NonNull String detailAddress,
             @NonNull GraduationStatus graduation,
-            @NonNull String telephone,
+            @NonNull String phoneNumber,
             @NonNull String guardianName,
             @NonNull String relationWithApplicant) {
         this.applicantImageUri = applicantImageUri;
         this.address = address;
         this.detailAddress = detailAddress;
         this.graduation = graduation;
-        this.telephone = telephone;
+        this.phoneNumber = phoneNumber;
         this.guardianName = guardianName;
         this.relationWithApplicant = relationWithApplicant;
     }

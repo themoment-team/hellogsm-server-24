@@ -38,8 +38,8 @@ public abstract class AbstractPersonalInformation {
     protected GraduationStatus graduation;
 
     @NotNull
-    @Column(name = "telephone", unique = true)
-    protected String telephone;
+    @Column(name = "phone_number", unique = true)
+    protected String phoneNumber;
 
     @NotNull
     @Column(name = "guardian_name")
@@ -55,7 +55,7 @@ public abstract class AbstractPersonalInformation {
         this.address = parameter.getAddress();
         this.detailAddress = parameter.getDetailAddress();
         this.graduation = parameter.getGraduation();
-        this.telephone = parameter.getTelephone();
+        this.phoneNumber = parameter.getPhoneNumber();
         this.guardianName = parameter.getGuardianName();
         this.relationWithApplicant = parameter.getRelationWithApplicant();
     }
