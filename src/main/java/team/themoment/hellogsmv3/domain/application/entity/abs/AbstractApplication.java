@@ -28,12 +28,12 @@ public abstract class AbstractApplication {
     protected UUID id;
 
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @Cascade(value = CascadeType.ALL)
     protected AbstractMiddleSchoolGrade middleSchoolGrade;
 
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @Cascade(value = CascadeType.ALL)
     protected AbstractPersonalInformation personalInformation;
 
@@ -77,7 +77,7 @@ public abstract class AbstractApplication {
     protected Major finalMajor;
 
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "applicant_id")
     protected Applicant applicant;
 
