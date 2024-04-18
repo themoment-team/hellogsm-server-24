@@ -19,7 +19,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private static final String oauth2LoginEndpointBaseUri = "/auth/v1/oauth2/authorization";
-    private static final String oauth2LoginProcessingUri = "/auth/v1/oauth2/code/*";
+    private static final String oauth2LoginProcessingUri = "/login/oauth2/code/*";
 
     @Configuration
     @EnableWebSecurity
