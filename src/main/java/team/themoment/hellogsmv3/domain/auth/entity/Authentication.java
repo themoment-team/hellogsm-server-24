@@ -1,7 +1,6 @@
 package team.themoment.hellogsmv3.domain.auth.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,11 +14,18 @@ import team.themoment.hellogsmv3.domain.auth.type.Role;
 public class Authentication {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String providerId;
 
     private String providerName;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
+
+    @PrePersist
+    private void prePersist() {
+        this.role = this.role == null ? Role.UNAUTHENTICATED : this.role;
+    }
 }
