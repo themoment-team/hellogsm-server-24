@@ -53,4 +53,4 @@ auth:
   redirect-login-failure-uri: http://localhost:8080/auth/error
   redirect-admin-uri: http://localhost:8080/admin
   allowed-origins:
-    - *
+    - '*'
