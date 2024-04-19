@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import team.themoment.hellogsmv3.domain.auth.type.Role;
+import team.themoment.hellogsmv3.global.security.auth.AuthEnvironment;
 import team.themoment.hellogsmv3.global.security.handler.CustomAccessDeniedHandler;
 import team.themoment.hellogsmv3.global.security.handler.CustomAuthenticationEntryPoint;
 import team.themoment.hellogsmv3.global.security.handler.CustomUrlAuthenticationSuccessHandler;
@@ -22,7 +22,8 @@ import java.util.Arrays;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private static final String oauth2LoginEndpointBaseUri = "/oauth2/authorization";
+    private final AuthEnvironment authEnv;
+    private static final String oauth2LoginEndpointBaseUri = "/auth/v3/oauth2/authorization";
     private static final String oauth2LoginProcessingUri = "/login/oauth2/code/*";
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
@@ -48,7 +49,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(authEnv.allowedOrigins());
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
         configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
@@ -64,8 +65,8 @@ public class SecurityConfig {
                         .authorizationEndpoint(authorizationEndpointConfig ->
                                 authorizationEndpointConfig.baseUri(oauth2LoginEndpointBaseUri))
                         .loginProcessingUrl(oauth2LoginProcessingUri)
-                        .successHandler(new CustomUrlAuthenticationSuccessHandler("http://localhost:8080", "http://localhost:8080/admin"))
-                        .failureHandler(new SimpleUrlAuthenticationFailureHandler("http://localhost:8080/login"))
+                        .successHandler(new CustomUrlAuthenticationSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri()))
+                        .failureHandler(new SimpleUrlAuthenticationFailureHandler(authEnv.redirectLoginFailureUri()))
 
         );
     }
@@ -78,11 +79,9 @@ public class SecurityConfig {
 
     private void authorizeHttpRequests(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(httpRequests -> httpRequests
-                .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // for CORS
                 .requestMatchers("/csrf").permitAll()
                 .requestMatchers("/auth/v3/**").permitAll()
-                .requestMatchers("/manager").authenticated()
-                .requestMatchers("/admin").hasAnyRole(Role.ADMIN.name())
                 .anyRequest().permitAll()
         );
     }

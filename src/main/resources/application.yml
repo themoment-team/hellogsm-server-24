@@ -48,4 +48,9 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             authorization-uri: https://kauth.kakao.com/oauth/authorize
 
-
+auth:
+  redirect-base-uri: http://localhost:8080/
+  redirect-login-failure-uri: http://localhost:8080/auth/error
+  redirect-admin-uri: http://localhost:8080/admin
+  allowed-origins:
+    - *
