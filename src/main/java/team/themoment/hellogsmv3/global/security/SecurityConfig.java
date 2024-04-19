@@ -7,15 +7,20 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.util.UriComponentsBuilder;
+import team.themoment.hellogsmv3.domain.auth.type.Role;
 import team.themoment.hellogsmv3.global.security.auth.AuthEnvironment;
 import team.themoment.hellogsmv3.global.security.handler.CustomAccessDeniedHandler;
 import team.themoment.hellogsmv3.global.security.handler.CustomAuthenticationEntryPoint;
 import team.themoment.hellogsmv3.global.security.handler.CustomUrlAuthenticationSuccessHandler;
+import team.themoment.hellogsmv3.global.security.handler.CustomUrlLogoutSuccessHandler;
 
 import java.util.Arrays;
 
@@ -37,7 +42,11 @@ public class SecurityConfig {
                     .formLogin(AbstractHttpConfigurer::disable)
                     .httpBasic(AbstractHttpConfigurer::disable)
                     .csrf(AbstractHttpConfigurer::disable)
-                    .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                    .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                    .logout(logout -> logout
+                            .logoutUrl("/auth/v3/logout")
+                            .deleteCookies("JSESSIONID", "remember-me")
+                            .logoutSuccessHandler(new CustomUrlLogoutSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri())));
 
             oauth2Login(http);
             exceptionHandling(http);
@@ -82,6 +91,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // for CORS
                 .requestMatchers("/csrf").permitAll()
                 .requestMatchers("/auth/v3/**").permitAll()
+                .requestMatchers("/admin").authenticated()
                 .anyRequest().permitAll()
         );
     }
