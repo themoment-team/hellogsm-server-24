@@ -28,19 +28,6 @@ public class AuthenticatedUserManagerImpl implements AuthenticatedUserManager {
     }
 
     @Override
-    public Role getRole() {
-        OAuth2User oAuth2User = (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return oAuth2User.getAttribute("role");
-    }
-
-    @Override
-    public LocalDateTime getLastLoginTime() {
-        OAuth2User oAuth2User =
-                (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return oAuth2User.getAttribute("last_login_time");
-    }
-
-    @Override
     public Role setRole(HttpServletRequest req, Role role) {
         OAuth2AuthenticationToken oAuth2AuthenticationToken =
                 (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();

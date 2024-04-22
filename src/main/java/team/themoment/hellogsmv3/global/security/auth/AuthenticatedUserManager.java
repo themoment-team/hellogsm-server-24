@@ -7,7 +7,5 @@ import java.time.LocalDateTime;
 
 public interface AuthenticatedUserManager {
     Long getId();
-    Role getRole();
-    LocalDateTime getLastLoginTime();
     Role setRole(HttpServletRequest req, Role role);
 }
