@@ -39,6 +39,8 @@ public class CustomOauth2UserService  implements OAuth2UserService {
         String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId;
 
+        if (provider == null) throw new ExpectedException("oauth provider가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+
         switch (provider.toLowerCase()) {
             case "kakao": {
                 providerId = ((Map<String, Object>) oAuthAttributes.get("kakao_account")).get("email").toString();
