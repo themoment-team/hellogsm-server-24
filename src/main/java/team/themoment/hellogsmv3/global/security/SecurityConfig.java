@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.global.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,10 +29,13 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthEnvironment authEnv;
-    private static final String oauth2LoginEndpointBaseUri = "/auth/v3/oauth2/authorization";
-    private static final String oauth2LoginProcessingUri = "/login/oauth2/code/*";
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+
+    @Value("${auth.loginEndPointBaseUri}")
+    private String oauth2LoginEndpointBaseUri;
+    @Value("${auth.loginProcessingUri}")
+    private String oauth2LoginProcessingUri;
 
     @Configuration
     @EnableWebSecurity

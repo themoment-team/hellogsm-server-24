@@ -54,3 +54,5 @@ auth:
   redirect-admin-uri: http://localhost:8080/admin
   allowed-origins:
     - '*'
+  loginEndPointBaseUri: /auth/v3/oauth2/authorization
+  loginProcessingUri: /login/oauth2/code/*
