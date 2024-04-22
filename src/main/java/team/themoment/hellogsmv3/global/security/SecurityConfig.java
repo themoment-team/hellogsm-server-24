@@ -69,7 +69,6 @@ public class SecurityConfig {
         http.logout(logout ->
                 logout
                     .logoutUrl("/auth/v3/logout")
-                    .deleteCookies("JSESSIONID", "remember-me")
                     .logoutSuccessHandler(new CustomUrlLogoutSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri())));
     }
 
