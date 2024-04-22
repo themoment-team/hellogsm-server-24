@@ -36,7 +36,7 @@ public class CustomOauth2UserService  implements OAuth2UserService {
         OAuth2User oAuth2User = delegateOauth2UserService.loadUser(userRequest);
         Map<String, Object> oAuthAttributes = oAuth2User.getAttributes();
 
-        String provider = userRequest.getClientRegistration().getRegistrationId();
+        final String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId;
 
         if (provider == null) throw new ExpectedException("oauth provider가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
