@@ -59,13 +59,19 @@ public class CustomOauth2UserService  implements OAuth2UserService {
 
         String nameAttribute = "id";
         Long id = user.getId();
+        String roleAttribute = "role";
         Role role = user.getRole();
+        String providerAttribute = "provider";
+        String providerIdAttribute = "provider_id";
+        String lastLoginTimeIdAttribute = "last_login_time";
+        LocalDateTime lastLoginTime = LocalDateTime.now();
+
         Map<String, Object> attributes = new HashMap<>(Map.of(
                 nameAttribute, id,
-                "role", role,
-                "provider", provider,
-                "provider_id", providerId,
-                "last_login_time", LocalDateTime.now()
+                roleAttribute, role,
+                providerAttribute, provider,
+                providerIdAttribute, providerId,
+                lastLoginTimeIdAttribute, lastLoginTime
         ));
         Collection<GrantedAuthority> authorities = new ArrayList<>(oAuth2User.getAuthorities());
         authorities.add(new SimpleGrantedAuthority(role.name()));
