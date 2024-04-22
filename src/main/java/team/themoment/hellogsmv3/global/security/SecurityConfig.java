@@ -94,9 +94,7 @@ public class SecurityConfig {
     private void authorizeHttpRequests(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(httpRequests -> httpRequests
                 .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // for CORS
-                .requestMatchers("/csrf").permitAll()
                 .requestMatchers("/auth/v3/**").permitAll()
-                .requestMatchers("/admin").authenticated()
                 .anyRequest().permitAll()
         );
     }
