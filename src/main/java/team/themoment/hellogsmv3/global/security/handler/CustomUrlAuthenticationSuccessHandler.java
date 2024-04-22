@@ -1,6 +1,5 @@
 package team.themoment.hellogsmv3.global.security.handler;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +23,7 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException {
         boolean isUnAuthentication = authentication.getAuthorities().stream()
                 .anyMatch(authority -> Role.UNAUTHENTICATED.name().equals(authority.getAuthority()));
 
