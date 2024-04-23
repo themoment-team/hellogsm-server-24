@@ -5,5 +5,5 @@ import team.themoment.hellogsmv3.domain.applicant.dto.response.CreateApplicantRe
 
 public interface CreateApplicantService {
 
-    CreateApplicantResDto execute(ApplicantReqDto reqDto);
+    CreateApplicantResDto execute(ApplicantReqDto reqDto, Long userId);
 }

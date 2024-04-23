@@ -14,7 +14,7 @@ public record CreateApplicantResDto(
         @JsonFormat(pattern="yyyy-MM-dd")
         LocalDate birth,
         Gender gender,
-        Role userRole,
-        Long userId
+        Role authenticationRole,
+        Long authenticationId
 ) {
 }
