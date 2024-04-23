@@ -39,19 +39,17 @@ public class SecurityConfig {
 
     @Configuration
     @EnableWebSecurity
-    public class ProdSecurityConfig {
+    public class LocalSecurityConfig {
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http
-                    .formLogin(AbstractHttpConfigurer::disable)
-                    .httpBasic(AbstractHttpConfigurer::disable)
-                    .csrf(AbstractHttpConfigurer::disable)
-                    .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
+            basicSetting(http);
+            cors(http);
             logout(http);
             oauth2Login(http);
             exceptionHandling(http);
             authorizeHttpRequests(http);
+
             return http.build();
         }
     }
@@ -74,6 +72,16 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    private void basicSetting(HttpSecurity http) throws Exception {
+        http.formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable);
+    }
+
+    private void cors(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
     }
 
     private void logout(HttpSecurity http) throws Exception {
