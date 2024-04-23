@@ -32,11 +32,6 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
-    @Value("${auth.loginEndPointBaseUri}")
-    private String oauth2LoginEndpointBaseUri;
-    @Value("${auth.loginProcessingUri}")
-    private String oauth2LoginProcessingUri;
-
     @Configuration
     @EnableWebSecurity
     public class LocalSecurityConfig {
@@ -95,8 +90,8 @@ public class SecurityConfig {
         http.oauth2Login(oauth2Login ->
                 oauth2Login
                         .authorizationEndpoint(authorizationEndpointConfig ->
-                                authorizationEndpointConfig.baseUri(oauth2LoginEndpointBaseUri))
-                        .loginProcessingUrl(oauth2LoginProcessingUri)
+                                authorizationEndpointConfig.baseUri(authEnv.loginEndPointBaseUri()))
+                        .loginProcessingUrl(authEnv.loginProcessingUri())
                         .successHandler(new CustomUrlAuthenticationSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri()))
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler(authEnv.redirectLoginFailureUri()))
 
