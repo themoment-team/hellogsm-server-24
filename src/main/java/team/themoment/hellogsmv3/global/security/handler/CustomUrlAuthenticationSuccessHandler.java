@@ -3,6 +3,7 @@ package team.themoment.hellogsmv3.global.security.handler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -11,15 +12,11 @@ import team.themoment.hellogsmv3.domain.auth.type.Role;
 
 import java.io.IOException;
 
+@RequiredArgsConstructor
 public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final String defaultTargetUrl;
-    private final String adminUrl;
-
-    public CustomUrlAuthenticationSuccessHandler(String defaultTargetUrl, String adminUrl) {
-        this.defaultTargetUrl = defaultTargetUrl;
-        this.adminUrl = adminUrl;
-    }
+    private final String redirectBaseUri;
+    private final String redirectAdminUri;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -43,9 +40,9 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
 
     protected final String getTargetUrl(boolean isAdmin) {
         if (isAdmin) {
-            return adminUrl;
+            return redirectAdminUri;
         } else {
-            return defaultTargetUrl;
+            return redirectBaseUri;
         }
     }
 
