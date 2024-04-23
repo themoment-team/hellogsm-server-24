@@ -22,7 +22,7 @@ public class CustomUrlLogoutSuccessHandler implements LogoutSuccessHandler {
     }
 
     @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String redirectUrl = buildRedirectUrl(isAdmin(authentication));
         response.sendRedirect(redirectUrl);
     }
