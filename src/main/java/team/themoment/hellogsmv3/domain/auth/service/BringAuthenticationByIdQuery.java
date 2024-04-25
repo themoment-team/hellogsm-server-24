@@ -20,11 +20,12 @@ public class BringAuthenticationByIdQuery {
         Authentication authentication = authenticationRepository.findById(authenticationId)
                 .orElseThrow(() -> new ExpectedException("authentication을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
-        return new BasicAuthenticationDto(
-                authentication.getId(),
-                authentication.getProviderName(),
-                authentication.getProviderId(),
-                authentication.getRole()
-        );
+        return BasicAuthenticationDto
+                .builder()
+                .id(authenticationId)
+                .provider(authentication.getProviderName())
+                .providerId(authentication.getProviderId())
+                .role(authentication.getRole())
+                .build();
     }
 }
