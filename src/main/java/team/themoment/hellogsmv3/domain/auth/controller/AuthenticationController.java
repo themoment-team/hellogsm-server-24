@@ -24,7 +24,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/authentication/me")
-    public ResponseEntity<BasicAuthenticationDto> getAuthenticationInfo() {
+    public ResponseEntity<BasicAuthenticationDto> getMyAuthenticationInfo() {
         Long authenticationId = authenticatedUserManager.getId();
         BasicAuthenticationDto authenticationDto = bringAuthenticationByIdQuery.execute(authenticationId);
         return ResponseEntity.ok(authenticationDto);
