@@ -11,7 +11,7 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
-public class BringAuthenticationByIdQuery {
+public class QueryAuthenticationById {
 
     private final AuthenticationRepository authenticationRepository;
 
@@ -22,7 +22,7 @@ public class BringAuthenticationByIdQuery {
 
         return BasicAuthenticationDto
                 .builder()
-                .id(authenticationId)
+                .id(authentication.getId())
                 .provider(authentication.getProviderName())
                 .providerId(authentication.getProviderId())
                 .role(authentication.getRole())
