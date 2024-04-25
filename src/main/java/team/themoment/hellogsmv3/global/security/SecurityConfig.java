@@ -108,6 +108,10 @@ public class SecurityConfig {
         http.authorizeHttpRequests(httpRequests -> httpRequests
                 .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // for CORS
                 .requestMatchers("/auth/v3/**").permitAll()
+                //auth
+                .requestMatchers("/authentication/v3/authentication/*").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .anyRequest().permitAll()
         );
     }
