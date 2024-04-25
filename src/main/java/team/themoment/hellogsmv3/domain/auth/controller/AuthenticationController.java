@@ -21,4 +21,3 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationDto);
     }
 }
-
