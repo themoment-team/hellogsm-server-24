@@ -10,11 +10,11 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class BringAuthenticationByIdQuery {
 
     private final AuthenticationRepository authenticationRepository;
 
-    public BasicAuthenticationDto queryAuthenticationInfo(Long authenticationId) {
+    public BasicAuthenticationDto execute(Long authenticationId) {
         Authentication authentication = authenticationRepository.findById(authenticationId)
                 .orElseThrow(() -> new ExpectedException("authentication을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
