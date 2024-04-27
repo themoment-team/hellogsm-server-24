@@ -30,7 +30,7 @@ public class CreateApplicantServiceImpl implements CreateApplicantService {
     @Override
     public CreateApplicantResDto execute(ApplicantReqDto reqDto, Long authenticationId) {
 
-        Authentication user = authenticationRepository.findById(authenticationId)
+        Authentication authentication = authenticationRepository.findById(authenticationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 Authentication 입니다", HttpStatus.BAD_REQUEST));
 
         if (applicantRepository.existsByAuthenticationId(authenticationId))
@@ -53,9 +53,9 @@ public class CreateApplicantServiceImpl implements CreateApplicantService {
 
         Authentication roleUpdatedAuthentication = authenticationRepository.save(
                 new Authentication(
-                        user.getId(),
-                        user.getProviderName(),
-                        user.getProviderId(),
+                        authentication.getId(),
+                        authentication.getProviderName(),
+                        authentication.getProviderId(),
                         Role.APPLICANT
                 ));
 
