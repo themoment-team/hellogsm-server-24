@@ -18,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.util.UriComponentsBuilder;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
 import team.themoment.hellogsmv3.global.security.auth.AuthEnvironment;
+import team.themoment.hellogsmv3.global.security.data.CookieName;
 import team.themoment.hellogsmv3.global.security.handler.CustomAccessDeniedHandler;
 import team.themoment.hellogsmv3.global.security.handler.CustomAuthenticationEntryPoint;
 import team.themoment.hellogsmv3.global.security.handler.CustomUrlAuthenticationSuccessHandler;
@@ -32,26 +33,19 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
-    @Value("${auth.loginEndPointBaseUri}")
-    private String oauth2LoginEndpointBaseUri;
-    @Value("${auth.loginProcessingUri}")
-    private String oauth2LoginProcessingUri;
-
     @Configuration
     @EnableWebSecurity
-    public class ProdSecurityConfig {
+    public class LocalSecurityConfig {
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http
-                    .formLogin(AbstractHttpConfigurer::disable)
-                    .httpBasic(AbstractHttpConfigurer::disable)
-                    .csrf(AbstractHttpConfigurer::disable)
-                    .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
+            basicSetting(http);
+            cors(http);
             logout(http);
             oauth2Login(http);
             exceptionHandling(http);
             authorizeHttpRequests(http);
+
             return http.build();
         }
     }
@@ -65,23 +59,30 @@ public class SecurityConfig {
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.PUT.name(),
-                HttpMethod.PATCH.name(),
                 HttpMethod.DELETE.name(),
-                HttpMethod.HEAD.name(),
                 HttpMethod.OPTIONS.name()));
 
-        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-        configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
+    private void basicSetting(HttpSecurity http) throws Exception {
+        http.formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable);
+    }
+
+    private void cors(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+    }
+
     private void logout(HttpSecurity http) throws Exception {
         http.logout(logout ->
                 logout
                     .logoutUrl("/auth/v3/logout")
+                    .deleteCookies(CookieName.JSESSIONID.name(), CookieName.REMEMBER_ME.name())
                     .logoutSuccessHandler(new CustomUrlLogoutSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri())));
     }
 
@@ -89,8 +90,8 @@ public class SecurityConfig {
         http.oauth2Login(oauth2Login ->
                 oauth2Login
                         .authorizationEndpoint(authorizationEndpointConfig ->
-                                authorizationEndpointConfig.baseUri(oauth2LoginEndpointBaseUri))
-                        .loginProcessingUrl(oauth2LoginProcessingUri)
+                                authorizationEndpointConfig.baseUri(authEnv.loginEndPointBaseUri()))
+                        .loginProcessingUrl(authEnv.loginProcessingUri())
                         .successHandler(new CustomUrlAuthenticationSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri()))
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler(authEnv.redirectLoginFailureUri()))
 
@@ -107,6 +108,16 @@ public class SecurityConfig {
         http.authorizeHttpRequests(httpRequests -> httpRequests
                 .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // for CORS
                 .requestMatchers("/auth/v3/**").permitAll()
+                //auth
+                .requestMatchers(HttpMethod.GET, "/authentication/v3/authentication/me").hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers("/authentication/v3/authentication/*").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .anyRequest().permitAll()
         );
     }
