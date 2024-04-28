@@ -39,4 +39,12 @@ public class ApplicantController {
         FindApplicantResDto findApplicantResDto = queryApplicantService.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(findApplicantResDto);
     }
+
+    @GetMapping("/applicant/{authenticationId}")
+    public ResponseEntity<FindApplicantResDto> findByUserId(
+            @PathVariable Long authenticationId
+    ) {
+        FindApplicantResDto findApplicantResDto = queryApplicantService.execute(authenticationId);
+        return ResponseEntity.status(HttpStatus.OK).body(findApplicantResDto);
+    }
 }
