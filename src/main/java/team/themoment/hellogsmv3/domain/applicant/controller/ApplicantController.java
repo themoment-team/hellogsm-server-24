@@ -25,7 +25,7 @@ public class ApplicantController {
     private final CreateApplicantService createApplicantService;
 
     @PostMapping("/applicant/me")
-    public ResponseEntity<Object> create(
+    public ResponseEntity<Map<String, String>> create(
             HttpServletRequest httpServletRequest,
             @RequestBody @Valid ApplicantReqDto reqDto
     ) {
