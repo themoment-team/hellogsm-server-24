@@ -14,6 +14,7 @@ import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto
 import team.themoment.hellogsmv3.domain.applicant.dto.response.CreateApplicantResDto;
 import team.themoment.hellogsmv3.domain.applicant.service.CreateApplicantService;
 import team.themoment.hellogsmv3.domain.applicant.service.GenerateCodeService;
+import team.themoment.hellogsmv3.domain.applicant.service.GenerateTestCodeService;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
 import java.util.Map;
@@ -25,6 +26,7 @@ public class ApplicantController {
 
     private final AuthenticatedUserManager manager;
     private final CreateApplicantService createApplicantService;
+    private final GenerateTestCodeService generateTestCodeService;
     private final GenerateCodeService generateCodeService;
 
     @PostMapping("/applicant/me/send-code")
@@ -33,6 +35,14 @@ public class ApplicantController {
     ) {
         generateCodeService.execute(manager.getId(), reqDto);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다."));
+    }
+
+    @PostMapping("/applicant/me/send-code-test")
+    public ResponseEntity<Map> sendCodeTest(
+            @RequestBody @Valid GenerateCodeReqDto reqDto
+    ) {
+        var code = generateTestCodeService.execute(manager.getId(), reqDto);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다. : " + code));
     }
 
     @PostMapping("/applicant/me")
