@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
+import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.repo.CodeRepository;
 import team.themoment.hellogsmv3.domain.applicant.service.GenerateCodeService;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
@@ -30,6 +32,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                     LIMIT_COUNT_CODE_REQUEST), HttpStatus.FORBIDDEN);
 
         final String code = generateUniqueCode();
+        codeRepository.save(new AuthenticationCode(code, userId, false, reqDto.phoneNumber(), LocalDateTime.now()));
 
         // 문자 발송 로직
 
