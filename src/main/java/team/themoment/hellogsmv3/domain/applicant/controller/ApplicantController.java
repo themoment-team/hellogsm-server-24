@@ -30,7 +30,7 @@ public class ApplicantController {
     private final GenerateCodeService generateCodeService;
 
     @PostMapping("/applicant/me/send-code")
-    public ResponseEntity<Map> sendCode(
+    public ResponseEntity<Map<String, String>> sendCode(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
         generateCodeService.execute(manager.getId(), reqDto);
@@ -38,7 +38,7 @@ public class ApplicantController {
     }
 
     @PostMapping("/applicant/me/send-code-test")
-    public ResponseEntity<Map> sendCodeTest(
+    public ResponseEntity<Map<String, String>> sendCodeTest(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
         var code = generateTestCodeService.execute(manager.getId(), reqDto);
