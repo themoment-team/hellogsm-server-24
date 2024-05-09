@@ -33,7 +33,7 @@ public class ApplicantController {
     private final AuthenticateCodeService authenticateCodeService;
 
     @PostMapping("/applicant/me/send-code")
-    public ResponseEntity<Map> sendCode(
+    public ResponseEntity<Map<String, String>> sendCode(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
         generateCodeService.execute(manager.getId(), reqDto);
@@ -41,10 +41,10 @@ public class ApplicantController {
     }
 
     @PostMapping("/applicant/me/send-code-test")
-    public ResponseEntity<Map> sendCodeTest(
+    public ResponseEntity<Map<String, String>> sendCodeTest(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
-        var code = generateTestCodeService.execute(manager.getId(), reqDto);
+        String code = generateTestCodeService.execute(manager.getId(), reqDto);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다. : " + code));
     }
 

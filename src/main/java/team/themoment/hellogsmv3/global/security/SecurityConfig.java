@@ -129,11 +129,11 @@ public class SecurityConfig {
                         "/applicant/v3/applicant/me/auth-code").hasAnyAuthority(
                         Role.UNAUTHENTICATED.name(),
                         Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
-                .requestMatchers(HttpMethod.POST,
-                        "/applicant/v3/applicant/me/*").hasAnyAuthority(
-                        Role.ADMIN.name()
+                .requestMatchers(HttpMethod.POST, "/applicant/v3/applicant/me/send-code-test").hasAnyAuthority(
+                        Role.ROOT.name()
                 )
                 .anyRequest().permitAll()
         );
