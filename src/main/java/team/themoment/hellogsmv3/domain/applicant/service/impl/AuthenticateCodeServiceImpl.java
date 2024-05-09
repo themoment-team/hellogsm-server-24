@@ -26,7 +26,7 @@ public class AuthenticateCodeServiceImpl implements AuthenticateCodeService {
 
         AuthenticationCode recentCode = codes.stream()
                 .max(Comparator.comparing(AuthenticationCode::getCreatedAt))
-                .orElseThrow(() -> new ExpectedException("사용자의 code가 존재하지 않습니다. 사용자의 ID : "+userId, HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new ExpectedException("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + userId, HttpStatus.BAD_REQUEST));
 
         if (!recentCode.getCode().equals(reqDto.code()))
             throw new ExpectedException("유효하지 않은 code 입니다. 이전 혹은 잘못된 code입니다.", HttpStatus.BAD_REQUEST);
