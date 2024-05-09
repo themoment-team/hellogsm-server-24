@@ -41,7 +41,7 @@ public class ApplicantController {
     public ResponseEntity<Map<String, String>> sendCodeTest(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
-        var code = generateTestCodeService.execute(manager.getId(), reqDto);
+        String code = generateTestCodeService.execute(manager.getId(), reqDto);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다. : " + code));
     }
 
