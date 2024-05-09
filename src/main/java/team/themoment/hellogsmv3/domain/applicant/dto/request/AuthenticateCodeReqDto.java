@@ -1,8 +1,8 @@
 package team.themoment.hellogsmv3.domain.applicant.dto.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public record AuthenticateCodeReqDto(
-        @NotNull String code
+        @NotBlank String code
 ) {
 }
