@@ -124,6 +124,15 @@ public class SecurityConfig {
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.POST, "/applicant/v3/applicant/me/send-code").hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
+                        Role.APPLICANT.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.POST,
+                        "/applicant/v3/applicant/me/*").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .anyRequest().permitAll()
         );
     }
