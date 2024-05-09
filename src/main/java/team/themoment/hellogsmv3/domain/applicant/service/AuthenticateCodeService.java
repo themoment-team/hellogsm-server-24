@@ -29,6 +29,14 @@ public class AuthenticateCodeService {
         if (!recentCode.getCode().equals(reqDto.code()))
             throw new ExpectedException("유효하지 않은 code 입니다. 이전 혹은 잘못된 code입니다.", HttpStatus.BAD_REQUEST);
 
-        codeRepository.save(new AuthenticationCode(recentCode.getCode(), recentCode.getAuthenticationId(), true, recentCode.getPhoneNumber(), recentCode.getCreatedAt()));
+        AuthenticationCode updatedAuthenticationCode = new AuthenticationCode(
+                recentCode.getCode(),
+                recentCode.getAuthenticationId(),
+                true,
+                recentCode.getPhoneNumber(),
+                recentCode.getCreatedAt()
+        );
+
+        codeRepository.save(updatedAuthenticationCode);
     }
 }
