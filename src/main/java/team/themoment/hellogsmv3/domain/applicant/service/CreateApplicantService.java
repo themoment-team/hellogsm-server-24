@@ -9,7 +9,6 @@ import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
 import team.themoment.hellogsmv3.domain.applicant.repo.CodeRepository;
-import team.themoment.hellogsmv3.domain.applicant.type.Gender;
 import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
