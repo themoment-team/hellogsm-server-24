@@ -49,7 +49,7 @@ public class ApplicantController {
     }
 
     @PostMapping("/applicant/me/auth-code")
-    public ResponseEntity<Map> authCode(
+    public ResponseEntity<Map<String, String>> authCode(
             @RequestBody @Valid AuthenticateCodeReqDto reqDto
     ) {
         authenticateCodeService.execute(manager.getId(), reqDto);
