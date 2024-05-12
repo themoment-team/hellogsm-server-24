@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface AuthenticationRepository extends JpaRepository<Authentication, Long> {
     Optional<Authentication> findByProviderNameAndProviderId(String providerName, String providerId);
+
 }

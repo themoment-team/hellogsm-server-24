@@ -18,7 +18,7 @@ public class AuthenticationCode {
     @Id
     private String code;
     @Indexed
-    private Long applicantId;
+    private Long authenticationId;
     private Boolean authenticated;
     private String phoneNumber;
     private LocalDateTime createdAt;

@@ -32,6 +32,7 @@ public class Applicant {
     private LocalDate birth;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private Gender gender;
 

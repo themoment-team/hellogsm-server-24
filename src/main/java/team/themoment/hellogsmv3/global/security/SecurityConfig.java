@@ -118,6 +118,12 @@ public class SecurityConfig {
                 .requestMatchers("/authentication/v3/authentication/*").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+                .requestMatchers(HttpMethod.POST, "/applicant/v3/applicant/me").hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
                 .anyRequest().permitAll()
         );
     }
