@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.ApplicantReqDto;
+import team.themoment.hellogsmv3.domain.applicant.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
+import team.themoment.hellogsmv3.domain.applicant.service.AuthenticateCodeService;
 import team.themoment.hellogsmv3.domain.applicant.service.CreateApplicantService;
-import team.themoment.hellogsmv3.domain.applicant.service.GenerateCodeService;
 import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateTestCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
@@ -27,6 +28,7 @@ public class ApplicantController {
 
     private final AuthenticatedUserManager manager;
     private final CreateApplicantService createApplicantService;
+    private final AuthenticateCodeService authenticateCodeService;
     private final GenerateTestCodeServiceImpl generateTestCodeService;
     private final GenerateCodeServiceImpl generateCodeService;
 
@@ -44,6 +46,14 @@ public class ApplicantController {
     ) {
         String code = generateTestCodeService.execute(manager.getId(), reqDto);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다. : " + code));
+    }
+
+    @PostMapping("/applicant/me/auth-code")
+    public ResponseEntity<Map<String, String>> authCode(
+            @RequestBody @Valid AuthenticateCodeReqDto reqDto
+    ) {
+        authenticateCodeService.execute(manager.getId(), reqDto);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "인증되었습니다."));
     }
 
     @PostMapping("/applicant/me")
