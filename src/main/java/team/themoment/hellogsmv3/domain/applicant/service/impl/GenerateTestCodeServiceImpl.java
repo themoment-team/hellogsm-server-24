@@ -5,20 +5,18 @@ import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
 import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.repo.CodeRepository;
-import team.themoment.hellogsmv3.domain.applicant.service.GenerateTestCodeService;
+import team.themoment.hellogsmv3.domain.applicant.service.GenerateCodeService;
 
 import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class GenerateTestCodeServiceImpl implements GenerateTestCodeService {
-
-    private final static Random RANDOM = new Random();
-    public final static int DIGIT_NUMBER = GenerateCodeServiceImpl.DIGIT_NUMBER;
-    public final static int MAX = GenerateCodeServiceImpl.MAX;
+public class GenerateTestCodeServiceImpl extends GenerateCodeService {
 
     private final CodeRepository codeRepository;
+    private final static Random RANDOM = new Random();
+
     @Override
     public String execute(Long userId, GenerateCodeReqDto reqDto) {
         final String code = generateUniqueCode();

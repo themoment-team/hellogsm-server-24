@@ -13,7 +13,6 @@ import team.themoment.hellogsmv3.domain.applicant.dto.request.ApplicantReqDto;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
 import team.themoment.hellogsmv3.domain.applicant.service.CreateApplicantService;
 import team.themoment.hellogsmv3.domain.applicant.service.GenerateCodeService;
-import team.themoment.hellogsmv3.domain.applicant.service.GenerateTestCodeService;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 

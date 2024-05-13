@@ -14,14 +14,10 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class GenerateCodeServiceImpl implements GenerateCodeService {
-
-    private final static Random RANDOM = new Random();
-    public final static int DIGIT_NUMBER = 6;
-    public final static int LIMIT_COUNT_CODE_REQUEST = 5;
-    public final static int MAX = (int) Math.pow(10, DIGIT_NUMBER) - 1;
+public class GenerateCodeServiceImpl extends GenerateCodeService {
 
     private final CodeRepository codeRepository;
+    private final static Random RANDOM = new Random();
 
     @Override
     public String execute(Long userId, GenerateCodeReqDto reqDto) {
