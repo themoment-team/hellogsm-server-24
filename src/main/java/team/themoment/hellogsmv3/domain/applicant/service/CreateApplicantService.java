@@ -3,13 +3,12 @@ package team.themoment.hellogsmv3.domain.applicant.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.ApplicantReqDto;
-import team.themoment.hellogsmv3.domain.applicant.dto.response.CreateApplicantResDto;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
 import team.themoment.hellogsmv3.domain.applicant.repo.CodeRepository;
-import team.themoment.hellogsmv3.domain.applicant.type.Gender;
 import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
@@ -19,6 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CreateApplicantService {
 
@@ -26,7 +26,7 @@ public class CreateApplicantService {
     private final AuthenticationRepository authenticationRepository;
     private final CodeRepository codeRepository;
 
-    public CreateApplicantResDto execute(ApplicantReqDto reqDto, Long authenticationId) {
+    public Role execute(ApplicantReqDto reqDto, Long authenticationId) {
 
         Authentication authentication = authenticationRepository.findById(authenticationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 Authentication 입니다", HttpStatus.BAD_REQUEST));
@@ -65,18 +65,10 @@ public class CreateApplicantService {
                 reqDto.gender(),
                 authenticationId
         );
-        Applicant savedApplicant = applicantRepository.save(newApplicant);
+        applicantRepository.save(newApplicant);
 
         codes.forEach(code -> codeRepository.deleteById(code.getCode()));
 
-        return new CreateApplicantResDto(
-                savedApplicant.getId(),
-                savedApplicant.getName(),
-                savedApplicant.getPhoneNumber(),
-                savedApplicant.getBirth(),
-                savedApplicant.getGender(),
-                roleUpdatedAuthentication.getRole(),
-                savedApplicant.getAuthenticationId()
-        );
+        return roleUpdatedAuthentication.getRole();
     };
 }
