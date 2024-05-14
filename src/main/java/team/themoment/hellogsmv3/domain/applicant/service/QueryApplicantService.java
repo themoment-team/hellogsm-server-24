@@ -17,7 +17,7 @@ public class QueryApplicantService {
 
     public FindApplicantResDto execute(Long authenticationId) {
         Applicant applicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 Applicant 입니다", HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new ExpectedException("존재하지 않는 Applicant 입니다", HttpStatus.NOT_FOUND));
 
         return new FindApplicantResDto(
                 applicant.getId(),
