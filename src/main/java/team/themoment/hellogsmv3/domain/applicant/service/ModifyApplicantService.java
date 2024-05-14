@@ -52,7 +52,7 @@ public class ModifyApplicantService {
                 reqDto.name(),
                 reqDto.phoneNumber(),
                 reqDto.birth(),
-                Gender.valueOf(reqDto.gender()),
+                reqDto.gender(),
                 authenticationId
         );
         applicantRepository.save(newApplicant);
