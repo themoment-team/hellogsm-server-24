@@ -5,7 +5,7 @@ import team.themoment.hellogsmv3.domain.applicant.type.Gender;
 
 import java.time.LocalDate;
 
-public record FindApplicantResDto(
+public record FoundApplicantResDto(
 
         Long id,
         String name,

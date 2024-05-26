@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.ApplicantReqDto;
-import team.themoment.hellogsmv3.domain.applicant.dto.response.FindApplicantResDto;
+import team.themoment.hellogsmv3.domain.applicant.dto.response.FoundApplicantResDto;
 import team.themoment.hellogsmv3.domain.applicant.service.CreateApplicantService;
 import team.themoment.hellogsmv3.domain.applicant.service.QueryApplicantService;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.AuthenticateCodeReqDto;
@@ -67,16 +67,16 @@ public class ApplicantController {
     }
 
     @GetMapping("/applicant/me")
-    public ResponseEntity<FindApplicantResDto> find() {
-        FindApplicantResDto findApplicantResDto = queryApplicantService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(findApplicantResDto);
+    public ResponseEntity<FoundApplicantResDto> find() {
+        FoundApplicantResDto foundApplicantResDto = queryApplicantService.execute(manager.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(foundApplicantResDto);
     }
 
     @GetMapping("/applicant/{authenticationId}")
-    public ResponseEntity<FindApplicantResDto> findByUserId(
+    public ResponseEntity<FoundApplicantResDto> findByUserId(
             @PathVariable Long authenticationId
     ) {
-        FindApplicantResDto findApplicantResDto = queryApplicantService.execute(authenticationId);
-        return ResponseEntity.status(HttpStatus.OK).body(findApplicantResDto);
+        FoundApplicantResDto foundApplicantResDto = queryApplicantService.execute(authenticationId);
+        return ResponseEntity.status(HttpStatus.OK).body(foundApplicantResDto);
     }
 }
