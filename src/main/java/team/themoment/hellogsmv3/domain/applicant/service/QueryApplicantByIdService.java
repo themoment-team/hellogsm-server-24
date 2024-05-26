@@ -11,7 +11,7 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
-public class QueryApplicantService {
+public class QueryApplicantByIdService {
 
     private final ApplicantRepository applicantRepository;
 
