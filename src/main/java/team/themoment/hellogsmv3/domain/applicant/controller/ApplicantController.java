@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.ApplicantReqDto;
+import team.themoment.hellogsmv3.domain.applicant.dto.response.FoundApplicantResDto;
+import team.themoment.hellogsmv3.domain.applicant.service.CreateApplicantService;
+import team.themoment.hellogsmv3.domain.applicant.service.QueryApplicantByIdService;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
 import team.themoment.hellogsmv3.domain.applicant.service.AuthenticateCodeService;
@@ -28,6 +31,7 @@ public class ApplicantController {
     private final AuthenticatedUserManager manager;
     private final CreateApplicantService createApplicantService;
     private final ModifyApplicantService modifyApplicantService;
+    private final QueryApplicantByIdService queryApplicantByIdService;
     private final AuthenticateCodeService authenticateCodeService;
     private final GenerateTestCodeServiceImpl generateTestCodeService;
     private final GenerateCodeServiceImpl generateCodeService;
@@ -72,5 +76,18 @@ public class ApplicantController {
     ) {
         modifyApplicantService.execute(reqDto, manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+
+    @GetMapping("/applicant/me")
+    public ResponseEntity<FoundApplicantResDto> find() {
+        FoundApplicantResDto foundApplicantResDto = queryApplicantByIdService.execute(manager.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(foundApplicantResDto);
+    }
+
+    @GetMapping("/applicant/{authenticationId}")
+    public ResponseEntity<FoundApplicantResDto> findByUserId(
+            @PathVariable Long authenticationId
+    ) {
+        FoundApplicantResDto foundApplicantResDto = queryApplicantByIdService.execute(authenticationId);
+        return ResponseEntity.status(HttpStatus.OK).body(foundApplicantResDto);
     }
 }
