@@ -13,6 +13,9 @@ import team.themoment.hellogsmv3.domain.applicant.service.QueryApplicantByIdServ
 import team.themoment.hellogsmv3.domain.applicant.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
 import team.themoment.hellogsmv3.domain.applicant.service.AuthenticateCodeService;
+import team.themoment.hellogsmv3.domain.applicant.service.CreateApplicantService;
+import team.themoment.hellogsmv3.domain.applicant.service.GenerateCodeService;
+import team.themoment.hellogsmv3.domain.applicant.service.ModifyApplicantService;
 import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateTestCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
@@ -27,6 +30,7 @@ public class ApplicantController {
 
     private final AuthenticatedUserManager manager;
     private final CreateApplicantService createApplicantService;
+    private final ModifyApplicantService modifyApplicantService;
     private final QueryApplicantByIdService queryApplicantByIdService;
     private final AuthenticateCodeService authenticateCodeService;
     private final GenerateTestCodeServiceImpl generateTestCodeService;
@@ -64,6 +68,14 @@ public class ApplicantController {
         Role role = createApplicantService.execute(reqDto, manager.getId());
         manager.setRole(httpServletRequest, role);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "본인인증이 완료되었습니다"));
+    }
+
+    @PutMapping("/applicant/me")
+    public ResponseEntity<Map<String, String>> modify(
+            @RequestBody @Valid ApplicantReqDto reqDto
+    ) {
+        modifyApplicantService.execute(reqDto, manager.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 
     @GetMapping("/applicant/me")

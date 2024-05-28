@@ -8,9 +8,7 @@ import team.themoment.hellogsmv3.domain.applicant.dto.request.ApplicantReqDto;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
-import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
-import team.themoment.hellogsmv3.domain.auth.type.Role;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.List;
@@ -18,32 +16,23 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CreateApplicantService {
+public class ModifyApplicantService {
 
     private final ApplicantRepository applicantRepository;
     private final AuthenticationRepository authenticationRepository;
     private final CommonCodeService commonCodeService;
 
-    public Role execute(ApplicantReqDto reqDto, Long authenticationId) {
+    public void execute(ApplicantReqDto reqDto, Long authenticationId) {
+        if(!authenticationRepository.existsById(authenticationId))
+            throw new ExpectedException("존재하지 않는 Authentication 입니다", HttpStatus.BAD_REQUEST);
 
-        Authentication authentication = authenticationRepository.findById(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 Authentication 입니다", HttpStatus.BAD_REQUEST));
-
-        if (applicantRepository.existsByAuthenticationId(authenticationId))
-            throw new ExpectedException("이미 존재하는 Applicant 입니다", HttpStatus.BAD_REQUEST);
+        Applicant savedApplicant = applicantRepository.findByAuthenticationId(authenticationId)
+                .orElseThrow(() -> new ExpectedException("존재하지 않는 Applicant 입니다", HttpStatus.BAD_REQUEST));
 
         List<AuthenticationCode> codes = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
 
-        Authentication roleUpdatedAuthentication = authenticationRepository.save(
-                new Authentication(
-                        authentication.getId(),
-                        authentication.getProviderName(),
-                        authentication.getProviderId(),
-                        Role.APPLICANT
-                ));
-
         Applicant newApplicant = new Applicant(
-                null,
+                savedApplicant.getId(),
                 reqDto.name(),
                 reqDto.phoneNumber(),
                 reqDto.birth(),
@@ -53,7 +42,5 @@ public class CreateApplicantService {
         applicantRepository.save(newApplicant);
 
         commonCodeService.deleteCodes(codes);
-
-        return roleUpdatedAuthentication.getRole();
-    };
+    }
 }
