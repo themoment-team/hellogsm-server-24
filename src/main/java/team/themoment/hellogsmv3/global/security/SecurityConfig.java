@@ -124,6 +124,11 @@ public class SecurityConfig {
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/applicant/v3/applicant/me").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
                 .requestMatchers(HttpMethod.POST,
                         "/applicant/v3/applicant/me/send-code",
                         "/applicant/v3/applicant/me/auth-code").hasAnyAuthority(
@@ -131,6 +136,9 @@ public class SecurityConfig {
                         Role.APPLICANT.name(),
                         Role.ADMIN.name(),
                         Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/applicant/v3/applicant/{authenticationId}").hasAnyAuthority(
+                        Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.POST, "/applicant/v3/applicant/me/send-code-test").hasAnyAuthority(
                         Role.ROOT.name()
