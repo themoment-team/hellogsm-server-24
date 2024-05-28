@@ -76,6 +76,7 @@ public class ApplicantController {
     ) {
         modifyApplicantService.execute(reqDto, manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    }
 
     @GetMapping("/applicant/me")
     public ResponseEntity<FoundApplicantResDto> find() {
