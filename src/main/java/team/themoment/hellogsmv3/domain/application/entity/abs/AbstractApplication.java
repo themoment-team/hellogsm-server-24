@@ -99,4 +99,8 @@ public abstract class AbstractApplication {
         this.finalMajor = parameter.finalMajor();
         this.applicant = applicant;
     }
+
+    public void updateFinalSubmission() {
+        this.finalSubmitted = true;
+    }
 }
