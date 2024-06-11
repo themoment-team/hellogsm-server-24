@@ -1,8 +1,13 @@
 package team.themoment.hellogsmv3.domain.application.dto.request;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import team.themoment.hellogsmv3.domain.application.annotation.NotSpace;
+import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.application.type.Major;
 
 public record ApplicationReqDto(
         @NotBlank
@@ -17,9 +22,9 @@ public record ApplicationReqDto(
         @NotBlank
         String detailAddress,
 
-        @NotBlank
-        @Pattern(regexp = "^(CANDIDATE|GRADUATE|GED)$")
-        String graduation,
+        @NotNull
+        @Enumerated(EnumType.STRING)
+        GraduationStatus graduation,
 
         @NotSpace
         @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
@@ -38,17 +43,17 @@ public record ApplicationReqDto(
         @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
         String teacherPhoneNumber,
 
-        @Pattern(regexp = "^(AI|SW|IOT)$")
-        @NotBlank
-        String firstDesiredMajor,
+        @NotNull
+        @Enumerated(EnumType.STRING)
+        Major firstDesiredMajor,
 
-        @Pattern(regexp = "^(AI|SW|IOT)$")
-        @NotBlank
-        String secondDesiredMajor,
+        @NotNull
+        @Enumerated(EnumType.STRING)
+        Major secondDesiredMajor,
 
-        @Pattern(regexp = "^(AI|SW|IOT)$")
-        @NotBlank
-        String thirdDesiredMajor,
+        @NotNull
+        @Enumerated(EnumType.STRING)
+        Major thirdDesiredMajor,
 
         @NotBlank
         String middleSchoolGrade,
