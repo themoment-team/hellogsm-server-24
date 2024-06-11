@@ -16,7 +16,7 @@ import java.util.UUID;
 public final class GraduateApplication extends AbstractApplication {
     @Builder
     private GraduateApplication(
-            @NonNull UUID id,
+            UUID id,
             @NonNull GraduatePersonalInformation personalInformation,
             @NonNull GraduateMiddleSchoolGrade middleSchoolGrade,
             @NonNull AbstractApplicationStatusParameter statusParameter,

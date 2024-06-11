@@ -68,10 +68,17 @@ public class CreateApplicationService {
 
         } else if (dto.graduation() == GraduationStatus.GED) {
 
+            GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto);
+
+            GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade();
+
+            GedApplication gedApplication = createGedApplication(dto, gedPersonalInformation, gedMiddleSchoolGrade, currentApplicant);
+
+            applicationRepository.save(gedApplication);
+
         } else {
-
+            throw new RuntimeException("발생하면 안되는 에러, 존재하지 않는 졸업현황");
         }
-
 
     }
 
@@ -140,7 +147,7 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private static GraduatePersonalInformation createGraduatePersonalInformation(ApplicationReqDto dto) {
+    private GraduatePersonalInformation createGraduatePersonalInformation(ApplicationReqDto dto) {
         return GraduatePersonalInformation.builder()
                 .superParameter(AbstractPersonalInformationParameter.builder()
                         .address(dto.address())
@@ -158,15 +165,16 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private static GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade() {
+    private GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade() {
         return GraduateMiddleSchoolGrade.builder()
+                // 환산 로직은 추후 구현 예정
                 .percentileRank(BigDecimal.ONE)
                 .attendanceScore(BigDecimal.ONE)
                 .volunteerScore(BigDecimal.ONE)
                 .build();
     }
 
-    private static GraduateApplication createGraduateApplication(
+    private GraduateApplication createGraduateApplication(
             ApplicationReqDto dto,
             GraduatePersonalInformation graduatePersonalInformation,
             GraduateMiddleSchoolGrade graduateMiddleSchoolGrade,
@@ -174,6 +182,53 @@ public class CreateApplicationService {
         return GraduateApplication.builder()
                 .personalInformation(graduatePersonalInformation)
                 .middleSchoolGrade(graduateMiddleSchoolGrade)
+                .statusParameter(AbstractApplicationStatusParameter.builder()
+                        .finalSubmitted(false)
+                        .printsArrived(false)
+                        .subjectEvaluationResult(null)
+                        .competencyEvaluationResult(null)
+                        .registrationNumber(null)
+                        .desiredMajors(DesiredMajors.builder()
+                                .firstDesiredMajor(dto.firstDesiredMajor())
+                                .secondDesiredMajor(dto.secondDesiredMajor())
+                                .thirdDesiredMajor(dto.thirdDesiredMajor())
+                                .build())
+                        .finalMajor(null)
+                        .build())
+                .applicant(currentApplicant)
+                .build();
+    }
+
+    private GedPersonalInformation createGedPersonalInformation(ApplicationReqDto dto) {
+        return GedPersonalInformation.builder()
+                .superParam(AbstractPersonalInformationParameter.builder()
+                        .address(dto.address())
+                        .applicantImageUri(dto.applicantImageUri())
+                        .detailAddress(dto.detailAddress())
+                        .graduation(dto.graduation())
+                        .phoneNumber(dto.telephone())
+                        .guardianName(dto.guardianName())
+                        .relationWithApplicant(dto.relationWithApplicant())
+                        .build())
+                .build();
+    }
+
+    private GedMiddleSchoolGrade createGedMiddleSchoolGrade() {
+        return GedMiddleSchoolGrade.builder()
+                .percentileRank(BigDecimal.ONE)
+                .gedMaxScore(BigDecimal.ONE)
+                .gedTotalScore(BigDecimal.ONE)
+                .build();
+    }
+
+    private GedApplication createGedApplication(
+            ApplicationReqDto dto,
+            GedPersonalInformation gedPersonalInformation,
+            GedMiddleSchoolGrade gedMiddleSchoolGrade,
+            Applicant currentApplicant) {
+        return GedApplication.builder()
+                .personalInformation(gedPersonalInformation)
+                .middleSchoolGrade(gedMiddleSchoolGrade)
                 .statusParameter(AbstractApplicationStatusParameter.builder()
                         .finalSubmitted(false)
                         .printsArrived(false)

@@ -20,7 +20,7 @@ public final class GraduateMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 
     @Builder
     private GraduateMiddleSchoolGrade(
-            @NonNull UUID id,
+            UUID id,
             @NonNull BigDecimal percentileRank,
             @NonNull BigDecimal attendanceScore,
             @NonNull BigDecimal volunteerScore

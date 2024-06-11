@@ -24,7 +24,7 @@ public final class GraduatePersonalInformation extends AbstractPersonalInformati
 
     @Builder
     private GraduatePersonalInformation(
-            @NonNull UUID id,
+            UUID id,
             @NonNull AbstractPersonalInformationParameter superParameter,
             @NonNull String schoolName,
             @NonNull String schoolLocation,
