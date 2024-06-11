@@ -2,6 +2,7 @@ package team.themoment.hellogsmv3.domain.application.entity;
 
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractMiddleSchoolGrade;
@@ -17,6 +18,7 @@ public final class GraduateMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 
     private BigDecimal volunteerScore;
 
+    @Builder
     private GraduateMiddleSchoolGrade(
             @NonNull UUID id,
             @NonNull BigDecimal percentileRank,

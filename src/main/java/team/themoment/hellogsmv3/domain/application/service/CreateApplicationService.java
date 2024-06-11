@@ -7,9 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
-import team.themoment.hellogsmv3.domain.application.entity.CandidateApplication;
-import team.themoment.hellogsmv3.domain.application.entity.CandidateMiddleSchoolGrade;
-import team.themoment.hellogsmv3.domain.application.entity.CandidatePersonalInformation;
+import team.themoment.hellogsmv3.domain.application.entity.*;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractMiddleSchoolGrade;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractPersonalInformation;
@@ -59,6 +57,15 @@ public class CreateApplicationService {
 
         } else if (dto.graduation() == GraduationStatus.GRADUATE) {
 
+            GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto);
+
+            GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade();
+
+            GraduateApplication graduateApplication = createGraduateApplication(
+                    dto, graduatePersonalInformation, graduateMiddleSchoolGrade, currentApplicant);
+
+            applicationRepository.save(graduateApplication);
+
         } else if (dto.graduation() == GraduationStatus.GED) {
 
         } else {
@@ -67,7 +74,6 @@ public class CreateApplicationService {
 
 
     }
-
 
     private CandidatePersonalInformation createCandidatePersonalInformation(ApplicationReqDto dto) {
         return CandidatePersonalInformation.builder()
@@ -131,6 +137,57 @@ public class CreateApplicationService {
                         .finalMajor(null)
                         .build())
                 .applicant(applicant)
+                .build();
+    }
+
+    private static GraduatePersonalInformation createGraduatePersonalInformation(ApplicationReqDto dto) {
+        return GraduatePersonalInformation.builder()
+                .superParameter(AbstractPersonalInformationParameter.builder()
+                        .address(dto.address())
+                        .applicantImageUri(dto.applicantImageUri())
+                        .detailAddress(dto.detailAddress())
+                        .graduation(dto.graduation())
+                        .phoneNumber(dto.telephone())
+                        .guardianName(dto.guardianName())
+                        .relationWithApplicant(dto.relationWithApplicant())
+                        .build())
+                .schoolName(dto.schoolName())
+                .schoolLocation(dto.schoolLocation())
+                .teacherName(dto.teacherName())
+                .teacherPhoneNumber(dto.teacherPhoneNumber())
+                .build();
+    }
+
+    private static GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade() {
+        return GraduateMiddleSchoolGrade.builder()
+                .percentileRank(BigDecimal.ONE)
+                .attendanceScore(BigDecimal.ONE)
+                .volunteerScore(BigDecimal.ONE)
+                .build();
+    }
+
+    private static GraduateApplication createGraduateApplication(
+            ApplicationReqDto dto,
+            GraduatePersonalInformation graduatePersonalInformation,
+            GraduateMiddleSchoolGrade graduateMiddleSchoolGrade,
+            Applicant currentApplicant) {
+        return GraduateApplication.builder()
+                .personalInformation(graduatePersonalInformation)
+                .middleSchoolGrade(graduateMiddleSchoolGrade)
+                .statusParameter(AbstractApplicationStatusParameter.builder()
+                        .finalSubmitted(false)
+                        .printsArrived(false)
+                        .subjectEvaluationResult(null)
+                        .competencyEvaluationResult(null)
+                        .registrationNumber(null)
+                        .desiredMajors(DesiredMajors.builder()
+                                .firstDesiredMajor(dto.firstDesiredMajor())
+                                .secondDesiredMajor(dto.secondDesiredMajor())
+                                .thirdDesiredMajor(dto.thirdDesiredMajor())
+                                .build())
+                        .finalMajor(null)
+                        .build())
+                .applicant(currentApplicant)
                 .build();
     }
 
