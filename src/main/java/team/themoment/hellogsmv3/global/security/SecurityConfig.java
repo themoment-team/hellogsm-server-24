@@ -150,7 +150,7 @@ public class SecurityConfig {
                         Role.ROOT.name()
                 )
                 // application
-                .requestMatchers(HttpMethod.POST, "/application/v3/application/me").hasAnyAuthority(
+                .requestMatchers("/application/v3/application/me").hasAnyAuthority(
                         Role.APPLICANT.name()
                 )
                 .anyRequest().permitAll()
