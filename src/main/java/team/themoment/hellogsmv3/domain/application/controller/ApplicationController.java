@@ -43,7 +43,7 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 
-    @PatchMapping("/final-submit")
+    @PutMapping("/final-submit")
     public ResponseEntity<Map<String, String>> finalSubmission() {
         updateFinalSubmissionService.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
