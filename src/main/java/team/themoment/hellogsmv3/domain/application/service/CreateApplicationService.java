@@ -19,9 +19,12 @@ import team.themoment.hellogsmv3.domain.application.entity.param.CandidateMiddle
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.application.type.MiddleSchoolTranscript;
 import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
+
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +40,7 @@ public class CreateApplicationService {
         Applicant currentApplicant = applicantRepository.findById(userId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
 
-        if (authenticationRepository.existsById(currentApplicant.getAuthenticationId()))
+        if (!authenticationRepository.existsById(currentApplicant.getAuthenticationId()))
             throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
         if (applicationRepository.existsByApplicant(currentApplicant))
@@ -86,6 +89,22 @@ public class CreateApplicationService {
 
     private CandidateMiddleSchoolGrade createCandidateMiddleSchoolGrade() {
         return CandidateMiddleSchoolGrade.builder()
+                // 환산 로직은 추후 구현 예정
+                .parameter(CandidateMiddleSchoolGradeParameter.builder()
+                        .transcript(new MiddleSchoolTranscript())
+                        .grade1Semester1Score(BigDecimal.ONE)
+                        .grade1Semester2Score(BigDecimal.ONE)
+                        .grade2Semester1Score(BigDecimal.ONE)
+                        .grade2Semester2Score(BigDecimal.ONE)
+                        .grade3Semester1Score(BigDecimal.ONE)
+                        .artisticScore(BigDecimal.ONE)
+                        .volunteerScore(BigDecimal.ONE)
+                        .curricularSubtotalScore(BigDecimal.ONE)
+                        .attendanceScore(BigDecimal.ONE)
+                        .totalScore(BigDecimal.ONE)
+                        .percentileRank(BigDecimal.ONE)
+                        .extraCurricularSubtotalScore(BigDecimal.ONE)
+                        .build())
                 .build();
     }
 
