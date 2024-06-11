@@ -21,6 +21,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ValidDesiredMajors
 public class DesiredMajors {
 
     @Enumerated(EnumType.STRING)

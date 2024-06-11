@@ -6,9 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import team.themoment.hellogsmv3.domain.application.annotation.NotSpace;
+import team.themoment.hellogsmv3.domain.application.annotation.ValidDesiredMajors;
 import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.Major;
 
+@ValidDesiredMajors
 public record ApplicationReqDto(
         @NotBlank
         String guardianName,
