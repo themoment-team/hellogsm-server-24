@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.ModifyApplicationService;
+import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissionService;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
 import java.util.Map;
@@ -20,6 +21,7 @@ public class ApplicationController {
     private final AuthenticatedUserManager manager;
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
+    private final UpdateFinalSubmissionService updateFinalSubmissionService;
 
     @PostMapping("/application/me")
     public ResponseEntity<Map<String, String>> create(@RequestBody @Valid ApplicationReqDto dto) {
@@ -38,6 +40,12 @@ public class ApplicationController {
             @RequestBody @Valid ApplicationReqDto body,
             @PathVariable Long userId) {
         modifyApplicationService.execute(body, userId, true);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    }
+
+    @PatchMapping("/final-submit")
+    public ResponseEntity<Map<String, String>> finalSubmission() {
+        updateFinalSubmissionService.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 
