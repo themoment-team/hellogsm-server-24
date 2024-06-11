@@ -21,7 +21,6 @@ import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -176,7 +175,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade(GraduateApplication application) {
+    private GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade(AbstractApplication application) {
         return GraduateMiddleSchoolGrade.builder()
                 // 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
