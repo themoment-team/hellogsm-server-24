@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
+import team.themoment.hellogsmv3.domain.application.annotation.ValidDesiredMajors;
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractApplicationStatusParameter;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.application.type.EvaluationResult;
@@ -71,6 +72,7 @@ public abstract class AbstractApplication {
 
     @NotNull
     @Embedded
+    @ValidDesiredMajors
     protected DesiredMajors desiredMajors;
 
     @Nullable

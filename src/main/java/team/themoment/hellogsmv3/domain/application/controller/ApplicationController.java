@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.domain.application.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class ApplicationController {
     private final CreateApplicationService createApplicationService;
 
     @PostMapping("/application/me")
-    public ResponseEntity<Map<String, String>> create(@RequestBody ApplicationReqDto dto) {
+    public ResponseEntity<Map<String, String>> create(@RequestBody @Valid ApplicationReqDto dto) {
         createApplicationService.execute(dto, manager.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "생성되었습니다"));
     }
