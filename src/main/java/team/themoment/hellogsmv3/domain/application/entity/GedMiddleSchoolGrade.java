@@ -1,16 +1,14 @@
 package team.themoment.hellogsmv3.domain.application.entity;
 
 import jakarta.persistence.Entity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractMiddleSchoolGrade;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class GedMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 

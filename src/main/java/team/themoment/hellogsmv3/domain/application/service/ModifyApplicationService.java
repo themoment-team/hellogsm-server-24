@@ -141,17 +141,17 @@ public class ModifyApplicationService {
                 .personalInformation(candidatePersonalInformation)
                 .middleSchoolGrade(candidateMiddleSchoolGrade)
                 .statusParameter(AbstractApplicationStatusParameter.builder()
-                        .finalSubmitted(false)
-                        .printsArrived(false)
-                        .subjectEvaluationResult(null)
-                        .competencyEvaluationResult(null)
-                        .registrationNumber(null)
+                        .finalSubmitted(application.getFinalSubmitted())
+                        .printsArrived(application.getPrintsArrived())
+                        .subjectEvaluationResult(application.getSubjectEvaluationResult())
+                        .competencyEvaluationResult(application.getCompetencyEvaluationResult())
+                        .registrationNumber(application.getRegistrationNumber())
                         .desiredMajors(DesiredMajors.builder()
                                 .firstDesiredMajor(dto.firstDesiredMajor())
                                 .secondDesiredMajor(dto.secondDesiredMajor())
                                 .thirdDesiredMajor(dto.thirdDesiredMajor())
                                 .build())
-                        .finalMajor(null)
+                        .finalMajor(application.getFinalMajor())
                         .build())
                 .applicant(applicant)
                 .build();
@@ -176,7 +176,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade(AbstractApplication application) {
+    private GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade(GraduateApplication application) {
         return GraduateMiddleSchoolGrade.builder()
                 // 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
@@ -198,17 +198,17 @@ public class ModifyApplicationService {
                 .personalInformation(graduatePersonalInformation)
                 .middleSchoolGrade(graduateMiddleSchoolGrade)
                 .statusParameter(AbstractApplicationStatusParameter.builder()
-                        .finalSubmitted(false)
-                        .printsArrived(false)
-                        .subjectEvaluationResult(null)
-                        .competencyEvaluationResult(null)
-                        .registrationNumber(null)
+                        .finalSubmitted(application.getFinalSubmitted())
+                        .printsArrived(application.getPrintsArrived())
+                        .subjectEvaluationResult(application.getSubjectEvaluationResult())
+                        .competencyEvaluationResult(application.getCompetencyEvaluationResult())
+                        .registrationNumber(application.getRegistrationNumber())
                         .desiredMajors(DesiredMajors.builder()
                                 .firstDesiredMajor(dto.firstDesiredMajor())
                                 .secondDesiredMajor(dto.secondDesiredMajor())
                                 .thirdDesiredMajor(dto.thirdDesiredMajor())
                                 .build())
-                        .finalMajor(null)
+                        .finalMajor(application.getFinalMajor())
                         .build())
                 .applicant(currentApplicant)
                 .build();
@@ -231,6 +231,7 @@ public class ModifyApplicationService {
 
     private GedMiddleSchoolGrade createGedMiddleSchoolGrade(AbstractApplication application) {
         return GedMiddleSchoolGrade.builder()
+                // 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
                 .percentileRank(BigDecimal.ONE)
                 .gedMaxScore(BigDecimal.ONE)
@@ -250,17 +251,17 @@ public class ModifyApplicationService {
                 .personalInformation(gedPersonalInformation)
                 .middleSchoolGrade(gedMiddleSchoolGrade)
                 .statusParameter(AbstractApplicationStatusParameter.builder()
-                        .finalSubmitted(false)
-                        .printsArrived(false)
-                        .subjectEvaluationResult(null)
-                        .competencyEvaluationResult(null)
-                        .registrationNumber(null)
+                        .finalSubmitted(application.getFinalSubmitted())
+                        .printsArrived(application.getPrintsArrived())
+                        .subjectEvaluationResult(application.getSubjectEvaluationResult())
+                        .competencyEvaluationResult(application.getCompetencyEvaluationResult())
+                        .registrationNumber(application.getRegistrationNumber())
                         .desiredMajors(DesiredMajors.builder()
                                 .firstDesiredMajor(dto.firstDesiredMajor())
                                 .secondDesiredMajor(dto.secondDesiredMajor())
                                 .thirdDesiredMajor(dto.thirdDesiredMajor())
                                 .build())
-                        .finalMajor(null)
+                        .finalMajor(application.getFinalMajor())
                         .build())
                 .applicant(currentApplicant)
                 .build();
