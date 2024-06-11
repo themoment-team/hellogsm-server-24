@@ -157,6 +157,9 @@ public class SecurityConfig {
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.PUT, "/application/v1/final-submit").hasAnyAuthority(
+                        Role.APPLICANT.name()
+                )
                 .anyRequest().permitAll()
         );
     }

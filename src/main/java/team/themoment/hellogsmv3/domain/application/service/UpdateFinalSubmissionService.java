@@ -26,6 +26,9 @@ public class UpdateFinalSubmissionService {
         AbstractApplication application = applicationRepository.findByApplicant(applicant)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
+        if (application.getFinalSubmitted())
+            throw new ExpectedException("이미 최종제출 되었습니다.", HttpStatus.BAD_REQUEST));
+
         application.updateFinalSubmission();
         applicationRepository.save(application);
     }
