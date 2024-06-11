@@ -32,18 +32,18 @@ public class ModifyApplicationService {
     private final EntityManager em;
 
     @Transactional
-    public void execute(ApplicationReqDto dto, Long userId) {
+    public void execute(ApplicationReqDto dto, Long userId, boolean isAdmin) {
 
-        Applicant currentApplicant = applicantRepository.findById(userId)
+        Applicant applicant = applicantRepository.findById(userId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
 
-        AbstractApplication application = applicationRepository.findByApplicant(currentApplicant)
+        AbstractApplication application = applicationRepository.findByApplicant(applicant)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
-        if (application.getFinalSubmitted())
+        if (!isAdmin && application.getFinalSubmitted())
             throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
 
-        if (!authenticationRepository.existsById(currentApplicant.getAuthenticationId()))
+        if (!authenticationRepository.existsById(applicant.getAuthenticationId()))
             throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
         applicationRepository.delete(application);
@@ -56,7 +56,7 @@ public class ModifyApplicationService {
             CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade(application);
 
             CandidateApplication candidateApplication = createCandidateApplication(
-                    dto, candidatePersonalInformation, candidateMiddleSchoolGrade, currentApplicant, application);
+                    dto, candidatePersonalInformation, candidateMiddleSchoolGrade, applicant, application);
 
             applicationRepository.save(candidateApplication);
 
@@ -67,7 +67,7 @@ public class ModifyApplicationService {
             GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade(application);
 
             GraduateApplication graduateApplication = createGraduateApplication(
-                    dto, graduatePersonalInformation, graduateMiddleSchoolGrade, currentApplicant, application);
+                    dto, graduatePersonalInformation, graduateMiddleSchoolGrade, applicant, application);
 
             applicationRepository.save(graduateApplication);
 
@@ -77,7 +77,7 @@ public class ModifyApplicationService {
 
             GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade(application);
 
-            GedApplication gedApplication = createGedApplication(dto, gedPersonalInformation, gedMiddleSchoolGrade, currentApplicant, application);
+            GedApplication gedApplication = createGedApplication(dto, gedPersonalInformation, gedMiddleSchoolGrade, applicant, application);
 
             applicationRepository.save(gedApplication);
 
@@ -189,7 +189,7 @@ public class ModifyApplicationService {
             ApplicationReqDto dto,
             GraduatePersonalInformation graduatePersonalInformation,
             GraduateMiddleSchoolGrade graduateMiddleSchoolGrade,
-            Applicant currentApplicant,
+            Applicant applicant,
             AbstractApplication application
     ) {
         return GraduateApplication.builder()
@@ -209,7 +209,7 @@ public class ModifyApplicationService {
                                 .build())
                         .finalMajor(application.getFinalMajor())
                         .build())
-                .applicant(currentApplicant)
+                .applicant(applicant)
                 .build();
     }
 
@@ -242,7 +242,7 @@ public class ModifyApplicationService {
             ApplicationReqDto dto,
             GedPersonalInformation gedPersonalInformation,
             GedMiddleSchoolGrade gedMiddleSchoolGrade,
-            Applicant currentApplicant,
+            Applicant applicant,
             AbstractApplication application
     ) {
         return GedApplication.builder()
@@ -262,7 +262,7 @@ public class ModifyApplicationService {
                                 .build())
                         .finalMajor(application.getFinalMajor())
                         .build())
-                .applicant(currentApplicant)
+                .applicant(applicant)
                 .build();
     }
 

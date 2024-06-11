@@ -153,6 +153,10 @@ public class SecurityConfig {
                 .requestMatchers("/application/v3/application/me").hasAnyAuthority(
                         Role.APPLICANT.name()
                 )
+                .requestMatchers(HttpMethod.PUT, "/application/v3/application/*").hasAnyAuthority(
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
                 .anyRequest().permitAll()
         );
     }
