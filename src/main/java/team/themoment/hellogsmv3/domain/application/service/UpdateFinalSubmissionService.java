@@ -18,9 +18,9 @@ public class UpdateFinalSubmissionService {
     private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public void execute(Long userId) {
+    public void execute(Long authenticationId) {
 
-        Applicant applicant = applicantRepository.findById(userId)
+        Applicant applicant = applicantRepository.findByAuthenticationId(authenticationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
 
         AbstractApplication application = applicationRepository.findByApplicant(applicant)
