@@ -20,10 +20,12 @@ public final class GraduateMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
     private GraduateMiddleSchoolGrade(
             @NonNull UUID id,
             @NonNull BigDecimal percentileRank,
+            @NonNull BigDecimal totalScore,
+            @NonNull String transcript,
             @NonNull BigDecimal attendanceScore,
             @NonNull BigDecimal volunteerScore
     ) {
-        super(id, percentileRank);
+        super(id, percentileRank, totalScore, transcript);
         this.attendanceScore = attendanceScore;
         this.volunteerScore = volunteerScore;
     }

@@ -20,10 +20,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class CandidateMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 
-    @Column(columnDefinition = "TEXT")
-    @Convert(converter = MiddleSchoolTranscriptConverter.class)
-    private MiddleSchoolTranscript transcript;
-
     private BigDecimal grade1Semester1Score;
 
     private BigDecimal grade1Semester2Score;
@@ -44,15 +40,11 @@ public final class CandidateMiddleSchoolGrade extends AbstractMiddleSchoolGrade 
 
     private BigDecimal extraCurricularSubtotalScore;
 
-    private BigDecimal totalScore;
-
-
     public CandidateMiddleSchoolGrade(
             UUID id,
             @NonNull CandidateMiddleSchoolGradeParameter parameter
     ) {
-        super(id, parameter.getPercentileRank());
-        this.transcript = parameter.getTranscript();
+        super(id, parameter.getPercentileRank(), parameter.getTotalScore(), parameter.getTranscript());
         this.grade1Semester1Score = parameter.getGrade1Semester1Score();
         this.grade1Semester2Score = parameter.getGrade1Semester2Score();
         this.grade2Semester1Score = parameter.getGrade2Semester1Score();
@@ -63,6 +55,5 @@ public final class CandidateMiddleSchoolGrade extends AbstractMiddleSchoolGrade 
         this.attendanceScore = parameter.getAttendanceScore();
         this.volunteerScore = parameter.getVolunteerScore();
         this.extraCurricularSubtotalScore = parameter.getExtraCurricularSubtotalScore();
-        this.totalScore = parameter.getTotalScore();
     }
 }

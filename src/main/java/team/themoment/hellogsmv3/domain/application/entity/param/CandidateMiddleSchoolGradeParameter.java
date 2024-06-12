@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 public final class CandidateMiddleSchoolGradeParameter {
 
-    private final MiddleSchoolTranscript transcript;
+    private final String transcript;
 
     private final BigDecimal percentileRank;
 
@@ -38,7 +38,7 @@ public final class CandidateMiddleSchoolGradeParameter {
 
     @Builder
     public CandidateMiddleSchoolGradeParameter(
-            @NonNull MiddleSchoolTranscript transcript,
+            @NonNull String transcript,
             @NonNull BigDecimal percentileRank,
             @NonNull BigDecimal grade1Semester1Score,
             @NonNull BigDecimal grade1Semester2Score,

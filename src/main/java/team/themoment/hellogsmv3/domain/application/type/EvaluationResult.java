@@ -1,11 +1,13 @@
 package team.themoment.hellogsmv3.domain.application.type;
 
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Embeddable
+@Getter
 @NoArgsConstructor
 public class EvaluationResult {
 

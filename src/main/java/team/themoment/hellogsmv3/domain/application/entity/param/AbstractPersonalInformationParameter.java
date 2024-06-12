@@ -22,6 +22,8 @@ public class AbstractPersonalInformationParameter {
 
     private final String relationWithApplicant;
 
+    private final String guardianPhoneNumber;
+
     @Builder
     public AbstractPersonalInformationParameter(
             @NonNull String applicantImageUri,
@@ -30,7 +32,8 @@ public class AbstractPersonalInformationParameter {
             @NonNull GraduationStatus graduation,
             @NonNull String phoneNumber,
             @NonNull String guardianName,
-            @NonNull String relationWithApplicant) {
+            @NonNull String relationWithApplicant,
+            @NonNull String guardianPhoneNumber) {
         this.applicantImageUri = applicantImageUri;
         this.address = address;
         this.detailAddress = detailAddress;
@@ -38,5 +41,6 @@ public class AbstractPersonalInformationParameter {
         this.phoneNumber = phoneNumber;
         this.guardianName = guardianName;
         this.relationWithApplicant = relationWithApplicant;
+        this.guardianPhoneNumber = guardianPhoneNumber;
     }
 }
