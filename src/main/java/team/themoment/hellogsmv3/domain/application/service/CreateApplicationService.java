@@ -45,42 +45,32 @@ public class CreateApplicationService {
         if (applicationRepository.existsByApplicant(currentApplicant))
             throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
 
-        if (dto.graduation() == GraduationStatus.CANDIDATE) {
+        switch (dto.graduation()) {
+            case CANDIDATE -> {
+                CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto);
+                CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade();
+                CandidateApplication candidateApplication = createCandidateApplication(
+                        dto, candidatePersonalInformation, candidateMiddleSchoolGrade, currentApplicant);
 
-            CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto);
+                applicationRepository.save(candidateApplication);
+            }
+            case GRADUATE -> {
+                GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto);
+                GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade();
+                GraduateApplication graduateApplication = createGraduateApplication(
+                        dto, graduatePersonalInformation, graduateMiddleSchoolGrade, currentApplicant);
 
-            CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade();
+                applicationRepository.save(graduateApplication);
+            }
+            case GED -> {
+                GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto);
+                GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade();
+                GedApplication gedApplication = createGedApplication(
+                        dto, gedPersonalInformation, gedMiddleSchoolGrade, currentApplicant);
 
-            CandidateApplication candidateApplication = createCandidateApplication(
-                    dto, candidatePersonalInformation, candidateMiddleSchoolGrade, currentApplicant);
-
-            applicationRepository.save(candidateApplication);
-
-        } else if (dto.graduation() == GraduationStatus.GRADUATE) {
-
-            GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto);
-
-            GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade();
-
-            GraduateApplication graduateApplication = createGraduateApplication(
-                    dto, graduatePersonalInformation, graduateMiddleSchoolGrade, currentApplicant);
-
-            applicationRepository.save(graduateApplication);
-
-        } else if (dto.graduation() == GraduationStatus.GED) {
-
-            GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto);
-
-            GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade();
-
-            GedApplication gedApplication = createGedApplication(dto, gedPersonalInformation, gedMiddleSchoolGrade, currentApplicant);
-
-            applicationRepository.save(gedApplication);
-
-        } else {
-            throw new RuntimeException("발생하면 안되는 에러, 존재하지 않는 졸업현황");
+                applicationRepository.save(gedApplication);
+            }
         }
-
     }
 
     private CandidatePersonalInformation createCandidatePersonalInformation(ApplicationReqDto dto) {
