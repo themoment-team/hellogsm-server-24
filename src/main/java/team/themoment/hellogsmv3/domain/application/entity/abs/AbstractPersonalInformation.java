@@ -12,7 +12,6 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@ToString
 public abstract class AbstractPersonalInformation {
 
     @Id

@@ -19,7 +19,6 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@ToString
 public abstract class AbstractApplication {
 
     @Id
@@ -100,10 +99,4 @@ public abstract class AbstractApplication {
         this.finalMajor = parameter.finalMajor();
         this.applicant = applicant;
     }
-
-    public void updatedChild(AbstractMiddleSchoolGrade middleSchoolGrade, AbstractPersonalInformation personalInformation) {
-        this.middleSchoolGrade = middleSchoolGrade;
-        this.personalInformation = personalInformation;
-    }
-
 }

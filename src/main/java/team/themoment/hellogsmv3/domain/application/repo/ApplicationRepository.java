@@ -12,4 +12,8 @@ import java.util.UUID;
 public interface ApplicationRepository extends JpaRepository<AbstractApplication, UUID> {
     boolean existsByApplicant(Applicant applicant);
     Optional<AbstractApplication> findByApplicant(Applicant applicant);
+
+    @Modifying(clearAutomatically = true)
+    @Query("DELETE FROM AbstractApplication WHERE id = :uuid")
+    void deleteQueryApplicationById(UUID uuid);
 }
