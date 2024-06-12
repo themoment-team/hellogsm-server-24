@@ -16,7 +16,6 @@ public class DeleteOldApplicationService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void execute(UUID uuid) {
-        System.out.println("=========== T 1 ===========");
         applicationRepository.deleteById(uuid);
     }
 

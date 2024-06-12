@@ -9,6 +9,8 @@ import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
+import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractMiddleSchoolGrade;
+import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractPersonalInformation;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.application.repo.MiddleSchoolGradeRepository;
 import team.themoment.hellogsmv3.domain.application.repo.PersonalInformationRepository;

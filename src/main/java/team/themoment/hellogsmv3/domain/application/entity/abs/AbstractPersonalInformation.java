@@ -57,8 +57,4 @@ public abstract class AbstractPersonalInformation {
         this.guardianName = parameter.getGuardianName();
         this.relationWithApplicant = parameter.getRelationWithApplicant();
     }
-
-    public void initId() {
-        this.id = null;
-    }
 }

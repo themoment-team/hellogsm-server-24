@@ -26,7 +26,6 @@ public class SaveUpdatedApplicationService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void execute(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
-        System.out.println("=========== T 2 ===========");
 
         switch (dto.graduation()) {
             case CANDIDATE -> {
@@ -53,8 +52,6 @@ public class SaveUpdatedApplicationService {
                 applicationRepository.save(gedApplication);
             }
         }
-
-        System.out.println("=========== T 2 ===========");
 
         throw new RuntimeException();
     }

@@ -26,8 +26,4 @@ public abstract class AbstractMiddleSchoolGrade {
         this.id = id;
         this.percentileRank = percentileRank;
     }
-
-    public void initId() {
-        this.id = null;
-    }
 }

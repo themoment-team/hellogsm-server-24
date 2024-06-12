@@ -101,10 +101,9 @@ public abstract class AbstractApplication {
         this.applicant = applicant;
     }
 
-    public void initId() {
-        this.id = null;
-        this.middleSchoolGrade.initId();
-        this.personalInformation.initId();
+    public void updatedChild(AbstractMiddleSchoolGrade middleSchoolGrade, AbstractPersonalInformation personalInformation) {
+        this.middleSchoolGrade = middleSchoolGrade;
+        this.personalInformation = personalInformation;
     }
 
 }
