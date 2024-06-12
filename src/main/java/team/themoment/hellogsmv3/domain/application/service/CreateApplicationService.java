@@ -45,6 +45,10 @@ public class CreateApplicationService {
         if (applicationRepository.existsByApplicant(currentApplicant))
             throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
 
+        saveNewApplication(dto, currentApplicant);
+    }
+
+    private void saveNewApplication(ApplicationReqDto dto, Applicant currentApplicant) {
         switch (dto.graduation()) {
             case CANDIDATE -> {
                 CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto);
