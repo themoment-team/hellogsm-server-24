@@ -16,6 +16,7 @@ import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersona
 import team.themoment.hellogsmv3.domain.application.entity.param.CandidateMiddleSchoolGradeParameter;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
+import team.themoment.hellogsmv3.domain.application.type.EvaluationResult;
 import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.MiddleSchoolTranscript;
 import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
@@ -133,8 +134,14 @@ public class CreateApplicationService {
                 .statusParameter(AbstractApplicationStatusParameter.builder()
                         .finalSubmitted(false)
                         .printsArrived(false)
-                        .subjectEvaluationResult(null)
-                        .competencyEvaluationResult(null)
+                        .subjectEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
+                        .competencyEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
                         .registrationNumber(null)
                         .desiredMajors(DesiredMajors.builder()
                                 .firstDesiredMajor(dto.firstDesiredMajor())
@@ -185,8 +192,14 @@ public class CreateApplicationService {
                 .statusParameter(AbstractApplicationStatusParameter.builder()
                         .finalSubmitted(false)
                         .printsArrived(false)
-                        .subjectEvaluationResult(null)
-                        .competencyEvaluationResult(null)
+                        .subjectEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
+                        .competencyEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
                         .registrationNumber(null)
                         .desiredMajors(DesiredMajors.builder()
                                 .firstDesiredMajor(dto.firstDesiredMajor())
@@ -232,8 +245,14 @@ public class CreateApplicationService {
                 .statusParameter(AbstractApplicationStatusParameter.builder()
                         .finalSubmitted(false)
                         .printsArrived(false)
-                        .subjectEvaluationResult(null)
-                        .competencyEvaluationResult(null)
+                        .subjectEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
+                        .competencyEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
                         .registrationNumber(null)
                         .desiredMajors(DesiredMajors.builder()
                                 .firstDesiredMajor(dto.firstDesiredMajor())
