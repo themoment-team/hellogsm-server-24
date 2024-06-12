@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.domain.application.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import team.themoment.hellogsmv3.domain.applicant.type.Gender;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 public record GeneralAdmissionInfoResDto(
         String applicantName,
         Gender applicantGender,
+        @JsonFormat(pattern="yyyy-MM-dd")
         LocalDate applicantBirth,
         String address,
         String detailAddress,
