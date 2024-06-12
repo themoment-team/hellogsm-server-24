@@ -61,9 +61,3 @@ auth:
     - '*'
   loginEndPointBaseUri: /auth/v3/oauth2/authorization
   loginProcessingUri: /login/oauth2/code/*
-
-
-logging:
-  level:
-    org.hibernate.sql: debug
-    org.hibernate.type: trace
