@@ -16,6 +16,7 @@ import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersona
 import team.themoment.hellogsmv3.domain.application.entity.param.CandidateMiddleSchoolGradeParameter;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
+import team.themoment.hellogsmv3.domain.application.type.EvaluationResult;
 import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.MiddleSchoolTranscript;
 import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
@@ -33,9 +34,9 @@ public class CreateApplicationService {
     private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public void execute(ApplicationReqDto dto, Long userId) {
+    public void execute(ApplicationReqDto dto, Long authenticationId) {
 
-        Applicant currentApplicant = applicantRepository.findById(userId)
+        Applicant currentApplicant = applicantRepository.findByAuthenticationId(authenticationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
 
         if (!authenticationRepository.existsById(currentApplicant.getAuthenticationId()))
@@ -44,42 +45,32 @@ public class CreateApplicationService {
         if (applicationRepository.existsByApplicant(currentApplicant))
             throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
 
-        if (dto.graduation() == GraduationStatus.CANDIDATE) {
+        switch (dto.graduation()) {
+            case CANDIDATE -> {
+                CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto);
+                CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade();
+                CandidateApplication candidateApplication = createCandidateApplication(
+                        dto, candidatePersonalInformation, candidateMiddleSchoolGrade, currentApplicant);
 
-            CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto);
+                applicationRepository.save(candidateApplication);
+            }
+            case GRADUATE -> {
+                GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto);
+                GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade();
+                GraduateApplication graduateApplication = createGraduateApplication(
+                        dto, graduatePersonalInformation, graduateMiddleSchoolGrade, currentApplicant);
 
-            CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade();
+                applicationRepository.save(graduateApplication);
+            }
+            case GED -> {
+                GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto);
+                GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade();
+                GedApplication gedApplication = createGedApplication(
+                        dto, gedPersonalInformation, gedMiddleSchoolGrade, currentApplicant);
 
-            CandidateApplication candidateApplication = createCandidateApplication(
-                    dto, candidatePersonalInformation, candidateMiddleSchoolGrade, currentApplicant);
-
-            applicationRepository.save(candidateApplication);
-
-        } else if (dto.graduation() == GraduationStatus.GRADUATE) {
-
-            GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto);
-
-            GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade();
-
-            GraduateApplication graduateApplication = createGraduateApplication(
-                    dto, graduatePersonalInformation, graduateMiddleSchoolGrade, currentApplicant);
-
-            applicationRepository.save(graduateApplication);
-
-        } else if (dto.graduation() == GraduationStatus.GED) {
-
-            GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto);
-
-            GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade();
-
-            GedApplication gedApplication = createGedApplication(dto, gedPersonalInformation, gedMiddleSchoolGrade, currentApplicant);
-
-            applicationRepository.save(gedApplication);
-
-        } else {
-            throw new RuntimeException("발생하면 안되는 에러, 존재하지 않는 졸업현황");
+                applicationRepository.save(gedApplication);
+            }
         }
-
     }
 
     private CandidatePersonalInformation createCandidatePersonalInformation(ApplicationReqDto dto) {
@@ -133,8 +124,14 @@ public class CreateApplicationService {
                 .statusParameter(AbstractApplicationStatusParameter.builder()
                         .finalSubmitted(false)
                         .printsArrived(false)
-                        .subjectEvaluationResult(null)
-                        .competencyEvaluationResult(null)
+                        .subjectEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
+                        .competencyEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
                         .registrationNumber(null)
                         .desiredMajors(DesiredMajors.builder()
                                 .firstDesiredMajor(dto.firstDesiredMajor())
@@ -185,8 +182,14 @@ public class CreateApplicationService {
                 .statusParameter(AbstractApplicationStatusParameter.builder()
                         .finalSubmitted(false)
                         .printsArrived(false)
-                        .subjectEvaluationResult(null)
-                        .competencyEvaluationResult(null)
+                        .subjectEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
+                        .competencyEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
                         .registrationNumber(null)
                         .desiredMajors(DesiredMajors.builder()
                                 .firstDesiredMajor(dto.firstDesiredMajor())
@@ -232,8 +235,14 @@ public class CreateApplicationService {
                 .statusParameter(AbstractApplicationStatusParameter.builder()
                         .finalSubmitted(false)
                         .printsArrived(false)
-                        .subjectEvaluationResult(null)
-                        .competencyEvaluationResult(null)
+                        .subjectEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
+                        .competencyEvaluationResult(EvaluationResult.builder()
+                                .preScreeningEvaluation(null)
+                                .postScreeningEvaluation(null)
+                                .evaluationStatus(null).build())
                         .registrationNumber(null)
                         .desiredMajors(DesiredMajors.builder()
                                 .firstDesiredMajor(dto.firstDesiredMajor())
