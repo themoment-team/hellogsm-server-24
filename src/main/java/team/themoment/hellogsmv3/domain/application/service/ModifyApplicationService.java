@@ -33,9 +33,9 @@ public class ModifyApplicationService {
     private final PersonalInformationRepository personalInformationRepository;
 
     @Transactional
-    public void execute(ApplicationReqDto dto, Long userId, boolean isAdmin) {
+    public void execute(ApplicationReqDto dto, Long authenticationId, boolean isAdmin) {
 
-        Applicant applicant = applicantRepository.findById(userId)
+        Applicant applicant = applicantRepository.findByAuthenticationId(authenticationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
 
         AbstractApplication application = applicationRepository.findByApplicant(applicant)
