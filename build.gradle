@@ -50,6 +50,10 @@ dependencies {
     /** object serialize **/
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
+
+
+
+    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
 }
 
 tasks.named('bootBuildImage') {

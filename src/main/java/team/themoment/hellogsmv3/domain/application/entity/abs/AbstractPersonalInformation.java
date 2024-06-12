@@ -2,10 +2,7 @@ package team.themoment.hellogsmv3.domain.application.entity.abs;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersonalInformationParameter;
 import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 
@@ -15,6 +12,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@ToString
 public abstract class AbstractPersonalInformation {
 
     @Id
@@ -58,5 +56,9 @@ public abstract class AbstractPersonalInformation {
         this.phoneNumber = parameter.getPhoneNumber();
         this.guardianName = parameter.getGuardianName();
         this.relationWithApplicant = parameter.getRelationWithApplicant();
+    }
+
+    public void initId() {
+        this.id = null;
     }
 }

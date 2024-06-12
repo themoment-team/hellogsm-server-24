@@ -19,6 +19,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@ToString
 public abstract class AbstractApplication {
 
     @Id
@@ -99,4 +100,11 @@ public abstract class AbstractApplication {
         this.finalMajor = parameter.finalMajor();
         this.applicant = applicant;
     }
+
+    public void initId() {
+        this.id = null;
+        this.middleSchoolGrade.initId();
+        this.personalInformation.initId();
+    }
+
 }
