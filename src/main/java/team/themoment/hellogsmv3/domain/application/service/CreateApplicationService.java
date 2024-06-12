@@ -33,9 +33,9 @@ public class CreateApplicationService {
     private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public void execute(ApplicationReqDto dto, Long userId) {
+    public void execute(ApplicationReqDto dto, Long authenticationId) {
 
-        Applicant currentApplicant = applicantRepository.findById(userId)
+        Applicant currentApplicant = applicantRepository.findByAuthenticationId(authenticationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
 
         if (!authenticationRepository.existsById(currentApplicant.getAuthenticationId()))
