@@ -48,7 +48,12 @@ public class ModifyApplicationService {
             throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
         deleteOldApplication(application);
-        saveUpdatedApplication(dto, application, applicant);
+
+        switch (dto.graduation()) {
+            case CANDIDATE -> saveUpdatedCandidateApplication(dto, application, applicant);
+            case GRADUATE -> saveUpdatedGraduateApplication(dto, application, applicant);
+            case GED -> saveUpdatedGedApplication(dto, application, applicant);
+        }
 
     }
 
@@ -58,32 +63,31 @@ public class ModifyApplicationService {
         personalInformationRepository.deleteQueryPersonalInformation(application.getPersonalInformation().getId());
     }
 
-    private void saveUpdatedApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
-        switch (dto.graduation()) {
-            case CANDIDATE -> {
-                CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto, application);
-                CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade(application);
-                CandidateApplication candidateApplication = createCandidateApplication(
-                        dto, candidatePersonalInformation, candidateMiddleSchoolGrade, applicant, application);
+    private void saveUpdatedCandidateApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
+        CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto, application);
+        CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade(application);
+        CandidateApplication candidateApplication = createCandidateApplication(
+                dto, candidatePersonalInformation, candidateMiddleSchoolGrade, applicant, application);
 
-                applicationRepository.save(candidateApplication);
-            }
-            case GRADUATE -> {
-                GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto, application);
-                GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade(application);
-                GraduateApplication graduateApplication = createGraduateApplication(
-                        dto, graduatePersonalInformation, graduateMiddleSchoolGrade, applicant, application);
+        applicationRepository.save(candidateApplication);
+    }
 
-                applicationRepository.save(graduateApplication);
-            }
-            case GED -> {
-                GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto, application);
-                GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade(application);
-                GedApplication gedApplication = createGedApplication(dto, gedPersonalInformation, gedMiddleSchoolGrade, applicant, application);
+    private void saveUpdatedGraduateApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
+        GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto, application);
+        GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade(application);
+        GraduateApplication graduateApplication = createGraduateApplication(
+                dto, graduatePersonalInformation, graduateMiddleSchoolGrade, applicant, application);
 
-                applicationRepository.save(gedApplication);
-            }
-        }
+        applicationRepository.save(graduateApplication);
+    }
+
+    private void saveUpdatedGedApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
+        GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto, application);
+        GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade(application);
+        GedApplication gedApplication = createGedApplication(
+                dto, gedPersonalInformation, gedMiddleSchoolGrade, applicant, application);
+
+        applicationRepository.save(gedApplication);
     }
 
     private CandidatePersonalInformation createCandidatePersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
