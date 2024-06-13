@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.domain.application.repo.custom;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
 
@@ -15,13 +16,10 @@ import static team.themoment.hellogsmv3.domain.applicant.entity.QApplicant.appli
 
 
 @Repository
+@RequiredArgsConstructor
 public class CustomApplicationRepositoryImpl implements CustomApplicationRepository {
 
     private final JPAQueryFactory queryFactory;
-
-    public CustomApplicationRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
-        this.queryFactory = jpaQueryFactory;
-    }
 
     @Override
     public Optional<AbstractApplication> findByApplicantAuthenticationIdWithAllJoins(Long authenticationId) {
