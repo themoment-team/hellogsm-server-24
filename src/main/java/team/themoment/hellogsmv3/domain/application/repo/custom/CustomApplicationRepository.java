@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface CustomApplicationRepository {
 
-    Optional<AbstractApplication> findByApplicantAuthenticationIdWithAllJoins(Long authenticationId);
+    Optional<AbstractApplication> findByAuthenticationIdWithAllJoins(Long authenticationId);
 }

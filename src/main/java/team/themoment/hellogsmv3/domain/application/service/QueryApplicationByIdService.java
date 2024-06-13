@@ -19,7 +19,7 @@ public class QueryApplicationByIdService {
     private final ApplicationRepository applicationRepository;
 
     public FoundApplicationResDto execute(Long authenticationId) {
-        AbstractApplication application = applicationRepository.findByApplicantAuthenticationIdWithAllJoins(authenticationId)
+        AbstractApplication application = applicationRepository.findByAuthenticationIdWithAllJoins(authenticationId)
                 .orElseThrow(() -> new ExpectedException(String.format("ID(%s)에 해당하는 사용자의 정보를 찾을 수 없습니다.", authenticationId), HttpStatus.NOT_FOUND));
 
         AdmissionInfoResDto admissionInfoResDto;

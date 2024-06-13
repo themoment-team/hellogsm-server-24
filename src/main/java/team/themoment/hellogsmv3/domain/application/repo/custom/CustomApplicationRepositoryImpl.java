@@ -22,7 +22,7 @@ public class CustomApplicationRepositoryImpl implements CustomApplicationReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<AbstractApplication> findByApplicantAuthenticationIdWithAllJoins(Long authenticationId) {
+    public Optional<AbstractApplication> findByAuthenticationIdWithAllJoins(Long authenticationId) {
 
         AbstractApplication application = queryFactory.selectFrom(abstractApplication)
                 .join(abstractApplication.middleSchoolGrade, abstractMiddleSchoolGrade).fetchJoin()
