@@ -1,0 +1,38 @@
+package team.themoment.hellogsmv3.domain.application.repo.custom;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.stereotype.Repository;
+import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
+
+import java.util.Optional;
+
+import static team.themoment.hellogsmv3.domain.application.entity.abs.QAbstractApplication.abstractApplication;
+import static team.themoment.hellogsmv3.domain.application.entity.abs.QAbstractMiddleSchoolGrade.abstractMiddleSchoolGrade;
+import static team.themoment.hellogsmv3.domain.application.entity.abs.QAbstractPersonalInformation.abstractPersonalInformation;
+import static team.themoment.hellogsmv3.domain.applicant.entity.QApplicant.applicant;
+
+
+
+
+@Repository
+public class CustomApplicationRepositoryImpl implements CustomApplicationRepository {
+
+    private final JPAQueryFactory queryFactory;
+
+    public CustomApplicationRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+        this.queryFactory = jpaQueryFactory;
+    }
+
+    @Override
+    public Optional<AbstractApplication> findByApplicantAuthenticationIdWithAllJoins(Long authenticationId) {
+
+        AbstractApplication application = queryFactory.selectFrom(abstractApplication)
+                .join(abstractApplication.middleSchoolGrade, abstractMiddleSchoolGrade).fetchJoin()
+                .join(abstractApplication.personalInformation, abstractPersonalInformation).fetchJoin()
+                .join(abstractApplication.applicant, applicant).fetchJoin()
+                .where(applicant.authenticationId.eq(authenticationId))
+                .fetchOne();
+
+        return Optional.ofNullable(application);
+    }
+}
