@@ -64,33 +64,33 @@ public class ModifyApplicationService {
     }
 
     private void saveUpdatedCandidateApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
-        CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto, application);
-        CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade(application);
-        CandidateApplication candidateApplication = createCandidateApplication(
+        CandidatePersonalInformation candidatePersonalInformation = buildCandidatePersonalInformation(dto, application);
+        CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = buildCandidateMiddleSchoolGrade(application);
+        CandidateApplication candidateApplication = buildCandidateApplication(
                 dto, candidatePersonalInformation, candidateMiddleSchoolGrade, applicant, application);
 
         applicationRepository.save(candidateApplication);
     }
 
     private void saveUpdatedGraduateApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
-        GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto, application);
-        GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade(application);
-        GraduateApplication graduateApplication = createGraduateApplication(
+        GraduatePersonalInformation graduatePersonalInformation = buildGraduatePersonalInformation(dto, application);
+        GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = buildGraduateMiddleSchoolGrade(application);
+        GraduateApplication graduateApplication = buildGraduateApplication(
                 dto, graduatePersonalInformation, graduateMiddleSchoolGrade, applicant, application);
 
         applicationRepository.save(graduateApplication);
     }
 
     private void saveUpdatedGedApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
-        GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto, application);
-        GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade(application);
-        GedApplication gedApplication = createGedApplication(
+        GedPersonalInformation gedPersonalInformation = buildGedPersonalInformation(dto, application);
+        GedMiddleSchoolGrade gedMiddleSchoolGrade = buildGedMiddleSchoolGrade(application);
+        GedApplication gedApplication = buildGedApplication(
                 dto, gedPersonalInformation, gedMiddleSchoolGrade, applicant, application);
 
         applicationRepository.save(gedApplication);
     }
 
-    private CandidatePersonalInformation createCandidatePersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
+    private CandidatePersonalInformation buildCandidatePersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
         return CandidatePersonalInformation.builder()
                 .id(application.getPersonalInformation().getId())
                 .superParameter(AbstractPersonalInformationParameter.builder()
@@ -109,7 +109,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private CandidateMiddleSchoolGrade createCandidateMiddleSchoolGrade(AbstractApplication application) {
+    private CandidateMiddleSchoolGrade buildCandidateMiddleSchoolGrade(AbstractApplication application) {
         return CandidateMiddleSchoolGrade.builder()
                 // 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
@@ -131,7 +131,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private CandidateApplication createCandidateApplication(
+    private CandidateApplication buildCandidateApplication(
             ApplicationReqDto dto,
             CandidatePersonalInformation candidatePersonalInformation,
             CandidateMiddleSchoolGrade candidateMiddleSchoolGrade,
@@ -159,7 +159,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GraduatePersonalInformation createGraduatePersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
+    private GraduatePersonalInformation buildGraduatePersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
         return GraduatePersonalInformation.builder()
                 .id(application.getPersonalInformation().getId())
                 .superParameter(AbstractPersonalInformationParameter.builder()
@@ -178,7 +178,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade(AbstractApplication application) {
+    private GraduateMiddleSchoolGrade buildGraduateMiddleSchoolGrade(AbstractApplication application) {
         return GraduateMiddleSchoolGrade.builder()
                 // 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
@@ -188,7 +188,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GraduateApplication createGraduateApplication(
+    private GraduateApplication buildGraduateApplication(
             ApplicationReqDto dto,
             GraduatePersonalInformation graduatePersonalInformation,
             GraduateMiddleSchoolGrade graduateMiddleSchoolGrade,
@@ -216,7 +216,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GedPersonalInformation createGedPersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
+    private GedPersonalInformation buildGedPersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
         return GedPersonalInformation.builder()
                 .id(application.getPersonalInformation().getId())
                 .superParam(AbstractPersonalInformationParameter.builder()
@@ -231,7 +231,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GedMiddleSchoolGrade createGedMiddleSchoolGrade(AbstractApplication application) {
+    private GedMiddleSchoolGrade buildGedMiddleSchoolGrade(AbstractApplication application) {
         return GedMiddleSchoolGrade.builder()
                 // 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
@@ -241,7 +241,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GedApplication createGedApplication(
+    private GedApplication buildGedApplication(
             ApplicationReqDto dto,
             GedPersonalInformation gedPersonalInformation,
             GedMiddleSchoolGrade gedMiddleSchoolGrade,
