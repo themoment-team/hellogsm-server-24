@@ -33,7 +33,7 @@ public class ModifyApplicationService {
     private final ApplicantService applicantService;
 
     @Transactional
-    public void execute(ApplicationReqDto dto, Long authenticationId, boolean isAdmin) {
+    public void execute(ApplicationReqDto reqDto, Long authenticationId, boolean isAdmin) {
 
         if (!authenticationRepository.existsById(authenticationId))
             throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
@@ -48,10 +48,10 @@ public class ModifyApplicationService {
 
         deleteOldApplication(application);
 
-        switch (dto.graduation()) {
-            case CANDIDATE -> saveUpdatedCandidateApplication(dto, application, currentApplicant);
-            case GRADUATE -> saveUpdatedGraduateApplication(dto, application, currentApplicant);
-            case GED -> saveUpdatedGedApplication(dto, application, currentApplicant);
+        switch (reqDto.graduation()) {
+            case CANDIDATE -> saveUpdatedCandidateApplication(reqDto, application, currentApplicant);
+            case GRADUATE -> saveUpdatedGraduateApplication(reqDto, application, currentApplicant);
+            case GED -> saveUpdatedGedApplication(reqDto, application, currentApplicant);
         }
 
     }
