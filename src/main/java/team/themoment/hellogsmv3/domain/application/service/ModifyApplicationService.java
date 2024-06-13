@@ -110,7 +110,7 @@ public class ModifyApplicationService {
 
     private CandidateMiddleSchoolGrade buildCandidateMiddleSchoolGrade(AbstractApplication application) {
         return CandidateMiddleSchoolGrade.builder()
-                // 환산 로직은 추후 구현 예정
+                // TODO 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
                 .parameter(CandidateMiddleSchoolGradeParameter.builder()
                         .transcript(new MiddleSchoolTranscript())
@@ -179,7 +179,7 @@ public class ModifyApplicationService {
 
     private GraduateMiddleSchoolGrade buildGraduateMiddleSchoolGrade(AbstractApplication application) {
         return GraduateMiddleSchoolGrade.builder()
-                // 환산 로직은 추후 구현 예정
+                // TODO 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
                 .percentileRank(BigDecimal.ONE)
                 .attendanceScore(BigDecimal.ONE)
@@ -232,7 +232,7 @@ public class ModifyApplicationService {
 
     private GedMiddleSchoolGrade buildGedMiddleSchoolGrade(AbstractApplication application) {
         return GedMiddleSchoolGrade.builder()
-                // 환산 로직은 추후 구현 예정
+                // TODO 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
                 .percentileRank(BigDecimal.ONE)
                 .gedMaxScore(BigDecimal.ONE)

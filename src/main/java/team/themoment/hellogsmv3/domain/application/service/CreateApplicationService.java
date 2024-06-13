@@ -94,7 +94,7 @@ public class CreateApplicationService {
 
     private CandidateMiddleSchoolGrade buildCandidateMiddleSchoolGrade() {
         return CandidateMiddleSchoolGrade.builder()
-                // 환산 로직은 추후 구현 예정
+                // TODO 환산 로직은 추후 구현 예정
                 .parameter(CandidateMiddleSchoolGradeParameter.builder()
                         .transcript(new MiddleSchoolTranscript())
                         .grade1Semester1Score(BigDecimal.ONE)
@@ -165,7 +165,7 @@ public class CreateApplicationService {
 
     private GraduateMiddleSchoolGrade buildGraduateMiddleSchoolGrade() {
         return GraduateMiddleSchoolGrade.builder()
-                // 환산 로직은 추후 구현 예정
+                // TODO 환산 로직은 추후 구현 예정
                 .percentileRank(BigDecimal.ONE)
                 .attendanceScore(BigDecimal.ONE)
                 .volunteerScore(BigDecimal.ONE)
@@ -219,6 +219,7 @@ public class CreateApplicationService {
 
     private GedMiddleSchoolGrade buildGedMiddleSchoolGrade() {
         return GedMiddleSchoolGrade.builder()
+                // TODO 환산 로직은 추후 구현 예정
                 .percentileRank(BigDecimal.ONE)
                 .gedMaxScore(BigDecimal.ONE)
                 .gedTotalScore(BigDecimal.ONE)
