@@ -153,6 +153,9 @@ public class SecurityConfig {
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/{authenticationId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .anyRequest().permitAll()
         );
     }
