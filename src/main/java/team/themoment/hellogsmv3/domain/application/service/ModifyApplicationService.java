@@ -35,6 +35,9 @@ public class ModifyApplicationService {
     @Transactional
     public void execute(ApplicationReqDto dto, Long authenticationId, boolean isAdmin) {
 
+        if (!authenticationRepository.existsById(authenticationId))
+            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+
         Applicant applicant = applicantRepository.findByAuthenticationId(authenticationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
 
@@ -43,9 +46,6 @@ public class ModifyApplicationService {
 
         if (!isAdmin && application.getFinalSubmitted())
             throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
-
-        if (!authenticationRepository.existsById(applicant.getAuthenticationId()))
-            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
         deleteOldApplication(application);
 

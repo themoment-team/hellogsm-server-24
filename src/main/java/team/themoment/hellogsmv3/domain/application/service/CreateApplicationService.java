@@ -31,11 +31,11 @@ public class CreateApplicationService {
     @Transactional
     public void execute(ApplicationReqDto dto, Long authenticationId) {
 
+        if (!authenticationRepository.existsById(authenticationId))
+            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+
         Applicant currentApplicant = applicantRepository.findByAuthenticationId(authenticationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
-
-        if (!authenticationRepository.existsById(currentApplicant.getAuthenticationId()))
-            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
         if (applicationRepository.existsByApplicant(currentApplicant))
             throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
