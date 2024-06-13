@@ -148,6 +148,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/applicant/v3/applicant/me/send-code-test").hasAnyAuthority(
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/me").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
                 .anyRequest().permitAll()
         );
     }
