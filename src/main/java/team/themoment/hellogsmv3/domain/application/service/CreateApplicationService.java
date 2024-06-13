@@ -31,13 +31,11 @@ public class CreateApplicationService {
     @Transactional
     public void execute(ApplicationReqDto reqDto, Long authenticationId) {
 
-        if (!authenticationRepository.existsById(authenticationId))
-            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+        isExistAuthentication(authenticationId);
 
         Applicant currentApplicant = applicantService.findOrThrow(authenticationId);
 
-        if (applicationRepository.existsByApplicant(currentApplicant))
-            throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
+        isNotExistApplication(currentApplicant);
 
         switch (reqDto.graduation()) {
             case CANDIDATE -> saveCandidateApplication(reqDto, currentApplicant);
@@ -255,6 +253,16 @@ public class CreateApplicationService {
                         .build())
                 .applicant(currentApplicant)
                 .build();
+    }
+
+    private void isNotExistApplication(Applicant currentApplicant) {
+        if (applicationRepository.existsByApplicant(currentApplicant))
+            throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
+    }
+
+    private void isExistAuthentication(Long authenticationId) {
+        if (!authenticationRepository.existsById(authenticationId))
+            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
     }
 
 }

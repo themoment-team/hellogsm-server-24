@@ -35,16 +35,14 @@ public class ModifyApplicationService {
     @Transactional
     public void execute(ApplicationReqDto reqDto, Long authenticationId, boolean isAdmin) {
 
-        if (!authenticationRepository.existsById(authenticationId))
-            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+        isExistAuthentication(authenticationId);
 
         Applicant currentApplicant = applicantService.findOrThrow(authenticationId);
 
         AbstractApplication application = applicationRepository.findByApplicant(currentApplicant)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
-        if (!isAdmin && application.getFinalSubmitted())
-            throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
+        isNotFinalSubmitted(isAdmin, application);
 
         deleteOldApplication(application);
 
@@ -266,6 +264,16 @@ public class ModifyApplicationService {
                         .build())
                 .applicant(applicant)
                 .build();
+    }
+
+    private void isExistAuthentication(Long authenticationId) {
+        if (!authenticationRepository.existsById(authenticationId))
+            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+    }
+
+    private static void isNotFinalSubmitted(boolean isAdmin, AbstractApplication application) {
+        if (!isAdmin && application.getFinalSubmitted())
+            throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
     }
 
 }
