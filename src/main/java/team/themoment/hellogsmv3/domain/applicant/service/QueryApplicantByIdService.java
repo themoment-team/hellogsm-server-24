@@ -2,22 +2,19 @@ package team.themoment.hellogsmv3.domain.applicant.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.applicant.dto.response.FoundApplicantResDto;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
-import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
 public class QueryApplicantByIdService {
 
-    private final ApplicantRepository applicantRepository;
+    private final ApplicantService applicantService;
 
     public FoundApplicantResDto execute(Long authenticationId) {
-        Applicant applicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 Applicant 입니다", HttpStatus.NOT_FOUND));
+
+        Applicant applicant = applicantService.findOrThrow(authenticationId);
 
         return new FoundApplicantResDto(
                 applicant.getId(),

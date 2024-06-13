@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
+import team.themoment.hellogsmv3.domain.applicant.service.ApplicantService;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.entity.*;
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractApplicationStatusParameter;
@@ -24,9 +24,9 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class CreateApplicationService {
 
-    private final ApplicantRepository applicantRepository;
     private final AuthenticationRepository authenticationRepository;
     private final ApplicationRepository applicationRepository;
+    private final ApplicantService applicantService;
 
     @Transactional
     public void execute(ApplicationReqDto dto, Long authenticationId) {
@@ -34,8 +34,7 @@ public class CreateApplicationService {
         if (!authenticationRepository.existsById(authenticationId))
             throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
-        Applicant currentApplicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
+        Applicant currentApplicant = applicantService.findOrThrow(authenticationId);
 
         if (applicationRepository.existsByApplicant(currentApplicant))
             throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
@@ -45,6 +44,7 @@ public class CreateApplicationService {
             case GRADUATE -> saveGraduateApplication(dto, currentApplicant);
             case GED -> saveGedApplication(dto, currentApplicant);
         }
+
     }
 
     private void saveCandidateApplication(ApplicationReqDto dto, Applicant currentApplicant) {

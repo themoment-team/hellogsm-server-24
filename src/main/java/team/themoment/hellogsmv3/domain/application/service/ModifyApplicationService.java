@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
+import team.themoment.hellogsmv3.domain.applicant.service.ApplicantService;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.entity.*;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
@@ -26,11 +26,11 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class ModifyApplicationService {
 
-    private final ApplicantRepository applicantRepository;
     private final AuthenticationRepository authenticationRepository;
     private final ApplicationRepository applicationRepository;
     private final MiddleSchoolGradeRepository middleSchoolGradeRepository;
     private final PersonalInformationRepository personalInformationRepository;
+    private final ApplicantService applicantService;
 
     @Transactional
     public void execute(ApplicationReqDto dto, Long authenticationId, boolean isAdmin) {
@@ -38,10 +38,9 @@ public class ModifyApplicationService {
         if (!authenticationRepository.existsById(authenticationId))
             throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
-        Applicant applicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
+        Applicant currentApplicant = applicantService.findOrThrow(authenticationId);
 
-        AbstractApplication application = applicationRepository.findByApplicant(applicant)
+        AbstractApplication application = applicationRepository.findByApplicant(currentApplicant)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
         if (!isAdmin && application.getFinalSubmitted())
@@ -50,9 +49,9 @@ public class ModifyApplicationService {
         deleteOldApplication(application);
 
         switch (dto.graduation()) {
-            case CANDIDATE -> saveUpdatedCandidateApplication(dto, application, applicant);
-            case GRADUATE -> saveUpdatedGraduateApplication(dto, application, applicant);
-            case GED -> saveUpdatedGedApplication(dto, application, applicant);
+            case CANDIDATE -> saveUpdatedCandidateApplication(dto, application, currentApplicant);
+            case GRADUATE -> saveUpdatedGraduateApplication(dto, application, currentApplicant);
+            case GED -> saveUpdatedGedApplication(dto, application, currentApplicant);
         }
 
     }
