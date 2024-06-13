@@ -8,18 +8,13 @@ import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.entity.*;
-import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
-import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractMiddleSchoolGrade;
-import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractPersonalInformation;
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractApplicationStatusParameter;
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersonalInformationParameter;
 import team.themoment.hellogsmv3.domain.application.entity.param.CandidateMiddleSchoolGradeParameter;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.application.type.EvaluationResult;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.MiddleSchoolTranscript;
-import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
@@ -46,34 +41,40 @@ public class CreateApplicationService {
             throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
 
         switch (dto.graduation()) {
-            case CANDIDATE -> {
-                CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto);
-                CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade();
-                CandidateApplication candidateApplication = createCandidateApplication(
-                        dto, candidatePersonalInformation, candidateMiddleSchoolGrade, currentApplicant);
-
-                applicationRepository.save(candidateApplication);
-            }
-            case GRADUATE -> {
-                GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto);
-                GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade();
-                GraduateApplication graduateApplication = createGraduateApplication(
-                        dto, graduatePersonalInformation, graduateMiddleSchoolGrade, currentApplicant);
-
-                applicationRepository.save(graduateApplication);
-            }
-            case GED -> {
-                GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto);
-                GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade();
-                GedApplication gedApplication = createGedApplication(
-                        dto, gedPersonalInformation, gedMiddleSchoolGrade, currentApplicant);
-
-                applicationRepository.save(gedApplication);
-            }
+            case CANDIDATE -> saveCandidateApplication(dto, currentApplicant);
+            case GRADUATE -> saveGraduateApplication(dto, currentApplicant);
+            case GED -> saveGedApplication(dto, currentApplicant);
         }
     }
 
-    private CandidatePersonalInformation createCandidatePersonalInformation(ApplicationReqDto dto) {
+    private void saveCandidateApplication(ApplicationReqDto dto, Applicant currentApplicant) {
+        CandidatePersonalInformation candidatePersonalInformation = buildCandidatePersonalInformation(dto);
+        CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = buildCandidateMiddleSchoolGrade();
+        CandidateApplication candidateApplication = buildCandidateApplication(
+                dto, candidatePersonalInformation, candidateMiddleSchoolGrade, currentApplicant);
+
+        applicationRepository.save(candidateApplication);
+    }
+
+    private void saveGedApplication(ApplicationReqDto dto, Applicant currentApplicant) {
+        GedPersonalInformation gedPersonalInformation = buildGedPersonalInformation(dto);
+        GedMiddleSchoolGrade gedMiddleSchoolGrade = buildGedMiddleSchoolGrade();
+        GedApplication gedApplication = buildGedApplication(
+                dto, gedPersonalInformation, gedMiddleSchoolGrade, currentApplicant);
+
+        applicationRepository.save(gedApplication);
+    }
+
+    private void saveGraduateApplication(ApplicationReqDto dto, Applicant currentApplicant) {
+        GraduatePersonalInformation graduatePersonalInformation = buildGraduatePersonalInformation(dto);
+        GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = buildGraduateMiddleSchoolGrade();
+        GraduateApplication graduateApplication = buildGraduateApplication(
+                dto, graduatePersonalInformation, graduateMiddleSchoolGrade, currentApplicant);
+
+        applicationRepository.save(graduateApplication);
+    }
+
+    private CandidatePersonalInformation buildCandidatePersonalInformation(ApplicationReqDto dto) {
         return CandidatePersonalInformation.builder()
                 .superParameter(AbstractPersonalInformationParameter.builder()
                         .address(dto.address())
@@ -91,7 +92,7 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private CandidateMiddleSchoolGrade createCandidateMiddleSchoolGrade() {
+    private CandidateMiddleSchoolGrade buildCandidateMiddleSchoolGrade() {
         return CandidateMiddleSchoolGrade.builder()
                 // 환산 로직은 추후 구현 예정
                 .parameter(CandidateMiddleSchoolGradeParameter.builder()
@@ -112,7 +113,7 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private CandidateApplication createCandidateApplication(
+    private CandidateApplication buildCandidateApplication(
             ApplicationReqDto dto,
             CandidatePersonalInformation candidatePersonalInformation,
             CandidateMiddleSchoolGrade candidateMiddleSchoolGrade,
@@ -144,7 +145,7 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private GraduatePersonalInformation createGraduatePersonalInformation(ApplicationReqDto dto) {
+    private GraduatePersonalInformation buildGraduatePersonalInformation(ApplicationReqDto dto) {
         return GraduatePersonalInformation.builder()
                 .superParameter(AbstractPersonalInformationParameter.builder()
                         .address(dto.address())
@@ -162,7 +163,7 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade() {
+    private GraduateMiddleSchoolGrade buildGraduateMiddleSchoolGrade() {
         return GraduateMiddleSchoolGrade.builder()
                 // 환산 로직은 추후 구현 예정
                 .percentileRank(BigDecimal.ONE)
@@ -171,7 +172,7 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private GraduateApplication createGraduateApplication(
+    private GraduateApplication buildGraduateApplication(
             ApplicationReqDto dto,
             GraduatePersonalInformation graduatePersonalInformation,
             GraduateMiddleSchoolGrade graduateMiddleSchoolGrade,
@@ -202,7 +203,7 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private GedPersonalInformation createGedPersonalInformation(ApplicationReqDto dto) {
+    private GedPersonalInformation buildGedPersonalInformation(ApplicationReqDto dto) {
         return GedPersonalInformation.builder()
                 .superParam(AbstractPersonalInformationParameter.builder()
                         .address(dto.address())
@@ -216,7 +217,7 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private GedMiddleSchoolGrade createGedMiddleSchoolGrade() {
+    private GedMiddleSchoolGrade buildGedMiddleSchoolGrade() {
         return GedMiddleSchoolGrade.builder()
                 .percentileRank(BigDecimal.ONE)
                 .gedMaxScore(BigDecimal.ONE)
@@ -224,7 +225,7 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private GedApplication createGedApplication(
+    private GedApplication buildGedApplication(
             ApplicationReqDto dto,
             GedPersonalInformation gedPersonalInformation,
             GedMiddleSchoolGrade gedMiddleSchoolGrade,
