@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team.themoment.hellogsmv3.domain.application.dto.response.FoundApplicationResDto;
@@ -21,6 +22,12 @@ public class ApplicationController {
     @GetMapping("/application/me")
     public ResponseEntity<FoundApplicationResDto> find() {
         FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(manager.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
+    }
+
+    @GetMapping("/application/{authenticationId}")
+    public ResponseEntity<FoundApplicationResDto> findOne(@PathVariable("authenticationId") Long userId) {
+        FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(userId);
         return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
     }
 }
