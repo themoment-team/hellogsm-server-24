@@ -20,7 +20,7 @@ public class ApplicationController {
     private final QueryApplicationByIdService queryApplicationByIdService;
 
     @GetMapping("/application/me")
-    public ResponseEntity<FoundApplicationResDto> find() {
+    public ResponseEntity<FoundApplicationResDto> findMe() {
         FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
     }
