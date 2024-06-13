@@ -38,7 +38,6 @@ public class ModifyApplicationService {
         isExistAuthentication(authenticationId);
 
         Applicant currentApplicant = applicantService.findOrThrow(authenticationId);
-
         AbstractApplication application = applicationRepository.findByApplicant(currentApplicant)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
