@@ -42,7 +42,7 @@ public class CreateApplicationService {
             case GRADUATE -> saveGraduateApplication(reqDto, currentApplicant);
             case GED -> saveGedApplication(reqDto, currentApplicant);
         }
-
+      
     }
 
     private void saveCandidateApplication(ApplicationReqDto dto, Applicant currentApplicant) {
