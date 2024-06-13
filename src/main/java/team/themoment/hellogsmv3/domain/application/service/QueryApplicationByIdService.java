@@ -12,6 +12,8 @@ import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.Screening;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class QueryApplicationByIdService {
@@ -104,10 +106,10 @@ public class QueryApplicationByIdService {
         AdmissionStatusResDto admissionStatusResDto = AdmissionStatusResDto.builder()
                 .isFinalSubmitted(application.getFinalSubmitted())
                 .isPrintsArrived(application.getPrintsArrived())
-                .firstEvaluation(application.getSubjectEvaluationResult().getEvaluationStatus())
-                .secondEvaluation(application.getCompetencyEvaluationResult().getEvaluationStatus())
-                .screeningFirstEvaluationAt(application.getSubjectEvaluationResult().getPostScreeningEvaluation())
-                .screeningSecondEvaluationAt(application.getCompetencyEvaluationResult().getPostScreeningEvaluation())
+                .firstEvaluation(application.getSubjectEvaluationResult() != null ? application.getSubjectEvaluationResult().getEvaluationStatus() : null)
+                .secondEvaluation(application.getCompetencyEvaluationResult() != null ? application.getCompetencyEvaluationResult().getEvaluationStatus() : null)
+                .screeningFirstEvaluationAt(application.getSubjectEvaluationResult() != null ? application.getSubjectEvaluationResult().getPostScreeningEvaluation() : null)
+                .screeningSecondEvaluationAt(application.getCompetencyEvaluationResult() != null ? application.getCompetencyEvaluationResult().getPostScreeningEvaluation() : null)
                 .registrationNumber(application.getRegistrationNumber())
                 .secondScore(application.getCompetencyExamScore())
                 .finalMajor(application.getFinalMajor())
