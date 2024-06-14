@@ -18,11 +18,12 @@ public abstract class GenerateCodeService {
             AuthenticationCode authCode,
             Long authenticationId,
             String code,
-            String phoneNumber) {
+            String phoneNumber,
+            boolean isTest) {
 
         return authCode == null ?
                 new AuthenticationCode(authenticationId, code, phoneNumber, LocalDateTime.now()) :
-                authCode.updatedCode(code, LocalDateTime.now());
+                authCode.updatedCode(code, LocalDateTime.now(), isTest);
     }
 
     protected String generateUniqueCode(Random RANDOM, CodeRepository codeRepository) {

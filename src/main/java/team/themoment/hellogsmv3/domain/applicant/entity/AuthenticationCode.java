@@ -26,16 +26,10 @@ public class AuthenticationCode {
     private LocalDateTime createdAt;
     private int count = 1;
 
-    public AuthenticationCode updatedCode(String code, LocalDateTime createdAt) {
+    public AuthenticationCode updatedCode(String code, LocalDateTime createdAt, Boolean isTest) {
         this.code = code;
         this.createdAt = createdAt;
-        this.count++;
-        return this;
-    }
-
-    public AuthenticationCode updatedTestCode(String code, LocalDateTime createdAt) {
-        this.code = code;
-        this.createdAt = createdAt;
+        this.count = !isTest ? (count + 1) : 0;
         return this;
     }
 

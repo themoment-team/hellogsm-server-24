@@ -52,7 +52,7 @@ public class CreateApplicantService {
         );
         applicantRepository.save(newApplicant);
 
-        commonCodeService.deleteCode(x);
+        commonCodeService.deleteCode(code);
 
         return roleUpdatedAuthentication.getRole();
     };
