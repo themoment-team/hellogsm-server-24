@@ -3,13 +3,14 @@ package team.themoment.hellogsmv3.domain.application.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsmv3.domain.application.dto.response.FoundApplicationResDto;
 import team.themoment.hellogsmv3.domain.application.service.QueryApplicationByIdService;
+import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationStatusService;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/application/v3")
@@ -18,6 +19,7 @@ public class ApplicationController {
 
     private final AuthenticatedUserManager manager;
     private final QueryApplicationByIdService queryApplicationByIdService;
+    private final UpdateApplicationStatusService updateApplicationStatusService;
 
     @GetMapping("/application/me")
     public ResponseEntity<FoundApplicationResDto> findMe() {
@@ -29,5 +31,14 @@ public class ApplicationController {
     public ResponseEntity<FoundApplicationResDto> findOne(@PathVariable("authenticationId") Long userId) {
         FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(userId);
         return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
+    }
+
+    @PutMapping("/status/{applicantId}")
+    public ResponseEntity<Map<String, String>> updateStatus(
+            @PathVariable Long applicantId,
+            @RequestBody ApplicationStatusReqDto applicationStatusReqDto
+    ) {
+        updateApplicationStatusService.execute(applicantId, applicationStatusReqDto);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다."));
     }
 }
