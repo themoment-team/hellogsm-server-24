@@ -1,8 +1,10 @@
 package team.themoment.hellogsmv3.domain.applicant.service;
 
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
+import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.repo.CodeRepository;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
 public abstract class GenerateCodeService {
@@ -11,6 +13,17 @@ public abstract class GenerateCodeService {
     protected final static int MAX = (int) Math.pow(10, DIGIT_NUMBER) - 1;
 
     protected abstract String execute(Long userId, GenerateCodeReqDto reqDto);
+
+    protected AuthenticationCode createAuthenticationCode(
+            AuthenticationCode authCode,
+            Long authenticationId,
+            String code,
+            String phoneNumber) {
+
+        return authCode == null ?
+                new AuthenticationCode(authenticationId, code, phoneNumber, LocalDateTime.now()) :
+                authCode.updatedCode(code, LocalDateTime.now());
+    }
 
     protected String generateUniqueCode(Random RANDOM, CodeRepository codeRepository) {
         String code;

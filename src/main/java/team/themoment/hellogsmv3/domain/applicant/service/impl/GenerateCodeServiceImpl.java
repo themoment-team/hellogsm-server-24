@@ -32,11 +32,7 @@ public class GenerateCodeServiceImpl extends GenerateCodeService {
 
         final String code = generateUniqueCode(RANDOM, codeRepository);
 
-        codeRepository.save(
-                authenticationCode == null ?
-                    new AuthenticationCode(authenticationId, code, reqDto.phoneNumber(), LocalDateTime.now()) :
-                    authenticationCode.updatedCode(code, LocalDateTime.now())
-                );
+        codeRepository.save(createAuthenticationCode(authenticationCode, authenticationId, code, reqDto.phoneNumber()));
 
         // 문자 발송 로직
 

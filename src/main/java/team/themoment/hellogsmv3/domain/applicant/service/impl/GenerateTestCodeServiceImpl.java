@@ -24,11 +24,7 @@ public class GenerateTestCodeServiceImpl extends GenerateCodeService {
         AuthenticationCode authenticationCode = codeRepository.findByAuthenticationId(authenticationId)
                 .orElse(null);
 
-        codeRepository.save(
-                authenticationCode == null ?
-                        new AuthenticationCode(authenticationId, code, reqDto.phoneNumber(), LocalDateTime.now()) :
-                        authenticationCode.updatedTestCode(code, LocalDateTime.now())
-        );
+        codeRepository.save(createAuthenticationCode(authenticationCode, authenticationId, code, reqDto.phoneNumber()));
 
         return code;
     }
