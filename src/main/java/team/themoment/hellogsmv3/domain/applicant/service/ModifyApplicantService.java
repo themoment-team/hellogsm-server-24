@@ -29,7 +29,7 @@ public class ModifyApplicantService {
         Applicant savedApplicant = applicantRepository.findByAuthenticationId(authenticationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 Applicant 입니다", HttpStatus.BAD_REQUEST));
 
-        List<AuthenticationCode> codes = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
+        AuthenticationCode code = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
 
         Applicant newApplicant = new Applicant(
                 savedApplicant.getId(),
@@ -41,6 +41,6 @@ public class ModifyApplicantService {
         );
         applicantRepository.save(newApplicant);
 
-        commonCodeService.deleteCodes(codes);
+        commonCodeService.deleteCode(code);
     }
 }

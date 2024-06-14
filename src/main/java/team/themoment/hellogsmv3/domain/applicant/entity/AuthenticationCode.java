@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
 import java.time.LocalDateTime;
@@ -16,10 +17,37 @@ import java.time.LocalDateTime;
 @RedisHash(timeToLive = 3600L)
 public class AuthenticationCode {
     @Id
-    private String code;
     @Indexed
     private Long authenticationId;
+    @Indexed
+    private String code;
     private Boolean authenticated;
     private String phoneNumber;
     private LocalDateTime createdAt;
+    private int count = 1;
+
+    public AuthenticationCode updatedCode(String code, LocalDateTime createdAt) {
+        this.code = code;
+        this.createdAt = createdAt;
+        this.count++;
+        return this;
+    }
+
+    public AuthenticationCode updatedTestCode(String code, LocalDateTime createdAt) {
+        this.code = code;
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public AuthenticationCode(Long authenticationId, String code, String phoneNumber, LocalDateTime createdAt) {
+        this.authenticationId = authenticationId;
+        this.code = code;
+        this.authenticated = false;
+        this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
+    }
+
+    public void authenticatedAuthenticationCode() {
+        this.authenticated = true;
+    }
 }

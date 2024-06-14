@@ -21,7 +21,7 @@ public abstract class GenerateCodeService {
     }
 
     protected Boolean isDuplicate(String code, CodeRepository codeRepository) {
-        return codeRepository.findById(code).isPresent();
+        return codeRepository.findByCode(code).isPresent();
     }
 
     protected String getRandomCode(Random RANDOM) {
