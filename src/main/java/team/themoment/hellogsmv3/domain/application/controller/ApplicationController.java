@@ -46,7 +46,7 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다."));
     }
 
-    @GetMapping("/admission-ticket")
+    @GetMapping("/admission-tickets")
     public ResponseEntity<List<AdmissionTicketsResDto>> findAdmissionTickets(
     ) {
         List<AdmissionTicketsResDto> admissionTicketsResDto = queryAdmissionTicketsService.execute();
