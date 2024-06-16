@@ -21,7 +21,7 @@ public class UpdateFinalSubmissionService {
     public void execute(Long authenticationId) {
 
         Applicant applicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. ID: " + authenticationId, HttpStatus.NOT_FOUND));
 
         AbstractApplication application = applicationRepository.findByApplicant(applicant)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
