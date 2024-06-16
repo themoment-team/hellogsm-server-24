@@ -268,7 +268,7 @@ public class ModifyApplicationService {
 
     private void isExistAuthentication(Long authenticationId) {
         if (!authenticationRepository.existsById(authenticationId))
-            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+            throw new ExpectedException("인증 정보가 존재하지 않습니다. ID: " + authenticationId, HttpStatus.NOT_FOUND);
     }
 
     private static void isNotFinalSubmitted(boolean isAdmin, AbstractApplication application) {
