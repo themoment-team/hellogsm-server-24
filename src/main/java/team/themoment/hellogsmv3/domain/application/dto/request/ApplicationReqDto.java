@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import team.themoment.hellogsmv3.domain.application.annotation.ValidDesiredMajors;
 import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.Major;
+import team.themoment.hellogsmv3.domain.application.type.Screening;
 
 @ValidDesiredMajors
 public record ApplicationReqDto(
@@ -58,7 +59,6 @@ public record ApplicationReqDto(
 
         String schoolLocation,
 
-        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL_VETERANS|SPECIAL_ADMISSION)$")
-        @NotBlank
-        String screening
+        @NotNull
+        Screening screening
 ) {}
