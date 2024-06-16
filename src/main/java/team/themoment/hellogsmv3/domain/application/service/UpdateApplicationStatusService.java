@@ -27,10 +27,10 @@ public class UpdateApplicationStatusService {
     @Transactional
     public void execute(Long applicantId, ApplicationStatusReqDto applicationStatusReqDto) {
         Applicant applicant = applicantRepository.findById(applicantId)
-                .orElseThrow(() -> new ExpectedException("applicant를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ExpectedException(String.format("ID(%s)에 해당하는 지원자를 찾을 수 없습니다.", applicantId), HttpStatus.NOT_FOUND));
 
         AbstractApplication application = applicationRepository.findAbstractApplicationByApplicant(applicant)
-                .orElseThrow(() -> new ExpectedException("application을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ExpectedException(String.format("ID(%s)에 해당하는 지원자의 원서를 찾을 수 없습니다.", applicantId), HttpStatus.NOT_FOUND));
 
         switch (application.getPersonalInformation().getGraduation()) {
             case GED -> updateGedApplicationStatus(application, applicationStatusReqDto, applicant);
