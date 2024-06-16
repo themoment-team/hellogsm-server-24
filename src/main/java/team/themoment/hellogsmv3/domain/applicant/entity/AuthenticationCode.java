@@ -24,12 +24,12 @@ public class AuthenticationCode {
     private Boolean authenticated;
     private String phoneNumber;
     private LocalDateTime createdAt;
-    private int count = 1;
+    private int count;
 
     public AuthenticationCode updatedCode(String code, LocalDateTime createdAt, Boolean isTest) {
         this.code = code;
         this.createdAt = createdAt;
-        this.count = !isTest ? (count + 1) : 0;
+        this.count = !isTest ? (count + 1) : 0; // 테스트 상황이라면 count가 증가하지 않음
         return this;
     }
 
@@ -39,6 +39,7 @@ public class AuthenticationCode {
         this.authenticated = false;
         this.phoneNumber = phoneNumber;
         this.createdAt = createdAt;
+        this.count = 1;
     }
 
     public void authenticatedAuthenticationCode() {
