@@ -37,7 +37,7 @@ public class CreateApplicationService {
     public void execute(ApplicationReqDto dto, Long authenticationId) {
 
         Applicant currentApplicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. ID: " + authenticationId, HttpStatus.NOT_FOUND));
 
         if (!authenticationRepository.existsById(currentApplicant.getAuthenticationId()))
             throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
