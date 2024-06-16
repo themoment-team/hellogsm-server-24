@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.applicant.dto.response.AdmissionTicketsResDto;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsmv3.domain.application.dto.response.FoundApplicationResDto;
+import team.themoment.hellogsmv3.domain.application.service.DeleteApplicationByApplicantIdService;
 import team.themoment.hellogsmv3.domain.application.service.QueryAdmissionTicketsService;
 import team.themoment.hellogsmv3.domain.application.service.QueryApplicationByIdService;
 import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationStatusService;
@@ -24,6 +25,7 @@ public class ApplicationController {
     private final QueryApplicationByIdService queryApplicationByIdService;
     private final UpdateApplicationStatusService updateApplicationStatusService;
     private final QueryAdmissionTicketsService queryAdmissionTicketsService;
+    private final DeleteApplicationByApplicantIdService deleteApplicationByApplicantIdService;
 
     @GetMapping("/application/me")
     public ResponseEntity<FoundApplicationResDto> findMe() {
@@ -51,5 +53,12 @@ public class ApplicationController {
     ) {
         List<AdmissionTicketsResDto> admissionTicketsResDto = queryAdmissionTicketsService.execute();
         return ResponseEntity.status(HttpStatus.OK).body(admissionTicketsResDto);
+    }
+
+    @DeleteMapping("/application/me")
+    public ResponseEntity<Map<String, String>> deleteApplication(
+    ) {
+        deleteApplicationByApplicantIdService.execute(manager.getId());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Map.of("message", "삭제되었습니다."));
     }
 }
