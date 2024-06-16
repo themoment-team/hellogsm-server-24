@@ -159,7 +159,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "application/v3/status/{applicantId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
-                .requestMatchers(HttpMethod.GET, "application/v3/admission-ticket").hasAnyAuthority(
+                .requestMatchers(HttpMethod.GET, "application/v3/admission-tickets").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.DELETE, "application/v3/application/").hasAnyAuthority(
