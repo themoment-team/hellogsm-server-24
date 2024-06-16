@@ -34,11 +34,11 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("수정되었습니다."));
     }
 
-    @PutMapping("/application/{userId}")
+    @PutMapping("/application/{applicantId}")
     public ResponseEntity<ApiResponse> modifyOne(
             @RequestBody @Valid ApplicationReqDto reqDto,
-            @PathVariable Long userId) {
-        modifyApplicationService.execute(reqDto, userId, true);
+            @PathVariable Long applicantId) {
+        modifyApplicationService.execute(reqDto, applicantId, true);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("수정되었습니다."));
     }
 

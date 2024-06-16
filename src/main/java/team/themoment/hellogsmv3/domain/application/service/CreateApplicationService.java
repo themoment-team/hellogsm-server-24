@@ -33,7 +33,7 @@ public class CreateApplicationService {
 
         isExistAuthentication(authenticationId);
 
-        Applicant currentApplicant = applicantService.findOrThrow(authenticationId);
+        Applicant currentApplicant = applicantService.findOrThrowByAuthId(authenticationId);
 
         isNotExistApplication(currentApplicant);
 

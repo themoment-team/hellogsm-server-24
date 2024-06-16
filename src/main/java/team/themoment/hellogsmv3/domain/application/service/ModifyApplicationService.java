@@ -33,11 +33,12 @@ public class ModifyApplicationService {
     private final ApplicantService applicantService;
 
     @Transactional
-    public void execute(ApplicationReqDto reqDto, Long authenticationId, boolean isAdmin) {
+    public void execute(ApplicationReqDto reqDto, Long applicantId, boolean isAdmin) {
 
-        isExistAuthentication(authenticationId);
+        Applicant currentApplicant = applicantService.findOrThrow(applicantId);
 
-        Applicant currentApplicant = applicantService.findOrThrow(authenticationId);
+        isExistAuthentication(currentApplicant.getAuthenticationId());
+
         AbstractApplication application = applicationRepository.findByApplicant(currentApplicant)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 

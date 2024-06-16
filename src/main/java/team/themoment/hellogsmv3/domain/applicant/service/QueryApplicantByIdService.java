@@ -14,7 +14,7 @@ public class QueryApplicantByIdService {
 
     public FoundApplicantResDto execute(Long authenticationId) {
 
-        Applicant applicant = applicantService.findOrThrow(authenticationId);
+        Applicant applicant = applicantService.findOrThrowByAuthId(authenticationId);
 
         return new FoundApplicantResDto(
                 applicant.getId(),
