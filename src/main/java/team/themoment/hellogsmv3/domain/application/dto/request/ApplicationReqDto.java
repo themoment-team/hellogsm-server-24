@@ -24,7 +24,6 @@ public record ApplicationReqDto(
         String detailAddress,
 
         @NotNull
-        @Enumerated(EnumType.STRING)
         GraduationStatus graduation,
 
         @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
@@ -44,15 +43,12 @@ public record ApplicationReqDto(
         String teacherPhoneNumber,
 
         @NotNull
-        @Enumerated(EnumType.STRING)
         Major firstDesiredMajor,
 
         @NotNull
-        @Enumerated(EnumType.STRING)
         Major secondDesiredMajor,
 
         @NotNull
-        @Enumerated(EnumType.STRING)
         Major thirdDesiredMajor,
 
         @NotBlank
