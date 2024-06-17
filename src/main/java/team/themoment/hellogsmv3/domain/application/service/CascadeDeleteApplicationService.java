@@ -27,7 +27,7 @@ public class CascadeDeleteApplicationService {
         if (optionalAbstractApplication.isPresent()) {
             applicationRepository.delete(optionalAbstractApplication.get());
         } else {
-            log.warn("존재하지 않는 application 삭제 요청 발생 - applicationId: {}", applicant.getId());
+            log.warn("존재하지 않는 application 삭제 요청 발생 - applicantId: {}", applicant.getId());
         }
 
     }
