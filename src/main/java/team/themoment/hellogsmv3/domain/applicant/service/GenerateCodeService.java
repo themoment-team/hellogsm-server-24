@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 public abstract class GenerateCodeService {
-    protected final static int DIGIT_NUMBER = 6;
-    protected final static int LIMIT_COUNT_CODE_REQUEST = 5;
-    protected final static int MAX = (int) Math.pow(10, DIGIT_NUMBER) - 1;
+    protected static final int DIGIT_NUMBER = 6;
+    protected static final int LIMIT_COUNT_CODE_REQUEST = 5;
+    protected static final int MAX = (int) Math.pow(10, DIGIT_NUMBER) - 1;
 
     protected abstract String execute(Long authenticationId, GenerateCodeReqDto reqDto);
 

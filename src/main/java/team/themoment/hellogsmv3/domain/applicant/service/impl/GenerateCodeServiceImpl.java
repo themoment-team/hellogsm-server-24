@@ -39,7 +39,7 @@ public class GenerateCodeServiceImpl extends GenerateCodeService {
                 reqDto.phoneNumber(),
                 false));
 
-        // 문자 발송 로직
+        // TODO 문자 발송 로직
 
         return code;
     }
