@@ -29,7 +29,7 @@ public class ModifyApplicantService {
 
         Applicant savedApplicant = applicantService.findOrThrowByAuthId(authenticationId);
 
-        List<AuthenticationCode> codes = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
+        AuthenticationCode code = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
 
         Applicant newApplicant = new Applicant(
                 savedApplicant.getId(),
@@ -41,6 +41,6 @@ public class ModifyApplicantService {
         );
         applicantRepository.save(newApplicant);
 
-        commonCodeService.deleteCodes(codes);
+        commonCodeService.deleteCode(code);
     }
 }
