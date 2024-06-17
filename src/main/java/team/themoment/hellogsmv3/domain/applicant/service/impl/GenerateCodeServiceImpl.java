@@ -20,23 +20,23 @@ public class GenerateCodeServiceImpl extends GenerateCodeService {
     private final static Random RANDOM = new Random();
 
     @Override
-    public String execute(Long userId, GenerateCodeReqDto reqDto) {
+    public String execute(Long authenticationId, GenerateCodeReqDto reqDto) {
 
-        if (isLimitedRequest(userId))
+        if (isLimitedRequest(authenticationId))
             throw new ExpectedException(String.format(
                     "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요. 특정 시간 내 제한 횟수인 %d회를 초과하였습니다.",
                     LIMIT_COUNT_CODE_REQUEST), HttpStatus.FORBIDDEN);
 
         final String code = generateUniqueCode(RANDOM, codeRepository);
-        codeRepository.save(new AuthenticationCode(code, userId, false, reqDto.phoneNumber(), LocalDateTime.now()));
+        codeRepository.save(new AuthenticationCode(code, authenticationId, false, reqDto.phoneNumber(), LocalDateTime.now()));
 
         // 문자 발송 로직
 
         return code;
     }
 
-    private Boolean isLimitedRequest(Long userId) {
-        long count = codeRepository.findByAuthenticationId(userId).stream().count();
+    private Boolean isLimitedRequest(Long authenticationId) {
+        long count = codeRepository.findByAuthenticationId(authenticationId).stream().count();
         return count >= LIMIT_COUNT_CODE_REQUEST;
     }
 }
