@@ -1,12 +1,11 @@
 package team.themoment.hellogsmv3.domain.application.service;
 
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
+import team.themoment.hellogsmv3.domain.applicant.service.ApplicantService;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.entity.*;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
@@ -14,8 +13,9 @@ import team.themoment.hellogsmv3.domain.application.entity.param.AbstractApplica
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersonalInformationParameter;
 import team.themoment.hellogsmv3.domain.application.entity.param.CandidateMiddleSchoolGradeParameter;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
+import team.themoment.hellogsmv3.domain.application.repo.MiddleSchoolGradeRepository;
+import team.themoment.hellogsmv3.domain.application.repo.PersonalInformationRepository;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.MiddleSchoolTranscript;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
@@ -26,68 +26,68 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class ModifyApplicationService {
 
-    private final ApplicantRepository applicantRepository;
     private final AuthenticationRepository authenticationRepository;
     private final ApplicationRepository applicationRepository;
-    private final EntityManager em;
+    private final MiddleSchoolGradeRepository middleSchoolGradeRepository;
+    private final PersonalInformationRepository personalInformationRepository;
+    private final ApplicantService applicantService;
 
     @Transactional
-    public void execute(ApplicationReqDto dto, Long userId, boolean isAdmin) {
+    public void execute(ApplicationReqDto reqDto, Long applicantId, boolean isAdmin) {
 
-        Applicant applicant = applicantRepository.findById(userId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다.", HttpStatus.NOT_FOUND));
+        Applicant currentApplicant = applicantService.findOrThrow(applicantId);
 
-        AbstractApplication application = applicationRepository.findByApplicant(applicant)
+        isExistAuthentication(currentApplicant.getAuthenticationId());
+
+        AbstractApplication application = applicationRepository.findByApplicant(currentApplicant)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
-        if (!isAdmin && application.getFinalSubmitted())
-            throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
+        isNotFinalSubmitted(isAdmin, application);
 
-        if (!authenticationRepository.existsById(applicant.getAuthenticationId()))
-            throw new ExpectedException("인증 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+        deleteOldApplication(application);
 
-        applicationRepository.delete(application);
-        em.flush();
-
-        if (dto.graduation() == GraduationStatus.CANDIDATE) {
-
-            CandidatePersonalInformation candidatePersonalInformation = createCandidatePersonalInformation(dto, application);
-
-            CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = createCandidateMiddleSchoolGrade(application);
-
-            CandidateApplication candidateApplication = createCandidateApplication(
-                    dto, candidatePersonalInformation, candidateMiddleSchoolGrade, applicant, application);
-
-            applicationRepository.save(candidateApplication);
-
-        } else if (dto.graduation() == GraduationStatus.GRADUATE) {
-
-            GraduatePersonalInformation graduatePersonalInformation = createGraduatePersonalInformation(dto, application);
-
-            GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = createGraduateMiddleSchoolGrade(application);
-
-            GraduateApplication graduateApplication = createGraduateApplication(
-                    dto, graduatePersonalInformation, graduateMiddleSchoolGrade, applicant, application);
-
-            applicationRepository.save(graduateApplication);
-
-        } else if (dto.graduation() == GraduationStatus.GED) {
-
-            GedPersonalInformation gedPersonalInformation = createGedPersonalInformation(dto, application);
-
-            GedMiddleSchoolGrade gedMiddleSchoolGrade = createGedMiddleSchoolGrade(application);
-
-            GedApplication gedApplication = createGedApplication(dto, gedPersonalInformation, gedMiddleSchoolGrade, applicant, application);
-
-            applicationRepository.save(gedApplication);
-
-        } else {
-            throw new RuntimeException("발생하면 안되는 에러, 존재하지 않는 졸업현황");
+        switch (reqDto.graduation()) {
+            case CANDIDATE -> saveUpdatedCandidateApplication(reqDto, application, currentApplicant);
+            case GRADUATE -> saveUpdatedGraduateApplication(reqDto, application, currentApplicant);
+            case GED -> saveUpdatedGedApplication(reqDto, application, currentApplicant);
         }
 
     }
 
-    private CandidatePersonalInformation createCandidatePersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
+    private void deleteOldApplication(AbstractApplication application) {
+        applicationRepository.deleteQueryApplicationById(application.getId());
+        middleSchoolGradeRepository.deleteQueryMiddleSchoolGrade(application.getMiddleSchoolGrade().getId());
+        personalInformationRepository.deleteQueryPersonalInformation(application.getPersonalInformation().getId());
+    }
+
+    private void saveUpdatedCandidateApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
+        CandidatePersonalInformation candidatePersonalInformation = buildCandidatePersonalInformation(dto, application);
+        CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = buildCandidateMiddleSchoolGrade(application);
+        CandidateApplication candidateApplication = buildCandidateApplication(
+                dto, candidatePersonalInformation, candidateMiddleSchoolGrade, applicant, application);
+
+        applicationRepository.save(candidateApplication);
+    }
+
+    private void saveUpdatedGraduateApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
+        GraduatePersonalInformation graduatePersonalInformation = buildGraduatePersonalInformation(dto, application);
+        GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = buildGraduateMiddleSchoolGrade(application);
+        GraduateApplication graduateApplication = buildGraduateApplication(
+                dto, graduatePersonalInformation, graduateMiddleSchoolGrade, applicant, application);
+
+        applicationRepository.save(graduateApplication);
+    }
+
+    private void saveUpdatedGedApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
+        GedPersonalInformation gedPersonalInformation = buildGedPersonalInformation(dto, application);
+        GedMiddleSchoolGrade gedMiddleSchoolGrade = buildGedMiddleSchoolGrade(application);
+        GedApplication gedApplication = buildGedApplication(
+                dto, gedPersonalInformation, gedMiddleSchoolGrade, applicant, application);
+
+        applicationRepository.save(gedApplication);
+    }
+
+    private CandidatePersonalInformation buildCandidatePersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
         return CandidatePersonalInformation.builder()
                 .id(application.getPersonalInformation().getId())
                 .superParameter(AbstractPersonalInformationParameter.builder()
@@ -106,9 +106,9 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private CandidateMiddleSchoolGrade createCandidateMiddleSchoolGrade(AbstractApplication application) {
+    private CandidateMiddleSchoolGrade buildCandidateMiddleSchoolGrade(AbstractApplication application) {
         return CandidateMiddleSchoolGrade.builder()
-                // 환산 로직은 추후 구현 예정
+                // TODO 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
                 .parameter(CandidateMiddleSchoolGradeParameter.builder()
                         .transcript(new MiddleSchoolTranscript())
@@ -128,7 +128,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private CandidateApplication createCandidateApplication(
+    private CandidateApplication buildCandidateApplication(
             ApplicationReqDto dto,
             CandidatePersonalInformation candidatePersonalInformation,
             CandidateMiddleSchoolGrade candidateMiddleSchoolGrade,
@@ -156,7 +156,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GraduatePersonalInformation createGraduatePersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
+    private GraduatePersonalInformation buildGraduatePersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
         return GraduatePersonalInformation.builder()
                 .id(application.getPersonalInformation().getId())
                 .superParameter(AbstractPersonalInformationParameter.builder()
@@ -175,9 +175,9 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GraduateMiddleSchoolGrade createGraduateMiddleSchoolGrade(AbstractApplication application) {
+    private GraduateMiddleSchoolGrade buildGraduateMiddleSchoolGrade(AbstractApplication application) {
         return GraduateMiddleSchoolGrade.builder()
-                // 환산 로직은 추후 구현 예정
+                // TODO 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
                 .percentileRank(BigDecimal.ONE)
                 .attendanceScore(BigDecimal.ONE)
@@ -185,7 +185,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GraduateApplication createGraduateApplication(
+    private GraduateApplication buildGraduateApplication(
             ApplicationReqDto dto,
             GraduatePersonalInformation graduatePersonalInformation,
             GraduateMiddleSchoolGrade graduateMiddleSchoolGrade,
@@ -213,7 +213,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GedPersonalInformation createGedPersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
+    private GedPersonalInformation buildGedPersonalInformation(ApplicationReqDto dto, AbstractApplication application) {
         return GedPersonalInformation.builder()
                 .id(application.getPersonalInformation().getId())
                 .superParam(AbstractPersonalInformationParameter.builder()
@@ -228,9 +228,9 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GedMiddleSchoolGrade createGedMiddleSchoolGrade(AbstractApplication application) {
+    private GedMiddleSchoolGrade buildGedMiddleSchoolGrade(AbstractApplication application) {
         return GedMiddleSchoolGrade.builder()
-                // 환산 로직은 추후 구현 예정
+                // TODO 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
                 .percentileRank(BigDecimal.ONE)
                 .gedMaxScore(BigDecimal.ONE)
@@ -238,7 +238,7 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GedApplication createGedApplication(
+    private GedApplication buildGedApplication(
             ApplicationReqDto dto,
             GedPersonalInformation gedPersonalInformation,
             GedMiddleSchoolGrade gedMiddleSchoolGrade,
@@ -264,6 +264,16 @@ public class ModifyApplicationService {
                         .build())
                 .applicant(applicant)
                 .build();
+    }
+
+    private void isExistAuthentication(Long authenticationId) {
+        if (!authenticationRepository.existsById(authenticationId))
+            throw new ExpectedException("인증 정보가 존재하지 않습니다. ID: " + authenticationId, HttpStatus.NOT_FOUND);
+    }
+
+    private static void isNotFinalSubmitted(boolean isAdmin, AbstractApplication application) {
+        if (!isAdmin && application.getFinalSubmitted())
+            throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
     }
 
 }

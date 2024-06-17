@@ -9,6 +9,7 @@ import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDt
 import team.themoment.hellogsmv3.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissionService;
+import team.themoment.hellogsmv3.global.common.response.ApiResponse;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
 import java.util.Map;
@@ -24,23 +25,23 @@ public class ApplicationController {
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
 
     @PostMapping("/application/me")
-    public ResponseEntity<Map<String, String>> create(@RequestBody @Valid ApplicationReqDto dto) {
-        createApplicationService.execute(dto, manager.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "생성되었습니다"));
+    public ResponseEntity<ApiResponse> create(@RequestBody @Valid ApplicationReqDto reqDto) {
+        createApplicationService.execute(reqDto, manager.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("생성되었습니다."));
     }
 
     @PutMapping("/application/me")
-    public ResponseEntity<Map<String, String>> modify(@RequestBody @Valid ApplicationReqDto dto) {
-        modifyApplicationService.execute(dto, manager.getId(), false);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    public ResponseEntity<ApiResponse> modify(@RequestBody @Valid ApplicationReqDto reqDto) {
+        modifyApplicationService.execute(reqDto, manager.getId(), false);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("수정되었습니다."));
     }
 
-    @PutMapping("/application/{userId}")
-    public ResponseEntity<Map<String, String>> modifyOne(
-            @RequestBody @Valid ApplicationReqDto body,
-            @PathVariable Long userId) {
-        modifyApplicationService.execute(body, userId, true);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    @PutMapping("/application/{applicantId}")
+    public ResponseEntity<ApiResponse> modifyOne(
+            @RequestBody @Valid ApplicationReqDto reqDto,
+            @PathVariable Long applicantId) {
+        modifyApplicationService.execute(reqDto, applicantId, true);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("수정되었습니다."));
     }
 
     @PutMapping("/final-submit")

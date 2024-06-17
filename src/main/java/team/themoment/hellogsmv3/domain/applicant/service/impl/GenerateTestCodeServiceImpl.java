@@ -18,9 +18,9 @@ public class GenerateTestCodeServiceImpl extends GenerateCodeService {
     private final static Random RANDOM = new Random();
 
     @Override
-    public String execute(Long userId, GenerateCodeReqDto reqDto) {
+    public String execute(Long authenticationId, GenerateCodeReqDto reqDto) {
         final String code = generateUniqueCode(RANDOM, codeRepository);
-        codeRepository.save(new AuthenticationCode(code, userId, false, reqDto.phoneNumber(), LocalDateTime.now()));
+        codeRepository.save(new AuthenticationCode(code, authenticationId, false, reqDto.phoneNumber(), LocalDateTime.now()));
         return code;
     }
 }
