@@ -64,7 +64,7 @@ public class ApplicantController {
     ) {
         Role role = createApplicantService.execute(reqDto, manager.getId());
         manager.setRole(httpServletRequest, role);
-        return CommonApiResponse.created("본인인증이 완료되었습니다");
+        return CommonApiResponse.created("본인인증이 완료되었습니다.");
     }
 
     @PutMapping("/applicant/me")
@@ -72,20 +72,18 @@ public class ApplicantController {
             @RequestBody @Valid ApplicantReqDto reqDto
     ) {
         modifyApplicantService.execute(reqDto, manager.getId());
-        return CommonApiResponse.success("수정되었습니다");
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
     @GetMapping("/applicant/me")
     public FoundApplicantResDto find() {
-        FoundApplicantResDto foundApplicantResDto = queryApplicantByIdService.execute(manager.getId());
-        return foundApplicantResDto;
+        return queryApplicantByIdService.execute(manager.getId());
     }
 
     @GetMapping("/applicant/{authenticationId}")
     public FoundApplicantResDto findByUserId(
             @PathVariable Long authenticationId
     ) {
-        FoundApplicantResDto foundApplicantResDto = queryApplicantByIdService.execute(authenticationId);
-        return foundApplicantResDto;
+        return queryApplicantByIdService.execute(authenticationId);
     }
 }
