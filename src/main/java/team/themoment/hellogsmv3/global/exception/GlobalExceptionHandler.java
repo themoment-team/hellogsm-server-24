@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.global.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,14 @@ public class GlobalExceptionHandler {
         log.trace("Validation Failed Details : ", ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
                 .body(new ExceptionResponseEntity(methodArgumentNotValidExceptionToJson(ex)));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ExceptionResponseEntity> validationException(ConstraintViolationException ex) {
+        log.warn("field validation failed : {}", ex.getMessage());
+        log.trace("field validation failed : ", ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
+                .body(new ExceptionResponseEntity("field validation failed : " + ex.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)
