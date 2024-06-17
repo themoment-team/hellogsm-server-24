@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import team.themoment.hellogsmv3.domain.application.annotation.ValidDesiredMajors;
 import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.Major;
+import team.themoment.hellogsmv3.domain.application.type.Screening;
 
 @ValidDesiredMajors
 public record ApplicationReqDto(
@@ -24,7 +25,6 @@ public record ApplicationReqDto(
         String detailAddress,
 
         @NotNull
-        @Enumerated(EnumType.STRING)
         GraduationStatus graduation,
 
         @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
@@ -44,15 +44,12 @@ public record ApplicationReqDto(
         String teacherPhoneNumber,
 
         @NotNull
-        @Enumerated(EnumType.STRING)
         Major firstDesiredMajor,
 
         @NotNull
-        @Enumerated(EnumType.STRING)
         Major secondDesiredMajor,
 
         @NotNull
-        @Enumerated(EnumType.STRING)
         Major thirdDesiredMajor,
 
         @NotBlank
@@ -62,7 +59,6 @@ public record ApplicationReqDto(
 
         String schoolLocation,
 
-        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL_VETERANS|SPECIAL_ADMISSION)$")
-        @NotBlank
-        String screening
+        @NotNull
+        Screening screening
 ) {}
