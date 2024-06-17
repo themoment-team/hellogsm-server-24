@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
+import team.themoment.hellogsmv3.domain.applicant.service.ApplicantService;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
@@ -14,14 +14,13 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 @RequiredArgsConstructor
 public class UpdateFinalSubmissionService {
 
-    private final ApplicantRepository applicantRepository;
+    private final ApplicantService applicantService;
     private final ApplicationRepository applicationRepository;
 
     @Transactional
     public void execute(Long authenticationId) {
 
-        Applicant applicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. ID: " + authenticationId, HttpStatus.NOT_FOUND));
+        Applicant applicant = applicantService.findOrThrowByAuthId(authenticationId);
 
         AbstractApplication application = applicationRepository.findByApplicant(applicant)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));

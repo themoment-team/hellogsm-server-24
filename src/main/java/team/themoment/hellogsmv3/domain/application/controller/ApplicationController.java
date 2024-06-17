@@ -12,8 +12,6 @@ import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissio
 import team.themoment.hellogsmv3.global.common.response.ApiResponse;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/application/v3")
 @RequiredArgsConstructor
@@ -45,9 +43,9 @@ public class ApplicationController {
     }
 
     @PutMapping("/final-submit")
-    public ResponseEntity<Map<String, String>> finalSubmission() {
+    public ResponseEntity<ApiResponse> finalSubmission() {
         updateFinalSubmissionService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("수정되었습니다."));
     }
 
 }
