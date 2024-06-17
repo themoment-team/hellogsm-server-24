@@ -31,6 +31,8 @@ public class GenerateTestCodeServiceImpl extends GenerateCodeService {
                 reqDto.phoneNumber(),
                 true));
 
+        codeRepository.save(new AuthenticationCode(authenticationId, code, reqDto.phoneNumber(), LocalDateTime.now()));
+
         return code;
     }
 }

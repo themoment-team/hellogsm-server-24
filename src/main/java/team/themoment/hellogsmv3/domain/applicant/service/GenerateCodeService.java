@@ -12,7 +12,7 @@ public abstract class GenerateCodeService {
     protected final static int LIMIT_COUNT_CODE_REQUEST = 5;
     protected final static int MAX = (int) Math.pow(10, DIGIT_NUMBER) - 1;
 
-    protected abstract String execute(Long userId, GenerateCodeReqDto reqDto);
+    protected abstract String execute(Long authenticationId, GenerateCodeReqDto reqDto);
 
     protected AuthenticationCode createAuthenticationCode(
             AuthenticationCode authCode,

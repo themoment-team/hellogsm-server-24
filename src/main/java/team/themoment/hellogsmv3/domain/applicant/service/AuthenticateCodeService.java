@@ -9,9 +9,6 @@ import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.repo.CodeRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
-import java.util.Comparator;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional

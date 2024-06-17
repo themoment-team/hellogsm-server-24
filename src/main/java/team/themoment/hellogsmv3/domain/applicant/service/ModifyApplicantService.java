@@ -21,13 +21,13 @@ public class ModifyApplicantService {
     private final ApplicantRepository applicantRepository;
     private final AuthenticationRepository authenticationRepository;
     private final CommonCodeService commonCodeService;
+    private final ApplicantService applicantService;
 
     public void execute(ApplicantReqDto reqDto, Long authenticationId) {
         if(!authenticationRepository.existsById(authenticationId))
             throw new ExpectedException("존재하지 않는 Authentication 입니다", HttpStatus.BAD_REQUEST);
 
-        Applicant savedApplicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 Applicant 입니다", HttpStatus.BAD_REQUEST));
+        Applicant savedApplicant = applicantService.findOrThrowByAuthId(authenticationId);
 
         AuthenticationCode code = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
 

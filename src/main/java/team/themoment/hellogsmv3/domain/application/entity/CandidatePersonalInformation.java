@@ -2,6 +2,7 @@ package team.themoment.hellogsmv3.domain.application.entity;
 
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractPersonalInformation;
@@ -21,6 +22,7 @@ public final class CandidatePersonalInformation extends AbstractPersonalInformat
 
     private String teacherPhoneNumber;
 
+    @Builder
     public CandidatePersonalInformation(
             UUID id,
             @NonNull AbstractPersonalInformationParameter superParameter,
