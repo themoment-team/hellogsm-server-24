@@ -109,6 +109,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // for CORS
                 .requestMatchers("/auth/v3/**").permitAll()
                 //auth
+                .requestMatchers(HttpMethod.DELETE, "/authentication/v3/authentication/me").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
                 .requestMatchers(HttpMethod.GET, "/authentication/v3/authentication/me").hasAnyAuthority(
                         Role.UNAUTHENTICATED.name(),
                         Role.APPLICANT.name(),
