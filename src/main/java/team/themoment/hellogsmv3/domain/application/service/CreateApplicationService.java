@@ -13,7 +13,6 @@ import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersona
 import team.themoment.hellogsmv3.domain.application.entity.param.CandidateMiddleSchoolGradeParameter;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.application.type.*;
-import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
@@ -33,9 +32,6 @@ public class CreateApplicationService {
     public void execute(ApplicationReqDto reqDto, Long authenticationId) {
 
         isExistAuthentication(authenticationId);
-      
-        Applicant currentApplicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. ID: " + authenticationId, HttpStatus.NOT_FOUND));
 
         Applicant currentApplicant = applicantService.findOrThrowByAuthId(authenticationId);
 
