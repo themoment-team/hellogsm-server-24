@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import team.themoment.hellogsmv3.global.exception.model.ExceptionResponseEntity;
 
@@ -24,50 +25,44 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ExpectedException.class)
-    private ResponseEntity<ExceptionResponseEntity> expectedException(ExpectedException ex) {
+    private CommonApiResponse expectedException(ExpectedException ex) {
         log.warn("ExpectedException : {} ", ex.getMessage());
         log.trace("ExpectedException Details : ", ex);
-        return ResponseEntity.status(ex.getStatusCode().value())
-                .body(ExceptionResponseEntity.of(ex));
+        return CommonApiResponse.error(ex.getMessage(), ex.getStatusCode());
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
-    public ResponseEntity<ExceptionResponseEntity> validationException(MethodArgumentNotValidException ex) {
+    public CommonApiResponse validationException(MethodArgumentNotValidException ex) {
         log.warn("Validation Failed : {}", ex.getMessage());
         log.trace("Validation Failed Details : ", ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
-                .body(new ExceptionResponseEntity(methodArgumentNotValidExceptionToJson(ex)));
+        return CommonApiResponse.error(methodArgumentNotValidExceptionToJson(ex), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ExceptionResponseEntity> validationException(ConstraintViolationException ex) {
+    public CommonApiResponse validationException(ConstraintViolationException ex) {
         log.warn("field validation failed : {}", ex.getMessage());
         log.trace("field validation failed : ", ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
-                .body(new ExceptionResponseEntity("field validation failed : " + ex.getMessage()));
+        return CommonApiResponse.error("field validation failed : " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ExceptionResponseEntity> unExpectedException(RuntimeException ex) {
+    public CommonApiResponse unExpectedException(RuntimeException ex) {
         log.error("UnExpectedException Occur : ", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .body(new ExceptionResponseEntity("internal server error has occurred"));
+        return CommonApiResponse.error("internal server error has occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ExceptionResponseEntity> noHandlerFoundException(NoHandlerFoundException ex) {
+    public CommonApiResponse noHandlerFoundException(NoHandlerFoundException ex) {
         log.warn("Not Found Endpoint : {}", ex.getMessage());
         log.trace("Not Found Endpoint Details : ", ex);
-        return ResponseEntity.status(ex.getStatusCode())
-                .body(new ExceptionResponseEntity(HttpStatus.NOT_FOUND.getReasonPhrase()));
+        return CommonApiResponse.error(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<ExceptionResponseEntity> maxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
+    public CommonApiResponse maxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
         log.warn("The file is too big : {}", ex.getMessage());
         log.trace("The file is too big Details : ", ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
-                .body(new ExceptionResponseEntity("The file is too big, limited file size : " + ex.getMaxUploadSize()));
+        return CommonApiResponse.error("The file is too big, limited file size : " + ex.getMaxUploadSize(), HttpStatus.BAD_REQUEST);
     }
 
     private static String methodArgumentNotValidExceptionToJson(MethodArgumentNotValidException ex) {

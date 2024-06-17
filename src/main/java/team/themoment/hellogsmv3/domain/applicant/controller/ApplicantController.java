@@ -34,58 +34,58 @@ public class ApplicantController {
     private final GenerateCodeServiceImpl generateCodeService;
 
     @PostMapping("/applicant/me/send-code")
-    public ResponseEntity<CommonApiResponse> sendCode(
+    public CommonApiResponse sendCode(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
         generateCodeService.execute(manager.getId(), reqDto);
-        return ResponseEntity.status(HttpStatus.OK).body(CommonApiResponse.success("전송되었습니다."));
+        return CommonApiResponse.success("전송되었습니다.");
     }
 
     @PostMapping("/applicant/me/send-code-test")
-    public ResponseEntity<CommonApiResponse> sendCodeTest(
+    public CommonApiResponse sendCodeTest(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
         String code = generateTestCodeService.execute(manager.getId(), reqDto);
-        return ResponseEntity.status(HttpStatus.OK).body(CommonApiResponse.success("전송되었습니다. : " + code));
+        return CommonApiResponse.success("전송되었습니다. : " + code);
     }
 
     @PostMapping("/applicant/me/auth-code")
-    public ResponseEntity<CommonApiResponse> authCode(
+    public CommonApiResponse authCode(
             @RequestBody @Valid AuthenticateCodeReqDto reqDto
     ) {
         authenticateCodeService.execute(manager.getId(), reqDto);
-        return ResponseEntity.status(HttpStatus.OK).body(CommonApiResponse.success("인증되었습니다."));
+        return CommonApiResponse.success("인증되었습니다.");
     }
 
     @PostMapping("/applicant/me")
-    public ResponseEntity<CommonApiResponse> create(
+    public CommonApiResponse create(
             HttpServletRequest httpServletRequest,
             @RequestBody @Valid ApplicantReqDto reqDto
     ) {
         Role role = createApplicantService.execute(reqDto, manager.getId());
         manager.setRole(httpServletRequest, role);
-        return ResponseEntity.status(HttpStatus.CREATED).body(CommonApiResponse.success("본인인증이 완료되었습니다"));
+        return CommonApiResponse.created("본인인증이 완료되었습니다");
     }
 
     @PutMapping("/applicant/me")
-    public ResponseEntity<CommonApiResponse> modify(
+    public CommonApiResponse modify(
             @RequestBody @Valid ApplicantReqDto reqDto
     ) {
         modifyApplicantService.execute(reqDto, manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(CommonApiResponse.success("수정되었습니다"));
+        return CommonApiResponse.success("수정되었습니다");
     }
 
     @GetMapping("/applicant/me")
-    public ResponseEntity<FoundApplicantResDto> find() {
+    public FoundApplicantResDto find() {
         FoundApplicantResDto foundApplicantResDto = queryApplicantByIdService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(foundApplicantResDto);
+        return foundApplicantResDto;
     }
 
     @GetMapping("/applicant/{authenticationId}")
-    public ResponseEntity<FoundApplicantResDto> findByUserId(
+    public FoundApplicantResDto findByUserId(
             @PathVariable Long authenticationId
     ) {
         FoundApplicantResDto foundApplicantResDto = queryApplicantByIdService.execute(authenticationId);
-        return ResponseEntity.status(HttpStatus.OK).body(foundApplicantResDto);
+        return foundApplicantResDto;
     }
 }

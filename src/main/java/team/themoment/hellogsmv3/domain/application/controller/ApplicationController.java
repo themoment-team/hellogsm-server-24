@@ -23,29 +23,29 @@ public class ApplicationController {
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
 
     @PostMapping("/application/me")
-    public ResponseEntity<CommonApiResponse> create(@RequestBody @Valid ApplicationReqDto reqDto) {
+    public CommonApiResponse create(@RequestBody @Valid ApplicationReqDto reqDto) {
         createApplicationService.execute(reqDto, manager.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(CommonApiResponse.success("생성되었습니다."));
+        return CommonApiResponse.created("생성되었습니다.");
     }
 
     @PutMapping("/application/me")
-    public ResponseEntity<CommonApiResponse> modify(@RequestBody @Valid ApplicationReqDto reqDto) {
+    public CommonApiResponse modify(@RequestBody @Valid ApplicationReqDto reqDto) {
         modifyApplicationService.execute(reqDto, manager.getId(), false);
-        return ResponseEntity.status(HttpStatus.OK).body(CommonApiResponse.success("수정되었습니다."));
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
     @PutMapping("/application/{applicantId}")
-    public ResponseEntity<CommonApiResponse> modifyOne(
+    public CommonApiResponse modifyOne(
             @RequestBody @Valid ApplicationReqDto reqDto,
             @PathVariable Long applicantId) {
         modifyApplicationService.execute(reqDto, applicantId, true);
-        return ResponseEntity.status(HttpStatus.OK).body(CommonApiResponse.success("수정되었습니다."));
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
     @PutMapping("/final-submit")
-    public ResponseEntity<CommonApiResponse> finalSubmission() {
+    public CommonApiResponse finalSubmission() {
         updateFinalSubmissionService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(CommonApiResponse.success("수정되었습니다."));
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
 }
