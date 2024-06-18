@@ -1,10 +1,7 @@
 package team.themoment.hellogsmv3.domain.application.entity;
 
 import jakarta.persistence.Entity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractMiddleSchoolGrade;
 
 import java.math.BigDecimal;
@@ -19,8 +16,9 @@ public final class GedMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
 
     private BigDecimal gedMaxScore;
 
+    @Builder
     public GedMiddleSchoolGrade(
-            @NonNull UUID id,
+            UUID id,
             @NonNull BigDecimal percentileRank,
             @NonNull BigDecimal totalScore,
             @NonNull String transcript,

@@ -15,12 +15,24 @@ import java.util.Random;
 public class GenerateTestCodeServiceImpl extends GenerateCodeService {
 
     private final CodeRepository codeRepository;
-    private final static Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
 
     @Override
-    public String execute(Long userId, GenerateCodeReqDto reqDto) {
+    public String execute(Long authenticationId, GenerateCodeReqDto reqDto) {
         final String code = generateUniqueCode(RANDOM, codeRepository);
-        codeRepository.save(new AuthenticationCode(code, userId, false, reqDto.phoneNumber(), LocalDateTime.now()));
+
+        AuthenticationCode authenticationCode = codeRepository.findByAuthenticationId(authenticationId)
+                .orElse(null);
+
+        codeRepository.save(createAuthenticationCode(
+                authenticationCode,
+                authenticationId,
+                code,
+                reqDto.phoneNumber(),
+                true));
+
+        codeRepository.save(new AuthenticationCode(authenticationId, code, reqDto.phoneNumber(), LocalDateTime.now()));
+
         return code;
     }
 }

@@ -3,10 +3,7 @@ package team.themoment.hellogsmv3.domain.application.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractMiddleSchoolGrade;
 import team.themoment.hellogsmv3.domain.application.entity.convert.MiddleSchoolTranscriptConverter;
 import team.themoment.hellogsmv3.domain.application.entity.param.CandidateMiddleSchoolGradeParameter;
@@ -40,6 +37,8 @@ public final class CandidateMiddleSchoolGrade extends AbstractMiddleSchoolGrade 
 
     private BigDecimal extraCurricularSubtotalScore;
 
+    private BigDecimal totalScore;
+  
     public CandidateMiddleSchoolGrade(
             UUID id,
             @NonNull CandidateMiddleSchoolGradeParameter parameter
