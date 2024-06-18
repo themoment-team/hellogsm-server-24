@@ -43,7 +43,7 @@ public class QueryAllApplicationService {
             }
 
             applicationDtoList.add(ApplicationDto.builder()
-                            .applicationId(application.getId())
+                            .applicantId(application.getApplicant().getId())
                             .applicantName(applicant.getName())
                             .graduation(personalInformation.getGraduation())
                             .applicantPhoneNumber(personalInformation.getPhoneNumber())

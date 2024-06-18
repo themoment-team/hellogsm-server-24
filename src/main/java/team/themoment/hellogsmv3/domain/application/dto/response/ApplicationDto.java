@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Builder
 public record ApplicationDto(
-        UUID applicationId,
+        Long applicantId,
         String applicantName,
         GraduationStatus graduation,
         String applicantPhoneNumber,
