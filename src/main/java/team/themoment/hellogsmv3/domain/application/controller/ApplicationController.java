@@ -2,14 +2,12 @@ package team.themoment.hellogsmv3.domain.application.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissionService;
-import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
+import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
 @RestController
@@ -23,29 +21,29 @@ public class ApplicationController {
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
 
     @PostMapping("/application/me")
-    public CommonApiResponse create(@RequestBody @Valid ApplicationReqDto reqDto) {
+    public CommonApiMessageResponse create(@RequestBody @Valid ApplicationReqDto reqDto) {
         createApplicationService.execute(reqDto, manager.getId());
-        return CommonApiResponse.created("생성되었습니다.");
+        return CommonApiMessageResponse.created("생성되었습니다.");
     }
 
     @PutMapping("/application/me")
-    public CommonApiResponse modify(@RequestBody @Valid ApplicationReqDto reqDto) {
+    public CommonApiMessageResponse modify(@RequestBody @Valid ApplicationReqDto reqDto) {
         modifyApplicationService.execute(reqDto, manager.getId(), false);
-        return CommonApiResponse.success("수정되었습니다.");
+        return CommonApiMessageResponse.success("수정되었습니다.");
     }
 
     @PutMapping("/application/{applicantId}")
-    public CommonApiResponse modifyOne(
+    public CommonApiMessageResponse modifyOne(
             @RequestBody @Valid ApplicationReqDto reqDto,
             @PathVariable Long applicantId) {
         modifyApplicationService.execute(reqDto, applicantId, true);
-        return CommonApiResponse.success("수정되었습니다.");
+        return CommonApiMessageResponse.success("수정되었습니다.");
     }
 
     @PutMapping("/final-submit")
-    public CommonApiResponse finalSubmission() {
+    public CommonApiMessageResponse finalSubmission() {
         updateFinalSubmissionService.execute(manager.getId());
-        return CommonApiResponse.success("수정되었습니다.");
+        return CommonApiMessageResponse.success("수정되었습니다.");
     }
 
 }

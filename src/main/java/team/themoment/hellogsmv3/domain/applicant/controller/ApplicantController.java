@@ -3,8 +3,6 @@ package team.themoment.hellogsmv3.domain.applicant.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.ApplicantReqDto;
 import team.themoment.hellogsmv3.domain.applicant.dto.response.FoundApplicantResDto;
@@ -17,7 +15,7 @@ import team.themoment.hellogsmv3.domain.applicant.service.ModifyApplicantService
 import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateTestCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
-import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
+import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
 @RestController
@@ -34,45 +32,45 @@ public class ApplicantController {
     private final GenerateCodeServiceImpl generateCodeService;
 
     @PostMapping("/applicant/me/send-code")
-    public CommonApiResponse sendCode(
+    public CommonApiMessageResponse sendCode(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
         generateCodeService.execute(manager.getId(), reqDto);
-        return CommonApiResponse.success("전송되었습니다.");
+        return CommonApiMessageResponse.success("전송되었습니다.");
     }
 
     @PostMapping("/applicant/me/send-code-test")
-    public CommonApiResponse sendCodeTest(
+    public CommonApiMessageResponse sendCodeTest(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
         String code = generateTestCodeService.execute(manager.getId(), reqDto);
-        return CommonApiResponse.success("전송되었습니다. : " + code);
+        return CommonApiMessageResponse.success("전송되었습니다. : " + code);
     }
 
     @PostMapping("/applicant/me/auth-code")
-    public CommonApiResponse authCode(
+    public CommonApiMessageResponse authCode(
             @RequestBody @Valid AuthenticateCodeReqDto reqDto
     ) {
         authenticateCodeService.execute(manager.getId(), reqDto);
-        return CommonApiResponse.success("인증되었습니다.");
+        return CommonApiMessageResponse.success("인증되었습니다.");
     }
 
     @PostMapping("/applicant/me")
-    public CommonApiResponse create(
+    public CommonApiMessageResponse create(
             HttpServletRequest httpServletRequest,
             @RequestBody @Valid ApplicantReqDto reqDto
     ) {
         Role role = createApplicantService.execute(reqDto, manager.getId());
         manager.setRole(httpServletRequest, role);
-        return CommonApiResponse.created("본인인증이 완료되었습니다.");
+        return CommonApiMessageResponse.created("본인인증이 완료되었습니다.");
     }
 
     @PutMapping("/applicant/me")
-    public CommonApiResponse modify(
+    public CommonApiMessageResponse modify(
             @RequestBody @Valid ApplicantReqDto reqDto
     ) {
         modifyApplicantService.execute(reqDto, manager.getId());
-        return CommonApiResponse.success("수정되었습니다.");
+        return CommonApiMessageResponse.success("수정되었습니다.");
     }
 
     @GetMapping("/applicant/me")
