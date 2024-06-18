@@ -59,11 +59,7 @@ public class ApiResponseWrapper implements ResponseBodyAdvice<Object> {
             int statusCode = (int) bodyMap.get("status");
             if (statusCode >= 400 && statusCode < 600) {
                 HttpStatus status = HttpStatus.valueOf(statusCode);
-                CommonApiMessageResponse<Object> errorResponse = new CommonApiMessageResponse<>(
-                        status,
-                        statusCode,
-                        status.getReasonPhrase()
-                );
+                CommonApiMessageResponse errorResponse = CommonApiMessageResponse.error(status.getReasonPhrase(), status);
                 response.setStatusCode(HttpStatusCode.valueOf(statusCode));
                 return errorResponse;
             }
