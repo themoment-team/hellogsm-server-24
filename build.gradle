@@ -37,6 +37,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    /** queryDsl **/
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
     /** test **/
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
@@ -50,6 +56,14 @@ dependencies {
     /** object serialize **/
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
+        }
+    }
 }
 
 tasks.named('bootBuildImage') {

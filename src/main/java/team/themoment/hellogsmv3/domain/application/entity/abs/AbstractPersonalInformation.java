@@ -46,6 +46,9 @@ public abstract class AbstractPersonalInformation {
     @Column(name = "relation_with_applicant")
     protected String relationWithApplicant;
 
+    @Column(name = "guardian_phone_number", nullable = false)
+    private String guardianPhoneNumber;
+
     protected AbstractPersonalInformation(UUID id, @NonNull AbstractPersonalInformationParameter parameter) {
         this.id = id;
         this.applicantImageUri = parameter.getApplicantImageUri();
@@ -55,5 +58,6 @@ public abstract class AbstractPersonalInformation {
         this.phoneNumber = parameter.getPhoneNumber();
         this.guardianName = parameter.getGuardianName();
         this.relationWithApplicant = parameter.getRelationWithApplicant();
+        this.guardianPhoneNumber = parameter.getGuardianPhoneNumber();
     }
 }

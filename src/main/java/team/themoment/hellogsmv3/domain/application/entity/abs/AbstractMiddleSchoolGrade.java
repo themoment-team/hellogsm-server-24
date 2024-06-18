@@ -21,8 +21,15 @@ public abstract class AbstractMiddleSchoolGrade {
     @Column(name = "percentile_rank")
     protected BigDecimal percentileRank;
 
-    public AbstractMiddleSchoolGrade(UUID id, @NonNull BigDecimal percentileRank) {
+    protected BigDecimal totalScore;
+
+    @Column(columnDefinition = "TEXT")
+    protected String transcript;
+
+    public AbstractMiddleSchoolGrade(UUID id, @NonNull BigDecimal percentileRank, @NonNull BigDecimal totalScore, @NonNull String transcript) {
         this.id = id;
         this.percentileRank = percentileRank;
+        this.totalScore = totalScore;
+        this.transcript = transcript;
     }
 }

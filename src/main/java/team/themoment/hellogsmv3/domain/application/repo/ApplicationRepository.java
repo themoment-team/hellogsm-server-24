@@ -5,11 +5,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
+import team.themoment.hellogsmv3.domain.application.repo.custom.CustomApplicationRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ApplicationRepository extends JpaRepository<AbstractApplication, UUID> {
+public interface ApplicationRepository extends JpaRepository<AbstractApplication, UUID>, CustomApplicationRepository {
     boolean existsByApplicant(Applicant applicant);
     Optional<AbstractApplication> findByApplicant(Applicant applicant);
 

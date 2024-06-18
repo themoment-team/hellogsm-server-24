@@ -150,10 +150,13 @@ public class SecurityConfig {
                         Role.ROOT.name()
                 )
                 // application
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/{applicantId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .requestMatchers("/application/v3/application/me").hasAnyAuthority(
                         Role.APPLICANT.name()
                 )
-                .requestMatchers(HttpMethod.PUT, "/application/v3/application/*").hasAnyAuthority(
+                .requestMatchers(HttpMethod.PUT, "/application/v3/application/{applicantId}").hasAnyAuthority(
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )

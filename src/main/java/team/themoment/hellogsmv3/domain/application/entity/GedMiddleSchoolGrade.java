@@ -20,10 +20,12 @@ public final class GedMiddleSchoolGrade extends AbstractMiddleSchoolGrade {
     public GedMiddleSchoolGrade(
             UUID id,
             @NonNull BigDecimal percentileRank,
+            @NonNull BigDecimal totalScore,
+            @NonNull String transcript,
             @NonNull BigDecimal gedTotalScore,
             @NonNull BigDecimal gedMaxScore
     ) {
-        super(id, percentileRank);
+        super(id, percentileRank, totalScore, transcript);
         this.gedTotalScore = gedTotalScore;
         this.gedMaxScore = gedMaxScore;
     }
