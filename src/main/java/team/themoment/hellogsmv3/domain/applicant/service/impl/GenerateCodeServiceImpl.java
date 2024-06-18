@@ -17,26 +17,34 @@ import java.util.Random;
 public class GenerateCodeServiceImpl extends GenerateCodeService {
 
     private final CodeRepository codeRepository;
-    private final static Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
 
     @Override
-    public String execute(Long userId, GenerateCodeReqDto reqDto) {
+    public String execute(Long authenticationId, GenerateCodeReqDto reqDto) {
 
-        if (isLimitedRequest(userId))
+        AuthenticationCode authenticationCode = codeRepository.findByAuthenticationId(authenticationId)
+                .orElse(null);
+
+        if (isLimitedRequest(authenticationCode))
             throw new ExpectedException(String.format(
                     "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요. 특정 시간 내 제한 횟수인 %d회를 초과하였습니다.",
                     LIMIT_COUNT_CODE_REQUEST), HttpStatus.FORBIDDEN);
 
         final String code = generateUniqueCode(RANDOM, codeRepository);
-        codeRepository.save(new AuthenticationCode(code, userId, false, reqDto.phoneNumber(), LocalDateTime.now()));
 
-        // 문자 발송 로직
+        codeRepository.save(createAuthenticationCode(
+                authenticationCode,
+                authenticationId,
+                code,
+                reqDto.phoneNumber(),
+                false));
+
+        // TODO 문자 발송 로직
 
         return code;
     }
 
-    private Boolean isLimitedRequest(Long userId) {
-        long count = codeRepository.findByAuthenticationId(userId).stream().count();
-        return count >= LIMIT_COUNT_CODE_REQUEST;
+    private boolean isLimitedRequest(AuthenticationCode authenticationCode) {
+        return authenticationCode != null && authenticationCode.getCount() >= LIMIT_COUNT_CODE_REQUEST;
     }
 }
