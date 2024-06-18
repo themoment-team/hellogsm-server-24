@@ -42,8 +42,8 @@ public class UpdateApplicationStatusService {
     private void updateGedApplicationStatus(AbstractApplication application, ApplicationStatusReqDto applicationStatusReqDto, Applicant applicant) {
         GedApplication updateApplication = GedApplication.builder()
                 .id(application.getId())
-                .personalInformation((GedPersonalInformation) application.getPersonalInformation())
-                .middleSchoolGrade((GedMiddleSchoolGrade) application.getMiddleSchoolGrade())
+                .personalInformation((GedPersonalInformation) application.getPersonalInformation().clone())
+                .middleSchoolGrade((GedMiddleSchoolGrade) application.getMiddleSchoolGrade().clone())
                 .statusParameter(buildAbstractApplicationStatusParameter(application, applicationStatusReqDto))
                 .applicant(applicant)
                 .build();
@@ -54,8 +54,8 @@ public class UpdateApplicationStatusService {
     private void updateGraduateApplicationStatus(AbstractApplication application, ApplicationStatusReqDto applicationStatusReqDto, Applicant applicant) {
         GraduateApplication updateApplication = GraduateApplication.builder()
                 .id(application.getId())
-                .personalInformation((GraduatePersonalInformation) application.getPersonalInformation())
-                .middleSchoolGrade((GraduateMiddleSchoolGrade) application.getMiddleSchoolGrade())
+                .personalInformation((GraduatePersonalInformation) application.getPersonalInformation().clone())
+                .middleSchoolGrade((GraduateMiddleSchoolGrade) application.getMiddleSchoolGrade().clone())
                 .statusParameter(buildAbstractApplicationStatusParameter(application, applicationStatusReqDto))
                 .applicant(applicant)
                 .build();
@@ -66,8 +66,8 @@ public class UpdateApplicationStatusService {
     private void updateCandidateApplicationStatus(AbstractApplication application, ApplicationStatusReqDto applicationStatusReqDto, Applicant applicant) {
         CandidateApplication updateApplication = CandidateApplication.builder()
                 .id(application.getId())
-                .personalInformation((CandidatePersonalInformation) application.getPersonalInformation())
-                .middleSchoolGrade((CandidateMiddleSchoolGrade) application.getMiddleSchoolGrade())
+                .personalInformation((CandidatePersonalInformation) application.getPersonalInformation().clone())
+                .middleSchoolGrade((CandidateMiddleSchoolGrade) application.getMiddleSchoolGrade().clone())
                 .statusParameter(buildAbstractApplicationStatusParameter(application, applicationStatusReqDto))
                 .applicant(applicant)
                 .build();

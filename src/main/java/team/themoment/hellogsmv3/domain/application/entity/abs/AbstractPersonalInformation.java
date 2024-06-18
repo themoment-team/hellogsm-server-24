@@ -15,7 +15,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class AbstractPersonalInformation {
+public abstract class AbstractPersonalInformation implements Cloneable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -62,5 +62,14 @@ public abstract class AbstractPersonalInformation {
         this.guardianName = parameter.getGuardianName();
         this.relationWithApplicant = parameter.getRelationWithApplicant();
         this.guardianPhoneNumber = parameter.getGuardianPhoneNumber();
+    }
+
+    @Override
+    public AbstractPersonalInformation clone() {
+        try {
+            return (AbstractPersonalInformation) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
