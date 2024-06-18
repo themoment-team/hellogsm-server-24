@@ -25,14 +25,7 @@ public class QueryApplicationByIdService {
         AdmissionInfoResDto admissionInfoResDto;
         AdmissionGradeResDto admissionGradeResDto;
 
-        Screening screening;
-        if (!application.getSubjectEvaluationResult().isPass()) {
-            screening = application.getSubjectEvaluationResult().getPreScreeningEvaluation();
-        } else if (!application.getCompetencyEvaluationResult().isPass()) {
-            screening = application.getCompetencyEvaluationResult().getPreScreeningEvaluation();
-        } else {
-            screening = application.getCompetencyEvaluationResult().getPostScreeningEvaluation();
-        }
+        Screening screening = getScreening(application);
 
         if (application.getPersonalInformation().getGraduation().equals(GraduationStatus.GED)) {
             admissionInfoResDto = buildGedAdmissionInfoResDto(application, screening);
@@ -51,6 +44,20 @@ public class QueryApplicationByIdService {
                 admissionGradeResDto,
                 admissionStatusResDto
         );
+    }
+
+    private Screening getScreening(AbstractApplication application) {
+        Screening screening;
+
+        if (!application.getSubjectEvaluationResult().isPass()) {
+            screening = application.getSubjectEvaluationResult().getPreScreeningEvaluation();
+        } else if (!application.getCompetencyEvaluationResult().isPass()) {
+            screening = application.getCompetencyEvaluationResult().getPreScreeningEvaluation();
+        } else {
+            screening = application.getCompetencyEvaluationResult().getPostScreeningEvaluation();
+        }
+
+        return screening;
     }
 
     private GedAdmissionInfoResDto buildGedAdmissionInfoResDto(AbstractApplication application, Screening screening) {
