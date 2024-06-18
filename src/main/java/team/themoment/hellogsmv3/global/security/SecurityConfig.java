@@ -153,6 +153,12 @@ public class SecurityConfig {
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/search").hasAnyAuthority(     // TODO 권한 설정
+                        Role.UNAUTHENTICATED.name(),
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
                 .requestMatchers(HttpMethod.GET, "/application/v3/application/{authenticationId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
