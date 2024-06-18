@@ -160,6 +160,12 @@ public class SecurityConfig {
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/all").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/{authenticationId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .requestMatchers(HttpMethod.PUT, "/application/v1/final-submit").hasAnyAuthority(
                         Role.APPLICANT.name()
                 )
