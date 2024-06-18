@@ -25,9 +25,9 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
     }
 
-    @GetMapping("/application/{authenticationId}")
-    public ResponseEntity<FoundApplicationResDto> findOne(@PathVariable("authenticationId") Long userId) {
-        FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(userId);
+    @GetMapping("/application/{applicantId}")
+    public ResponseEntity<FoundApplicationResDto> findOne(@PathVariable("applicantId") Long applicantId) {
+        FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(applicantId);
         return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
     }
 }

@@ -18,9 +18,9 @@ public class QueryApplicationByIdService {
 
     private final ApplicationRepository applicationRepository;
 
-    public FoundApplicationResDto execute(Long authenticationId) {
-        AbstractApplication application = applicationRepository.findByAuthenticationIdWithAllJoins(authenticationId)
-                .orElseThrow(() -> new ExpectedException(String.format("ID(%s)에 해당하는 지원자의 원서를 찾을 수 없습니다.", authenticationId), HttpStatus.NOT_FOUND));
+    public FoundApplicationResDto execute(Long applicantId) {
+        AbstractApplication application = applicationRepository.findByAuthenticationIdWithAllJoins(applicantId)
+                .orElseThrow(() -> new ExpectedException(String.format("ID(%s)에 해당하는 지원자의 원서를 찾을 수 없습니다.", applicantId), HttpStatus.NOT_FOUND));
 
         AdmissionInfoResDto admissionInfoResDto;
         AdmissionGradeResDto admissionGradeResDto;
