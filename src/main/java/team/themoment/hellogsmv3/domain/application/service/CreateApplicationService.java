@@ -82,6 +82,7 @@ public class CreateApplicationService {
                         .phoneNumber(dto.telephone())
                         .guardianName(dto.guardianName())
                         .relationWithApplicant(dto.relationWithApplicant())
+                        .guardianPhoneNumber(dto.guardianPhoneNumber())
                         .build())
                 .schoolName(dto.schoolName())
                 .schoolLocation(dto.schoolLocation())
@@ -153,6 +154,7 @@ public class CreateApplicationService {
                         .phoneNumber(dto.telephone())
                         .guardianName(dto.guardianName())
                         .relationWithApplicant(dto.relationWithApplicant())
+                        .guardianPhoneNumber(dto.guardianPhoneNumber())
                         .build())
                 .schoolName(dto.schoolName())
                 .schoolLocation(dto.schoolLocation())
@@ -213,6 +215,7 @@ public class CreateApplicationService {
                         .phoneNumber(dto.telephone())
                         .guardianName(dto.guardianName())
                         .relationWithApplicant(dto.relationWithApplicant())
+                        .guardianPhoneNumber(dto.guardianPhoneNumber())
                         .build())
                 .build();
     }
