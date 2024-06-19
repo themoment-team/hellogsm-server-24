@@ -87,7 +87,8 @@ public class SearchApplicationService {
         return switch (tag) {
             case APPLICANT -> applicationRepository.findAllByFinalSubmittedAndApplicantNameContaining(keyword, pageable);
             case SCHOOL -> applicationRepository.findAllByFinalSubmittedAndSchoolNameContaining(keyword, pageable);
-            case PHONE_NUMBER -> applicationRepository.findAllByFinalSubmittedAndPhoneNumberContaining(keyword, pageable);
+            case PHONE_NUMBER -> null;
+//            case PHONE_NUMBER -> applicationRepository.findAllByFinalSubmittedAndPhoneNumberContaining(keyword, pageable);
         };
     }
 }
