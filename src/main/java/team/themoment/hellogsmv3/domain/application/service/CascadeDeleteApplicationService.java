@@ -2,13 +2,11 @@ package team.themoment.hellogsmv3.domain.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.event.DeleteApplicantEvent;
+import team.themoment.hellogsmv3.domain.applicant.service.ApplicantService;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
-import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.Optional;
 
@@ -18,17 +16,22 @@ import java.util.Optional;
 public class CascadeDeleteApplicationService {
 
     private final ApplicationRepository applicationRepository;
+    private final ApplicantService applicantService;
 
-    public void execute(DeleteApplicantEvent deleteApplicantEvent) {
-        Applicant applicant = deleteApplicantEvent.applicant();
+    public void execute(Long authenticationId) {
+        Applicant applicant = applicantService.findOrThrowByAuthId(authenticationId);
 
-        Optional<AbstractApplication> optionalAbstractApplication = applicationRepository.findAbstractApplicationByApplicant(applicant);
+        final Optional<AbstractApplication> optionalApplication = applicationRepository.findByApplicant(applicant);
 
-        if (optionalAbstractApplication.isPresent()) {
-            applicationRepository.delete(optionalAbstractApplication.get());
+        if (optionalApplication.isPresent()) {
+            AbstractApplication application = optionalApplication.get();
+            if (application.getFinalSubmitted()) {
+                log.warn("최종제출 된 application 삭제 요청 발생 - applicantId: {}", applicant.getId());
+            } else {
+                applicationRepository.deleteById(application.getId());
+            }
         } else {
             log.warn("존재하지 않는 application 삭제 요청 발생 - applicantId: {}", applicant.getId());
         }
-
     }
 }

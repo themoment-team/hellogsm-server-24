@@ -33,7 +33,7 @@ public class AuthenticationController {
 
     @DeleteMapping("/authentication/me")
     public ResponseEntity<Map<String, String>> deleteMyAuthentication() {
-        Long authenticationId = authenticatedUserManager.getId();
+        Long authenticationId = manager.getId();
         deleteMyAuthenticationService.execute(authenticationId);
         return ResponseEntity.ok().body(Map.of("message", "삭제되었습니다."));
     }
