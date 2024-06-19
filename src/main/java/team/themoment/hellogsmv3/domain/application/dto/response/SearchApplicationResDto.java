@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Builder
 public record SearchApplicationResDto(
-        UUID applicationId,
+        Long applicantId,
         Boolean isFinalSubmitted,
         Boolean isPrintsArrived,
         String applicantName,

@@ -56,7 +56,7 @@ public class SearchApplicationService {
             }
 
             searchApplicationResDtoList.add(SearchApplicationResDto.builder()
-                            .applicationId(application.getId())  // TODO applicantID 로 변경
+                            .applicantId(application.getApplicant().getId())
                             .isFinalSubmitted(application.getFinalSubmitted())
                             .isPrintsArrived(application.getPrintsArrived())
                             .applicantName(applicant.getName())
