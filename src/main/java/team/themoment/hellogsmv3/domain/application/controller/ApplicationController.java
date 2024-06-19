@@ -34,7 +34,7 @@ public class ApplicationController {
     }
 
     @GetMapping("/application/search")
-    public ResponseEntity<SearchApplicationsResDto> findAll(
+    public ResponseEntity<SearchApplicationsResDto> search(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size,
             @RequestParam(name = "tag", required = false) String tag,
