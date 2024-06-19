@@ -1,21 +1,17 @@
 package team.themoment.hellogsmv3.global.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.util.UriComponentsBuilder;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
 import team.themoment.hellogsmv3.global.security.auth.AuthEnvironment;
 import team.themoment.hellogsmv3.global.security.data.CookieName;
@@ -108,7 +104,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(httpRequests -> httpRequests
                 .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // for CORS
                 .requestMatchers("/auth/v3/**").permitAll()
-                //auth
+                // authentication
                 .requestMatchers(HttpMethod.GET, "/authentication/v3/authentication/me").hasAnyAuthority(
                         Role.UNAUTHENTICATED.name(),
                         Role.APPLICANT.name(),
@@ -118,6 +114,7 @@ public class SecurityConfig {
                 .requestMatchers("/authentication/v3/authentication/*").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+                // applicant
                 .requestMatchers(HttpMethod.POST, "/applicant/v3/applicant/me").hasAnyAuthority(
                         Role.UNAUTHENTICATED.name(),
                         Role.APPLICANT.name(),
@@ -148,13 +145,25 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/applicant/v3/applicant/me/send-code-test").hasAnyAuthority(
                         Role.ROOT.name()
                 )
-                .requestMatchers(HttpMethod.GET, "/application/v3/application/me").hasAnyAuthority(
-                        Role.APPLICANT.name(),
+                // application
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/{applicantId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
+                .requestMatchers("/application/v3/application/me").hasAnyAuthority(
+                        Role.APPLICANT.name()
+                )
+                .requestMatchers(HttpMethod.PUT, "/application/v3/application/{applicantId}").hasAnyAuthority(
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/all").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .requestMatchers(HttpMethod.GET, "/application/v3/application/{authenticationId}").hasAnyAuthority(
                         Role.ADMIN.name()
+                )
+                .requestMatchers(HttpMethod.PUT, "/application/v1/final-submit").hasAnyAuthority(
+                        Role.APPLICANT.name()
                 )
                 .requestMatchers(HttpMethod.PUT, "application/v3/status/{applicantId}").hasAnyAuthority(
                         Role.ADMIN.name()
@@ -162,7 +171,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "application/v3/admission-tickets").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
-                .requestMatchers(HttpMethod.DELETE, "application/v3/application/").hasAnyAuthority(
+                .requestMatchers(HttpMethod.DELETE, "application/v3/application").hasAnyAuthority(
                         Role.APPLICANT.name()
                 )
                 .requestMatchers(HttpMethod.POST, "s3/v3/image").hasAnyAuthority(

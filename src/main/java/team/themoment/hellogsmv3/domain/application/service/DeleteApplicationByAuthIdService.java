@@ -5,22 +5,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
+import team.themoment.hellogsmv3.domain.applicant.service.ApplicantService;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
-public class DeleteApplicationByApplicantIdService {
+public class DeleteApplicationByAuthIdService {
 
-    private final ApplicantRepository applicantRepository;
     private final ApplicationRepository applicationRepository;
+    private final ApplicantService applicantService;
 
     @Transactional
     public void execute(Long authenticationId) {
-        Applicant applicant = applicantRepository.findByAuthenticationId(authenticationId)
-                .orElseThrow(() -> new ExpectedException("applicant를 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+        Applicant applicant = applicantService.findOrThrowByAuthId(authenticationId);
 
         AbstractApplication application = applicationRepository.findAbstractApplicationByApplicant(applicant)
                 .orElseThrow(() -> new ExpectedException("application을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
