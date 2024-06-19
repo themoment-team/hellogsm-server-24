@@ -102,14 +102,4 @@ public class CustomApplicationRepositoryImpl implements CustomApplicationReposit
 
         return new PageImpl<>(applications, pageable, total);
     }
-
-    @Override
-    public Page<AbstractApplication> findAllByFinalSubmittedAndSchoolNameContaining(String keyword, Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public Page<AbstractApplication> findAllByFinalSubmittedAndPhoneNumberContaining(String keyword, Pageable pageable) {
-        return null;
-    }
 }

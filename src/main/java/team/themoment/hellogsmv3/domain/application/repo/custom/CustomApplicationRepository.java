@@ -14,8 +14,4 @@ public interface CustomApplicationRepository {
 
     Page<AbstractApplication> findAllByFinalSubmittedAndApplicantNameContaining(String keyword, Pageable pageable);
 
-    Page<AbstractApplication> findAllByFinalSubmittedAndSchoolNameContaining(String keyword, Pageable pageable);
-
-    Page<AbstractApplication> findAllByFinalSubmittedAndPhoneNumberContaining(String keyword, Pageable pageable);
-
 }
