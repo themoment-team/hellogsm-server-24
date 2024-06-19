@@ -33,14 +33,12 @@ public class ApplicationController {
 
     @GetMapping("/application/me")
     public FoundApplicationResDto findMe() {
-        FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(manager.getId());
-        return foundApplicationResDto;
+        return queryApplicationByIdService.execute(manager.getId());
     }
 
     @GetMapping("/application/{applicantId}")
     public FoundApplicationResDto findOne(@PathVariable("applicantId") Long applicantId) {
-        FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(applicantId);
-        return foundApplicationResDto;
+        return queryApplicationByIdService.execute(applicantId);
     }
 
     @GetMapping("/application/all")
@@ -50,8 +48,7 @@ public class ApplicationController {
     ) {
         if (page < 0 || size < 0)
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
-        ApplicationListResDto applicationListResDto = queryAllApplicationService.execute(page, size);
-        return applicationListResDto;
+        return queryAllApplicationService.execute(page, size);
     }
   
     @PostMapping("/application/me")
