@@ -85,11 +85,11 @@ public class ApplicationController {
 
 
     @PutMapping("/status/{applicantId}")
-    public ResponseEntity<Map<String, String>> updateStatus(
+    public CommonApiMessageResponse updateStatus(
             @PathVariable Long applicantId,
             @RequestBody ApplicationStatusReqDto applicationStatusReqDto
     ) {
         updateApplicationStatusService.execute(applicantId, applicationStatusReqDto);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다."));
+        return CommonApiMessageResponse.success("수정되었습니다.");
     }
 }
