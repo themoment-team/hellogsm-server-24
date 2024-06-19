@@ -72,7 +72,35 @@ public class CustomApplicationRepositoryImpl implements CustomApplicationReposit
 
     @Override
     public Page<AbstractApplication> findAllByFinalSubmittedAndApplicantNameContaining(String keyword, Pageable pageable) {
-        return null;
+
+        List<AbstractApplication> applications = queryFactory.selectFrom(abstractApplication)
+                .leftJoin(abstractApplication.applicant, applicant).fetchJoin()
+                .leftJoin(abstractApplication.personalInformation, abstractPersonalInformation).fetchJoin()
+                .where(
+                        abstractApplication.finalSubmitted.isTrue()
+                                .and(abstractApplication.applicant.name.like("%" + keyword + "%"))
+                )
+                .orderBy(
+                        new CaseBuilder()
+                                .when(abstractApplication.competencyEvaluationResult.evaluationStatus.eq(EvaluationStatus.valueOf("PASS"))).then(30)
+                                .when(abstractApplication.competencyEvaluationResult.evaluationStatus.eq(EvaluationStatus.valueOf("FALL"))).then(20)
+                                .otherwise(10).desc(),
+                        new CaseBuilder()
+                                .when(abstractApplication.subjectEvaluationResult.evaluationStatus.eq(EvaluationStatus.valueOf("PASS"))).then(3)
+                                .when(abstractApplication.subjectEvaluationResult.evaluationStatus.eq(EvaluationStatus.valueOf("FALL"))).then(2)
+                                .otherwise(1).desc()
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(abstractApplication.count())
+                .from(abstractApplication)
+                .where(abstractApplication.finalSubmitted.eq(true))
+                .fetchOne();
+
+        return new PageImpl<>(applications, pageable, total);
     }
 
     @Override
