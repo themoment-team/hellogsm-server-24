@@ -57,7 +57,7 @@ public class QueryAllApplicationService {
                             .screeningFirstEvaluationAt(application.getSubjectEvaluationResult() != null ? application.getSubjectEvaluationResult().getPostScreeningEvaluation() : null)
                             .screeningSecondEvaluationAt(application.getCompetencyEvaluationResult() != null ? application.getCompetencyEvaluationResult().getPostScreeningEvaluation() : null)
                             .registrationNumber(application.getRegistrationNumber())
-                            .secondScore(application.getCompetencyExamScore())
+                            .secondScore(application.getCompetencyEvaluationResult().getScore())
                             .build());
         }
 
