@@ -95,7 +95,7 @@ public class UpdateApplicationStatusService {
                 .registrationNumber(applicationStatusReqDto.registrationNumber())
                 .competencyExamScore(applicationStatusReqDto.secondScore())
                 .desiredMajors(application.getDesiredMajors())
-                .finalMajor(Major.valueOf(applicationStatusReqDto.finalMajor()))
+                .finalMajor(applicationStatusReqDto.finalMajor())
                 .build();
     }
 }
