@@ -38,7 +38,7 @@ public abstract class AbstractMiddleSchoolGrade implements Cloneable {
         try {
             return (AbstractMiddleSchoolGrade) super.clone();
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
+            throw new RuntimeException("객체를 복사하는중에 문제가 발생하였습니다.", e);
         }
     }
 }
