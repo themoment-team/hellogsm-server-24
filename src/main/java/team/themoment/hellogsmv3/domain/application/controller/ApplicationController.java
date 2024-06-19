@@ -97,9 +97,9 @@ public class ApplicationController {
     }
 
     @GetMapping("/admission-tickets")
-    public ResponseEntity<List<AdmissionTicketsResDto>> findAdmissionTickets(
+    public List<AdmissionTicketsResDto> findAdmissionTickets(
     ) {
         List<AdmissionTicketsResDto> admissionTicketsResDto = queryAdmissionTicketsService.execute();
-        return ResponseEntity.status(HttpStatus.OK).body(admissionTicketsResDto);
+        return admissionTicketsResDto;
     }
 }
