@@ -24,6 +24,7 @@ public record ApplicationDto(
         Screening screeningFirstEvaluationAt,
         Screening screeningSecondEvaluationAt,
         Long registrationNumber,
-        BigDecimal secondScore
+        BigDecimal secondScore,
+        BigDecimal interviewScore
 ) {
 }
