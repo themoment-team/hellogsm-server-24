@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.auth.dto.BasicAuthenticationDto;
 import team.themoment.hellogsmv3.domain.auth.service.DeleteMyAuthenticationService;
 import team.themoment.hellogsmv3.domain.auth.service.QueryAuthenticationById;
+import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
 import java.util.Map;
@@ -32,9 +33,9 @@ public class AuthenticationController {
     }
 
     @DeleteMapping("/authentication/me")
-    public ResponseEntity<Map<String, String>> deleteMyAuthentication() {
+    public CommonApiMessageResponse deleteMyAuthentication() {
         Long authenticationId = manager.getId();
         deleteMyAuthenticationService.execute(authenticationId);
-        return ResponseEntity.ok().body(Map.of("message", "삭제되었습니다."));
+        return CommonApiMessageResponse.success("삭제되었습니다.");
     }
 }
