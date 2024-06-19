@@ -37,7 +37,7 @@ public class QueryAdmissionTicketsService {
         List<AdmissionTicketsResDto> candidateAdmissionTicketsResDtos = applications.stream()
                 .filter(application -> application.getPersonalInformation().getGraduation() == GraduationStatus.CANDIDATE)
                 .map(application -> {
-                    CandidatePersonalInformation candidatePersonalInformation = (CandidatePersonalInformation) application.getPersonalInformation();
+                    CandidatePersonalInformation candidatePersonalInformation = (CandidatePersonalInformation) application.getPersonalInformation().clone();
 
                     return AdmissionTicketsResDto.builder()
                             .applicantName(application.getApplicant().getName())
@@ -52,7 +52,7 @@ public class QueryAdmissionTicketsService {
         List<AdmissionTicketsResDto> graduateAdmissionTicketsResDtos = applications.stream()
                 .filter(application -> application.getPersonalInformation().getGraduation() == GraduationStatus.GRADUATE)
                 .map(application -> {
-                    GraduatePersonalInformation graduatePersonalInformation = (GraduatePersonalInformation) application.getPersonalInformation();
+                    GraduatePersonalInformation graduatePersonalInformation = (GraduatePersonalInformation) application.getPersonalInformation().clone();
 
                     return AdmissionTicketsResDto.builder()
                             .applicantName(application.getApplicant().getName())
