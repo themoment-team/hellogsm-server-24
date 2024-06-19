@@ -16,28 +16,26 @@ public class CommonCodeService {
 
     private final CodeRepository codeRepository;
 
-    public List<AuthenticationCode> validateAndGetRecentCode(Long authenticationId, String inputCode, String inputPhoneNumber) {
-        List<AuthenticationCode> codes = codeRepository.findByAuthenticationId(authenticationId);
-        AuthenticationCode recentCode = codes.stream()
-                .max(Comparator.comparing(AuthenticationCode::getCreatedAt))
+    public AuthenticationCode validateAndGetRecentCode(Long authenticationId, String inputCode, String inputPhoneNumber) {
+        AuthenticationCode code = codeRepository.findByAuthenticationId(authenticationId)
                 .orElseThrow(() -> new ExpectedException("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + authenticationId, HttpStatus.BAD_REQUEST));
 
-        if (!recentCode.getAuthenticated()) {
+        if (!code.getAuthenticated()) {
             throw new ExpectedException("유효하지 않은 요청입니다. 인증받지 않은 code입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        if (!recentCode.getCode().equals(inputCode)) {
+        if (!code.getCode().equals(inputCode)) {
             throw new ExpectedException("유효하지 않은 요청입니다. 이전 혹은 잘못된 형식의 code입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        if (!recentCode.getPhoneNumber().equals(inputPhoneNumber)) {
+        if (!code.getPhoneNumber().equals(inputPhoneNumber)) {
             throw new ExpectedException("유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
-        return codes;
+        return code;
     }
 
-    public void deleteCodes(List<AuthenticationCode> codes) {
-        codes.forEach(code -> codeRepository.deleteById(code.getCode()));
+    public void deleteCode(AuthenticationCode code) {
+        codeRepository.delete(code);
     }
 }

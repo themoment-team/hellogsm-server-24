@@ -2,10 +2,7 @@ package team.themoment.hellogsmv3.domain.application.entity.abs;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersonalInformationParameter;
 import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 

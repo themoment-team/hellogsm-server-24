@@ -17,7 +17,7 @@ public final class GedApplication extends AbstractApplication {
 
     @Builder
     private GedApplication(
-            @NonNull UUID id,
+            UUID id,
             @NonNull GedPersonalInformation personalInformation,
             @NonNull GedMiddleSchoolGrade middleSchoolGrade,
             @NonNull AbstractApplicationStatusParameter statusParameter,
