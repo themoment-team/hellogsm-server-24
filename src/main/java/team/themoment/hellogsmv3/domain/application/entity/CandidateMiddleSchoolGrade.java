@@ -37,8 +37,7 @@ public final class CandidateMiddleSchoolGrade extends AbstractMiddleSchoolGrade 
 
     private BigDecimal extraCurricularSubtotalScore;
 
-    private BigDecimal totalScore;
-  
+    @Builder
     public CandidateMiddleSchoolGrade(
             UUID id,
             @NonNull CandidateMiddleSchoolGradeParameter parameter

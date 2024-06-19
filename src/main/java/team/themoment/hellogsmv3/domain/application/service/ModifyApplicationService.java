@@ -62,7 +62,7 @@ public class ModifyApplicationService {
 
     private void saveUpdatedCandidateApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
         CandidatePersonalInformation candidatePersonalInformation = buildCandidatePersonalInformation(dto, application);
-        CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = buildCandidateMiddleSchoolGrade(application);
+        CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = buildCandidateMiddleSchoolGrade(dto, application);
         CandidateApplication candidateApplication = buildCandidateApplication(
                 dto, candidatePersonalInformation, candidateMiddleSchoolGrade, applicant, application);
 
@@ -71,7 +71,7 @@ public class ModifyApplicationService {
 
     private void saveUpdatedGraduateApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
         GraduatePersonalInformation graduatePersonalInformation = buildGraduatePersonalInformation(dto, application);
-        GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = buildGraduateMiddleSchoolGrade(application);
+        GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = buildGraduateMiddleSchoolGrade(dto, application);
         GraduateApplication graduateApplication = buildGraduateApplication(
                 dto, graduatePersonalInformation, graduateMiddleSchoolGrade, applicant, application);
 
@@ -80,7 +80,7 @@ public class ModifyApplicationService {
 
     private void saveUpdatedGedApplication(ApplicationReqDto dto, AbstractApplication application, Applicant applicant) {
         GedPersonalInformation gedPersonalInformation = buildGedPersonalInformation(dto, application);
-        GedMiddleSchoolGrade gedMiddleSchoolGrade = buildGedMiddleSchoolGrade(application);
+        GedMiddleSchoolGrade gedMiddleSchoolGrade = buildGedMiddleSchoolGrade(dto, application);
         GedApplication gedApplication = buildGedApplication(
                 dto, gedPersonalInformation, gedMiddleSchoolGrade, applicant, application);
 
@@ -98,6 +98,7 @@ public class ModifyApplicationService {
                         .phoneNumber(dto.telephone())
                         .guardianName(dto.guardianName())
                         .relationWithApplicant(dto.relationWithApplicant())
+                        .guardianPhoneNumber(dto.guardianPhoneNumber())
                         .build())
                 .schoolName(dto.schoolName())
                 .schoolLocation(dto.schoolLocation())
@@ -106,12 +107,12 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private CandidateMiddleSchoolGrade buildCandidateMiddleSchoolGrade(AbstractApplication application) {
+    private CandidateMiddleSchoolGrade buildCandidateMiddleSchoolGrade(ApplicationReqDto dto, AbstractApplication application) {
         return CandidateMiddleSchoolGrade.builder()
                 // TODO 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
                 .parameter(CandidateMiddleSchoolGradeParameter.builder()
-                        .transcript(new MiddleSchoolTranscript())
+                        .transcript(dto.middleSchoolGrade())
                         .grade1Semester1Score(BigDecimal.ONE)
                         .grade1Semester2Score(BigDecimal.ONE)
                         .grade2Semester1Score(BigDecimal.ONE)
@@ -167,6 +168,7 @@ public class ModifyApplicationService {
                         .phoneNumber(dto.telephone())
                         .guardianName(dto.guardianName())
                         .relationWithApplicant(dto.relationWithApplicant())
+                        .guardianPhoneNumber(dto.guardianPhoneNumber())
                         .build())
                 .schoolName(dto.schoolName())
                 .schoolLocation(dto.schoolLocation())
@@ -175,13 +177,15 @@ public class ModifyApplicationService {
                 .build();
     }
 
-    private GraduateMiddleSchoolGrade buildGraduateMiddleSchoolGrade(AbstractApplication application) {
+    private GraduateMiddleSchoolGrade buildGraduateMiddleSchoolGrade(ApplicationReqDto dto, AbstractApplication application) {
         return GraduateMiddleSchoolGrade.builder()
                 // TODO 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
+                .transcript(dto.middleSchoolGrade())
                 .percentileRank(BigDecimal.ONE)
                 .attendanceScore(BigDecimal.ONE)
                 .volunteerScore(BigDecimal.ONE)
+                .totalScore(BigDecimal.ONE)
                 .build();
     }
 
@@ -224,17 +228,20 @@ public class ModifyApplicationService {
                         .phoneNumber(dto.telephone())
                         .guardianName(dto.guardianName())
                         .relationWithApplicant(dto.relationWithApplicant())
+                        .guardianPhoneNumber(dto.guardianPhoneNumber())
                         .build())
                 .build();
     }
 
-    private GedMiddleSchoolGrade buildGedMiddleSchoolGrade(AbstractApplication application) {
+    private GedMiddleSchoolGrade buildGedMiddleSchoolGrade(ApplicationReqDto dto, AbstractApplication application) {
         return GedMiddleSchoolGrade.builder()
                 // TODO 환산 로직은 추후 구현 예정
                 .id(application.getMiddleSchoolGrade().getId())
+                .transcript(dto.middleSchoolGrade())
                 .percentileRank(BigDecimal.ONE)
                 .gedMaxScore(BigDecimal.ONE)
                 .gedTotalScore(BigDecimal.ONE)
+                .totalScore(BigDecimal.ONE)
                 .build();
     }
 
