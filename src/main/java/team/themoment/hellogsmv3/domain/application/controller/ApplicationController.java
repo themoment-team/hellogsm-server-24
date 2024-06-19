@@ -38,26 +38,23 @@ public class ApplicationController {
     private final QueryAdmissionTicketsService queryAdmissionTicketsService;
 
     @GetMapping("/application/me")
-    public ResponseEntity<FoundApplicationResDto> findMe() {
-        FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
+    public FoundApplicationResDto findMe() {
+        return queryApplicationByIdService.execute(manager.getId());
     }
 
     @GetMapping("/application/{applicantId}")
-    public ResponseEntity<FoundApplicationResDto> findOne(@PathVariable("applicantId") Long applicantId) {
-        FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(applicantId);
-        return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
+    public FoundApplicationResDto findOne(@PathVariable("applicantId") Long applicantId) {
+        return queryApplicationByIdService.execute(applicantId);
     }
 
     @GetMapping("/application/all")
-    public ResponseEntity<ApplicationListResDto> findAll(
+    public ApplicationListResDto findAll(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size
     ) {
         if (page < 0 || size < 0)
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
-        ApplicationListResDto applicationListResDto = queryAllApplicationService.execute(page, size);
-        return ResponseEntity.status(HttpStatus.OK).body(applicationListResDto);
+        return queryAllApplicationService.execute(page, size);
     }
 
     @PostMapping("/application/me")
