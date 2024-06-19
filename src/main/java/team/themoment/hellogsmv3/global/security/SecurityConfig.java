@@ -171,7 +171,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "application/v3/admission-tickets").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
-                .requestMatchers(HttpMethod.DELETE, "application/v3/application/").hasAnyAuthority(
+                .requestMatchers(HttpMethod.DELETE, "application/v3/application").hasAnyAuthority(
                         Role.APPLICANT.name()
                 )
                 .anyRequest().permitAll()
