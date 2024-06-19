@@ -225,7 +225,7 @@ public class CreateApplicationService {
                 // TODO 환산 로직은 추후 구현 예정
                 .transcript(dto.middleSchoolGrade())
                 .percentileRank(BigDecimal.ONE)
-                .gedMaxScore(BigDecimal.ONE)
+                .totalScore(BigDecimal.ONE)
                 .gedTotalScore(BigDecimal.ONE)
                 .gedMaxScore(BigDecimal.ONE)
                 .build();
