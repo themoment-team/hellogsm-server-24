@@ -34,5 +34,29 @@ public interface ApplicationRepository extends JpaRepository<AbstractApplication
             nativeQuery = true)
     Page<AbstractApplication> findAllByFinalSubmittedAndSchoolNameContaining(@Param("keyword") String keyword, Pageable pageable);
 
-
+    @Query(value = "SELECT a.* FROM abstract_application a " +
+            "JOIN abstract_personal_information p ON a.personal_information_id = p.id " +
+            "WHERE p.phone_number LIKE %:keyword% " +
+            "OR p.guardian_phone_number LIKE %:keyword% " +
+            "OR p.teacher_phone_number LIKE %:keyword% " +
+            "AND a.final_submitted = TRUE " +
+            "ORDER BY " +
+            "    CASE " +
+            "        WHEN a.competency_evaluation_result_status = 'PASS' THEN 30 " +
+            "        WHEN a.competency_evaluation_result_status = 'FALL' THEN 20 " +
+            "        ELSE 10 " +
+            "    END DESC, " +
+            "    CASE " +
+            "        WHEN a.subject_evaluation_result_status = 'PASS' THEN 3 " +
+            "        WHEN a.subject_evaluation_result_status = 'FALL' THEN 2 " +
+            "        ELSE 1 " +
+            "    END DESC",
+            countQuery = "SELECT COUNT(*) FROM abstract_application a " +
+                    "JOIN abstract_personal_information p ON a.personal_information_id = p.id " +
+                    "WHERE p.phone_number LIKE %:keyword% " +
+                    "OR p.guardian_phone_number LIKE %:keyword% " +
+                    "OR p.teacher_phone_number LIKE %:keyword% " +
+                    "AND a.final_submitted = TRUE",
+            nativeQuery = true)
+    Page<AbstractApplication> findAllByFinalSubmittedAndPhoneNumberContaining(@Param("keyword") String keyword, Pageable pageable);
 }
