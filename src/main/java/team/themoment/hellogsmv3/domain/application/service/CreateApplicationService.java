@@ -47,7 +47,7 @@ public class CreateApplicationService {
 
     private void saveCandidateApplication(ApplicationReqDto dto, Applicant currentApplicant) {
         CandidatePersonalInformation candidatePersonalInformation = buildCandidatePersonalInformation(dto);
-        CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = buildCandidateMiddleSchoolGrade();
+        CandidateMiddleSchoolGrade candidateMiddleSchoolGrade = buildCandidateMiddleSchoolGrade(dto);
         CandidateApplication candidateApplication = buildCandidateApplication(
                 dto, candidatePersonalInformation, candidateMiddleSchoolGrade, currentApplicant);
 
@@ -56,7 +56,7 @@ public class CreateApplicationService {
 
     private void saveGedApplication(ApplicationReqDto dto, Applicant currentApplicant) {
         GedPersonalInformation gedPersonalInformation = buildGedPersonalInformation(dto);
-        GedMiddleSchoolGrade gedMiddleSchoolGrade = buildGedMiddleSchoolGrade();
+        GedMiddleSchoolGrade gedMiddleSchoolGrade = buildGedMiddleSchoolGrade(dto);
         GedApplication gedApplication = buildGedApplication(
                 dto, gedPersonalInformation, gedMiddleSchoolGrade, currentApplicant);
 
@@ -65,7 +65,7 @@ public class CreateApplicationService {
 
     private void saveGraduateApplication(ApplicationReqDto dto, Applicant currentApplicant) {
         GraduatePersonalInformation graduatePersonalInformation = buildGraduatePersonalInformation(dto);
-        GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = buildGraduateMiddleSchoolGrade();
+        GraduateMiddleSchoolGrade graduateMiddleSchoolGrade = buildGraduateMiddleSchoolGrade(dto);
         GraduateApplication graduateApplication = buildGraduateApplication(
                 dto, graduatePersonalInformation, graduateMiddleSchoolGrade, currentApplicant);
 
@@ -90,11 +90,11 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private CandidateMiddleSchoolGrade buildCandidateMiddleSchoolGrade() {
+    private CandidateMiddleSchoolGrade buildCandidateMiddleSchoolGrade(ApplicationReqDto dto) {
         return CandidateMiddleSchoolGrade.builder()
                 // TODO 환산 로직은 추후 구현 예정
                 .parameter(CandidateMiddleSchoolGradeParameter.builder()
-                        .transcript(new MiddleSchoolTranscript())
+                        .transcript(dto.middleSchoolGrade())
                         .grade1Semester1Score(BigDecimal.ONE)
                         .grade1Semester2Score(BigDecimal.ONE)
                         .grade2Semester1Score(BigDecimal.ONE)
@@ -161,12 +161,14 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private GraduateMiddleSchoolGrade buildGraduateMiddleSchoolGrade() {
+    private GraduateMiddleSchoolGrade buildGraduateMiddleSchoolGrade(ApplicationReqDto dto) {
         return GraduateMiddleSchoolGrade.builder()
                 // TODO 환산 로직은 추후 구현 예정
+                .transcript(dto.middleSchoolGrade())
                 .percentileRank(BigDecimal.ONE)
                 .attendanceScore(BigDecimal.ONE)
                 .volunteerScore(BigDecimal.ONE)
+                .totalScore(BigDecimal.ONE)
                 .build();
     }
 
@@ -215,12 +217,14 @@ public class CreateApplicationService {
                 .build();
     }
 
-    private GedMiddleSchoolGrade buildGedMiddleSchoolGrade() {
+    private GedMiddleSchoolGrade buildGedMiddleSchoolGrade(ApplicationReqDto dto) {
         return GedMiddleSchoolGrade.builder()
                 // TODO 환산 로직은 추후 구현 예정
+                .transcript(dto.middleSchoolGrade())
                 .percentileRank(BigDecimal.ONE)
                 .gedMaxScore(BigDecimal.ONE)
                 .gedTotalScore(BigDecimal.ONE)
+                .gedMaxScore(BigDecimal.ONE)
                 .build();
     }
 
