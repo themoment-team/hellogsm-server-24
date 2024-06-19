@@ -15,23 +15,20 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticatedUserManager authenticatedUserManager;
+    private final AuthenticatedUserManager manager;
     private final QueryAuthenticationById queryAuthenticationById;
     private final DeleteMyAuthenticationService deleteMyAuthenticationService;
 
     @GetMapping("/authentication/{authenticationId}")
-    public ResponseEntity<BasicAuthenticationDto> getAuthenticationInfo(
+    public BasicAuthenticationDto getAuthenticationInfo(
             @PathVariable Long authenticationId
     ) {
-        BasicAuthenticationDto authenticationDto = queryAuthenticationById.execute(authenticationId);
-        return ResponseEntity.ok(authenticationDto);
+        return queryAuthenticationById.execute(authenticationId);
     }
 
     @GetMapping("/authentication/me")
-    public ResponseEntity<BasicAuthenticationDto> getMyAuthenticationInfo() {
-        Long authenticationId = authenticatedUserManager.getId();
-        BasicAuthenticationDto authenticationDto = queryAuthenticationById.execute(authenticationId);
-        return ResponseEntity.ok(authenticationDto);
+    public BasicAuthenticationDto getMyAuthenticationInfo() {
+        return queryAuthenticationById.execute(manager.getId());
     }
 
     @DeleteMapping("/authentication/me")

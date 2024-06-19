@@ -13,7 +13,7 @@ import team.themoment.hellogsmv3.global.thirdParty.aws.s3.service.UploadImageSer
 import java.util.Map;
 
 @RestController
-@RequestMapping("/s3/v3")
+@RequestMapping("/application/v3")
 @RequiredArgsConstructor
 public class S3Controller {
 

@@ -16,6 +16,7 @@ import team.themoment.hellogsmv3.global.thirdParty.aws.s3.properties.S3Environme
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ public class UploadImageService {
         }
         String originalFileName = multipartFile.getOriginalFilename();
         String fileExtension = StringUtils.getFilenameExtension(originalFileName);
-        validateFileContentType(Objects.requireNonNull(multipartFile.getContentType()));
+        validateFileContentType(Objects.requireNonNull(fileExtension));
         String fileName = generateFileName(fileExtension);
 
         try {
@@ -59,9 +60,10 @@ public class UploadImageService {
         return UUID.randomUUID().toString() + LocalDateTime.now() + "." + fileExtension;
     }
 
-    private void validateFileContentType(String contentType) {
-        if (!contentType.contains("image")) {
-            throw new ExpectedException("이미지 업로드 에서는 지원하지 않는 파일 형식입니다.", HttpStatus.BAD_REQUEST);
+    private void validateFileContentType(String fileExtension) {
+        List<String> allowExtension = List.of("jpg", "jpeg", "png");
+        if (!allowExtension.contains(fileExtension.toLowerCase())) {
+            throw new ExpectedException("지원하지 않는 파일 확장자 입니다.", HttpStatus.BAD_REQUEST);
         }
     }
 }
