@@ -17,6 +17,7 @@ public record AdmissionStatusResDto(
         Screening screeningSecondEvaluationAt,
         Long registrationNumber,
         BigDecimal secondScore,
+        BigDecimal interviewScore,
         Major finalMajor
 ) {
 }

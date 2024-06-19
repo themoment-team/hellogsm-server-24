@@ -152,20 +152,17 @@ public class SecurityConfig {
                         Role.ROOT.name()
                 )
                 // application
-                .requestMatchers(HttpMethod.GET, "/application/v3/application/{applicantId}").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
                 .requestMatchers("/application/v3/application/me").hasAnyAuthority(
                         Role.APPLICANT.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/{applicantId}").hasAnyAuthority(
+                        Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.PUT, "/application/v3/application/{applicantId}").hasAnyAuthority(
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
                 .requestMatchers(HttpMethod.GET, "/application/v3/application/all").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
-                .requestMatchers(HttpMethod.GET, "/application/v3/application/{authenticationId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.PUT, "/application/v1/final-submit").hasAnyAuthority(
