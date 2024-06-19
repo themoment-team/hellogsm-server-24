@@ -5,12 +5,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Modifying;
+import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
 import team.themoment.hellogsmv3.domain.application.repo.custom.CustomApplicationRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ApplicationRepository extends JpaRepository<AbstractApplication, UUID>, CustomApplicationRepository {
+
+    boolean existsByApplicant(Applicant applicant);
+    Optional<AbstractApplication> findByApplicant(Applicant applicant);
+
+    @Modifying(clearAutomatically = true)
+    @Query("DELETE FROM AbstractApplication WHERE id = :uuid")
+    void deleteQueryApplicationById(UUID uuid);
 
     @Query(value = "SELECT a.* FROM abstract_application a " +
             "JOIN abstract_personal_information p ON a.personal_information_id = p.id " +

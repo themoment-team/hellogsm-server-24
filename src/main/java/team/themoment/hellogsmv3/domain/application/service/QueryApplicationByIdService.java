@@ -18,15 +18,37 @@ public class QueryApplicationByIdService {
 
     private final ApplicationRepository applicationRepository;
 
-    public FoundApplicationResDto execute(Long authenticationId) {
-        AbstractApplication application = applicationRepository.findByAuthenticationIdWithAllJoins(authenticationId)
-                .orElseThrow(() -> new ExpectedException(String.format("ID(%s)에 해당하는 지원자의 원서를 찾을 수 없습니다.", authenticationId), HttpStatus.NOT_FOUND));
+    public FoundApplicationResDto execute(Long applicantId) {
+        AbstractApplication application = applicationRepository.findByApplicantIdWithAllJoins(applicantId)
+                .orElseThrow(() -> new ExpectedException(String.format("ID(%s)에 해당하는 지원자의 원서를 찾을 수 없습니다.", applicantId), HttpStatus.NOT_FOUND));
 
         AdmissionInfoResDto admissionInfoResDto;
         AdmissionGradeResDto admissionGradeResDto;
-        Applicant applicant = application.getApplicant();
 
+        Screening screening = getScreening(application);
+
+        if (application.getPersonalInformation().getGraduation().equals(GraduationStatus.GED)) {
+            admissionInfoResDto = buildGedAdmissionInfoResDto(application, screening);
+            admissionGradeResDto = buildGedAdmissionGradeResDto(application);
+        } else {
+            admissionInfoResDto = buildGeneralAdmissionInfoResDto(application, screening);
+            admissionGradeResDto = buildGeneralAdmissionGradeResDto(application);
+        }
+
+        AdmissionStatusResDto admissionStatusResDto = buildAdmissionStatusResDto(application);
+
+        return new FoundApplicationResDto(
+                application.getId(),
+                admissionInfoResDto,
+                application.getMiddleSchoolGrade().getTranscript(),
+                admissionGradeResDto,
+                admissionStatusResDto
+        );
+    }
+
+    private Screening getScreening(AbstractApplication application) {
         Screening screening;
+
         if (!application.getSubjectEvaluationResult().isPass()) {
             screening = application.getSubjectEvaluationResult().getPreScreeningEvaluation();
         } else if (!application.getCompetencyEvaluationResult().isPass()) {
@@ -35,72 +57,89 @@ public class QueryApplicationByIdService {
             screening = application.getCompetencyEvaluationResult().getPostScreeningEvaluation();
         }
 
-        if (application.getPersonalInformation().getGraduation().equals(GraduationStatus.GED)) {
-            GedPersonalInformation personalInformation = (GedPersonalInformation) application.getPersonalInformation();
-            GedMiddleSchoolGrade middleSchoolGrade = (GedMiddleSchoolGrade) application.getMiddleSchoolGrade();
+        return screening;
+    }
 
-            admissionInfoResDto = GedAdmissionInfoResDto.builder()
-                    .applicantName(applicant.getName())
-                    .applicantGender(applicant.getGender())
-                    .applicantBirth(applicant.getBirth())
-                    .address(personalInformation.getAddress())
-                    .detailAddress(personalInformation.getDetailAddress())
-                    .graduation(personalInformation.getGraduation())
-                    .telephone(personalInformation.getPhoneNumber())
-                    .applicantPhoneNumber(applicant.getPhoneNumber())
-                    .guardianName(personalInformation.getGuardianName())
-                    .relationWithApplicant(personalInformation.getRelationWithApplicant())
-                    .guardianPhoneNumber(personalInformation.getGuardianPhoneNumber())
-                    .applicantImageUri(personalInformation.getApplicantImageUri())
-                    .desiredMajor(application.getDesiredMajors())
-                    .screening(screening)
-                    .build();
-            admissionGradeResDto = GedAdmissionGradeResDto.builder()
-                    .totalScore(middleSchoolGrade.getTotalScore())
-                    .percentileRank(middleSchoolGrade.getPercentileRank())
-                    .gedTotalScore(middleSchoolGrade.getGedTotalScore())
-                    .gedMaxScore(middleSchoolGrade.getGedMaxScore())
-                    .build();
-        } else {
-            CandidatePersonalInformation personalInformation = (CandidatePersonalInformation) application.getPersonalInformation();
-            CandidateMiddleSchoolGrade middleSchoolGrade = (CandidateMiddleSchoolGrade) application.getMiddleSchoolGrade();
-            admissionInfoResDto = GeneralAdmissionInfoResDto.builder()
-                    .applicantName(applicant.getName())
-                    .applicantGender(applicant.getGender())
-                    .applicantBirth(applicant.getBirth())
-                    .address(personalInformation.getAddress())
-                    .detailAddress(personalInformation.getDetailAddress())
-                    .graduation(personalInformation.getGraduation())
-                    .telephone(personalInformation.getPhoneNumber())
-                    .applicantPhoneNumber(applicant.getPhoneNumber())
-                    .guardianName(personalInformation.getGuardianName())
-                    .relationWithApplicant(personalInformation.getRelationWithApplicant())
-                    .guardianPhoneNumber(personalInformation.getGuardianPhoneNumber())
-                    .teacherName(personalInformation.getTeacherName())
-                    .teacherPhoneNumber(personalInformation.getTeacherPhoneNumber())
-                    .schoolName(personalInformation.getSchoolName())
-                    .schoolLocation(personalInformation.getSchoolLocation())
-                    .applicantImageUri(personalInformation.getApplicantImageUri())
-                    .desiredMajor(application.getDesiredMajors())
-                    .screening(screening)
-                    .build();
-            admissionGradeResDto = GeneralAdmissionGradeResDto.builder()
-                    .totalScore(middleSchoolGrade.getTotalScore())
-                    .percentileRank(middleSchoolGrade.getPercentileRank())
-                    .grade1Semester1Score(middleSchoolGrade.getGrade1Semester1Score())
-                    .grade1Semester2Score(middleSchoolGrade.getGrade1Semester2Score())
-                    .grade2Semester1Score(middleSchoolGrade.getGrade2Semester1Score())
-                    .grade2Semester2Score(middleSchoolGrade.getGrade2Semester2Score())
-                    .grade3Semester1Score(middleSchoolGrade.getGrade3Semester1Score())
-                    .artisticScore(middleSchoolGrade.getArtisticScore())
-                    .curricularSubtotalScore(middleSchoolGrade.getCurricularSubtotalScore())
-                    .attendanceScore(middleSchoolGrade.getAttendanceScore())
-                    .volunteerScore(middleSchoolGrade.getVolunteerScore())
-                    .extracurricularSubtotalScore(middleSchoolGrade.getExtraCurricularSubtotalScore())
-                    .build();
-        }
+    private GedAdmissionInfoResDto buildGedAdmissionInfoResDto(AbstractApplication application, Screening screening) {
+        Applicant applicant = application.getApplicant();
+        GedPersonalInformation personalInformation = (GedPersonalInformation) application.getPersonalInformation();
 
-        AdmissionStatusResDto admissionStatusResDto = AdmissionStatusResDto.builder()
+        return GedAdmissionInfoResDto.builder()
+                .applicantName(applicant.getName())
+                .applicantGender(applicant.getGender())
+                .applicantBirth(applicant.getBirth())
+                .address(personalInformation.getAddress())
+                .detailAddress(personalInformation.getDetailAddress())
+                .graduation(personalInformation.getGraduation())
+                .telephone(personalInformation.getPhoneNumber())
+                .applicantPhoneNumber(applicant.getPhoneNumber())
+                .guardianName(personalInformation.getGuardianName())
+                .relationWithApplicant(personalInformation.getRelationWithApplicant())
+                .guardianPhoneNumber(personalInformation.getGuardianPhoneNumber())
+                .applicantImageUri(personalInformation.getApplicantImageUri())
+                .desiredMajor(application.getDesiredMajors())
+                .screening(screening)
+                .build();
+    }
+
+    private GedAdmissionGradeResDto buildGedAdmissionGradeResDto(AbstractApplication application) {
+        GedMiddleSchoolGrade middleSchoolGrade = (GedMiddleSchoolGrade) application.getMiddleSchoolGrade();
+
+        return GedAdmissionGradeResDto.builder()
+                .totalScore(middleSchoolGrade.getTotalScore())
+                .percentileRank(middleSchoolGrade.getPercentileRank())
+                .gedTotalScore(middleSchoolGrade.getGedTotalScore())
+                .gedMaxScore(middleSchoolGrade.getGedMaxScore())
+                .build();
+    }
+
+    private GeneralAdmissionInfoResDto buildGeneralAdmissionInfoResDto(AbstractApplication application, Screening screening) {
+        Applicant applicant = application.getApplicant();
+        CandidatePersonalInformation personalInformation = (CandidatePersonalInformation) application.getPersonalInformation();
+
+        return GeneralAdmissionInfoResDto.builder()
+                .applicantName(applicant.getName())
+                .applicantGender(applicant.getGender())
+                .applicantBirth(applicant.getBirth())
+                .address(personalInformation.getAddress())
+                .detailAddress(personalInformation.getDetailAddress())
+                .graduation(personalInformation.getGraduation())
+                .telephone(personalInformation.getPhoneNumber())
+                .applicantPhoneNumber(applicant.getPhoneNumber())
+                .guardianName(personalInformation.getGuardianName())
+                .relationWithApplicant(personalInformation.getRelationWithApplicant())
+                .guardianPhoneNumber(personalInformation.getGuardianPhoneNumber())
+                .teacherName(personalInformation.getTeacherName())
+                .teacherPhoneNumber(personalInformation.getTeacherPhoneNumber())
+                .schoolName(personalInformation.getSchoolName())
+                .schoolLocation(personalInformation.getSchoolLocation())
+                .applicantImageUri(personalInformation.getApplicantImageUri())
+                .desiredMajor(application.getDesiredMajors())
+                .screening(screening)
+                .build();
+    }
+
+    private GeneralAdmissionGradeResDto buildGeneralAdmissionGradeResDto(AbstractApplication application) {
+        CandidateMiddleSchoolGrade middleSchoolGrade = (CandidateMiddleSchoolGrade) application.getMiddleSchoolGrade();
+
+        return GeneralAdmissionGradeResDto.builder()
+                .totalScore(middleSchoolGrade.getTotalScore())
+                .percentileRank(middleSchoolGrade.getPercentileRank())
+                .grade1Semester1Score(middleSchoolGrade.getGrade1Semester1Score())
+                .grade1Semester2Score(middleSchoolGrade.getGrade1Semester2Score())
+                .grade2Semester1Score(middleSchoolGrade.getGrade2Semester1Score())
+                .grade2Semester2Score(middleSchoolGrade.getGrade2Semester2Score())
+                .grade3Semester1Score(middleSchoolGrade.getGrade3Semester1Score())
+                .artisticScore(middleSchoolGrade.getArtisticScore())
+                .curricularSubtotalScore(middleSchoolGrade.getCurricularSubtotalScore())
+                .attendanceScore(middleSchoolGrade.getAttendanceScore())
+                .volunteerScore(middleSchoolGrade.getVolunteerScore())
+                .extracurricularSubtotalScore(middleSchoolGrade.getExtraCurricularSubtotalScore())
+                .build();
+    }
+
+    private AdmissionStatusResDto buildAdmissionStatusResDto(AbstractApplication application) {
+        return AdmissionStatusResDto.builder()
                 .isFinalSubmitted(application.getFinalSubmitted())
                 .isPrintsArrived(application.getPrintsArrived())
                 .firstEvaluation(application.getSubjectEvaluationResult().getEvaluationStatus())
@@ -111,13 +150,5 @@ public class QueryApplicationByIdService {
                 .secondScore(application.getCompetencyExamScore())
                 .finalMajor(application.getFinalMajor())
                 .build();
-
-        return new FoundApplicationResDto(
-                application.getId(),
-                admissionInfoResDto,
-                application.getMiddleSchoolGrade().getTranscript(),
-                admissionGradeResDto,
-                admissionStatusResDto
-        );
     }
 }

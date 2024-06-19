@@ -4,6 +4,8 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
@@ -11,6 +13,8 @@ import java.util.Objects;
 @Embeddable
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class EvaluationResult {
 
     @Enumerated(EnumType.STRING)

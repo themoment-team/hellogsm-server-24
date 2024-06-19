@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CustomApplicationRepository {
 
-    Optional<AbstractApplication> findByAuthenticationIdWithAllJoins(Long authenticationId);
+    Optional<AbstractApplication> findByApplicantIdWithAllJoins(Long authenticationId);
 
     Page<AbstractApplication> findAllByFinalSubmitted(Pageable pageable);
 
