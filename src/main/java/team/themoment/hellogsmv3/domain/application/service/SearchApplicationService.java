@@ -37,42 +37,10 @@ public class SearchApplicationService {
         List<SearchApplicationResDto> searchApplicationResDtoList = new ArrayList<SearchApplicationResDto>(applicationList.size());
 
         for ( AbstractApplication application : applicationList ) {
-            Applicant applicant = application.getApplicant();
-
-            AbstractPersonalInformation personalInformation = application.getPersonalInformation();
-            CandidatePersonalInformation generalPersonalInformation = null;
-            boolean isGed = application.getPersonalInformation().getGraduation() == GraduationStatus.GED;
-            if (!isGed) {
-                generalPersonalInformation = (CandidatePersonalInformation) Hibernate.unproxy(personalInformation);
-            }
-
-            Screening screening;
-            if (!application.getSubjectEvaluationResult().isPass()) {
-                screening = application.getSubjectEvaluationResult().getPreScreeningEvaluation();
-            } else if (!application.getCompetencyEvaluationResult().isPass()) {
-                screening = application.getCompetencyEvaluationResult().getPreScreeningEvaluation();
-            } else {
-                screening = application.getCompetencyEvaluationResult().getPostScreeningEvaluation();
-            }
-
-            searchApplicationResDtoList.add(SearchApplicationResDto.builder()
-                            .applicantId(application.getApplicant().getId())
-                            .isFinalSubmitted(application.getFinalSubmitted())
-                            .isPrintsArrived(application.getPrintsArrived())
-                            .applicantName(applicant.getName())
-                            .screening(screening)
-                            .schoolName(isGed ? null : generalPersonalInformation.getSchoolName())
-                            .applicantPhoneNumber(personalInformation.getPhoneNumber())
-                            .guardianPhoneNumber(personalInformation.getGuardianPhoneNumber())
-                            .teacherPhoneNumber(isGed ? null : generalPersonalInformation.getTeacherPhoneNumber())
-                            .firstEvaluation(application.getSubjectEvaluationResult().getEvaluationStatus())
-                            .secondEvaluation(application.getCompetencyEvaluationResult().getEvaluationStatus())
-                            .registrationNumber(application.getRegistrationNumber())
-                            .secondScore(application.getCompetencyExamScore())
-                            .build());
+            searchApplicationResDtoList.add(
+                    buildSearchApplicationResDto(application)
+            );
         }
-
-
 
          return new SearchApplicationsResDto(
                 paginationInfo,
@@ -89,5 +57,41 @@ public class SearchApplicationService {
             case SCHOOL -> applicationRepository.findAllByFinalSubmittedAndSchoolNameContaining(keyword, pageable);
             case PHONE_NUMBER -> applicationRepository.findAllByFinalSubmittedAndPhoneNumberContaining(keyword, pageable);
         };
+    }
+
+    private SearchApplicationResDto buildSearchApplicationResDto(AbstractApplication application) {
+        Applicant applicant = application.getApplicant();
+        AbstractPersonalInformation personalInformation = application.getPersonalInformation();
+        CandidatePersonalInformation generalPersonalInformation = null;
+
+        boolean isGed = application.getPersonalInformation().getGraduation() == GraduationStatus.GED;
+        if (!isGed) {
+            generalPersonalInformation = (CandidatePersonalInformation) Hibernate.unproxy(personalInformation);
+        }
+
+        Screening screening;
+        if (!application.getSubjectEvaluationResult().isPass()) {
+            screening = application.getSubjectEvaluationResult().getPreScreeningEvaluation();
+        } else if (!application.getCompetencyEvaluationResult().isPass()) {
+            screening = application.getCompetencyEvaluationResult().getPreScreeningEvaluation();
+        } else {
+            screening = application.getCompetencyEvaluationResult().getPostScreeningEvaluation();
+        }
+
+        return SearchApplicationResDto.builder()
+                .applicantId(application.getApplicant().getId())
+                .isFinalSubmitted(application.getFinalSubmitted())
+                .isPrintsArrived(application.getPrintsArrived())
+                .applicantName(applicant.getName())
+                .screening(screening)
+                .schoolName(isGed ? null : generalPersonalInformation.getSchoolName())
+                .applicantPhoneNumber(personalInformation.getPhoneNumber())
+                .guardianPhoneNumber(personalInformation.getGuardianPhoneNumber())
+                .teacherPhoneNumber(isGed ? null : generalPersonalInformation.getTeacherPhoneNumber())
+                .firstEvaluation(application.getSubjectEvaluationResult().getEvaluationStatus())
+                .secondEvaluation(application.getCompetencyEvaluationResult().getEvaluationStatus())
+                .registrationNumber(application.getRegistrationNumber())
+                .secondScore(application.getCompetencyExamScore())
+                .build();
     }
 }
