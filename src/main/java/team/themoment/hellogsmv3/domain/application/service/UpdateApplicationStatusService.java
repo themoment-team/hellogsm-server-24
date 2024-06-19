@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
+import team.themoment.hellogsmv3.domain.applicant.service.ApplicantService;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsmv3.domain.application.entity.*;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
@@ -22,12 +23,11 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 public class UpdateApplicationStatusService {
 
     private final ApplicationRepository applicationRepository;
-    private final ApplicantRepository applicantRepository;
+    private final ApplicantService applicantService;
 
     @Transactional
     public void execute(Long applicantId, ApplicationStatusReqDto applicationStatusReqDto) {
-        Applicant applicant = applicantRepository.findById(applicantId)
-                .orElseThrow(() -> new ExpectedException(String.format("ID(%s)에 해당하는 지원자를 찾을 수 없습니다.", applicantId), HttpStatus.NOT_FOUND));
+        Applicant applicant = applicantService.findOrThrow(applicantId);
 
         AbstractApplication application = applicationRepository.findAbstractApplicationByApplicant(applicant)
                 .orElseThrow(() -> new ExpectedException(String.format("ID(%s)에 해당하는 지원자의 원서를 찾을 수 없습니다.", applicantId), HttpStatus.NOT_FOUND));
