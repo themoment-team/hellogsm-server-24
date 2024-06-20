@@ -1,15 +1,12 @@
 package team.themoment.hellogsmv3.domain.auth.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.auth.dto.BasicAuthenticationDto;
 import team.themoment.hellogsmv3.domain.auth.service.DeleteMyAuthenticationService;
 import team.themoment.hellogsmv3.domain.auth.service.QueryAuthenticationById;
 import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/authentication/v3")
