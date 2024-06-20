@@ -89,11 +89,12 @@ public class UpdateApplicationStatusService {
                         .evaluationStatus(applicationStatusReqDto.secondEvaluation())
                         .preScreeningEvaluation(application.getCompetencyEvaluationResult().getPreScreeningEvaluation())
                         .postScreeningEvaluation(applicationStatusReqDto.screeningSecondEvaluationAt())
+                        .score(applicationStatusReqDto.secondScore())
                         .build()
 
                 )
                 .registrationNumber(applicationStatusReqDto.registrationNumber())
-                .competencyExamScore(applicationStatusReqDto.secondScore())
+                .interviewScore(applicationStatusReqDto.interviewScore())
                 .desiredMajors(application.getDesiredMajors())
                 .finalMajor(applicationStatusReqDto.finalMajor())
                 .build();

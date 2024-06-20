@@ -24,6 +24,7 @@ public record ApplicationStatusReqDto(
         Screening screeningSecondEvaluationAt,
         Long registrationNumber,
         BigDecimal secondScore,
+        BigDecimal interviewScore,
         Major finalMajor
 ) {
 }
