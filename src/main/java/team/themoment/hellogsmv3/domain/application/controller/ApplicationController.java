@@ -96,7 +96,6 @@ public class ApplicationController {
     @GetMapping("/admission-tickets")
     public List<AdmissionTicketsResDto> findAdmissionTickets(
     ) {
-        List<AdmissionTicketsResDto> admissionTicketsResDto = queryAdmissionTicketsService.execute();
-        return admissionTicketsResDto;
+        return queryAdmissionTicketsService.execute();
     }
 }
