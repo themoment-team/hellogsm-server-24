@@ -31,8 +31,7 @@ public class AuthenticationController {
 
     @DeleteMapping("/authentication/me")
     public CommonApiMessageResponse deleteMyAuthentication() {
-        Long authenticationId = manager.getId();
-        deleteMyAuthenticationService.execute(authenticationId);
+        deleteMyAuthenticationService.execute(manager.getId());
         return CommonApiMessageResponse.success("삭제되었습니다.");
     }
 }
