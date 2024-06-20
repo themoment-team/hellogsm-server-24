@@ -34,13 +34,7 @@ public class CreateApplicantService {
 
         AuthenticationCode code = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
 
-        Authentication roleUpdatedAuthentication = authenticationRepository.save(
-                new Authentication(
-                        authentication.getId(),
-                        authentication.getProviderName(),
-                        authentication.getProviderId(),
-                        Role.APPLICANT
-                ));
+        Authentication roleUpdatedAuthentication = authenticationRepository.save(authentication.roleUpdatedAuthentication());
 
         Applicant newApplicant = new Applicant(
                 null,

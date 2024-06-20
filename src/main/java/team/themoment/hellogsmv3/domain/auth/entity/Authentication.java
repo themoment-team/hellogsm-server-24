@@ -1,16 +1,14 @@
 package team.themoment.hellogsmv3.domain.auth.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
 
 @Getter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Authentication {
 
     @Id
@@ -23,6 +21,11 @@ public class Authentication {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public Authentication roleUpdatedAuthentication() {
+        this.role = Role.APPLICANT;
+        return role;
+    }
 
     @PrePersist
     private void prePersist() {
