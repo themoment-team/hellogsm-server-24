@@ -49,7 +49,7 @@ public abstract class AbstractApplication {
             @AttributeOverride( name = "evaluationStatus", column = @Column(name = "subject_evaluation_result_status")),
             @AttributeOverride( name = "preScreeningEvaluation", column = @Column(name = "subject_evaluation_result_pre_screening")),
             @AttributeOverride( name = "postScreeningEvaluation", column = @Column(name = "subject_evaluation_result_post_screening")),
-            @AttributeOverride( name = "score", column = @Column(name = "subject_evaluation_result_score"))
+            @AttributeOverride( name = "score", column = @Column(name = "subject_evaluation_result_score")) // 1차 서류 전형 점수
     })
     protected EvaluationResult subjectEvaluationResult;
 
@@ -59,12 +59,12 @@ public abstract class AbstractApplication {
             @AttributeOverride( name = "evaluationStatus", column = @Column(name = "competency_evaluation_result_status")),
             @AttributeOverride( name = "preScreeningEvaluation", column = @Column(name = "competency_evaluation_result_pre_screening")),
             @AttributeOverride( name = "postScreeningEvaluation", column = @Column(name = "competency_evaluation_result_post_screening")),
-            @AttributeOverride( name = "score", column = @Column(name = "competency_evaluation_result_score"))
+            @AttributeOverride( name = "score", column = @Column(name = "competency_evaluation_result_score")) // 2차 인적성 검사 점수
     })
     protected EvaluationResult competencyEvaluationResult;
 
     @Nullable
-    protected BigDecimal competencyExamScore;
+    protected BigDecimal interviewScore; // 심층면접 점수
 
     @Nullable
     protected Long registrationNumber;
