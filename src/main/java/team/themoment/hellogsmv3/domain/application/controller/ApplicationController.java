@@ -107,4 +107,11 @@ public class ApplicationController {
         deleteApplicationByAuthIdService.execute(manager.getId());
         return CommonApiMessageResponse.success("삭제되었습니다.");
     }
+
+    @DeleteMapping("/application/me")
+    public CommonApiMessageResponse deleteApplication(
+    ) {
+        deleteApplicationByAuthIdService.execute(manager.getId());
+        return CommonApiMessageResponse.success("삭제되었습니다.");
+    }
 }

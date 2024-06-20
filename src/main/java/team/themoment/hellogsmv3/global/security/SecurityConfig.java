@@ -171,6 +171,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "application/v3/application").hasAnyAuthority(
                         Role.APPLICANT.name()
                 )
+                .requestMatchers(HttpMethod.POST, "application/v3/image").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
                 .anyRequest().permitAll()
         );
     }

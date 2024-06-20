@@ -59,6 +59,23 @@ spring:
     resources:
       add-mappings: false
 
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+        bucket-name: ${AWS_BUCKET_NAME}
+      region:
+        static: ${AWS_REGION}
+      stack:
+        auto: false
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
 auth:
   redirect-base-uri: http://localhost:8080/
   redirect-login-failure-uri: http://localhost:8080/auth/error
