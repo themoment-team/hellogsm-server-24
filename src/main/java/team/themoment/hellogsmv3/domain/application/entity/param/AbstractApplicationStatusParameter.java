@@ -16,7 +16,6 @@ public record AbstractApplicationStatusParameter(
         @Nullable EvaluationResult subjectEvaluationResult,
         @Nullable EvaluationResult competencyEvaluationResult,
         @Nullable Long registrationNumber,
-        @Nullable BigDecimal competencyExamScore,
         @Nullable BigDecimal interviewScore,
         @NonNull DesiredMajors desiredMajors,
         @Nullable Major finalMajor) {
@@ -28,7 +27,6 @@ public record AbstractApplicationStatusParameter(
                 .subjectEvaluationResult(null)
                 .competencyEvaluationResult(null)
                 .registrationNumber(null)
-                .competencyExamScore(null)
                 .interviewScore(null)
                 .desiredMajors(desiredMajors)
                 .finalMajor(null)
