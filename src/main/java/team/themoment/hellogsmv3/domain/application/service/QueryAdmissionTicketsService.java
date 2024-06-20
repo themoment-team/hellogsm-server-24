@@ -6,7 +6,6 @@ import team.themoment.hellogsmv3.domain.applicant.dto.response.AdmissionTicketsR
 import team.themoment.hellogsmv3.domain.application.entity.*;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,43 +23,50 @@ public class QueryAdmissionTicketsService {
         List<AdmissionTicketsResDto> admissionTicketsResDtos = new ArrayList<>();
 
         for (AbstractApplication application : applications) {
-
-            if (application.getPersonalInformation().getGraduation() == GraduationStatus.GED) {
-                admissionTicketsResDtos.add(AdmissionTicketsResDto.builder()
-                        .applicantName(application.getApplicant().getName())
-                        .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                        .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
-                        .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
-                        .schoolName(null)
-                        .registrationNumber(application.getRegistrationNumber())
-                        .build()
-                );
-            } else if (application.getPersonalInformation().getGraduation() == GraduationStatus.CANDIDATE) {
-                CandidatePersonalInformation candidatePersonalInformation = (CandidatePersonalInformation) application.getPersonalInformation().clone();
-
-                admissionTicketsResDtos.add(AdmissionTicketsResDto.builder()
-                        .applicantName(application.getApplicant().getName())
-                        .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                        .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
-                        .schoolName(candidatePersonalInformation.getSchoolName())
-                        .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
-                        .registrationNumber(application.getRegistrationNumber())
-                        .build()
-                );
-            } else if (application.getPersonalInformation().getGraduation() == GraduationStatus.GRADUATE) {
-                GraduatePersonalInformation graduatePersonalInformation = (GraduatePersonalInformation) application.getPersonalInformation().clone();
-
-                admissionTicketsResDtos.add(AdmissionTicketsResDto.builder()
-                        .applicantName(application.getApplicant().getName())
-                        .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                        .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
-                        .schoolName(graduatePersonalInformation.getSchoolName())
-                        .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
-                        .registrationNumber(application.getRegistrationNumber())
-                        .build()
-                );
+            switch (application.getPersonalInformation().getGraduation()) {
+                case GED -> admissionTicketsResDtos.add(buildGedAdmissionTicketsResDto(application));
+                case CANDIDATE -> admissionTicketsResDtos.add(buildCandidateAdmissionTicketsResDto(application));
+                case GRADUATE -> admissionTicketsResDtos.add(buildGraduateAdmissionTicketsResDto(application));
             }
         }
+
         return admissionTicketsResDtos;
+    }
+
+    private AdmissionTicketsResDto buildGedAdmissionTicketsResDto (AbstractApplication application) {
+        return AdmissionTicketsResDto.builder()
+                .applicantName(application.getApplicant().getName())
+                .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
+                .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
+                .schoolName(null)
+                .registrationNumber(application.getRegistrationNumber())
+                .build();
+    }
+
+    private AdmissionTicketsResDto buildCandidateAdmissionTicketsResDto (AbstractApplication application) {
+        CandidatePersonalInformation candidatePersonalInformation = (CandidatePersonalInformation) application.getPersonalInformation().clone();
+
+        return AdmissionTicketsResDto.builder()
+                .applicantName(application.getApplicant().getName())
+                .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
+                .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
+                .schoolName(candidatePersonalInformation.getSchoolName())
+                .registrationNumber(application.getRegistrationNumber())
+                .build();
+    }
+
+    private AdmissionTicketsResDto buildGraduateAdmissionTicketsResDto (AbstractApplication application) {
+        GraduatePersonalInformation graduatePersonalInformation = (GraduatePersonalInformation) application.getPersonalInformation().clone();
+
+        return AdmissionTicketsResDto.builder()
+                .applicantName(application.getApplicant().getName())
+                .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
+                .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
+                .schoolName(graduatePersonalInformation.getSchoolName())
+                .registrationNumber(application.getRegistrationNumber())
+                .build();
     }
 }
