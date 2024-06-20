@@ -2,6 +2,7 @@ package team.themoment.hellogsmv3.domain.application.entity;
 
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -11,6 +12,7 @@ import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersona
 import java.util.UUID;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class GraduatePersonalInformation extends AbstractPersonalInformation {
 

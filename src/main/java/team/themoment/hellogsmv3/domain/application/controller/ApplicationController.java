@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.application.dto.response.ApplicationListResDto;
+import team.themoment.hellogsmv3.domain.applicant.dto.response.AdmissionTicketsResDto;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsmv3.domain.application.dto.response.FoundApplicationResDto;
 import team.themoment.hellogsmv3.domain.application.service.QueryAllApplicationService;
+import team.themoment.hellogsmv3.domain.application.service.QueryAdmissionTicketsService;
 import team.themoment.hellogsmv3.domain.application.service.QueryApplicationByIdService;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import jakarta.validation.Valid;
@@ -19,7 +21,7 @@ import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse
 import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationStatusService;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/application/v3")
@@ -33,6 +35,7 @@ public class ApplicationController {
     private final ModifyApplicationService modifyApplicationService;
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
     private final UpdateApplicationStatusService updateApplicationStatusService;
+    private final QueryAdmissionTicketsService queryAdmissionTicketsService;
 
     @GetMapping("/application/me")
     public FoundApplicationResDto findMe() {
@@ -88,5 +91,11 @@ public class ApplicationController {
     ) {
         updateApplicationStatusService.execute(applicantId, applicationStatusReqDto);
         return CommonApiMessageResponse.success("수정되었습니다.");
+    }
+
+    @GetMapping("/admission-tickets")
+    public List<AdmissionTicketsResDto> findAdmissionTickets(
+    ) {
+        return queryAdmissionTicketsService.execute();
     }
 }
