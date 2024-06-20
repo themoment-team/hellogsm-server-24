@@ -8,6 +8,7 @@ import team.themoment.hellogsmv3.domain.application.dto.response.ApplicationList
 import team.themoment.hellogsmv3.domain.applicant.dto.response.AdmissionTicketsResDto;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsmv3.domain.application.dto.response.FoundApplicationResDto;
+import team.themoment.hellogsmv3.domain.application.service.DeleteApplicationByAuthIdService;
 import team.themoment.hellogsmv3.domain.application.service.QueryAllApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.QueryAdmissionTicketsService;
 import team.themoment.hellogsmv3.domain.application.service.QueryApplicationByIdService;
@@ -36,6 +37,7 @@ public class ApplicationController {
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
     private final UpdateApplicationStatusService updateApplicationStatusService;
     private final QueryAdmissionTicketsService queryAdmissionTicketsService;
+    private final DeleteApplicationByAuthIdService deleteApplicationByAuthIdService;
 
     @GetMapping("/application/me")
     public FoundApplicationResDto findMe() {
@@ -97,5 +99,12 @@ public class ApplicationController {
     public List<AdmissionTicketsResDto> findAdmissionTickets(
     ) {
         return queryAdmissionTicketsService.execute();
+    }
+
+    @DeleteMapping("/application/me")
+    public CommonApiMessageResponse deleteApplication(
+    ) {
+        deleteApplicationByAuthIdService.execute(manager.getId());
+        return CommonApiMessageResponse.success("삭제되었습니다.");
     }
 }
