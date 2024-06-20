@@ -14,6 +14,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class GraduateApplication extends AbstractApplication {
+
     @Builder
     private GraduateApplication(
             UUID id,
@@ -21,7 +22,7 @@ public final class GraduateApplication extends AbstractApplication {
             @NonNull GraduateMiddleSchoolGrade middleSchoolGrade,
             @NonNull AbstractApplicationStatusParameter statusParameter,
             @NonNull Applicant applicant
-            ) {
+    ) {
         super(id, personalInformation, middleSchoolGrade, statusParameter, applicant);
     }
 }

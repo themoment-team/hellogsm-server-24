@@ -7,6 +7,8 @@ import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.application.type.EvaluationResult;
 import team.themoment.hellogsmv3.domain.application.type.Major;
 
+import java.math.BigDecimal;
+
 @Builder
 public record AbstractApplicationStatusParameter(
         @NonNull Boolean finalSubmitted,
@@ -14,6 +16,7 @@ public record AbstractApplicationStatusParameter(
         @Nullable EvaluationResult subjectEvaluationResult,
         @Nullable EvaluationResult competencyEvaluationResult,
         @Nullable Long registrationNumber,
+        @Nullable BigDecimal interviewScore,
         @NonNull DesiredMajors desiredMajors,
         @Nullable Major finalMajor) {
 
@@ -24,6 +27,7 @@ public record AbstractApplicationStatusParameter(
                 .subjectEvaluationResult(null)
                 .competencyEvaluationResult(null)
                 .registrationNumber(null)
+                .interviewScore(null)
                 .desiredMajors(desiredMajors)
                 .finalMajor(null)
                 .build();

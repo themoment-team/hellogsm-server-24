@@ -5,19 +5,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.application.dto.response.ApplicationListResDto;
+import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsmv3.domain.application.dto.response.FoundApplicationResDto;
 import team.themoment.hellogsmv3.domain.application.service.QueryAllApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.QueryApplicationByIdService;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissionService;
 import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
+import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationStatusService;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/application/v3")
@@ -30,6 +32,7 @@ public class ApplicationController {
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
+    private final UpdateApplicationStatusService updateApplicationStatusService;
 
     @GetMapping("/application/me")
     public FoundApplicationResDto findMe() {
@@ -50,7 +53,7 @@ public class ApplicationController {
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
         return queryAllApplicationService.execute(page, size);
     }
-  
+
     @PostMapping("/application/me")
     public CommonApiMessageResponse create(@RequestBody @Valid ApplicationReqDto reqDto) {
         createApplicationService.execute(reqDto, manager.getId());
@@ -77,4 +80,13 @@ public class ApplicationController {
         return CommonApiMessageResponse.success("수정되었습니다.");
     }
 
+
+    @PutMapping("/status/{applicantId}")
+    public CommonApiMessageResponse updateStatus(
+            @PathVariable Long applicantId,
+            @RequestBody ApplicationStatusReqDto applicationStatusReqDto
+    ) {
+        updateApplicationStatusService.execute(applicantId, applicationStatusReqDto);
+        return CommonApiMessageResponse.success("수정되었습니다.");
+    }
 }

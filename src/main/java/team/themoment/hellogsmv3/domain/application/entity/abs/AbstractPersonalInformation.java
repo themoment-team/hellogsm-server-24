@@ -12,7 +12,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class AbstractPersonalInformation {
+public abstract class AbstractPersonalInformation implements Cloneable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -59,5 +59,14 @@ public abstract class AbstractPersonalInformation {
         this.guardianName = parameter.getGuardianName();
         this.relationWithApplicant = parameter.getRelationWithApplicant();
         this.guardianPhoneNumber = parameter.getGuardianPhoneNumber();
+    }
+
+    @Override
+    public AbstractPersonalInformation clone() {
+        try {
+            return (AbstractPersonalInformation) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("객체를 복사하는중에 문제가 발생하였습니다.", e);
+        }
     }
 }

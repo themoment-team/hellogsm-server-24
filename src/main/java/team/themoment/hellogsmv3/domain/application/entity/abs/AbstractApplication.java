@@ -95,6 +95,7 @@ public abstract class AbstractApplication {
         this.printsArrived = parameter.printsArrived();
         this.subjectEvaluationResult = parameter.subjectEvaluationResult();
         this.competencyEvaluationResult = parameter.competencyEvaluationResult();
+        this.interviewScore = parameter.interviewScore();
         this.registrationNumber = parameter.registrationNumber();
         this.desiredMajors = parameter.desiredMajors();
         this.finalMajor = parameter.finalMajor();
