@@ -98,8 +98,14 @@ public class ApplicationController {
     @GetMapping("/admission-tickets")
     public List<AdmissionTicketsResDto> findAdmissionTickets(
     ) {
-        List<AdmissionTicketsResDto> admissionTicketsResDto = queryAdmissionTicketsService.execute();
-        return admissionTicketsResDto;
+        return queryAdmissionTicketsService.execute();
+    }
+
+    @DeleteMapping("/application/me")
+    public CommonApiMessageResponse deleteApplication(
+    ) {
+        deleteApplicationByAuthIdService.execute(manager.getId());
+        return CommonApiMessageResponse.success("삭제되었습니다.");
     }
 
     @DeleteMapping("/application/me")

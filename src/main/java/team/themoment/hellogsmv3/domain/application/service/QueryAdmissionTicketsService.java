@@ -21,54 +21,46 @@ public class QueryAdmissionTicketsService {
 
     public List<AdmissionTicketsResDto> execute() {
         List<AbstractApplication> applications = applicationRepository.findAll();
+        List<AdmissionTicketsResDto> admissionTicketsResDtos = new ArrayList<>();
 
-        List<AdmissionTicketsResDto> gedAdmissionTicketsResDtos = applications.stream()
-                .filter(application -> application.getPersonalInformation().getGraduation() == GraduationStatus.GED)
-                .map(application ->
-                        AdmissionTicketsResDto.builder()
-                                .applicantName(application.getApplicant().getName())
-                                .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                                .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
-                                .schoolName(null)
-                                .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
-                                .registrationNumber(application.getRegistrationNumber())
-                                .build()).toList();
+        for (AbstractApplication application : applications) {
 
-        List<AdmissionTicketsResDto> candidateAdmissionTicketsResDtos = applications.stream()
-                .filter(application -> application.getPersonalInformation().getGraduation() == GraduationStatus.CANDIDATE)
-                .map(application -> {
-                    CandidatePersonalInformation candidatePersonalInformation = (CandidatePersonalInformation) application.getPersonalInformation().clone();
+            if (application.getPersonalInformation().getGraduation() == GraduationStatus.GED) {
+                admissionTicketsResDtos.add(AdmissionTicketsResDto.builder()
+                        .applicantName(application.getApplicant().getName())
+                        .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
+                        .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
+                        .schoolName(null)
+                        .registrationNumber(application.getRegistrationNumber())
+                        .build()
+                );
+            } else if (application.getPersonalInformation().getGraduation() == GraduationStatus.CANDIDATE) {
+                CandidatePersonalInformation candidatePersonalInformation = (CandidatePersonalInformation) application.getPersonalInformation().clone();
 
-                    return AdmissionTicketsResDto.builder()
-                            .applicantName(application.getApplicant().getName())
-                            .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                            .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
-                            .schoolName(candidatePersonalInformation.getSchoolName())
-                            .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
-                            .registrationNumber(application.getRegistrationNumber())
-                            .build();
-                }).toList();
+                admissionTicketsResDtos.add(AdmissionTicketsResDto.builder()
+                        .applicantName(application.getApplicant().getName())
+                        .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
+                        .schoolName(candidatePersonalInformation.getSchoolName())
+                        .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
+                        .registrationNumber(application.getRegistrationNumber())
+                        .build()
+                );
+            } else if (application.getPersonalInformation().getGraduation() == GraduationStatus.GRADUATE) {
+                GraduatePersonalInformation graduatePersonalInformation = (GraduatePersonalInformation) application.getPersonalInformation().clone();
 
-        List<AdmissionTicketsResDto> graduateAdmissionTicketsResDtos = applications.stream()
-                .filter(application -> application.getPersonalInformation().getGraduation() == GraduationStatus.GRADUATE)
-                .map(application -> {
-                    GraduatePersonalInformation graduatePersonalInformation = (GraduatePersonalInformation) application.getPersonalInformation().clone();
-
-                    return AdmissionTicketsResDto.builder()
-                            .applicantName(application.getApplicant().getName())
-                            .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                            .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
-                            .schoolName(graduatePersonalInformation.getSchoolName())
-                            .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
-                            .registrationNumber(application.getRegistrationNumber())
-                            .build();
-                }).toList();
-
-        List<AdmissionTicketsResDto> allAdmissionTicketsResDtos = new ArrayList<>();
-        allAdmissionTicketsResDtos.addAll(gedAdmissionTicketsResDtos);
-        allAdmissionTicketsResDtos.addAll(candidateAdmissionTicketsResDtos);
-        allAdmissionTicketsResDtos.addAll(graduateAdmissionTicketsResDtos);
-
-        return allAdmissionTicketsResDtos;
+                admissionTicketsResDtos.add(AdmissionTicketsResDto.builder()
+                        .applicantName(application.getApplicant().getName())
+                        .applicantBirth(application.getApplicant().getBirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        .applicantImageUri(application.getPersonalInformation().getApplicantImageUri())
+                        .schoolName(graduatePersonalInformation.getSchoolName())
+                        .screening(application.getSubjectEvaluationResult().getPreScreeningEvaluation())
+                        .registrationNumber(application.getRegistrationNumber())
+                        .build()
+                );
+            }
+        }
+        return admissionTicketsResDtos;
     }
 }
