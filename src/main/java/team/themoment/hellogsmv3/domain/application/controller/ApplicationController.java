@@ -54,7 +54,7 @@ public class ApplicationController {
     }
 
     @GetMapping("/application/search")
-    public ResponseEntity<SearchApplicationsResDto> search(
+    public SearchApplicationsResDto search(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size,
             @RequestParam(name = "tag", required = false) String tag,
@@ -70,7 +70,7 @@ public class ApplicationController {
         } catch (IllegalArgumentException e) {
             throw new ExpectedException("유효하지 않은 tag입니다", HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(searchApplicationService.execute(page, size, searchTag, keyword));
+        return searchApplicationService.execute(page, size, searchTag, keyword);
     }
 
     @GetMapping("/application/all")
