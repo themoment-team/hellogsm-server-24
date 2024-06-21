@@ -32,6 +32,7 @@ public abstract class AbstractPersonalInformation implements Cloneable{
 
     @NotNull
     @Column(name = "graduation")
+    @Enumerated(EnumType.STRING)
     protected GraduationStatus graduation;
 
     @NotNull
