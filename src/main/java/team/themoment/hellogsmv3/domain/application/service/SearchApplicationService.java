@@ -19,8 +19,8 @@ import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.Screening;
 import team.themoment.hellogsmv3.domain.application.type.SearchTag;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,13 +34,10 @@ public class SearchApplicationService {
         Page<AbstractApplication> applicationPage = applicationPage(tag, keyword, pageable);
         ApplicationListInfoDto paginationInfo = new ApplicationListInfoDto(applicationPage.getTotalPages(), applicationPage.getTotalElements());
         List<AbstractApplication> applicationList = applicationPage.getContent();
-        List<SearchApplicationResDto> searchApplicationResDtoList = new ArrayList<SearchApplicationResDto>(applicationList.size());
 
-        for ( AbstractApplication application : applicationList ) {
-            searchApplicationResDtoList.add(
-                    buildSearchApplicationResDto(application)
-            );
-        }
+        List<SearchApplicationResDto> searchApplicationResDtoList = applicationList.stream()
+                .map(this::buildSearchApplicationResDto)
+                .collect(Collectors.toList());
 
          return new SearchApplicationsResDto(
                 paginationInfo,
