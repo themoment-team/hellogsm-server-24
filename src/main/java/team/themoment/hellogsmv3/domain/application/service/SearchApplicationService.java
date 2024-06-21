@@ -88,7 +88,7 @@ public class SearchApplicationService {
                 .firstEvaluation(application.getSubjectEvaluationResult().getEvaluationStatus())
                 .secondEvaluation(application.getCompetencyEvaluationResult().getEvaluationStatus())
                 .registrationNumber(application.getRegistrationNumber())
-                .secondScore(application.getCompetencyExamScore())
+                .secondScore(application.getCompetencyEvaluationResult().getScore())
                 .build();
     }
 }
