@@ -60,8 +60,7 @@ public class ApplicationController {
             @RequestParam(name = "tag", required = false) String tag,
             @RequestParam(name = "keyword", required = false) String keyword
     ) {
-        if (page < 0 || size < 0)
-            throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
+        validatePageAndSize(page, size);
         SearchTag searchTag = null;
         try {
             if (tag != null) {
@@ -78,8 +77,7 @@ public class ApplicationController {
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size
     ) {
-        if (page < 0 || size < 0)
-            throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
+        validatePageAndSize(page, size);
         return queryAllApplicationService.execute(page, size);
     }
 
@@ -130,5 +128,10 @@ public class ApplicationController {
     ) {
         deleteApplicationByAuthIdService.execute(manager.getId());
         return CommonApiMessageResponse.success("삭제되었습니다.");
+    }
+
+    private void validatePageAndSize(Integer page, Integer size) {
+        if (page < 0 || size < 0)
+            throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
     }
 }
