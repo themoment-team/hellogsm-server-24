@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.global.security.oauth;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -39,7 +40,7 @@ public class CustomOauth2UserService  implements OAuth2UserService {
         final String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId;
 
-        if (provider == null) throw new ExpectedException("oauth provider가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        if (provider == null) throw new AuthenticationServiceException("oauth provider가 존재하지 않습니다.");
 
         switch (provider.toLowerCase()) {
             case "kakao" -> providerId = ((Map<String, Object>) oAuthAttributes.get("kakao_account")).get("email").toString();
