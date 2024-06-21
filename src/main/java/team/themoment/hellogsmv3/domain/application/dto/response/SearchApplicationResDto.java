@@ -21,6 +21,7 @@ public record SearchApplicationResDto(
         EvaluationStatus firstEvaluation,
         EvaluationStatus secondEvaluation,
         Long registrationNumber,
-        BigDecimal secondScore
+        BigDecimal secondScore,
+        BigDecimal interviewScore
 ) {
 }

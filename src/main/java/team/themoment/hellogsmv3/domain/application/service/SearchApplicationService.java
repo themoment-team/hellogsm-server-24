@@ -89,6 +89,7 @@ public class SearchApplicationService {
                 .secondEvaluation(application.getCompetencyEvaluationResult().getEvaluationStatus())
                 .registrationNumber(application.getRegistrationNumber())
                 .secondScore(application.getCompetencyEvaluationResult().getScore())
+                .interviewScore(application.getInterviewScore())
                 .build();
     }
 }
