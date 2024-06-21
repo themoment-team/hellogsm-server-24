@@ -74,6 +74,7 @@ public abstract class AbstractApplication {
     protected DesiredMajors desiredMajors;
 
     @Nullable
+    @Enumerated(EnumType.STRING)
     protected Major finalMajor;
 
     @NotNull

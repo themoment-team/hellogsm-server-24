@@ -1,6 +1,8 @@
 package team.themoment.hellogsmv3.domain.application.type;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,10 +20,13 @@ import java.util.Objects;
 @Builder
 public class EvaluationResult {
 
+    @Enumerated(EnumType.STRING)
     private EvaluationStatus evaluationStatus;
 
+    @Enumerated(EnumType.STRING)
     private Screening preScreeningEvaluation;
 
+    @Enumerated(EnumType.STRING)
     private Screening postScreeningEvaluation;
 
     private BigDecimal score;
