@@ -90,6 +90,7 @@ public class SearchApplicationService {
                 .registrationNumber(application.getRegistrationNumber())
                 .secondScore(application.getCompetencyEvaluationResult().getScore())
                 .interviewScore(application.getInterviewScore())
+                .graduation(personalInformation.getGraduation())
                 .build();
     }
 }
