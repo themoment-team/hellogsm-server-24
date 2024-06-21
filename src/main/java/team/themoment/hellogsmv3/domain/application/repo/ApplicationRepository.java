@@ -49,9 +49,9 @@ public interface ApplicationRepository extends JpaRepository<AbstractApplication
 
     @Query(value = "SELECT a.* FROM abstract_application a " +
             "JOIN abstract_personal_information p ON a.personal_information_id = p.id " +
-            "WHERE p.phone_number LIKE %:keyword% " +
+            "WHERE (p.phone_number LIKE %:keyword% " +
             "OR p.guardian_phone_number LIKE %:keyword% " +
-            "OR p.teacher_phone_number LIKE %:keyword% " +
+            "OR p.teacher_phone_number LIKE %:keyword%) " +
             "AND a.final_submitted = TRUE " +
             "ORDER BY " +
             "    CASE " +
