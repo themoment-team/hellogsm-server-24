@@ -149,21 +149,16 @@ public class SecurityConfig {
                 .requestMatchers("/application/v3/application/me").hasAnyAuthority(
                         Role.APPLICANT.name()
                 )
-                .requestMatchers(HttpMethod.GET, "/application/v3/application/{applicantId}").hasAnyAuthority(
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/search").hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
+                        Role.APPLICANT.name(),
                         Role.ADMIN.name()
-                )
-                .requestMatchers(HttpMethod.PUT, "/application/v3/application/{applicantId}").hasAnyAuthority(
-                        Role.ADMIN.name(),
-                        Role.ROOT.name()
                 )
                 .requestMatchers(HttpMethod.GET, "/application/v3/application/all").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.PUT, "/application/v1/final-submit").hasAnyAuthority(
                         Role.APPLICANT.name()
-                )
-                .requestMatchers(HttpMethod.PUT, "application/v3/status/{applicantId}").hasAnyAuthority(
-                        Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.GET, "application/v3/admission-tickets").hasAnyAuthority(
                         Role.ADMIN.name()
@@ -175,6 +170,16 @@ public class SecurityConfig {
                         Role.APPLICANT.name(),
                         Role.ADMIN.name(),
                         Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/application/v3/application/{applicantId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
+                .requestMatchers(HttpMethod.PUT, "/application/v3/application/{applicantId}").hasAnyAuthority(
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.PUT, "application/v3/status/{applicantId}").hasAnyAuthority(
+                        Role.ADMIN.name()
                 )
                 .anyRequest().permitAll()
         );
