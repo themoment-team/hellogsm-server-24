@@ -14,11 +14,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
 import team.themoment.hellogsmv3.global.security.auth.AuthEnvironment;
-import team.themoment.hellogsmv3.global.security.data.CookieName;
 import team.themoment.hellogsmv3.global.security.handler.CustomAccessDeniedHandler;
 import team.themoment.hellogsmv3.global.security.handler.CustomAuthenticationEntryPoint;
 import team.themoment.hellogsmv3.global.security.handler.CustomUrlAuthenticationSuccessHandler;
-import team.themoment.hellogsmv3.global.security.handler.CustomUrlLogoutSuccessHandler;
 
 import java.util.Arrays;
 

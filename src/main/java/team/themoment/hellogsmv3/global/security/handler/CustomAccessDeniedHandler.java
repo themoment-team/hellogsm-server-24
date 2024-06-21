@@ -15,6 +15,7 @@ import java.util.Map;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
 
 @Component
 @RequiredArgsConstructor
@@ -35,8 +36,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setCharacterEncoding("utf-8");
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        Map<String, Object> map = new HashMap<>();
-        map.put("message", "요청을 수행할 수 있는 권한이 없습니다");
-        response.getWriter().write(objectMapper.writeValueAsString(map));
+        response.getWriter().write(objectMapper.writeValueAsString(
+                CommonApiMessageResponse.error("요청을 수행할 수 있는 권한이 없습니다.", HttpStatus.FORBIDDEN)
+        ));
     }
 }
