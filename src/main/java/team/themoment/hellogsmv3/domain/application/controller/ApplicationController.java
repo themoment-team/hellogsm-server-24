@@ -61,14 +61,7 @@ public class ApplicationController {
             @RequestParam(name = "keyword", required = false) String keyword
     ) {
         validatePageAndSize(page, size);
-        SearchTag searchTag = null;
-        try {
-            if (tag != null) {
-                searchTag = SearchTag.valueOf(tag);
-            }
-        } catch (IllegalArgumentException e) {
-            throw new ExpectedException("유효하지 않은 tag입니다", HttpStatus.BAD_REQUEST);
-        }
+        SearchTag searchTag = validateAndConvertTag(tag);
         return searchApplicationService.execute(page, size, searchTag, keyword);
     }
 
@@ -133,5 +126,16 @@ public class ApplicationController {
     private void validatePageAndSize(Integer page, Integer size) {
         if (page < 0 || size < 0)
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
+    }
+
+    private SearchTag validateAndConvertTag(String tag) {
+        if (tag == null) {
+            return null;
+        }
+        try {
+            return SearchTag.valueOf(tag);
+        } catch (IllegalArgumentException e) {
+            throw new ExpectedException("유효하지 않은 tag입니다", HttpStatus.BAD_REQUEST);
+        }
     }
 }
