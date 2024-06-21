@@ -42,17 +42,9 @@ public class CustomOauth2UserService  implements OAuth2UserService {
         if (provider == null) throw new ExpectedException("oauth provider가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
 
         switch (provider.toLowerCase()) {
-            case "kakao": {
-                providerId = ((Map<String, Object>) oAuthAttributes.get("kakao_account")).get("email").toString();
-                break;
-            }
-            case "google": {
-                providerId = oAuthAttributes.get("email").toString();
-                break;
-            }
-            default: {
-                throw new ExpectedException("올바르지 않은 oauth provider 입니다.", HttpStatus.BAD_REQUEST);
-            }
+            case "kakao" -> providerId = ((Map<String, Object>) oAuthAttributes.get("kakao_account")).get("email").toString();
+            case "google" -> providerId = oAuthAttributes.get("email").toString();
+            default -> throw new IllegalArgumentException("올바르지 않은 oauth provider 입니다.");
         }
 
         Authentication user = getUser(provider, providerId);
