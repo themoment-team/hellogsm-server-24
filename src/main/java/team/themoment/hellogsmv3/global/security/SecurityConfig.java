@@ -37,7 +37,6 @@ public class SecurityConfig {
 
             basicSetting(http);
             cors(http);
-            logout(http);
             oauth2Login(http);
             exceptionHandling(http);
             authorizeHttpRequests(http);
@@ -72,14 +71,6 @@ public class SecurityConfig {
     private void cors(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
-    }
-
-    private void logout(HttpSecurity http) throws Exception {
-        http.logout(logout ->
-                logout
-                    .logoutUrl("/auth/v3/logout")
-                    .deleteCookies(CookieName.JSESSIONID.name(), CookieName.REMEMBER_ME.name())
-                    .logoutSuccessHandler(new CustomUrlLogoutSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri())));
     }
 
     private void oauth2Login(HttpSecurity http) throws Exception {
