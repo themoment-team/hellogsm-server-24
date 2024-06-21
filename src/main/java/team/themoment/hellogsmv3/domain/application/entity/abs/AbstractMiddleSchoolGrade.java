@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class AbstractMiddleSchoolGrade {
+public abstract class AbstractMiddleSchoolGrade implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,5 +31,14 @@ public abstract class AbstractMiddleSchoolGrade {
         this.percentileRank = percentileRank;
         this.totalScore = totalScore;
         this.transcript = transcript;
+    }
+
+    @Override
+    public AbstractMiddleSchoolGrade clone() {
+        try {
+            return (AbstractMiddleSchoolGrade) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("객체를 복사하는중에 문제가 발생하였습니다.", e);
+        }
     }
 }

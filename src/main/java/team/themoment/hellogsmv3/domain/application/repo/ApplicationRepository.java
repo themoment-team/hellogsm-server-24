@@ -15,7 +15,10 @@ import java.util.UUID;
 
 public interface ApplicationRepository extends JpaRepository<AbstractApplication, UUID>, CustomApplicationRepository {
 
+    Optional<AbstractApplication> findAbstractApplicationByApplicant(Applicant applicant);
+
     boolean existsByApplicant(Applicant applicant);
+
     Optional<AbstractApplication> findByApplicant(Applicant applicant);
 
     @Modifying(clearAutomatically = true)

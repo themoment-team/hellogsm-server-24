@@ -6,19 +6,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.application.dto.response.FoundApplicationResDto;
 import team.themoment.hellogsmv3.domain.application.dto.response.SearchApplicationsResDto;
+import team.themoment.hellogsmv3.domain.application.dto.response.ApplicationListResDto;
+import team.themoment.hellogsmv3.domain.applicant.dto.response.AdmissionTicketsResDto;
+import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationStatusReqDto;
+import team.themoment.hellogsmv3.domain.application.service.DeleteApplicationByAuthIdService;
+import team.themoment.hellogsmv3.domain.application.service.QueryAllApplicationService;
+import team.themoment.hellogsmv3.domain.application.service.QueryAdmissionTicketsService;
 import team.themoment.hellogsmv3.domain.application.service.QueryApplicationByIdService;
 import team.themoment.hellogsmv3.domain.application.service.SearchApplicationService;
 import team.themoment.hellogsmv3.domain.application.type.SearchTag;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
-import team.themoment.hellogsmv3.domain.application.dto.response.ApplicationListResDto;
-import team.themoment.hellogsmv3.domain.application.service.QueryAllApplicationService;
 import jakarta.validation.Valid;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissionService;
 import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
+import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationStatusService;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/application/v3")
@@ -32,17 +39,18 @@ public class ApplicationController {
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
+    private final UpdateApplicationStatusService updateApplicationStatusService;
+    private final QueryAdmissionTicketsService queryAdmissionTicketsService;
+    private final DeleteApplicationByAuthIdService deleteApplicationByAuthIdService;
 
     @GetMapping("/application/me")
-    public ResponseEntity<FoundApplicationResDto> findMe() {
-        FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
+    public FoundApplicationResDto findMe() {
+        return queryApplicationByIdService.execute(manager.getId());
     }
 
     @GetMapping("/application/{applicantId}")
-    public ResponseEntity<FoundApplicationResDto> findOne(@PathVariable("applicantId") Long applicantId) {
-        FoundApplicationResDto foundApplicationResDto = queryApplicationByIdService.execute(applicantId);
-        return ResponseEntity.status(HttpStatus.OK).body(foundApplicationResDto);
+    public FoundApplicationResDto findOne(@PathVariable("applicantId") Long applicantId) {
+        return queryApplicationByIdService.execute(applicantId);
     }
 
     @GetMapping("/application/search")
@@ -66,16 +74,15 @@ public class ApplicationController {
     }
 
     @GetMapping("/application/all")
-    public ResponseEntity<ApplicationListResDto> findAll(
+    public ApplicationListResDto findAll(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size
     ) {
         if (page < 0 || size < 0)
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
-        ApplicationListResDto applicationListResDto = queryAllApplicationService.execute(page, size);
-        return ResponseEntity.status(HttpStatus.OK).body(applicationListResDto);
+        return queryAllApplicationService.execute(page, size);
     }
-  
+
     @PostMapping("/application/me")
     public CommonApiMessageResponse create(@RequestBody @Valid ApplicationReqDto reqDto) {
         createApplicationService.execute(reqDto, manager.getId());
@@ -102,4 +109,26 @@ public class ApplicationController {
         return CommonApiMessageResponse.success("수정되었습니다.");
     }
 
+
+    @PutMapping("/status/{applicantId}")
+    public CommonApiMessageResponse updateStatus(
+            @PathVariable Long applicantId,
+            @RequestBody ApplicationStatusReqDto applicationStatusReqDto
+    ) {
+        updateApplicationStatusService.execute(applicantId, applicationStatusReqDto);
+        return CommonApiMessageResponse.success("수정되었습니다.");
+    }
+
+    @GetMapping("/admission-tickets")
+    public List<AdmissionTicketsResDto> findAdmissionTickets(
+    ) {
+        return queryAdmissionTicketsService.execute();
+    }
+
+    @DeleteMapping("/application/me")
+    public CommonApiMessageResponse deleteApplication(
+    ) {
+        deleteApplicationByAuthIdService.execute(manager.getId());
+        return CommonApiMessageResponse.success("삭제되었습니다.");
+    }
 }
