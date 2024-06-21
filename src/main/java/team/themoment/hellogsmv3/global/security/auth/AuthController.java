@@ -11,7 +11,9 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
+import team.themoment.hellogsmv3.domain.auth.type.Role;
+import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
+import team.themoment.hellogsmv3.global.security.auth.dto.response.LogoutResDto;
 
 @RestController
 @RequestMapping("/auth/v3")
@@ -19,19 +21,22 @@ import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse
 public class AuthController {
 
     @GetMapping("/logout")
-    public CommonApiMessageResponse logout(HttpServletRequest req, HttpServletResponse res){
-        return logoutProccess(req, res, SecurityContextHolder.getContext().getAuthentication()) ?
-                CommonApiMessageResponse.success("로그아웃 되었습니다.") :
-                CommonApiMessageResponse.error("인증 정보가 올바르지 않습니다.", HttpStatus.UNAUTHORIZED);
+    public LogoutResDto logout(HttpServletRequest req, HttpServletResponse res){
+        return new LogoutResDto(logoutProcess(req, res, SecurityContextHolder.getContext().getAuthentication()));
     }
 
-    private static boolean logoutProccess(HttpServletRequest req, HttpServletResponse res, Authentication auth) {
+    private static boolean logoutProcess(HttpServletRequest req, HttpServletResponse res, Authentication auth) {
         if (auth instanceof OAuth2AuthenticationToken) {
             new SecurityContextLogoutHandler().logout(req, res, SecurityContextHolder.getContext().getAuthentication());
-            return true;
+            return isAdmin(auth);
         } else {
-            return false;
+            throw new ExpectedException("인증 정보가 올바르지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    private static boolean isAdmin(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> Role.ADMIN.name().equals(authority.getAuthority()));
     }
 
 }
