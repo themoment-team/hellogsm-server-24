@@ -18,7 +18,13 @@ public class CustomUrlLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        String redirectUrl = buildRedirectUrl(isAdmin(authentication));
+
+        if (authentication == null) {
+            response.sendRedirect(buildRedirectUrl(false, false));
+            return;
+        }
+
+        String redirectUrl = buildRedirectUrl(isAdmin(authentication), true);
         response.sendRedirect(redirectUrl);
     }
 
@@ -27,11 +33,11 @@ public class CustomUrlLogoutSuccessHandler implements LogoutSuccessHandler {
                 .anyMatch(authority -> Role.ADMIN.name().equals(authority.getAuthority()));
     }
 
-    protected final String buildRedirectUrl(boolean isAdmin) {
+    protected final String buildRedirectUrl(boolean isAdmin, boolean isSuccess) {
         String targetUrl = isAdmin ? redirectAdminUri : redirectBaseUri;
 
         return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("logout", "success")
+                .queryParam("logout", isSuccess)
                 .build()
                 .toUriString();
     }
