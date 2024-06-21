@@ -24,7 +24,7 @@ public class Authentication {
 
     public Authentication roleUpdatedAuthentication() {
         this.role = Role.APPLICANT;
-        return role;
+        return this;
     }
 
     @PrePersist
