@@ -3,7 +3,7 @@ package team.themoment.hellogsmv3.domain.application.annotation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
-import team.themoment.hellogsmv3.domain.application.type.Major;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 
 import java.util.HashSet;
 import java.util.Set;

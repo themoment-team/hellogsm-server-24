@@ -4,17 +4,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.AssertFalse;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.themoment.hellogsmv3.domain.application.annotation.ValidDesiredMajors;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 
 @Embeddable
 @Getter

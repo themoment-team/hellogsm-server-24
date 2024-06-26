@@ -10,7 +10,7 @@ import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractApplicationStatusParameter;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.application.type.EvaluationResult;
-import team.themoment.hellogsmv3.domain.application.type.Major;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 
 import java.math.BigDecimal;
 import java.util.UUID;

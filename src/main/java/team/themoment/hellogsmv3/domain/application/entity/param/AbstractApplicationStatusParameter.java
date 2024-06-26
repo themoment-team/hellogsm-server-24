@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.application.type.EvaluationResult;
-import team.themoment.hellogsmv3.domain.application.type.Major;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 
 import java.math.BigDecimal;
 

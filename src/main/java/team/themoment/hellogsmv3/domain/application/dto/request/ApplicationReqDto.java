@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import team.themoment.hellogsmv3.domain.application.annotation.ValidDesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
-import team.themoment.hellogsmv3.domain.application.type.Major;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.application.type.Screening;
 
 @ValidDesiredMajors
