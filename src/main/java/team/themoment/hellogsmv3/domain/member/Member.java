@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import team.themoment.hellogsmv3.domain.applicant.type.Gender;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
 
@@ -43,9 +45,11 @@ public class Member {
     @Column(name = "role")
     private Role role;
 
-    @Column(name = "created_time")
+    @CreatedDate
+    @Column(name = "created_time", updatable = false)
     private LocalDateTime createdTime;
 
+    @LastModifiedDate
     @Column(name = "updated_time")
     private LocalDateTime updatedTime;
 }
