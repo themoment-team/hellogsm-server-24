@@ -19,9 +19,11 @@ public class ScreeningChangeHistory {
     @Column(name = "entrance _test_result_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "before_screening", nullable = false)
     private Screening beforeScreening;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "after_screening", nullable = false)
     private Screening afterScreening;
 
