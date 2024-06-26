@@ -20,6 +20,7 @@ public class OneseoPrivacyDetail {
 //    @JoinColumn(name = "id")  TODO 원서 테이블 생성 후 주석 풀기
 //    private Oneseo oneseo;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "education_type", nullable = false)
     private GraduationStatus educationType;
 
