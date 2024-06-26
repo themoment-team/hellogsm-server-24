@@ -3,7 +3,7 @@ package team.themoment.hellogsmv3.domain.application.entity.param;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
 
 @Getter
 public class AbstractPersonalInformationParameter {

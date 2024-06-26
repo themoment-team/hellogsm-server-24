@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersonalInformationParameter;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
 
 import java.util.UUID;
 

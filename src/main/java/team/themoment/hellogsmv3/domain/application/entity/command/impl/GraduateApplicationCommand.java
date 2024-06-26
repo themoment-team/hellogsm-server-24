@@ -2,7 +2,7 @@ package team.themoment.hellogsmv3.domain.application.entity.command.impl;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import team.themoment.hellogsmv3.domain.application.entity.command.ApplicationCommand;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
 
 @JsonTypeName("graduate")
 public record GraduateApplicationCommand(

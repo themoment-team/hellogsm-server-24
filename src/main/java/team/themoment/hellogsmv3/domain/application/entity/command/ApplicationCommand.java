@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import team.themoment.hellogsmv3.domain.application.entity.command.impl.CandidateApplicationCommand;
 import team.themoment.hellogsmv3.domain.application.entity.command.impl.GedApplicationCommand;
 import team.themoment.hellogsmv3.domain.application.entity.command.impl.GraduateApplicationCommand;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
 
 @JsonSubTypes({
         @JsonSubTypes.Type(value = CandidateApplicationCommand.class, name = "candidate"),
