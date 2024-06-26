@@ -1,7 +1,7 @@
 package team.themoment.hellogsmv3.domain.application.dto.response;
 
 import lombok.Builder;
-import team.themoment.hellogsmv3.domain.application.type.EvaluationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.EvaluationStatus;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
 import team.themoment.hellogsmv3.domain.application.type.Screening;
 

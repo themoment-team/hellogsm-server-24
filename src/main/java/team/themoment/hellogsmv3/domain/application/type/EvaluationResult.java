@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.EvaluationStatus;
 
 import java.math.BigDecimal;
 import java.util.Objects;

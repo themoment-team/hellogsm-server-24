@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.themoment.hellogsmv3.domain.application.type.EvaluationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.EvaluationStatus;
 import team.themoment.hellogsmv3.domain.application.type.Major;
 
 import java.math.BigDecimal;

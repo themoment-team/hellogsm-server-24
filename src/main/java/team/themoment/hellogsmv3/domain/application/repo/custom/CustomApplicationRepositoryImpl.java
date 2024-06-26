@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
-import team.themoment.hellogsmv3.domain.application.type.EvaluationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.EvaluationStatus;
 
 import java.util.List;
 import java.util.Optional;
