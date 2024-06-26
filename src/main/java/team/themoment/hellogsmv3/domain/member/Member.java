@@ -22,10 +22,10 @@ public class Member {
     @Column(name = "member_id", unique = true)
     private Long id;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "auth_referrer_type")
+    @Column(name = "auth_referrer_type", nullable = false)
     private String authReferrerType;
 
     @Column(name = "name")
@@ -46,10 +46,10 @@ public class Member {
     private Role role;
 
     @CreatedDate
-    @Column(name = "created_time", updatable = false)
+    @Column(name = "created_time", updatable = false, nullable = false)
     private LocalDateTime createdTime;
 
     @LastModifiedDate
-    @Column(name = "updated_time")
+    @Column(name = "updated_time", nullable = false)
     private LocalDateTime updatedTime;
 }
