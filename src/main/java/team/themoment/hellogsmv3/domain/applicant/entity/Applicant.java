@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.themoment.hellogsmv3.domain.applicant.type.Gender;
+import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
 
 import java.time.LocalDate;
 

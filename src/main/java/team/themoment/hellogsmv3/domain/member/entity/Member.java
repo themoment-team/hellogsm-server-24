@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import team.themoment.hellogsmv3.domain.applicant.type.Gender;
-import team.themoment.hellogsmv3.domain.auth.type.Role;
+import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
+import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 
 import java.time.LocalDate;

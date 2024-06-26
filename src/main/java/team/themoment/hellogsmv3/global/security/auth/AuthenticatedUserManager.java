@@ -1,9 +1,7 @@
 package team.themoment.hellogsmv3.global.security.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
-import team.themoment.hellogsmv3.domain.auth.type.Role;
-
-import java.time.LocalDateTime;
+import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 
 public interface AuthenticatedUserManager {
     Long getId();

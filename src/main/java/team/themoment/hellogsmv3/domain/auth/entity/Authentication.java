@@ -2,7 +2,7 @@ package team.themoment.hellogsmv3.domain.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import team.themoment.hellogsmv3.domain.auth.type.Role;
+import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 
 @Getter
 @Entity

@@ -14,7 +14,7 @@ import team.themoment.hellogsmv3.domain.applicant.service.AuthenticateCodeServic
 import team.themoment.hellogsmv3.domain.applicant.service.ModifyApplicantService;
 import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateTestCodeServiceImpl;
-import team.themoment.hellogsmv3.domain.auth.type.Role;
+import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
