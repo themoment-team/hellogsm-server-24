@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.EvaluationStatus;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
-import team.themoment.hellogsmv3.domain.application.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 import java.math.BigDecimal;
 

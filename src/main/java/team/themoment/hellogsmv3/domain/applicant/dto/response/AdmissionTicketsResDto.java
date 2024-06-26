@@ -1,7 +1,7 @@
 package team.themoment.hellogsmv3.domain.applicant.dto.response;
 
 import lombok.Builder;
-import team.themoment.hellogsmv3.domain.application.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 @Builder
 public record AdmissionTicketsResDto(

@@ -5,7 +5,7 @@ import lombok.Builder;
 import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
 import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
-import team.themoment.hellogsmv3.domain.application.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 import java.time.LocalDate;
 

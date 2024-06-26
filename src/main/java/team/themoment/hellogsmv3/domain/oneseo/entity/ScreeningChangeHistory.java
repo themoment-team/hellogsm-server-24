@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import team.themoment.hellogsmv3.domain.application.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 import java.time.LocalDateTime;
 
