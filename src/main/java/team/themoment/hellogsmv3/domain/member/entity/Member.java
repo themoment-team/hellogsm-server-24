@@ -1,4 +1,4 @@
-package team.themoment.hellogsmv3.domain.member;
+package team.themoment.hellogsmv3.domain.member.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
