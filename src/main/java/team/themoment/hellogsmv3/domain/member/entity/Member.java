@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import team.themoment.hellogsmv3.domain.applicant.type.Gender;
 import team.themoment.hellogsmv3.domain.auth.type.Role;
+import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,8 +26,9 @@ public class Member {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "auth_referrer_type", nullable = false)
-    private String authReferrerType;
+    private AuthReferrerType authReferrerType;
 
     @Column(name = "name")
     private String name;
