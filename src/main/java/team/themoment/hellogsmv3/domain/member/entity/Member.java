@@ -20,7 +20,7 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id", unique = true)
+    @Column(name = "member_id")
     private Long id;
 
     @Column(name = "email", unique = true, nullable = false)
