@@ -1,11 +1,12 @@
 package team.themoment.hellogsmv3.domain.oneseo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 @Getter
@@ -33,17 +34,9 @@ public class Oneseo {
     @Column(name = "oneseo_submit_code")
     private Long oneseoSubmitCode;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "first_desired_major", nullable = false)
-    private Major firstDesiredMajor;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "second_desired_major", nullable = false)
-    private Major secondDesiredMajor;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "third_desired_major", nullable = false)
-    private Major thirdDesiredMajor;
+    @NotNull
+    @Embedded
+    protected DesiredMajors desiredMajors;
 
     @Column(name = "is_real_oneseo_arrived", nullable = false)
     private Boolean isRealOneseoArrived;

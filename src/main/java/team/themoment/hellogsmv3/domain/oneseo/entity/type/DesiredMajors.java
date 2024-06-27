@@ -1,4 +1,4 @@
-package team.themoment.hellogsmv3.domain.application.type;
+package team.themoment.hellogsmv3.domain.oneseo.entity.type;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
