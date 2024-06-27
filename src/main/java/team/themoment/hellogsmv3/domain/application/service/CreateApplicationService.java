@@ -18,7 +18,7 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.math.BigDecimal;
 
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.EvaluationStatus.*;
+import static team.themoment.hellogsmv3.domain.application.type.EvaluationStatus.*;
 
 @Service
 @RequiredArgsConstructor
