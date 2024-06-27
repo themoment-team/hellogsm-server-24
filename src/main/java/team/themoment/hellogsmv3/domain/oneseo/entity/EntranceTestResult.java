@@ -18,6 +18,10 @@ public class EntranceTestResult {
     @Column(name = "entrance _test_result_id")
     private Long id;
 
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "oneseo_id")
+    private Oneseo oneseo;
+
     @Column(name = "first_test_result_score")
     private BigDecimal firstTestResultScore;
 
