@@ -25,13 +25,13 @@ public class EntranceTestResult {
     @Column(name = "first_test_result_score")
     private BigDecimal firstTestResultScore;
 
-    @Column(name = "first_test_pass_yn")
+    @Column(name = "is_first_test_pass")
     private Boolean isFirstTestPass;
 
     @Column(name = "second_test_result_score")
     private BigDecimal secondTestResultScore;
 
-    @Column(name = "second_test_pass_yn")
+    @Column(name = "is_second_test_pass")
     private Boolean isSecondTestPass;
 
     @Column(name = "interview_score")
