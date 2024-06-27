@@ -2,7 +2,6 @@ package team.themoment.hellogsmv3.domain.application.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.application.dto.response.FoundApplicationResDto;
 import team.themoment.hellogsmv3.domain.application.dto.response.SearchApplicationsResDto;
@@ -15,6 +14,7 @@ import team.themoment.hellogsmv3.domain.application.service.QueryAdmissionTicket
 import team.themoment.hellogsmv3.domain.application.service.QueryApplicationByIdService;
 import team.themoment.hellogsmv3.domain.application.service.SearchApplicationService;
 import team.themoment.hellogsmv3.domain.application.type.SearchTag;
+import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import jakarta.validation.Valid;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
@@ -23,7 +23,7 @@ import team.themoment.hellogsmv3.domain.application.service.ModifyApplicationSer
 import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissionService;
 import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
 import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationStatusService;
-import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
+
 
 import java.util.List;
 
@@ -32,7 +32,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApplicationController {
 
-    private final AuthenticatedUserManager manager;
     private final QueryApplicationByIdService queryApplicationByIdService;
     private final SearchApplicationService searchApplicationService;
     private final QueryAllApplicationService queryAllApplicationService;
@@ -44,8 +43,8 @@ public class ApplicationController {
     private final DeleteApplicationByAuthIdService deleteApplicationByAuthIdService;
 
     @GetMapping("/application/me")
-    public FoundApplicationResDto findMe() {
-        return queryApplicationByIdService.execute(manager.getId());
+    public FoundApplicationResDto findMe(@AuthRequest Long authId) {
+        return queryApplicationByIdService.execute(authId);
     }
 
     @GetMapping("/application/{applicantId}")
@@ -75,14 +74,16 @@ public class ApplicationController {
     }
 
     @PostMapping("/application/me")
-    public CommonApiMessageResponse create(@RequestBody @Valid ApplicationReqDto reqDto) {
-        createApplicationService.execute(reqDto, manager.getId());
+    public CommonApiMessageResponse create(@RequestBody @Valid ApplicationReqDto reqDto,
+                                           @AuthRequest Long authId) {
+        createApplicationService.execute(reqDto, authId);
         return CommonApiMessageResponse.created("생성되었습니다.");
     }
 
     @PutMapping("/application/me")
-    public CommonApiMessageResponse modify(@RequestBody @Valid ApplicationReqDto reqDto) {
-        modifyApplicationService.execute(reqDto, manager.getId(), false);
+    public CommonApiMessageResponse modify(@RequestBody @Valid ApplicationReqDto reqDto,
+                                           @AuthRequest Long authId) {
+        modifyApplicationService.execute(reqDto, authId, false);
         return CommonApiMessageResponse.success("수정되었습니다.");
     }
 
@@ -95,8 +96,8 @@ public class ApplicationController {
     }
 
     @PutMapping("/final-submit")
-    public CommonApiMessageResponse finalSubmission() {
-        updateFinalSubmissionService.execute(manager.getId());
+    public CommonApiMessageResponse finalSubmission(@AuthRequest Long authId) {
+        updateFinalSubmissionService.execute(authId);
         return CommonApiMessageResponse.success("수정되었습니다.");
     }
 
@@ -111,15 +112,13 @@ public class ApplicationController {
     }
 
     @GetMapping("/admission-tickets")
-    public List<AdmissionTicketsResDto> findAdmissionTickets(
-    ) {
+    public List<AdmissionTicketsResDto> findAdmissionTickets() {
         return queryAdmissionTicketsService.execute();
     }
 
     @DeleteMapping("/application/me")
-    public CommonApiMessageResponse deleteApplication(
-    ) {
-        deleteApplicationByAuthIdService.execute(manager.getId());
+    public CommonApiMessageResponse deleteApplication(@AuthRequest Long authId) {
+        deleteApplicationByAuthIdService.execute(authId);
         return CommonApiMessageResponse.success("삭제되었습니다.");
     }
 
