@@ -1,6 +1,6 @@
 package team.themoment.hellogsmv3.global.security.oauth;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
-import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class CustomOauth2UserService  implements OAuth2UserService {
+public class CustomOauth2UserService implements OAuth2UserService {
 
     private final OAuth2UserService<OAuth2UserRequest, OAuth2User> delegateOauth2UserService;
     private final AuthenticationRepository authenticationRepository;
@@ -39,20 +38,12 @@ public class CustomOauth2UserService  implements OAuth2UserService {
         final String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId;
 
-        if (provider == null) throw new ExpectedException("oauth provider가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        if (provider == null) throw new AuthenticationServiceException("oauth provider가 존재하지 않습니다.");
 
         switch (provider.toLowerCase()) {
-            case "kakao": {
-                providerId = ((Map<String, Object>) oAuthAttributes.get("kakao_account")).get("email").toString();
-                break;
-            }
-            case "google": {
-                providerId = oAuthAttributes.get("email").toString();
-                break;
-            }
-            default: {
-                throw new ExpectedException("올바르지 않은 oauth provider 입니다.", HttpStatus.BAD_REQUEST);
-            }
+            case "kakao" -> providerId = ((Map<String, Object>) oAuthAttributes.get("kakao_account")).get("email").toString();
+            case "google" -> providerId = oAuthAttributes.get("email").toString();
+            default -> throw new IllegalArgumentException("올바르지 않은 oauth provider 입니다.");
         }
 
         Authentication user = getUser(provider, providerId);
@@ -80,13 +71,7 @@ public class CustomOauth2UserService  implements OAuth2UserService {
     }
 
     private Authentication getUser(String provider, String providerId) {
-        Authentication savedAuthentication = authenticationRepository.findByProviderNameAndProviderId(provider, providerId)
-                .orElse(null);
-        if (savedAuthentication == null) {
-            Authentication authentication = new Authentication(null, providerId, provider, null);
-            return authenticationRepository.save(authentication);
-        }
-        return savedAuthentication;
+        return authenticationRepository.findByProviderNameAndProviderId(provider, providerId)
+                .orElseGet(() -> authenticationRepository.save(new Authentication(null, providerId, provider, null)));
     }
 }
-
