@@ -19,6 +19,10 @@ public class ScreeningChangeHistory {
     @Column(name = "entrance _test_result_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "oneseo_id")
+    private Oneseo oneseo;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "before_screening", nullable = false)
     private Screening beforeScreening;
