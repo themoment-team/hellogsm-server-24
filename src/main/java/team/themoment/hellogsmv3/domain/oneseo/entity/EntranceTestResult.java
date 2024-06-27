@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.EvaluationStatus;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 
 import java.math.BigDecimal;
@@ -22,16 +21,14 @@ public class EntranceTestResult {
     @Column(name = "first_test_result_score")
     private BigDecimal firstTestResultScore;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "first_test_pass_yn")
-    private EvaluationStatus firstTestPassYn;
+    private Boolean isFirstTestPass;
 
     @Column(name = "second_test_result_score")
     private BigDecimal secondTestResultScore;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "second_test_pass_yn")
-    private EvaluationStatus secondTestPassYn;
+    private Boolean isSecondTestPass;
 
     @Column(name = "interview_score")
     private BigDecimal interviewScore;
