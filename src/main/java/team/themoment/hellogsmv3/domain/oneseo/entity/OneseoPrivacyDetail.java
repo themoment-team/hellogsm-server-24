@@ -8,6 +8,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
 
 @Getter
 @Entity
+@Table(name = "tb_oneseo_privacy_detail")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OneseoPrivacyDetail {
 

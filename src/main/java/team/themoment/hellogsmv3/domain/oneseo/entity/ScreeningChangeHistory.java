@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@Table(name = "tb_screening_change_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ScreeningChangeHistory {
 

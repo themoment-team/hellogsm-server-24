@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Entity
+@Table(name = "tb_entrance_test_result")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EntranceTestResult {
 

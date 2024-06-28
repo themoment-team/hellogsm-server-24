@@ -11,6 +11,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 @Getter
 @Entity
+@Table(name = "tb_oneseo")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Oneseo {
 

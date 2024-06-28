@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Entity
+@Table(name = "tb_middle_school_achievement")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MiddleSchoolAchievement {
 

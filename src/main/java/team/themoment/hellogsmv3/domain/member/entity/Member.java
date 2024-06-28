@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@Table(name = "tb_member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
