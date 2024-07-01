@@ -21,8 +21,8 @@ public class OneseoPrivacyDetail {
     private Oneseo oneseo;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "education_type", nullable = false)
-    private GraduationStatus educationType;
+    @Column(name = "graduation_type", nullable = false)
+    private GraduationStatus graduationType;
 
     @Column(name = "address", nullable = false)
     private String address;
