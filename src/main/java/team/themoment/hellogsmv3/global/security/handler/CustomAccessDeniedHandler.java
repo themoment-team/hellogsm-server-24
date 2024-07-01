@@ -9,13 +9,11 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
+import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +35,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(
-                CommonApiMessageResponse.error("요청을 수행할 수 있는 권한이 없습니다.", HttpStatus.FORBIDDEN)
+                CommonApiResponse.error("요청을 수행할 수 있는 권한이 없습니다.", HttpStatus.FORBIDDEN)
         ));
     }
 }

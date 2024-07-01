@@ -15,13 +15,13 @@ import team.themoment.hellogsmv3.domain.application.service.QueryApplicationById
 import team.themoment.hellogsmv3.domain.application.service.SearchApplicationService;
 import team.themoment.hellogsmv3.domain.application.type.SearchTag;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
+import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import jakarta.validation.Valid;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissionService;
-import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
 import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationStatusService;
 
 
@@ -74,41 +74,41 @@ public class ApplicationController {
     }
 
     @PostMapping("/application/me")
-    public CommonApiMessageResponse create(@RequestBody @Valid ApplicationReqDto reqDto,
+    public CommonApiResponse create(@RequestBody @Valid ApplicationReqDto reqDto,
                                            @AuthRequest Long authId) {
         createApplicationService.execute(reqDto, authId);
-        return CommonApiMessageResponse.created("생성되었습니다.");
+        return CommonApiResponse.created("생성되었습니다.");
     }
 
     @PutMapping("/application/me")
-    public CommonApiMessageResponse modify(@RequestBody @Valid ApplicationReqDto reqDto,
+    public CommonApiResponse modify(@RequestBody @Valid ApplicationReqDto reqDto,
                                            @AuthRequest Long authId) {
         modifyApplicationService.execute(reqDto, authId, false);
-        return CommonApiMessageResponse.success("수정되었습니다.");
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
     @PutMapping("/application/{applicantId}")
-    public CommonApiMessageResponse modifyOne(
+    public CommonApiResponse modifyOne(
             @RequestBody @Valid ApplicationReqDto reqDto,
             @PathVariable Long applicantId) {
         modifyApplicationService.execute(reqDto, applicantId, true);
-        return CommonApiMessageResponse.success("수정되었습니다.");
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
     @PutMapping("/final-submit")
-    public CommonApiMessageResponse finalSubmission(@AuthRequest Long authId) {
+    public CommonApiResponse finalSubmission(@AuthRequest Long authId) {
         updateFinalSubmissionService.execute(authId);
-        return CommonApiMessageResponse.success("수정되었습니다.");
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
 
     @PutMapping("/status/{applicantId}")
-    public CommonApiMessageResponse updateStatus(
+    public CommonApiResponse updateStatus(
             @PathVariable Long applicantId,
             @RequestBody ApplicationStatusReqDto applicationStatusReqDto
     ) {
         updateApplicationStatusService.execute(applicantId, applicationStatusReqDto);
-        return CommonApiMessageResponse.success("수정되었습니다.");
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
     @GetMapping("/admission-tickets")
@@ -117,9 +117,9 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/application/me")
-    public CommonApiMessageResponse deleteApplication(@AuthRequest Long authId) {
+    public CommonApiResponse deleteApplication(@AuthRequest Long authId) {
         deleteApplicationByAuthIdService.execute(authId);
-        return CommonApiMessageResponse.success("삭제되었습니다.");
+        return CommonApiResponse.success("삭제되었습니다.");
     }
 
     private void validatePageAndSize(Integer page, Integer size) {
