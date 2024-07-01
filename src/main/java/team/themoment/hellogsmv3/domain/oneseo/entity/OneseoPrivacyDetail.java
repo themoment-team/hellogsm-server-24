@@ -13,8 +13,12 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
 public class OneseoPrivacyDetail {
 
     @Id
-    @Column(name = "oneseo_id")
     private Long id;
+
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "oneseo_id")
+    private Oneseo oneseo;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "education_type", nullable = false)

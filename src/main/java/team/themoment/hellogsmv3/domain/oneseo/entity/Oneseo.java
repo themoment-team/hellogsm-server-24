@@ -24,10 +24,6 @@ public class Oneseo {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "oneseo_privacy_detail_id")
-    private OneseoPrivacyDetail oneseoPrivacyDetail;
-
     @Column(name = "oneseo_submit_code")
     private Long oneseoSubmitCode;
 
