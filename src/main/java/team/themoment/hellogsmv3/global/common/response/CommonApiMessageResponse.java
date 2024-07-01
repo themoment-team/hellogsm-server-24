@@ -8,15 +8,4 @@ public record CommonApiMessageResponse<T>(
         int code,
         String message
 ) {
-    public static CommonApiMessageResponse success(@Nonnull String message) {
-        return new CommonApiMessageResponse(HttpStatus.OK, HttpStatus.OK.value(), message);
-    }
-
-    public static CommonApiMessageResponse created(@Nonnull String message) {
-        return new CommonApiMessageResponse(HttpStatus.CREATED, HttpStatus.CREATED.value(), message);
-    }
-
-    public static CommonApiMessageResponse error(@Nonnull String message, @Nonnull HttpStatus status) {
-        return new CommonApiMessageResponse(status, status.value(), message);
-    }
 }
