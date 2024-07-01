@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
+import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @RestController
@@ -20,9 +20,9 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 public class AuthController {
 
     @GetMapping("/logout")
-    public CommonApiMessageResponse logout(HttpServletRequest req, HttpServletResponse res){
+    public CommonApiResponse logout(HttpServletRequest req, HttpServletResponse res){
         logoutProcess(req, res, SecurityContextHolder.getContext().getAuthentication());
-        return CommonApiMessageResponse.success("로그아웃 되었습니다.");
+        return CommonApiResponse.success("로그아웃 되었습니다.");
     }
 
     private static void logoutProcess(HttpServletRequest req, HttpServletResponse res, Authentication auth) {

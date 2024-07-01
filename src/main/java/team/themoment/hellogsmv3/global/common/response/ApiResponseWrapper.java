@@ -26,14 +26,14 @@ public class ApiResponseWrapper implements ResponseBodyAdvice<Object> {
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
 
-        if (body instanceof CommonApiMessageResponse<?>) {
+        if (body instanceof CommonApiResponse<?>) {
             return byPassResponse(body, response);
         }
 
 
         if (body instanceof Map) {
             Map<String, Object> bodyMap = (Map<String, Object>) body;
-            CommonApiMessageResponse<Object> errorResponse = exceptionResponse(response, bodyMap);
+            CommonApiResponse<Object> errorResponse = exceptionResponse(response, bodyMap);
             if (errorResponse != null) return errorResponse;
         }
 
@@ -49,17 +49,17 @@ public class ApiResponseWrapper implements ResponseBodyAdvice<Object> {
     }
 
     private static Object byPassResponse(Object body, ServerHttpResponse response) {
-        CommonApiMessageResponse<?> commonApiMessageResponse = (CommonApiMessageResponse<?>) body;
+        CommonApiResponse<?> commonApiMessageResponse = (CommonApiResponse<?>) body;
         response.setStatusCode(commonApiMessageResponse.status());
         return body;
     }
 
-    private static CommonApiMessageResponse<Object> exceptionResponse(ServerHttpResponse response, Map<String, Object> bodyMap) {
+    private static CommonApiResponse<Object> exceptionResponse(ServerHttpResponse response, Map<String, Object> bodyMap) {
         if (bodyMap.containsKey("status")) {
             int statusCode = (int) bodyMap.get("status");
             if (statusCode >= 400 && statusCode < 600) {
                 HttpStatus status = HttpStatus.valueOf(statusCode);
-                CommonApiMessageResponse errorResponse = CommonApiMessageResponse.error(status.getReasonPhrase(), status);
+                CommonApiResponse errorResponse = CommonApiResponse.error(status.getReasonPhrase(), status);
                 response.setStatusCode(HttpStatusCode.valueOf(statusCode));
                 return errorResponse;
             }
