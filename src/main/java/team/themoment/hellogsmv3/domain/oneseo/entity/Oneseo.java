@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
 @Getter
 @Entity
@@ -31,11 +32,11 @@ public class Oneseo {
     @Embedded
     protected DesiredMajors desiredMajors;
 
-    @Column(name = "is_real_oneseo_arrived", nullable = false)
-    private Boolean isRealOneseoArrived;
+    @Column(name = "real_oneseo_arrived_yn", nullable = false)
+    private YesNo realOneseoArrivedYn;
 
-    @Column(name = "is_final_submitted", nullable = false)
-    private Boolean isFinalSubmitted;
+    @Column(name = "final_submitted_yn", nullable = false)
+    private YesNo finalSubmittedYn;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "wanted_screening", nullable = false)
