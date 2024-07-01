@@ -10,8 +10,10 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
-import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
+import team.themoment.hellogsmv3.domain.member.entity.Member;
+import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
+import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,15 +21,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType.*;
+
 @Service
 public class CustomOauth2UserService implements OAuth2UserService {
 
     private final OAuth2UserService<OAuth2UserRequest, OAuth2User> delegateOauth2UserService;
-    private final AuthenticationRepository authenticationRepository;
+    private final MemberRepository memberRepository;
 
-    public CustomOauth2UserService(AuthenticationRepository authenticationRepository) {
+    public CustomOauth2UserService(MemberRepository memberRepository) {
         this.delegateOauth2UserService = new DefaultOAuth2UserService();
-        this.authenticationRepository = authenticationRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -37,21 +41,28 @@ public class CustomOauth2UserService implements OAuth2UserService {
 
         final String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId;
+        AuthReferrerType authRefType;
 
         if (provider == null) throw new AuthenticationServiceException("oauth provider가 존재하지 않습니다.");
 
         switch (provider.toLowerCase()) {
-            case "kakao" -> providerId = ((Map<String, Object>) oAuthAttributes.get("kakao_account")).get("email").toString();
-            case "google" -> providerId = oAuthAttributes.get("email").toString();
+            case "kakao" -> {
+                providerId = ((Map<String, Object>) oAuthAttributes.get("kakao_account")).get("email").toString();
+                authRefType = KAKAO;
+            }
+            case "google" -> {
+                providerId = oAuthAttributes.get("email").toString();
+                authRefType = GOOGLE;
+            }
             default -> throw new IllegalArgumentException("올바르지 않은 oauth provider 입니다.");
         }
 
-        Authentication user = getUser(provider, providerId);
+        Member member = getUser(authRefType, providerId);
 
         String nameAttribute = "id";
-        Long id = user.getId();
+        Long id = member.getId();
         String roleAttribute = "role";
-        Role role = user.getRole();
+        Role role = member.getRole();
         String providerAttribute = "provider";
         String providerIdAttribute = "provider_id";
         String lastLoginTimeIdAttribute = "last_login_time";
@@ -70,8 +81,12 @@ public class CustomOauth2UserService implements OAuth2UserService {
         return new UserInfo(authorities, attributes, nameAttribute);
     }
 
-    private Authentication getUser(String provider, String providerId) {
-        return authenticationRepository.findByProviderNameAndProviderId(provider, providerId)
-                .orElseGet(() -> authenticationRepository.save(new Authentication(null, providerId, provider, null)));
+    private Member getUser(AuthReferrerType authRefType, String providerId) {
+        return memberRepository.findByAuthReferrerTypeAndEmail(authRefType, providerId)
+                .orElseGet(() -> memberRepository.save(Member.builder()
+                                .authReferrerType(authRefType)
+                                .email(providerId)
+                                .createdTime(LocalDateTime.now())
+                                .updatedTime(LocalDateTime.now()).build()));
     }
 }

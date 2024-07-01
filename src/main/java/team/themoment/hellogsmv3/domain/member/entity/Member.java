@@ -1,9 +1,7 @@
 package team.themoment.hellogsmv3.domain.member.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
@@ -14,9 +12,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @Entity
 @Table(name = "tb_member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member {
 
     @Id
@@ -55,4 +55,9 @@ public class Member {
     @LastModifiedDate
     @Column(name = "updated_time", nullable = false)
     private LocalDateTime updatedTime;
+
+    @PrePersist
+    private void prePersist() {
+        this.role = this.role == null ? Role.UNAUTHENTICATED : this.role;
+    }
 }
