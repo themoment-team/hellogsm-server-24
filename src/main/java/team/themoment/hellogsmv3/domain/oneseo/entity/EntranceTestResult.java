@@ -27,12 +27,14 @@ public class EntranceTestResult {
     @Column(name = "first_test_result_score")
     private BigDecimal firstTestResultScore;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "first_test_pass_yn")
     private YesNo firstTestPassYn;
 
     @Column(name = "second_test_result_score")
     private BigDecimal secondTestResultScore;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "second_test_pass_yn")
     private YesNo secondTestPassYn;
 
