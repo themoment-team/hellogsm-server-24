@@ -28,10 +28,6 @@ public class Oneseo {
     @JoinColumn(name = "oneseo_privacy_detail_id")
     private OneseoPrivacyDetail oneseoPrivacyDetail;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "middle_school_achievement_id")
-    private MiddleSchoolAchievement middleSchoolAchievement;
-
     @Column(name = "oneseo_submit_code")
     private Long oneseoSubmitCode;
 

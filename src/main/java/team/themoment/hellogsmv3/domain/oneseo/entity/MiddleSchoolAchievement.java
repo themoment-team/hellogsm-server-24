@@ -14,8 +14,12 @@ import java.math.BigDecimal;
 public class MiddleSchoolAchievement {
 
     @Id
-    @Column(name = "oneseo_id")
     private Long id;
+
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "oneseo_id")
+    private Oneseo oneseo;
 
     @Column(name = "transcript", columnDefinition = "TEXT", nullable = false)
     private String transcript;
