@@ -32,9 +32,11 @@ public class Oneseo {
     @Embedded
     protected DesiredMajors desiredMajors;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "real_oneseo_arrived_yn", nullable = false)
     private YesNo realOneseoArrivedYn;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "final_submitted_yn", nullable = false)
     private YesNo finalSubmittedYn;
 
