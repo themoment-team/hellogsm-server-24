@@ -56,6 +56,14 @@ public class Member {
     @Column(name = "updated_time", nullable = false)
     private LocalDateTime updatedTime;
 
+    public static Member buildNewMember(String email, AuthReferrerType authRefType) {
+        return Member.builder()
+                .email(email)
+                .authReferrerType(authRefType)
+                .createdTime(LocalDateTime.now())
+                .updatedTime(LocalDateTime.now()).build();
+    }
+
     @PrePersist
     private void prePersist() {
         this.role = this.role == null ? Role.UNAUTHENTICATED : this.role;

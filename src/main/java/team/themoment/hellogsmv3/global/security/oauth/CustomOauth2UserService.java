@@ -57,7 +57,7 @@ public class CustomOauth2UserService implements OAuth2UserService {
             default -> throw new IllegalArgumentException("올바르지 않은 oauth provider 입니다.");
         }
 
-        Member member = getUser(authRefType, providerId);
+        Member member = getUser(providerId, authRefType);
 
         String nameAttribute = "id";
         Long id = member.getId();
@@ -81,12 +81,8 @@ public class CustomOauth2UserService implements OAuth2UserService {
         return new UserInfo(authorities, attributes, nameAttribute);
     }
 
-    private Member getUser(AuthReferrerType authRefType, String providerId) {
+    private Member getUser(String providerId, AuthReferrerType authRefType) {
         return memberRepository.findByAuthReferrerTypeAndEmail(authRefType, providerId)
-                .orElseGet(() -> memberRepository.save(Member.builder()
-                                .authReferrerType(authRefType)
-                                .email(providerId)
-                                .createdTime(LocalDateTime.now())
-                                .updatedTime(LocalDateTime.now()).build()));
+                .orElseGet(() -> memberRepository.save(Member.buildNewMember(providerId, authRefType)));
     }
 }
