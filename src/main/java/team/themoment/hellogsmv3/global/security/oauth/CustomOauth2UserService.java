@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
-import team.themoment.hellogsmv3.domain.auth.type.Role;
+import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

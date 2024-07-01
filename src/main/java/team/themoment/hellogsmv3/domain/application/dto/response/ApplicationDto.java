@@ -2,17 +2,16 @@ package team.themoment.hellogsmv3.domain.application.dto.response;
 
 import lombok.Builder;
 import team.themoment.hellogsmv3.domain.application.type.EvaluationStatus;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
-import team.themoment.hellogsmv3.domain.application.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Builder
 public record ApplicationDto(
         Long applicantId,
         String applicantName,
-        GraduationStatus graduation,
+        GraduationType graduation,
         String applicantPhoneNumber,
         String guardianPhoneNumber,
         String teacherName,

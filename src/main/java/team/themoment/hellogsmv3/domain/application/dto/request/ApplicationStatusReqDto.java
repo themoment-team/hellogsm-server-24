@@ -1,13 +1,10 @@
 package team.themoment.hellogsmv3.domain.application.dto.request;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import team.themoment.hellogsmv3.domain.application.type.EvaluationStatus;
-import team.themoment.hellogsmv3.domain.application.type.Major;
-import team.themoment.hellogsmv3.domain.application.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 import java.math.BigDecimal;
 

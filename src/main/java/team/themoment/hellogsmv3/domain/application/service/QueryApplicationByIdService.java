@@ -8,8 +8,8 @@ import team.themoment.hellogsmv3.domain.application.dto.response.*;
 import team.themoment.hellogsmv3.domain.application.entity.*;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
-import team.themoment.hellogsmv3.domain.application.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
@@ -27,7 +27,7 @@ public class QueryApplicationByIdService {
 
         Screening screening = getScreening(application);
 
-        if (application.getPersonalInformation().getGraduation().equals(GraduationStatus.GED)) {
+        if (application.getPersonalInformation().getGraduation().equals(GraduationType.GED)) {
             admissionInfoResDto = buildGedAdmissionInfoResDto(application, screening);
             admissionGradeResDto = buildGedAdmissionGradeResDto(application);
         } else {

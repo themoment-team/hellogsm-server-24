@@ -15,8 +15,7 @@ import team.themoment.hellogsmv3.domain.application.entity.param.CandidateMiddle
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.application.repo.MiddleSchoolGradeRepository;
 import team.themoment.hellogsmv3.domain.application.repo.PersonalInformationRepository;
-import team.themoment.hellogsmv3.domain.application.type.DesiredMajors;
-import team.themoment.hellogsmv3.domain.application.type.MiddleSchoolTranscript;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 

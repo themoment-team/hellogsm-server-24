@@ -2,7 +2,7 @@ package team.themoment.hellogsmv3.domain.application.entity.command.impl;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import team.themoment.hellogsmv3.domain.application.entity.command.ApplicationCommand;
-import team.themoment.hellogsmv3.domain.application.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 
 @JsonTypeName("candidate")
 public record CandidateApplicationCommand(
@@ -10,7 +10,7 @@ public record CandidateApplicationCommand(
 ) implements ApplicationCommand {
 
     @Override
-    public GraduationStatus getGraduationStatus() {
+    public GraduationType getGraduationStatus() {
         return this.personalInformationCommand.graduation;
     }
 
@@ -18,7 +18,7 @@ public record CandidateApplicationCommand(
             String applicantImageUri,
             String address,
             String detailAddress,
-            GraduationStatus graduation,
+            GraduationType graduation,
             String telephone,
             String guardianName,
             String relationWithApplicant,

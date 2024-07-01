@@ -1,4 +1,4 @@
-package team.themoment.hellogsmv3.domain.auth.type;
+package team.themoment.hellogsmv3.domain.member.entity.type;
 
 public enum Role {
     UNAUTHENTICATED,

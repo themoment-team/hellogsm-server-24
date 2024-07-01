@@ -14,6 +14,7 @@ import team.themoment.hellogsmv3.domain.application.entity.param.CandidateMiddle
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.application.type.*;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.math.BigDecimal;

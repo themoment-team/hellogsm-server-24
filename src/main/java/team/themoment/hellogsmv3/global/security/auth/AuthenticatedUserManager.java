@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.global.security.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
+import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,7 +11,6 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Component;
-import team.themoment.hellogsmv3.domain.auth.type.Role;
 import team.themoment.hellogsmv3.global.security.oauth.UserInfo;
 
 import java.util.ArrayList;

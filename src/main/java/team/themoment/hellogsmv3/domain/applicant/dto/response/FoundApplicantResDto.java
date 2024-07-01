@@ -1,7 +1,7 @@
 package team.themoment.hellogsmv3.domain.applicant.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import team.themoment.hellogsmv3.domain.applicant.type.Gender;
+import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
 
 import java.time.LocalDate;
 

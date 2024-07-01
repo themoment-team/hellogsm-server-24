@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
 import team.themoment.hellogsmv3.domain.applicant.service.ApplicantService;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsmv3.domain.application.entity.*;
@@ -13,9 +12,6 @@ import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplicati
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractApplicationStatusParameter;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.application.type.EvaluationResult;
-import team.themoment.hellogsmv3.domain.application.type.EvaluationStatus;
-import team.themoment.hellogsmv3.domain.application.type.Major;
-import team.themoment.hellogsmv3.domain.application.type.Screening;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
