@@ -3,7 +3,7 @@ package team.themoment.hellogsmv3.domain.application.entity.param;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 
 @Getter
 public class AbstractPersonalInformationParameter {
@@ -14,7 +14,7 @@ public class AbstractPersonalInformationParameter {
 
     private final String detailAddress;
 
-    private final GraduationStatus graduation;
+    private final GraduationType graduation;
 
     private final String phoneNumber;
 
@@ -29,7 +29,7 @@ public class AbstractPersonalInformationParameter {
             @NonNull String applicantImageUri,
             @NonNull String address,
             @NonNull String detailAddress,
-            @NonNull GraduationStatus graduation,
+            @NonNull GraduationType graduation,
             @NonNull String phoneNumber,
             @NonNull String guardianName,
             @NonNull String relationWithApplicant,

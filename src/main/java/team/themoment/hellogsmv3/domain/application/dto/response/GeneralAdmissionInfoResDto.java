@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ public record GeneralAdmissionInfoResDto(
         LocalDate applicantBirth,
         String address,
         String detailAddress,
-        GraduationStatus graduation,
+        GraduationType graduation,
         String telephone,
         String applicantPhoneNumber,
         String guardianName,

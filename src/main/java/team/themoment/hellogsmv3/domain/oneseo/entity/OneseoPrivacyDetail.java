@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 
 @Getter
 @Entity
@@ -22,7 +22,7 @@ public class OneseoPrivacyDetail {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "graduation_type", nullable = false)
-    private GraduationStatus graduationType;
+    private GraduationType graduationType;
 
     @Column(name = "address", nullable = false)
     private String address;

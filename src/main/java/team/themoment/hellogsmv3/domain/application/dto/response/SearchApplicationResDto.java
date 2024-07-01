@@ -2,7 +2,7 @@ package team.themoment.hellogsmv3.domain.application.dto.response;
 
 import lombok.Builder;
 import team.themoment.hellogsmv3.domain.application.type.EvaluationStatus;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 import java.math.BigDecimal;
@@ -23,6 +23,6 @@ public record SearchApplicationResDto(
         Long registrationNumber,
         BigDecimal secondScore,
         BigDecimal interviewScore,
-        GraduationStatus graduation
+        GraduationType graduation
 ) {
 }

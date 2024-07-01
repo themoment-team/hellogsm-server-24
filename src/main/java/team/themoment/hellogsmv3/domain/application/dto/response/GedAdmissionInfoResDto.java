@@ -3,7 +3,7 @@ package team.themoment.hellogsmv3.domain.application.dto.response;
 import lombok.Builder;
 import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ public record GedAdmissionInfoResDto(
         LocalDate applicantBirth,
         String address,
         String detailAddress,
-        GraduationStatus graduation,
+        GraduationType graduation,
         String telephone,
         String applicantPhoneNumber,
         String guardianName,

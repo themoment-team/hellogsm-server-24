@@ -14,7 +14,7 @@ import team.themoment.hellogsmv3.domain.application.entity.CandidatePersonalInfo
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractApplication;
 import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractPersonalInformation;
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class QueryAllApplicationService {
 
             AbstractPersonalInformation personalInformation = application.getPersonalInformation();
             CandidatePersonalInformation generalPersonalInformation = null;
-            boolean isGed = application.getPersonalInformation().getGraduation() == GraduationStatus.GED;
+            boolean isGed = application.getPersonalInformation().getGraduation() == GraduationType.GED;
             if (!isGed) {
                 generalPersonalInformation = (CandidatePersonalInformation) Hibernate.unproxy(personalInformation);
             }

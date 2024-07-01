@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import team.themoment.hellogsmv3.domain.application.entity.param.AbstractPersonalInformationParameter;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationStatus;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 
 import java.util.UUID;
 
@@ -33,7 +33,7 @@ public abstract class AbstractPersonalInformation implements Cloneable{
     @NotNull
     @Column(name = "graduation")
     @Enumerated(EnumType.STRING)
-    protected GraduationStatus graduation;
+    protected GraduationType graduation;
 
     @NotNull
     @Column(name = "phone_number", unique = true)
