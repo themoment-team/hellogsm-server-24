@@ -12,17 +12,17 @@ public abstract class GenerateCodeService {
     protected static final int LIMIT_COUNT_CODE_REQUEST = 5;
     protected static final int MAX = (int) Math.pow(10, DIGIT_NUMBER) - 1;
 
-    protected abstract String execute(Long authenticationId, GenerateCodeReqDto reqDto);
+    protected abstract String execute(Long memberId, GenerateCodeReqDto reqDto);
 
     protected AuthenticationCode createAuthenticationCode(
             AuthenticationCode authCode,
-            Long authenticationId,
+            Long memberId,
             String code,
             String phoneNumber,
             boolean isTest) {
 
         return authCode == null ?
-                new AuthenticationCode(authenticationId, code, phoneNumber, LocalDateTime.now()) :
+                new AuthenticationCode(memberId, code, phoneNumber, LocalDateTime.now()) :
                 authCode.updatedCode(code, LocalDateTime.now(), isTest);
     }
 

@@ -19,9 +19,9 @@ public class GenerateCodeServiceImpl extends GenerateCodeService {
     private static final Random RANDOM = new Random();
 
     @Override
-    public String execute(Long authenticationId, GenerateCodeReqDto reqDto) {
+    public String execute(Long memberId, GenerateCodeReqDto reqDto) {
 
-        AuthenticationCode authenticationCode = codeRepository.findByAuthenticationId(authenticationId)
+        AuthenticationCode authenticationCode = codeRepository.findByMemberId(memberId)
                 .orElse(null);
 
         if (isLimitedRequest(authenticationCode))
@@ -33,7 +33,7 @@ public class GenerateCodeServiceImpl extends GenerateCodeService {
 
         codeRepository.save(createAuthenticationCode(
                 authenticationCode,
-                authenticationId,
+                memberId,
                 code,
                 reqDto.phoneNumber(),
                 false));

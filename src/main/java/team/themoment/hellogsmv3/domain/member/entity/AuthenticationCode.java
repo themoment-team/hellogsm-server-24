@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class AuthenticationCode {
     @Id
     @Indexed
-    private Long authenticationId;
+    private Long memberId;
     @Indexed
     private String code;
     private Boolean authenticated;
@@ -30,8 +30,8 @@ public class AuthenticationCode {
         return this;
     }
 
-    public AuthenticationCode(Long authenticationId, String code, String phoneNumber, LocalDateTime createdAt) {
-        this.authenticationId = authenticationId;
+    public AuthenticationCode(Long memberId, String code, String phoneNumber, LocalDateTime createdAt) {
+        this.memberId = memberId;
         this.code = code;
         this.authenticated = false;
         this.phoneNumber = phoneNumber;
