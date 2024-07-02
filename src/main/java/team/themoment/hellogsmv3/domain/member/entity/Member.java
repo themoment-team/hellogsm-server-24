@@ -1,9 +1,7 @@
 package team.themoment.hellogsmv3.domain.member.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,9 +13,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @Entity
 @Table(name = "tb_member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
@@ -57,4 +57,16 @@ public class Member {
     @LastModifiedDate
     @Column(name = "updated_time", nullable = false)
     private LocalDateTime updatedTime;
+
+    public static Member buildNewMember(String email, AuthReferrerType authRefType) {
+        return Member.builder()
+                .email(email)
+                .authReferrerType(authRefType)
+                .build();
+    }
+
+    @PrePersist
+    private void prePersist() {
+        this.role = this.role == null ? Role.UNAUTHENTICATED : this.role;
+    }
 }
