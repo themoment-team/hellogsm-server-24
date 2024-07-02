@@ -66,7 +66,7 @@ public class QueryApplicationByIdService {
 
         return GedAdmissionInfoResDto.builder()
                 .applicantName(applicant.getName())
-                .applicantGender(applicant.getGender())
+                .applicantGender(applicant.getSex())
                 .applicantBirth(applicant.getBirth())
                 .address(personalInformation.getAddress())
                 .detailAddress(personalInformation.getDetailAddress())
@@ -99,7 +99,7 @@ public class QueryApplicationByIdService {
 
         return GeneralAdmissionInfoResDto.builder()
                 .applicantName(applicant.getName())
-                .applicantGender(applicant.getGender())
+                .applicantGender(applicant.getSex())
                 .applicantBirth(applicant.getBirth())
                 .address(personalInformation.getAddress())
                 .detailAddress(personalInformation.getDetailAddress())

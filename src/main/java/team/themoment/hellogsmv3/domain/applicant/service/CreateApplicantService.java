@@ -39,7 +39,7 @@ public class CreateApplicantService {
                 reqDto.name(),
                 reqDto.phoneNumber(),
                 reqDto.birth(),
-                reqDto.gender(),
+                reqDto.sex(),
                 authenticationId
         );
         applicantRepository.save(newApplicant);
