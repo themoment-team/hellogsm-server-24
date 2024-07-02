@@ -1,0 +1,29 @@
+package team.themoment.hellogsmv3.domain.member.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import team.themoment.hellogsmv3.domain.member.dto.FoundMemberResDto;
+import team.themoment.hellogsmv3.domain.member.entity.Member;
+import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
+
+@Service
+@RequiredArgsConstructor
+public class QueryMemberByIdService {
+
+    private final MemberRepository memberRepository;
+
+    public FoundMemberResDto execute(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. authentication ID: " + memberId, HttpStatus.NOT_FOUND));
+
+        return FoundMemberResDto.builder()
+                .memberId(member.getId())
+                .name(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .birth(member.getBirth())
+                .sex(member.getSex())
+                .build();
+    }
+}
