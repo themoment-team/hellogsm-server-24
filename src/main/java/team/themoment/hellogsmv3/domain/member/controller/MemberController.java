@@ -19,13 +19,13 @@ public class MemberController {
     private final GenerateTestCodeServiceImpl generateTestCodeService;
     private final QueryMemberByIdService queryMemberByIdService;
 
-    @PostMapping("/me/send-code")
+    @PostMapping("/member/me/send-code")
     public CommonApiResponse sendCode(@AuthRequest Long memberId, @RequestBody GenerateCodeReqDto reqDto) {
         generateCodeService.execute(memberId, reqDto);
         return CommonApiResponse.success("전송되었습니다.");
     }
 
-    @PostMapping("/me/send-code-test")
+    @PostMapping("/member/me/send-code-test")
     public CommonApiResponse sendCodeTest(@AuthRequest Long memberId, @RequestBody GenerateCodeReqDto reqDto) {
         String code = generateTestCodeService.execute(memberId, reqDto);
         return CommonApiResponse.success("전송되었습니다. : " + code);

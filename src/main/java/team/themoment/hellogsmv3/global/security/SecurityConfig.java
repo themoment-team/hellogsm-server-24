@@ -170,6 +170,20 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "application/v3/status/{applicantId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+
+                // member
+                .requestMatchers(HttpMethod.POST,
+                        "/member/v3/member/me/send-code").hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.POST,
+                        "/member/v3/member/me/send-code-test").hasAnyAuthority(
+                        Role.ROOT.name()
+                )
+
                 .anyRequest().permitAll()
         );
     }
