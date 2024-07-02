@@ -15,7 +15,9 @@ public class MemberController {
     private final QueryMemberByIdService queryMemberByIdService;
 
     @GetMapping("/member/me")
-    public FoundMemberResDto find(@AuthRequest Long memberId) {
+    public FoundMemberResDto find(
+            @AuthRequest Long memberId
+    ) {
         return queryMemberByIdService.execute(memberId);
     }
 
