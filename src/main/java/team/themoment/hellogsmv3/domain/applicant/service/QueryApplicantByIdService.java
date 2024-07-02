@@ -1,6 +1,5 @@
 package team.themoment.hellogsmv3.domain.applicant.service;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.applicant.dto.response.FoundApplicantResDto;

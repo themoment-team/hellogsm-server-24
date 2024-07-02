@@ -3,25 +3,25 @@ package team.themoment.hellogsmv3.domain.applicant.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
-import team.themoment.hellogsmv3.domain.member.entity.AuthenticationCode;
-import team.themoment.hellogsmv3.domain.member.repo.CodeRepository;
-import team.themoment.hellogsmv3.domain.applicant.service.GenerateCodeService;
+import team.themoment.hellogsmv3.domain.applicant.entity.ApplicantAuthenticationCode;
+import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantCodeRepository;
+import team.themoment.hellogsmv3.domain.applicant.service.GenerateApplicantCodeService;
 
 import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class GenerateTestCodeServiceImpl extends GenerateCodeService {
+public class GenerateApplicantTestCodeServiceImpl extends GenerateApplicantCodeService {
 
-    private final CodeRepository codeRepository;
+    private final ApplicantCodeRepository codeRepository;
     private static final Random RANDOM = new Random();
 
     @Override
     public String execute(Long authenticationId, GenerateCodeReqDto reqDto) {
         final String code = generateUniqueCode(RANDOM, codeRepository);
 
-        AuthenticationCode authenticationCode = codeRepository.findByAuthenticationId(authenticationId)
+        ApplicantAuthenticationCode authenticationCode = codeRepository.findByAuthenticationId(authenticationId)
                 .orElse(null);
 
         codeRepository.save(createAuthenticationCode(
@@ -31,7 +31,7 @@ public class GenerateTestCodeServiceImpl extends GenerateCodeService {
                 reqDto.phoneNumber(),
                 true));
 
-        codeRepository.save(new AuthenticationCode(authenticationId, code, reqDto.phoneNumber(), LocalDateTime.now()));
+        codeRepository.save(new ApplicantAuthenticationCode(authenticationId, code, reqDto.phoneNumber(), LocalDateTime.now()));
 
         return code;
     }
