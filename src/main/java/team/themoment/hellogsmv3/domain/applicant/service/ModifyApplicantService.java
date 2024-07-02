@@ -6,12 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.ApplicantReqDto;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
+import team.themoment.hellogsmv3.domain.member.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
-
-import java.util.List;
 
 @Service
 @Transactional

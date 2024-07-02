@@ -1,8 +1,8 @@
 package team.themoment.hellogsmv3.domain.member.service;
 
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
-import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
-import team.themoment.hellogsmv3.domain.applicant.repo.CodeRepository;
+import team.themoment.hellogsmv3.domain.member.entity.AuthenticationCode;
+import team.themoment.hellogsmv3.domain.member.repo.CodeRepository;
 
 import java.time.LocalDateTime;
 import java.util.Random;
