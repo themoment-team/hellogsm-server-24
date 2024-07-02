@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Table(name = "tb_member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Member {
 
     @Id
@@ -60,8 +62,7 @@ public class Member {
         return Member.builder()
                 .email(email)
                 .authReferrerType(authRefType)
-                .createdTime(LocalDateTime.now())
-                .updatedTime(LocalDateTime.now()).build();
+                .build();
     }
 
     @PrePersist

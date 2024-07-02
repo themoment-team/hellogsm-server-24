@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
 import java.math.BigDecimal;
 
@@ -26,14 +27,16 @@ public class EntranceTestResult {
     @Column(name = "first_test_result_score")
     private BigDecimal firstTestResultScore;
 
-    @Column(name = "is_first_test_pass")
-    private Boolean isFirstTestPass;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "first_test_pass_yn")
+    private YesNo firstTestPassYn;
 
     @Column(name = "second_test_result_score")
     private BigDecimal secondTestResultScore;
 
-    @Column(name = "is_second_test_pass")
-    private Boolean isSecondTestPass;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "second_test_pass_yn")
+    private YesNo secondTestPassYn;
 
     @Column(name = "interview_score")
     private BigDecimal interviewScore;

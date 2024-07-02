@@ -9,13 +9,11 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import team.themoment.hellogsmv3.global.common.response.CommonApiMessageResponse;
+import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +35,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(
-                CommonApiMessageResponse.error("인증에 실패했습니다.", HttpStatus.UNAUTHORIZED)
+                CommonApiResponse.error("인증에 실패했습니다.", HttpStatus.UNAUTHORIZED)
         ));
     }
 }
