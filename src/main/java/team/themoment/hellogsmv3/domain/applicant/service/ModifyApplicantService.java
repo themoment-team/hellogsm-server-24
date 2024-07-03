@@ -11,8 +11,6 @@ import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
-import java.util.List;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -36,7 +34,7 @@ public class ModifyApplicantService {
                 reqDto.name(),
                 reqDto.phoneNumber(),
                 reqDto.birth(),
-                reqDto.gender(),
+                reqDto.sex(),
                 authenticationId
         );
         applicantRepository.save(newApplicant);
