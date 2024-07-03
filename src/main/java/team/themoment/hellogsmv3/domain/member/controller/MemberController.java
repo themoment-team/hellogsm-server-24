@@ -20,7 +20,10 @@ public class MemberController {
     private final QueryMemberByIdService queryMemberByIdService;
 
     @PostMapping("/member/me/send-code")
-    public CommonApiResponse sendCode(@AuthRequest Long memberId, @RequestBody GenerateCodeReqDto reqDto) {
+    public CommonApiResponse sendCode(
+        @AuthRequest Long memberId, 
+        @RequestBody GenerateCodeReqDto reqDto
+    ) {
         generateCodeService.execute(memberId, reqDto);
         return CommonApiResponse.success("전송되었습니다.");
     }
