@@ -11,15 +11,15 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AuthenticateCodeService {
 
     private final CodeRepository codeRepository;
 
+    @Transactional
     public void execute(Long memberId, AuthenticateCodeReqDto reqDto) {
 
         AuthenticationCode code = codeRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new ExpectedException("사용자의 code가 존재하지 않습니다. member ID : " + memberId, HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new ExpectedException("사용자의 code가 존재하지 않습니다. member ID : " + memberId, HttpStatus.NOT_FOUND));
 
         if (!code.getCode().equals(reqDto.code()))
             throw new ExpectedException("유효하지 않은 code 이거나 이전 혹은 잘못된 code 입니다.", HttpStatus.BAD_REQUEST);
