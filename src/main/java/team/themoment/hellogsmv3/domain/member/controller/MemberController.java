@@ -35,7 +35,7 @@ public class MemberController {
         return CommonApiResponse.success("전송되었습니다. : " + code);
     }
 
-    @PostMapping("/applicant/me/auth-code")
+    @PostMapping("/member/me/auth-code")
     public CommonApiResponse authCode(
             @AuthRequest Long memberId,
             @RequestBody @Valid AuthenticateCodeReqDto reqDto

@@ -173,7 +173,8 @@ public class SecurityConfig {
 
                 // member
                 .requestMatchers(HttpMethod.POST,
-                        "/member/v3/member/me/send-code").hasAnyAuthority(
+                        "/member/v3/member/me/send-code",
+                        "/member/v3/member/me/auth-code").hasAnyAuthority(
                         Role.UNAUTHENTICATED.name(),
                         Role.APPLICANT.name(),
                         Role.ADMIN.name(),
