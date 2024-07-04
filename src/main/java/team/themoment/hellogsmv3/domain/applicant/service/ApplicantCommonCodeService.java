@@ -9,7 +9,7 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
-public class CommonCodeService {
+public class ApplicantCommonCodeService {
 
     private final ApplicantCodeRepository codeRepository;
 
