@@ -21,7 +21,7 @@ public class CreateMemberService {
     @Transactional
     public Role execute(CreateMemberReqDto reqDto, Long memberId) {
 
-        AuthenticationCode code = commonCodeService.validateAndGetRecentCode(memberId, reqDto.code(), reqDto.phoneNumber());
+        commonCodeService.validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
@@ -38,8 +38,6 @@ public class CreateMemberService {
                 .build();
 
         memberRepository.save(newMember);
-
-        commonCodeService.deleteCode(code);
 
         return newMember.getRole();
     }
