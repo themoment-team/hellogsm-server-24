@@ -1,7 +1,7 @@
-package team.themoment.hellogsmv3.domain.member.dto;
+package team.themoment.hellogsmv3.domain.member.dto.response;
 
 import lombok.Builder;
-import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
+import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
 
 import java.time.LocalDate;
 
@@ -12,6 +12,6 @@ public record FoundMemberResDto(
         String name,
         String phoneNumber,
         LocalDate birth,
-        Gender sex
+        Sex sex
 ) {
 }

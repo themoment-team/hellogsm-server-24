@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.ApplicantReqDto;
 import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
+import team.themoment.hellogsmv3.domain.applicant.entity.ApplicantAuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantRepository;
 import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.auth.repo.AuthenticationRepository;
@@ -30,7 +30,7 @@ public class CreateApplicantService {
         if (applicantRepository.existsByAuthenticationId(authenticationId))
             throw new ExpectedException("이미 존재하는 Applicant 입니다", HttpStatus.BAD_REQUEST);
 
-        AuthenticationCode code = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
+        ApplicantAuthenticationCode code = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
 
         Authentication roleUpdatedAuthentication = authenticationRepository.save(authentication.roleUpdatedAuthentication());
 
@@ -39,7 +39,7 @@ public class CreateApplicantService {
                 reqDto.name(),
                 reqDto.phoneNumber(),
                 reqDto.birth(),
-                reqDto.gender(),
+                reqDto.sex(),
                 authenticationId
         );
         applicantRepository.save(newApplicant);

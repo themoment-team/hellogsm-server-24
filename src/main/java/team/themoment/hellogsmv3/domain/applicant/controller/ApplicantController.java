@@ -10,10 +10,10 @@ import team.themoment.hellogsmv3.domain.applicant.service.CreateApplicantService
 import team.themoment.hellogsmv3.domain.applicant.service.QueryApplicantByIdService;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
-import team.themoment.hellogsmv3.domain.applicant.service.AuthenticateCodeService;
+import team.themoment.hellogsmv3.domain.applicant.service.ApplicantAuthenticateCodeService;
 import team.themoment.hellogsmv3.domain.applicant.service.ModifyApplicantService;
-import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateCodeServiceImpl;
-import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateTestCodeServiceImpl;
+import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateApplicantCodeServiceImpl;
+import team.themoment.hellogsmv3.domain.applicant.service.impl.GenerateApplicantTestCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
@@ -27,9 +27,9 @@ public class ApplicantController {
     private final CreateApplicantService createApplicantService;
     private final ModifyApplicantService modifyApplicantService;
     private final QueryApplicantByIdService queryApplicantByIdService;
-    private final AuthenticateCodeService authenticateCodeService;
-    private final GenerateTestCodeServiceImpl generateTestCodeService;
-    private final GenerateCodeServiceImpl generateCodeService;
+    private final ApplicantAuthenticateCodeService authenticateCodeService;
+    private final GenerateApplicantTestCodeServiceImpl generateTestCodeService;
+    private final GenerateApplicantCodeServiceImpl generateCodeService;
     private final AuthenticatedUserManager manager;
 
     @PostMapping("/applicant/me/send-code")

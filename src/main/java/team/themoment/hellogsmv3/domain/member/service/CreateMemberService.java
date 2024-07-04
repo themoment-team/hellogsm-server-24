@@ -3,11 +3,10 @@ package team.themoment.hellogsmv3.domain.member.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import team.themoment.hellogsmv3.domain.applicant.entity.Applicant;
-import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
+import team.themoment.hellogsmv3.domain.applicant.entity.ApplicantAuthenticationCode;
 import team.themoment.hellogsmv3.domain.applicant.service.CommonCodeService;
-import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.member.dto.CreateMemberReqDto;
+import team.themoment.hellogsmv3.domain.member.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
@@ -22,7 +21,7 @@ public class CreateMemberService {
 
     public Role execute(CreateMemberReqDto reqDto, Long memberId) {
 
-        AuthenticationCode code = commonCodeService.validateAndGetRecentCode(memberId, reqDto.code(), reqDto.phoneNumber());
+        ApplicantAuthenticationCode code = commonCodeService.validateAndGetRecentCode(memberId, reqDto.code(), reqDto.phoneNumber());
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
