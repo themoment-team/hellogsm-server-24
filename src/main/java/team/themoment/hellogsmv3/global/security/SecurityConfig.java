@@ -172,16 +172,25 @@ public class SecurityConfig {
                 )
 
                 // member
-                .requestMatchers(HttpMethod.POST,
-                        "/member/v3/member/me/send-code",
-                        "/member/v3/member/me/auth-code").hasAnyAuthority(
+                .requestMatchers(HttpMethod.GET, "/member/v3/member/me").hasAnyAuthority(
                         Role.UNAUTHENTICATED.name(),
                         Role.APPLICANT.name(),
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/member/v3/member/{memberId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .requestMatchers(HttpMethod.POST,
-                        "/member/v3/member/me/send-code-test").hasAnyAuthority(
+                        "/member/v3/member/me/send-code",
+                        "/member/v3/member/me/auth-code"
+                ).hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.POST, "/member/v3/member/me/send-code-test").hasAnyAuthority(
                         Role.ROOT.name()
                 )
 

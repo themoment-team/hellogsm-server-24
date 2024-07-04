@@ -7,7 +7,6 @@ import team.themoment.hellogsmv3.domain.member.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.member.repo.CodeRepository;
 import team.themoment.hellogsmv3.domain.member.service.GenerateCodeService;
 
-import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
@@ -30,8 +29,6 @@ public class GenerateTestCodeServiceImpl extends GenerateCodeService {
                 code,
                 reqDto.phoneNumber(),
                 true));
-
-        codeRepository.save(new AuthenticationCode(memberId, code, reqDto.phoneNumber(), LocalDateTime.now()));
 
         return code;
     }

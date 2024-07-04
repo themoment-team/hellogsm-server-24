@@ -5,9 +5,9 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
+import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,7 +44,7 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sex")
-    private Gender sex;
+    private Sex sex;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
