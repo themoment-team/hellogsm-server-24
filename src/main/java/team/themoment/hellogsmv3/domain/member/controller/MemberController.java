@@ -1,8 +1,12 @@
 package team.themoment.hellogsmv3.domain.member.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import team.themoment.hellogsmv3.domain.member.dto.CreateMemberReqDto;
+import team.themoment.hellogsmv3.domain.member.entity.type.Role;
+import team.themoment.hellogsmv3.domain.member.service.CreateMemberService;
 import team.themoment.hellogsmv3.domain.member.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.request.GenerateCodeReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberResDto;
@@ -12,16 +16,19 @@ import team.themoment.hellogsmv3.domain.member.service.impl.GenerateCodeServiceI
 import team.themoment.hellogsmv3.domain.member.service.impl.GenerateTestCodeServiceImpl;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
+import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
 @RestController
 @RequestMapping("/member/v3")
 @RequiredArgsConstructor
 public class MemberController {
 
+    private final AuthenticatedUserManager manager;
     private final GenerateCodeServiceImpl generateCodeService;
     private final GenerateTestCodeServiceImpl generateTestCodeService;
     private final AuthenticateCodeService authenticateCodeService;
     private final QueryMemberByIdService queryMemberByIdService;
+    private final CreateMemberService createMemberService;
 
     @PostMapping("/member/me/send-code")
     public CommonApiResponse sendCode(
@@ -59,5 +66,16 @@ public class MemberController {
             @PathVariable Long memberId
     ) {
         return queryMemberByIdService.execute(memberId);
+    }
+
+    @PostMapping("/member/me")
+    public CommonApiResponse create(
+            HttpServletRequest httpServletRequest,
+            @RequestBody @Valid CreateMemberReqDto reqDto,
+            @AuthRequest Long memberId
+    ) {
+        Role role = createMemberService.execute(reqDto, memberId);
+        manager.setRole(httpServletRequest, role);
+        return CommonApiResponse.created("본인인증이 완료되었습니다.");
     }
 }
