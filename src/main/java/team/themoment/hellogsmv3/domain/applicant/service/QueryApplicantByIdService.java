@@ -20,7 +20,7 @@ public class QueryApplicantByIdService {
                 applicant.getName(),
                 applicant.getPhoneNumber(),
                 applicant.getBirth(),
-                applicant.getGender(),
+                applicant.getSex(),
                 authenticationId
         );
     }

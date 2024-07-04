@@ -2,7 +2,7 @@ package team.themoment.hellogsmv3.domain.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
+import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 public record GeneralAdmissionInfoResDto(
         String applicantName,
-        Gender applicantGender,
+        Sex applicantSex,
         @JsonFormat(pattern="yyyy-MM-dd")
         LocalDate applicantBirth,
         String address,

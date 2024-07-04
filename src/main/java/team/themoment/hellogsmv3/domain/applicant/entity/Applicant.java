@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.themoment.hellogsmv3.domain.member.entity.type.Gender;
+import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
 
 import java.time.LocalDate;
 
@@ -34,7 +34,7 @@ public class Applicant {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
-    private Gender gender;
+    private Sex sex;
 
     @NotNull
     @Column(name = "authentication_id", unique = true)

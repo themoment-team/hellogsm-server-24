@@ -1,6 +1,6 @@
 package team.themoment.hellogsmv3.domain.member.entity.type;
 
-public enum Gender {
+public enum Sex {
     MALE,
     FEMALE
 }
