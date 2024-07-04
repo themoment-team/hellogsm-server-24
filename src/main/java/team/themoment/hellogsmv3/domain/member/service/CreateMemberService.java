@@ -3,6 +3,7 @@ package team.themoment.hellogsmv3.domain.member.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.dto.CreateMemberReqDto;
 import team.themoment.hellogsmv3.domain.member.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
@@ -17,9 +18,10 @@ public class CreateMemberService {
     private final MemberRepository memberRepository;
     private final CommonCodeService commonCodeService;
 
+    @Transactional
     public Role execute(CreateMemberReqDto reqDto, Long memberId) {
 
-        AuthenticationCode code = commonCodeService.validateAndGetRecentCode(memberId, reqDto.code(), reqDto.phoneNumber());
+        commonCodeService.validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
@@ -36,8 +38,6 @@ public class CreateMemberService {
                 .build();
 
         memberRepository.save(newMember);
-
-        commonCodeService.deleteCode(code);
 
         return newMember.getRole();
     }
