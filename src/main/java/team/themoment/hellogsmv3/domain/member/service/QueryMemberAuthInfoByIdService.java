@@ -18,8 +18,7 @@ public class QueryMemberAuthInfoByIdService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
 
-        return FoundMemberAuthInfoResDto
-                .builder()
+        return FoundMemberAuthInfoResDto.builder()
                 .memberId(member.getId())
                 .email(member.getEmail())
                 .authReferrerType(member.getAuthReferrerType())
