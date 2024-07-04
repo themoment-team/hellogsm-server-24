@@ -58,7 +58,7 @@ public class Member {
     @Column(name = "updated_time", nullable = false)
     private LocalDateTime updatedTime;
 
-    public static Member buildNewMember(String email, AuthReferrerType authRefType) {
+    public static Member buildMemberWithOauthInfo(String email, AuthReferrerType authRefType) {
         return Member.builder()
                 .email(email)
                 .authReferrerType(authRefType)
