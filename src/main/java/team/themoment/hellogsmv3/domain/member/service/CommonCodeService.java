@@ -25,14 +25,14 @@ public class CommonCodeService {
             throw new ExpectedException("유효하지 않은 요청입니다. 이전 혹은 잘못된 형식의 code입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        if (!code.getPhoneNumber().equals(inputPhoneNumber)) {  // TODO 반환 메시지에 전화번호 추가?
+        if (!code.getPhoneNumber().equals(inputPhoneNumber)) {
             throw new ExpectedException("유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         return code;
     }
 
-    public void deleteCode(AuthenticationCode code) {      // TODO recentCode만 지워도 되는지 check
+    public void deleteCode(AuthenticationCode code) {
         codeRepository.delete(code);
     }
 }
