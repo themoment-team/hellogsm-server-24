@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.member.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.request.GenerateCodeReqDto;
+import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberAuthInfoResDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberResDto;
 import team.themoment.hellogsmv3.domain.member.service.AuthenticateCodeService;
+import team.themoment.hellogsmv3.domain.member.service.QueryMemberAuthInfoByIdService;
 import team.themoment.hellogsmv3.domain.member.service.QueryMemberByIdService;
 import team.themoment.hellogsmv3.domain.member.service.impl.GenerateCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.member.service.impl.GenerateTestCodeServiceImpl;
@@ -22,6 +24,7 @@ public class MemberController {
     private final GenerateTestCodeServiceImpl generateTestCodeService;
     private final AuthenticateCodeService authenticateCodeService;
     private final QueryMemberByIdService queryMemberByIdService;
+    private final QueryMemberAuthInfoByIdService queryMemberAuthInfoByIdService;
 
     @PostMapping("/member/me/send-code")
     public CommonApiResponse sendCode(
@@ -59,5 +62,19 @@ public class MemberController {
             @PathVariable Long memberId
     ) {
         return queryMemberByIdService.execute(memberId);
+    }
+
+    @GetMapping("/auth-info/me")
+    public FoundMemberAuthInfoResDto findAuthInfo(
+            @AuthRequest Long memberId
+    ) {
+        return queryMemberAuthInfoByIdService.execute(memberId);
+    }
+
+    @GetMapping("/auth-info/{memberId}")
+    public FoundMemberAuthInfoResDto findAuthInfoByMemberId(
+            @PathVariable Long memberId
+    ) {
+        return queryMemberAuthInfoByIdService.execute(memberId);
     }
 }
