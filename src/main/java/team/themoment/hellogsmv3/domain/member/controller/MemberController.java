@@ -70,4 +70,11 @@ public class MemberController {
     ) {
         return queryMemberAuthInfoByIdService.execute(memberId);
     }
+
+    @GetMapping("/auth-info/{memberId}")
+    public FoundMemberAuthInfoResDto findAuthInfoByMemberId(
+            @PathVariable Long memberId
+    ) {
+        return queryMemberAuthInfoByIdService.execute(memberId);
+    }
 }
