@@ -24,7 +24,7 @@ public class CreateMemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
 
-        Member newMember = Member.builder()     // TODO 새로운 객체 생성 후 저장 시 auditing이 정상작동 하는지
+        Member newMember = Member.builder()
                 .id(member.getId())
                 .email(member.getEmail())
                 .authReferrerType(member.getAuthReferrerType())
