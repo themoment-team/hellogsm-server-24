@@ -13,7 +13,7 @@ public class ApplicantCommonCodeService {
 
     private final ApplicantCodeRepository codeRepository;
 
-    public ApplicantAuthenticationCode validateAndGetRecentCode(Long authenticationId, String inputCode, String inputPhoneNumber) {     // TODO parameter name check
+    public ApplicantAuthenticationCode validateAndGetRecentCode(Long authenticationId, String inputCode, String inputPhoneNumber) {
         ApplicantAuthenticationCode code = codeRepository.findByAuthenticationId(authenticationId)
                 .orElseThrow(() -> new ExpectedException("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + authenticationId, HttpStatus.BAD_REQUEST));
 
@@ -25,7 +25,7 @@ public class ApplicantCommonCodeService {
             throw new ExpectedException("유효하지 않은 요청입니다. 이전 혹은 잘못된 형식의 code입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        if (!code.getPhoneNumber().equals(inputPhoneNumber)) {  // TODO 반환 메시지에 전화번호 추가?
+        if (!code.getPhoneNumber().equals(inputPhoneNumber)) {
             throw new ExpectedException("유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
