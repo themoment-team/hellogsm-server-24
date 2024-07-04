@@ -12,7 +12,7 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AuthenticateCodeService {
+public class ApplicantAuthenticateCodeService {
 
     private final ApplicantCodeRepository codeRepository;
 
