@@ -1,4 +1,4 @@
-package team.themoment.hellogsmv3.domain.member.dto;
+package team.themoment.hellogsmv3.domain.member.dto.response;
 
 import lombok.Builder;
 import team.themoment.hellogsmv3.domain.member.entity.type.Gender;

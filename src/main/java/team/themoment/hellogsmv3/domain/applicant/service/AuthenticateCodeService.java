@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.AuthenticateCodeReqDto;
-import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
-import team.themoment.hellogsmv3.domain.applicant.repo.CodeRepository;
+import team.themoment.hellogsmv3.domain.applicant.entity.ApplicantAuthenticationCode;
+import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantCodeRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
@@ -14,11 +14,11 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 @Transactional
 public class AuthenticateCodeService {
 
-    private final CodeRepository codeRepository;
+    private final ApplicantCodeRepository codeRepository;
 
     public void execute(Long userId, AuthenticateCodeReqDto reqDto) {
 
-        AuthenticationCode code = codeRepository.findByAuthenticationId(userId)
+        ApplicantAuthenticationCode code = codeRepository.findByAuthenticationId(userId)
                 .orElseThrow(() -> new ExpectedException("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + userId, HttpStatus.BAD_REQUEST));
 
         if (!code.getCode().equals(reqDto.code()))

@@ -1,12 +1,10 @@
-package team.themoment.hellogsmv3.domain.applicant.entity;
+package team.themoment.hellogsmv3.domain.member.entity;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
 import java.time.LocalDateTime;
@@ -17,7 +15,7 @@ import java.time.LocalDateTime;
 public class AuthenticationCode {
     @Id
     @Indexed
-    private Long authenticationId;
+    private Long memberId;
     @Indexed
     private String code;
     private Boolean authenticated;
@@ -32,8 +30,8 @@ public class AuthenticationCode {
         return this;
     }
 
-    public AuthenticationCode(Long authenticationId, String code, String phoneNumber, LocalDateTime createdAt) {
-        this.authenticationId = authenticationId;
+    public AuthenticationCode(Long memberId, String code, String phoneNumber, LocalDateTime createdAt) {
+        this.memberId = memberId;
         this.code = code;
         this.authenticated = false;
         this.phoneNumber = phoneNumber;

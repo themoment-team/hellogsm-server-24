@@ -4,25 +4,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.applicant.dto.request.GenerateCodeReqDto;
-import team.themoment.hellogsmv3.domain.applicant.entity.AuthenticationCode;
-import team.themoment.hellogsmv3.domain.applicant.repo.CodeRepository;
-import team.themoment.hellogsmv3.domain.applicant.service.GenerateCodeService;
+import team.themoment.hellogsmv3.domain.applicant.entity.ApplicantAuthenticationCode;
+import team.themoment.hellogsmv3.domain.applicant.repo.ApplicantCodeRepository;
+import team.themoment.hellogsmv3.domain.applicant.service.GenerateApplicantCodeService;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
-import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class GenerateCodeServiceImpl extends GenerateCodeService {
+public class GenerateApplicantCodeServiceImpl extends GenerateApplicantCodeService {
 
-    private final CodeRepository codeRepository;
+    private final ApplicantCodeRepository codeRepository;
     private static final Random RANDOM = new Random();
 
     @Override
     public String execute(Long authenticationId, GenerateCodeReqDto reqDto) {
 
-        AuthenticationCode authenticationCode = codeRepository.findByAuthenticationId(authenticationId)
+        ApplicantAuthenticationCode authenticationCode = codeRepository.findByAuthenticationId(authenticationId)
                 .orElse(null);
 
         if (isLimitedRequest(authenticationCode))
@@ -44,7 +43,7 @@ public class GenerateCodeServiceImpl extends GenerateCodeService {
         return code;
     }
 
-    private boolean isLimitedRequest(AuthenticationCode authenticationCode) {
+    private boolean isLimitedRequest(ApplicantAuthenticationCode authenticationCode) {
         return authenticationCode != null && authenticationCode.getCount() >= LIMIT_COUNT_CODE_REQUEST;
     }
 }
