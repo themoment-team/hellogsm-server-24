@@ -20,7 +20,7 @@ public class CreateApplicantService {
 
     private final ApplicantRepository applicantRepository;
     private final AuthenticationRepository authenticationRepository;
-    private final CommonCodeService commonCodeService;
+    private final ApplicantCommonCodeService applicantCommonCodeService;
 
     public Role execute(ApplicantReqDto reqDto, Long authenticationId) {
 
@@ -30,7 +30,7 @@ public class CreateApplicantService {
         if (applicantRepository.existsByAuthenticationId(authenticationId))
             throw new ExpectedException("이미 존재하는 Applicant 입니다", HttpStatus.BAD_REQUEST);
 
-        ApplicantAuthenticationCode code = commonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
+        ApplicantAuthenticationCode code = applicantCommonCodeService.validateAndGetRecentCode(authenticationId, reqDto.code(), reqDto.phoneNumber());
 
         Authentication roleUpdatedAuthentication = authenticationRepository.save(authentication.roleUpdatedAuthentication());
 
@@ -44,7 +44,7 @@ public class CreateApplicantService {
         );
         applicantRepository.save(newApplicant);
 
-        commonCodeService.deleteCode(code);
+        applicantCommonCodeService.deleteCode(code);
 
         return roleUpdatedAuthentication.getRole();
     };
