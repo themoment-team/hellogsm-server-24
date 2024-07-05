@@ -3,12 +3,12 @@ package team.themoment.hellogsmv3.domain.application.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import team.themoment.hellogsmv3.domain.application.annotation.ValidDesiredMajors;
+import team.themoment.hellogsmv3.domain.application.annotation.ApplicationValidDesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
-@ValidDesiredMajors
+@ApplicationValidDesiredMajors
 public record ApplicationReqDto(
         @NotBlank
         String guardianName,
