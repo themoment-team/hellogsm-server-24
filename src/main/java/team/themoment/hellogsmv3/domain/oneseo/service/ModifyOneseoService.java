@@ -37,8 +37,8 @@ public class ModifyOneseoService {
         Oneseo oneseo = oneseoRepository.findByMember(currentMember)
                 .orElseThrow(() -> new ExpectedException("원서 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
-//        OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
-//        MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
+        OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
+        MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
 
         isNotFinalSubmitted(isAdmin, oneseo);
 
@@ -55,6 +55,7 @@ public class ModifyOneseoService {
                 .appliedScreening(oneseo.getAppliedScreening()).build(); // 적용되는 전형 로직 추가해야함
 
         OneseoPrivacyDetail modifiedOneseoPrivacyDetail = OneseoPrivacyDetail.builder()
+                .id(oneseoPrivacyDetail.getId())
                 .oneseo(oneseo)
                 .graduationType(reqDto.graduationType())
                 .address(reqDto.address())
@@ -69,6 +70,7 @@ public class ModifyOneseoService {
                 .schoolTeacherPhoneNumber(reqDto.teacherPhoneNumber()).build();
 
         MiddleSchoolAchievement modifiedMiddleSchoolAchievement = MiddleSchoolAchievement.builder()
+                .id(middleSchoolAchievement.getId())
                 .oneseo(oneseo)
                 .transcript(reqDto.middleSchoolGrade())
                 .percentileRank(BigDecimal.ONE)

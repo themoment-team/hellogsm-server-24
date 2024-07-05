@@ -2,6 +2,7 @@ package team.themoment.hellogsmv3.domain.oneseo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 
 @Getter
@@ -10,7 +11,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-// @DynamicUpdate <- 더티채킹시 변경된 컬럼만 UPDATE
+@DynamicUpdate
 public class OneseoPrivacyDetail {
 
     @Id
