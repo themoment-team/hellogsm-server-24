@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.dto.request.ModifyMemberReqDto;
-import team.themoment.hellogsmv3.domain.member.entity.AuthenticationCode;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
@@ -24,7 +23,7 @@ public class ModifyMemberService {
 
         commonCodeService.validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
 
-        Member updatedMember = member.updateMember(reqDto);
-        memberRepository.save(updatedMember);
+        Member modifiedMember = member.modifyMember(reqDto);
+        memberRepository.save(modifiedMember);
     }
 }

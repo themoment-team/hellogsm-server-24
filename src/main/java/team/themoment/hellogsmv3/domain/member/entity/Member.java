@@ -66,7 +66,7 @@ public class Member {
                 .build();
     }
 
-    public Member updateMember(ModifyMemberReqDto reqDto) {
+    public Member modifyMember(ModifyMemberReqDto reqDto) {
         this.name = reqDto.name();
         this.birth = reqDto.birth();
         this.phoneNumber = reqDto.phoneNumber();
