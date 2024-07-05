@@ -9,7 +9,6 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import team.themoment.hellogsmv3.domain.auth.entity.Authentication;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
@@ -83,6 +82,6 @@ public class CustomOauth2UserService implements OAuth2UserService {
 
     private Member getUser(String providerId, AuthReferrerType authRefType) {
         return memberRepository.findByAuthReferrerTypeAndEmail(authRefType, providerId)
-                .orElseGet(() -> memberRepository.save(Member.buildNewMember(providerId, authRefType)));
+                .orElseGet(() -> memberRepository.save(Member.buildMemberWithOauthInfo(providerId, authRefType)));
     }
 }
