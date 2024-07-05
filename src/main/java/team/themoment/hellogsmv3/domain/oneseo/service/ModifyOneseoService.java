@@ -10,10 +10,12 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
+import team.themoment.hellogsmv3.domain.oneseo.entity.ScreeningChangeHistory;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
+import team.themoment.hellogsmv3.domain.oneseo.repository.ScreeningChangeHistoryRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.math.BigDecimal;
@@ -28,6 +30,7 @@ public class ModifyOneseoService {
     private final OneseoRepository oneseoRepository;
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
+    private final ScreeningChangeHistoryRepository screeningChangeHistoryRepository;
 
     @Transactional
     public void execute(OneseoReqDto reqDto, Long memberId, boolean isAdmin) {
@@ -42,6 +45,15 @@ public class ModifyOneseoService {
 
         isNotFinalSubmitted(isAdmin, oneseo);
 
+        if (oneseo.getAppliedScreening() != reqDto.screening()) {
+            ScreeningChangeHistory screeningChangeHistory = ScreeningChangeHistory.builder()
+                    .beforeScreening(oneseo.getAppliedScreening())
+                    .afterScreening(reqDto.screening())
+                    .oneseo(oneseo).build();
+
+            screeningChangeHistoryRepository.save(screeningChangeHistory);
+        }
+
         Oneseo modifiedOneseo = Oneseo.builder()
                 .id(oneseo.getId())
                 .member(currentMember)
@@ -52,7 +64,7 @@ public class ModifyOneseoService {
                         .build())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .finalSubmittedYn(oneseo.getFinalSubmittedYn())
-                .appliedScreening(oneseo.getAppliedScreening()).build(); // 적용되는 전형 로직 추가해야함
+                .appliedScreening(reqDto.screening()).build();
 
         OneseoPrivacyDetail modifiedOneseoPrivacyDetail = OneseoPrivacyDetail.builder()
                 .id(oneseoPrivacyDetail.getId())
