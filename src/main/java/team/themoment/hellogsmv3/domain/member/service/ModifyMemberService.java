@@ -24,17 +24,7 @@ public class ModifyMemberService {
 
         commonCodeService.validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
 
-        Member newMember = Member.builder()
-                .id(member.getId())
-                .email(member.getEmail())
-                .authReferrerType(member.getAuthReferrerType())
-                .name(reqDto.name())
-                .birth(reqDto.birth())
-                .phoneNumber(reqDto.phoneNumber())
-                .sex(reqDto.sex())
-                .role(member.getRole())
-                .build();
-
-        memberRepository.save(newMember);
+        Member updatedMember = member.updateMember(reqDto);
+        memberRepository.save(updatedMember);
     }
 }
