@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.member.dto.CreateMemberReqDto;
+import team.themoment.hellogsmv3.domain.member.dto.request.ModifyMemberReqDto;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.service.CreateMemberService;
 import team.themoment.hellogsmv3.domain.member.dto.request.AuthenticateCodeReqDto;
@@ -12,6 +13,7 @@ import team.themoment.hellogsmv3.domain.member.dto.request.GenerateCodeReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberAuthInfoResDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberResDto;
 import team.themoment.hellogsmv3.domain.member.service.AuthenticateCodeService;
+import team.themoment.hellogsmv3.domain.member.service.ModifyMemberService;
 import team.themoment.hellogsmv3.domain.member.service.QueryMemberAuthInfoByIdService;
 import team.themoment.hellogsmv3.domain.member.service.QueryMemberByIdService;
 import team.themoment.hellogsmv3.domain.member.service.impl.GenerateCodeServiceImpl;
@@ -31,6 +33,7 @@ public class MemberController {
     private final AuthenticateCodeService authenticateCodeService;
     private final QueryMemberByIdService queryMemberByIdService;
     private final CreateMemberService createMemberService;
+    private final ModifyMemberService modifyMemberService;
     private final QueryMemberAuthInfoByIdService queryMemberAuthInfoByIdService;
 
     @PostMapping("/member/me/send-code")
@@ -80,6 +83,7 @@ public class MemberController {
         Role role = createMemberService.execute(reqDto, memberId);
         manager.setRole(httpServletRequest, role);
         return CommonApiResponse.created("본인인증이 완료되었습니다.");
+    }
 
     @GetMapping("/auth-info/me")
     public FoundMemberAuthInfoResDto findAuthInfo(
@@ -94,5 +98,14 @@ public class MemberController {
     ) {
         return queryMemberAuthInfoByIdService.execute(memberId);
 
+    }
+
+    @PutMapping("/member/me")
+    public CommonApiResponse modify(
+            @RequestBody @Valid ModifyMemberReqDto reqDto,
+            @AuthRequest Long memberId
+    ) {
+        modifyMemberService.execute(reqDto, memberId);
+        return CommonApiResponse.success("수정되었습니다.");
     }
 }

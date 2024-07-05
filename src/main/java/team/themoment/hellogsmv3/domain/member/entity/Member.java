@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import team.themoment.hellogsmv3.domain.member.dto.request.ModifyMemberReqDto;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
@@ -63,6 +64,15 @@ public class Member {
                 .email(email)
                 .authReferrerType(authRefType)
                 .build();
+    }
+
+    public Member modifyMember(String name, LocalDate birth, String phoneNumber, Sex sex) {
+        this.name = name;
+        this.birth = birth;
+        this.phoneNumber = phoneNumber;
+        this.sex = sex;
+
+        return this;
     }
 
     @PrePersist
