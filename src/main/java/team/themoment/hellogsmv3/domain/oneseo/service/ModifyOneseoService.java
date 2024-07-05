@@ -12,6 +12,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.ScreeningChangeHistory;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -36,7 +37,6 @@ public class ModifyOneseoService {
     public void execute(OneseoReqDto reqDto, Long memberId, boolean isAdmin) {
         Member currentMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
-
         Oneseo oneseo = oneseoRepository.findByMember(currentMember)
                 .orElseThrow(() -> new ExpectedException("원서 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
@@ -45,16 +45,17 @@ public class ModifyOneseoService {
 
         isNotFinalSubmitted(isAdmin, oneseo);
 
-        if (oneseo.getAppliedScreening() != reqDto.screening()) {
-            ScreeningChangeHistory screeningChangeHistory = ScreeningChangeHistory.builder()
-                    .beforeScreening(oneseo.getAppliedScreening())
-                    .afterScreening(reqDto.screening())
-                    .oneseo(oneseo).build();
+        ifScreeningChangeSaveHistory(reqDto.screening(), oneseo);
 
-            screeningChangeHistoryRepository.save(screeningChangeHistory);
-        }
+        Oneseo modifiedOneseo = buildOneseo(reqDto, oneseo, currentMember);
+        OneseoPrivacyDetail modifiedOneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseoPrivacyDetail, oneseo);
+        MiddleSchoolAchievement modifiedMiddleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, middleSchoolAchievement, oneseo);
 
-        Oneseo modifiedOneseo = Oneseo.builder()
+        saveModifiedOneseo(modifiedOneseo, modifiedOneseoPrivacyDetail, modifiedMiddleSchoolAchievement);
+    }
+
+    private Oneseo buildOneseo(OneseoReqDto reqDto, Oneseo oneseo, Member currentMember) {
+        return Oneseo.builder()
                 .id(oneseo.getId())
                 .member(currentMember)
                 .desiredMajors(DesiredMajors.builder()
@@ -65,8 +66,10 @@ public class ModifyOneseoService {
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .finalSubmittedYn(oneseo.getFinalSubmittedYn())
                 .appliedScreening(reqDto.screening()).build();
+    }
 
-        OneseoPrivacyDetail modifiedOneseoPrivacyDetail = OneseoPrivacyDetail.builder()
+    private OneseoPrivacyDetail buildOneseoPrivacyDetail(OneseoReqDto reqDto, OneseoPrivacyDetail oneseoPrivacyDetail, Oneseo oneseo) {
+        return OneseoPrivacyDetail.builder()
                 .id(oneseoPrivacyDetail.getId())
                 .oneseo(oneseo)
                 .graduationType(reqDto.graduationType())
@@ -80,8 +83,10 @@ public class ModifyOneseoService {
                 .schoolName(reqDto.schoolName())
                 .schoolTeacherName(reqDto.teacherName())
                 .schoolTeacherPhoneNumber(reqDto.teacherPhoneNumber()).build();
+    }
 
-        MiddleSchoolAchievement modifiedMiddleSchoolAchievement = MiddleSchoolAchievement.builder()
+    private MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, MiddleSchoolAchievement middleSchoolAchievement, Oneseo oneseo) {
+        return MiddleSchoolAchievement.builder()
                 .id(middleSchoolAchievement.getId())
                 .oneseo(oneseo)
                 .transcript(reqDto.middleSchoolGrade())
@@ -99,16 +104,28 @@ public class ModifyOneseoService {
                 .grade2Semester1Score(BigDecimal.ONE)
                 .grade2Semester2Score(BigDecimal.ONE)
                 .grade3Semester1Score(BigDecimal.ONE).build();
+    }
 
+    private void saveModifiedOneseo(Oneseo modifiedOneseo, OneseoPrivacyDetail modifiedOneseoPrivacyDetail, MiddleSchoolAchievement modifiedMiddleSchoolAchievement) {
         oneseoRepository.save(modifiedOneseo);
         oneseoPrivacyDetailRepository.save(modifiedOneseoPrivacyDetail);
         middleSchoolAchievementRepository.save(modifiedMiddleSchoolAchievement);
-
     }
 
-    private static void isNotFinalSubmitted(boolean isAdmin, Oneseo oneseo) {
+    private void isNotFinalSubmitted(boolean isAdmin, Oneseo oneseo) {
         if (!isAdmin && oneseo.getFinalSubmittedYn().equals(YES))
             throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
+    }
+
+    private void ifScreeningChangeSaveHistory(Screening beforeScreening, Oneseo oneseo) {
+        if (oneseo.getAppliedScreening() != beforeScreening) {
+            ScreeningChangeHistory screeningChangeHistory = ScreeningChangeHistory.builder()
+                    .beforeScreening(oneseo.getAppliedScreening())
+                    .afterScreening(beforeScreening)
+                    .oneseo(oneseo).build();
+
+            screeningChangeHistoryRepository.save(screeningChangeHistory);
+        }
     }
 
 }
