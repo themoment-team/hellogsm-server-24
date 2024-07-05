@@ -23,7 +23,12 @@ public class ModifyMemberService {
 
         commonCodeService.validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
 
-        Member modifiedMember = member.modifyMember(reqDto);
+        Member modifiedMember = member.modifyMember(
+                reqDto.name(),
+                reqDto.birth(),
+                reqDto.phoneNumber(),
+                reqDto.sex()
+        );
         memberRepository.save(modifiedMember);
     }
 }

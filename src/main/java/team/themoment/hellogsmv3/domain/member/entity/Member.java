@@ -66,11 +66,11 @@ public class Member {
                 .build();
     }
 
-    public Member modifyMember(ModifyMemberReqDto reqDto) {
-        this.name = reqDto.name();
-        this.birth = reqDto.birth();
-        this.phoneNumber = reqDto.phoneNumber();
-        this.sex = reqDto.sex();
+    public Member modifyMember(String name, LocalDate birth, String phoneNumber, Sex sex) {
+        this.name = name;
+        this.birth = birth;
+        this.phoneNumber = phoneNumber;
+        this.sex = sex;
 
         return this;
     }
