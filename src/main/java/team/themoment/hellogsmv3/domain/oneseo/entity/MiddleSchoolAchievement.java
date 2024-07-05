@@ -1,9 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -11,6 +9,8 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "tb_middle_school_achievement")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class MiddleSchoolAchievement {
 
     @Id

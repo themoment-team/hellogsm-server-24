@@ -53,7 +53,7 @@ public record OneseoReqDto(
 
         String schoolName,
 
-        String schoolLocation,
+        String schoolAddress,
 
         @NotNull
         Screening screening
