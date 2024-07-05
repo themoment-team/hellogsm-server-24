@@ -199,9 +199,19 @@ public class SecurityConfig {
                         Role.ROOT.name()
                 )
                 .requestMatchers(HttpMethod.POST, "/member/v3/member/me").hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
                         Role.APPLICANT.name(),
                         Role.ADMIN.name(),
                         Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/member/v3/auth-info/me").hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/member/v3/auth-info/{memberId}").hasAnyAuthority(
+                        Role.ADMIN.name()
                 )
 
                 .anyRequest().permitAll()
