@@ -35,4 +35,13 @@ public class OneseoController {
         return CommonApiResponse.created("수정되었습니다.");
     }
 
+    @PutMapping("/oneseo/{memberId}")
+    public CommonApiResponse modifyOne(
+            @RequestBody @Valid OneseoReqDto reqDto,
+            @PathVariable("memberId") Long memberId
+    ) {
+        modifyOneseoService.execute(reqDto, memberId, true);
+        return CommonApiResponse.created("수정되었습니다.");
+    }
+
 }
