@@ -40,7 +40,13 @@ public class CreateOneseoService {
         OneseoPrivacyDetail oneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, oneseo);
 
-        saveOneseo(oneseo, oneseoPrivacyDetail, middleSchoolAchievement);
+        saveEntities(oneseo, oneseoPrivacyDetail, middleSchoolAchievement);
+    }
+
+    private void saveEntities(Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, MiddleSchoolAchievement middleSchoolAchievement) {
+        oneseoRepository.save(oneseo);
+        oneseoPrivacyDetailRepository.save(oneseoPrivacyDetail);
+        middleSchoolAchievementRepository.save(middleSchoolAchievement);
     }
 
     private Oneseo buildOneseo(OneseoReqDto reqDto, Member currentMember) {
@@ -93,12 +99,6 @@ public class CreateOneseoService {
                 .grade2Semester1Score(BigDecimal.ONE)
                 .grade2Semester2Score(BigDecimal.ONE)
                 .grade3Semester1Score(BigDecimal.ONE).build();
-    }
-
-    private void saveOneseo(Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, MiddleSchoolAchievement middleSchoolAchievement) {
-        oneseoRepository.save(oneseo);
-        oneseoPrivacyDetailRepository.save(oneseoPrivacyDetail);
-        middleSchoolAchievementRepository.save(middleSchoolAchievement);
     }
 
     private void isExistOneseo(Member currentMember) {
