@@ -18,7 +18,7 @@ public record OneseoReqDto(
         String guardianPhoneNumber,
 
         @NotBlank
-        String relationWithApplicant,
+        String relationshipWithGuardian,
 
         @NotBlank
         @Pattern(regexp = "^https:\\/\\/[^\\s/$.?#].[^\\s]*$", message = "유효한 이미지 URL이 아닙니다.")
@@ -34,10 +34,10 @@ public record OneseoReqDto(
         GraduationType graduationType,
 
         @Pattern(regexp = "^(?!\\s*$).+")
-        String teacherName,
+        String schoolTeacherName,
 
         @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$", message = "유요한 전화번호가 아닙니다.")
-        String teacherPhoneNumber,
+        String schoolTeacherPhoneNumber,
 
         @NotNull
         Major firstDesiredMajor,
