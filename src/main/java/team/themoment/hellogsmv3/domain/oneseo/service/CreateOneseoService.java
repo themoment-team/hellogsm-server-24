@@ -59,7 +59,8 @@ public class CreateOneseoService {
                         .build())
                 .realOneseoArrivedYn(NO)
                 .finalSubmittedYn(NO)
-                .appliedScreening(reqDto.screening()).build();
+                .appliedScreening(reqDto.screening())
+                .build();
     }
 
     private OneseoPrivacyDetail buildOneseoPrivacyDetail(OneseoReqDto reqDto, Oneseo oneseo) {
@@ -75,7 +76,8 @@ public class CreateOneseoService {
                 .schoolAddress(reqDto.schoolAddress())
                 .schoolName(reqDto.schoolName())
                 .schoolTeacherName(reqDto.schoolTeacherName())
-                .schoolTeacherPhoneNumber(reqDto.schoolTeacherPhoneNumber()).build();
+                .schoolTeacherPhoneNumber(reqDto.schoolTeacherPhoneNumber())
+                .build();
     }
 
     private MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, Oneseo oneseo) {
@@ -98,7 +100,8 @@ public class CreateOneseoService {
                 .grade1Semester2Score(BigDecimal.ONE)
                 .grade2Semester1Score(BigDecimal.ONE)
                 .grade2Semester2Score(BigDecimal.ONE)
-                .grade3Semester1Score(BigDecimal.ONE).build();
+                .grade3Semester1Score(BigDecimal.ONE)
+                .build();
     }
 
     private void isExistOneseo(Member currentMember) {
