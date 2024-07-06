@@ -49,7 +49,7 @@ public record OneseoReqDto(
         Major thirdDesiredMajor,
 
         @NotBlank
-        String middleSchoolGrade,
+        String transcript,
 
         String schoolName,
 

@@ -84,7 +84,7 @@ public class CreateOneseoService {
 
         return MiddleSchoolAchievement.builder()
                 .oneseo(oneseo)
-                .transcript(reqDto.middleSchoolGrade())
+                .transcript(reqDto.transcript())
                 .percentileRank(BigDecimal.ONE)
                 .totalScore(BigDecimal.ONE)
                 .artisticScore(BigDecimal.ONE)
