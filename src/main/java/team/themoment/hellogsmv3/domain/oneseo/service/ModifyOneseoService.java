@@ -117,11 +117,11 @@ public class ModifyOneseoService {
             throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
     }
 
-    private void saveHistoryIfScreeningChange(Screening beforeScreening, Oneseo oneseo) {
-        if (oneseo.getAppliedScreening() != beforeScreening) {
+    private void saveHistoryIfScreeningChange(Screening afterScreening, Oneseo oneseo) {
+        if (oneseo.getAppliedScreening() != afterScreening) {
             ScreeningChangeHistory screeningChangeHistory = ScreeningChangeHistory.builder()
                     .beforeScreening(oneseo.getAppliedScreening())
-                    .afterScreening(beforeScreening)
+                    .afterScreening(afterScreening)
                     .oneseo(oneseo).build();
 
             screeningChangeHistoryRepository.save(screeningChangeHistory);
