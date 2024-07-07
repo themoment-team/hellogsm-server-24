@@ -7,7 +7,7 @@ public record FoundOneseoResDto(
 
         Long oneseoId,
         Long submitCode,
-        Screening appliedScreening,
+        Screening wantedScreening,
         DesiredMajorsResDto desiredMajors,
         YesNo finalSubmittedYn,
         YesNo realOneseoArrivedYn,
