@@ -41,6 +41,10 @@ public class Oneseo {
     private YesNo finalSubmittedYn;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "wanted_screening", nullable = false)
+    private Screening wantedScreening;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "applied_screening", nullable = false)
     private Screening appliedScreening;
 }
