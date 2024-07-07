@@ -65,7 +65,8 @@ public class ModifyOneseoService {
                         .build())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .finalSubmittedYn(oneseo.getFinalSubmittedYn())
-                .appliedScreening(reqDto.screening()).build();
+                .appliedScreening(reqDto.screening())
+                .build();
     }
 
     private OneseoPrivacyDetail buildOneseoPrivacyDetail(OneseoReqDto reqDto, OneseoPrivacyDetail oneseoPrivacyDetail, Oneseo oneseo) {
@@ -82,7 +83,8 @@ public class ModifyOneseoService {
                 .schoolAddress(reqDto.schoolAddress())
                 .schoolName(reqDto.schoolName())
                 .schoolTeacherName(reqDto.schoolTeacherName())
-                .schoolTeacherPhoneNumber(reqDto.schoolTeacherPhoneNumber()).build();
+                .schoolTeacherPhoneNumber(reqDto.schoolTeacherPhoneNumber())
+                .build();
     }
 
     private MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, MiddleSchoolAchievement middleSchoolAchievement, Oneseo oneseo) {
@@ -103,7 +105,8 @@ public class ModifyOneseoService {
                 .grade1Semester2Score(BigDecimal.ONE)
                 .grade2Semester1Score(BigDecimal.ONE)
                 .grade2Semester2Score(BigDecimal.ONE)
-                .grade3Semester1Score(BigDecimal.ONE).build();
+                .grade3Semester1Score(BigDecimal.ONE)
+                .build();
     }
 
     private void saveModifiedEntities(Oneseo modifiedOneseo, OneseoPrivacyDetail modifiedOneseoPrivacyDetail, MiddleSchoolAchievement modifiedMiddleSchoolAchievement) {
