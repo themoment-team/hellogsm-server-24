@@ -36,7 +36,7 @@ public class OneseoController {
     }
 
     @PutMapping("/oneseo/{memberId}")
-    public CommonApiResponse modifyOne(
+    public CommonApiResponse modifyByAdmin(
             @RequestBody @Valid OneseoReqDto reqDto,
             @PathVariable("memberId") Long memberId
     ) {
