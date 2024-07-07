@@ -45,7 +45,7 @@ public class ModifyOneseoService {
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
 
-        ifScreeningChangeSaveHistory(reqDto.screening(), oneseo);
+        saveHistoryIfScreeningChange(reqDto.screening(), oneseo);
 
         Oneseo modifiedOneseo = buildOneseo(reqDto, oneseo, currentMember);
         OneseoPrivacyDetail modifiedOneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseoPrivacyDetail, oneseo);
@@ -117,7 +117,7 @@ public class ModifyOneseoService {
             throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
     }
 
-    private void ifScreeningChangeSaveHistory(Screening beforeScreening, Oneseo oneseo) {
+    private void saveHistoryIfScreeningChange(Screening beforeScreening, Oneseo oneseo) {
         if (oneseo.getAppliedScreening() != beforeScreening) {
             ScreeningChangeHistory screeningChangeHistory = ScreeningChangeHistory.builder()
                     .beforeScreening(oneseo.getAppliedScreening())
