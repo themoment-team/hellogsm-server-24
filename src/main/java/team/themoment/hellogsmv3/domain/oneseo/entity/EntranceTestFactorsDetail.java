@@ -15,7 +15,7 @@ public class EntranceTestFactorsDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "entrance _test_factors_detail_id")
+    @Column(name = "entrance_test_factors_detail_id")
     private Long id;
 
     @Column(name = "curricular_subtotal_score")
