@@ -4,8 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
+import team.themoment.hellogsmv3.domain.oneseo.service.QueryOneseoByIdService;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 
@@ -16,6 +18,7 @@ public class OneseoController {
 
     private final CreateOneseoService createOneseoService;
     private final ModifyOneseoService modifyOneseoService;
+    private final QueryOneseoByIdService queryOneseoByIdService;
 
     @PostMapping("/oneseo/me")
     public CommonApiResponse create(
@@ -44,4 +47,10 @@ public class OneseoController {
         return CommonApiResponse.created("수정되었습니다.");
     }
 
+    @GetMapping("/oneseo/me")
+    public FoundOneseoResDto find(
+            @AuthRequest Long memberId
+    ) {
+        return queryOneseoByIdService.execute(memberId);
+    }
 }
