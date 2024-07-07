@@ -40,12 +40,16 @@ public class CreateOneseoService {
         OneseoPrivacyDetail oneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, oneseo);
 
+        saveEntities(oneseo, oneseoPrivacyDetail, middleSchoolAchievement);
+    }
+
+    private void saveEntities(Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, MiddleSchoolAchievement middleSchoolAchievement) {
         oneseoRepository.save(oneseo);
         oneseoPrivacyDetailRepository.save(oneseoPrivacyDetail);
         middleSchoolAchievementRepository.save(middleSchoolAchievement);
     }
 
-    private static Oneseo buildOneseo(OneseoReqDto reqDto, Member currentMember) {
+    private Oneseo buildOneseo(OneseoReqDto reqDto, Member currentMember) {
         return Oneseo.builder()
                 .member(currentMember)
                 .desiredMajors(DesiredMajors.builder()
@@ -55,10 +59,11 @@ public class CreateOneseoService {
                         .build())
                 .realOneseoArrivedYn(NO)
                 .finalSubmittedYn(NO)
-                .appliedScreening(reqDto.screening()).build();
+                .appliedScreening(reqDto.screening())
+                .build();
     }
 
-    private static OneseoPrivacyDetail buildOneseoPrivacyDetail(OneseoReqDto reqDto, Oneseo oneseo) {
+    private OneseoPrivacyDetail buildOneseoPrivacyDetail(OneseoReqDto reqDto, Oneseo oneseo) {
         return OneseoPrivacyDetail.builder()
                 .oneseo(oneseo)
                 .graduationType(reqDto.graduationType())
@@ -67,20 +72,21 @@ public class CreateOneseoService {
                 .profileImg(reqDto.profileImg())
                 .guardianName(reqDto.guardianName())
                 .guardianPhoneNumber(reqDto.guardianPhoneNumber())
-                .relationshipWithGuardian(reqDto.relationWithApplicant())
+                .relationshipWithGuardian(reqDto.relationshipWithGuardian())
                 .schoolAddress(reqDto.schoolAddress())
                 .schoolName(reqDto.schoolName())
-                .schoolTeacherName(reqDto.teacherName())
-                .schoolTeacherPhoneNumber(reqDto.teacherPhoneNumber()).build();
+                .schoolTeacherName(reqDto.schoolTeacherName())
+                .schoolTeacherPhoneNumber(reqDto.schoolTeacherPhoneNumber())
+                .build();
     }
 
-    private static MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, Oneseo oneseo) {
+    private MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, Oneseo oneseo) {
 
         // TODO 추후에 성적 환산 로직 추가
 
         return MiddleSchoolAchievement.builder()
                 .oneseo(oneseo)
-                .transcript(reqDto.middleSchoolGrade())
+                .transcript(reqDto.transcript())
                 .percentileRank(BigDecimal.ONE)
                 .totalScore(BigDecimal.ONE)
                 .artisticScore(BigDecimal.ONE)
@@ -94,7 +100,8 @@ public class CreateOneseoService {
                 .grade1Semester2Score(BigDecimal.ONE)
                 .grade2Semester1Score(BigDecimal.ONE)
                 .grade2Semester2Score(BigDecimal.ONE)
-                .grade3Semester1Score(BigDecimal.ONE).build();
+                .grade3Semester1Score(BigDecimal.ONE)
+                .build();
     }
 
     private void isExistOneseo(Member currentMember) {
