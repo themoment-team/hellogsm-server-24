@@ -31,7 +31,6 @@ public class QueryOneseoByIdService {
         Oneseo oneseo = oneseoRepository.findByMember(member)
                 .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
         EntranceTestResult entranceTestResult = entranceTestResultRepository.findByOneseo(oneseo).orElse(null);
-//                .orElseThrow(() -> new ExpectedException("입학시험 결과를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
 
