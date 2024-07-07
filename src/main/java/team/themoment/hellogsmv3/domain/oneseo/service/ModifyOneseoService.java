@@ -40,10 +40,10 @@ public class ModifyOneseoService {
         Oneseo oneseo = oneseoRepository.findByMember(currentMember)
                 .orElseThrow(() -> new ExpectedException("원서 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
 
+        isNotFinalSubmitted(isAdmin, oneseo);
+
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
-
-        isNotFinalSubmitted(isAdmin, oneseo);
 
         ifScreeningChangeSaveHistory(reqDto.screening(), oneseo);
 
@@ -78,18 +78,18 @@ public class ModifyOneseoService {
                 .profileImg(reqDto.profileImg())
                 .guardianName(reqDto.guardianName())
                 .guardianPhoneNumber(reqDto.guardianPhoneNumber())
-                .relationshipWithGuardian(reqDto.relationWithApplicant())
+                .relationshipWithGuardian(reqDto.relationshipWithGuardian())
                 .schoolAddress(reqDto.schoolAddress())
                 .schoolName(reqDto.schoolName())
-                .schoolTeacherName(reqDto.teacherName())
-                .schoolTeacherPhoneNumber(reqDto.teacherPhoneNumber()).build();
+                .schoolTeacherName(reqDto.schoolTeacherName())
+                .schoolTeacherPhoneNumber(reqDto.schoolTeacherPhoneNumber()).build();
     }
 
     private MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, MiddleSchoolAchievement middleSchoolAchievement, Oneseo oneseo) {
         return MiddleSchoolAchievement.builder()
                 .id(middleSchoolAchievement.getId())
                 .oneseo(oneseo)
-                .transcript(reqDto.middleSchoolGrade())
+                .transcript(reqDto.transcript())
                 .percentileRank(BigDecimal.ONE)
                 .totalScore(BigDecimal.ONE)
                 .artisticScore(BigDecimal.ONE)
