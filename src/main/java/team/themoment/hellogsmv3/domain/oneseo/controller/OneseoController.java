@@ -53,4 +53,11 @@ public class OneseoController {
     ) {
         return queryOneseoByIdService.execute(memberId);
     }
+
+    @GetMapping("/oneseo/{memberId}")
+    public FoundOneseoResDto findByAdmin(
+            @PathVariable Long memberId
+    ) {
+        return queryOneseoByIdService.execute(memberId);
+    }
 }
