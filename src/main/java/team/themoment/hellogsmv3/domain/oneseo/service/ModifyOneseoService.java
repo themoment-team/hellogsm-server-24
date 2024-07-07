@@ -51,7 +51,7 @@ public class ModifyOneseoService {
         OneseoPrivacyDetail modifiedOneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseoPrivacyDetail, oneseo);
         MiddleSchoolAchievement modifiedMiddleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, middleSchoolAchievement, oneseo);
 
-        saveModifiedOneseo(modifiedOneseo, modifiedOneseoPrivacyDetail, modifiedMiddleSchoolAchievement);
+        saveModifiedEntities(modifiedOneseo, modifiedOneseoPrivacyDetail, modifiedMiddleSchoolAchievement);
     }
 
     private Oneseo buildOneseo(OneseoReqDto reqDto, Oneseo oneseo, Member currentMember) {
@@ -106,7 +106,7 @@ public class ModifyOneseoService {
                 .grade3Semester1Score(BigDecimal.ONE).build();
     }
 
-    private void saveModifiedOneseo(Oneseo modifiedOneseo, OneseoPrivacyDetail modifiedOneseoPrivacyDetail, MiddleSchoolAchievement modifiedMiddleSchoolAchievement) {
+    private void saveModifiedEntities(Oneseo modifiedOneseo, OneseoPrivacyDetail modifiedOneseoPrivacyDetail, MiddleSchoolAchievement modifiedMiddleSchoolAchievement) {
         oneseoRepository.save(modifiedOneseo);
         oneseoPrivacyDetailRepository.save(modifiedOneseoPrivacyDetail);
         middleSchoolAchievementRepository.save(modifiedMiddleSchoolAchievement);
