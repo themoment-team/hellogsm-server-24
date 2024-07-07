@@ -37,7 +37,7 @@ public class EntranceTestFactorsDetail {
     private BigDecimal documentEvaluationScore;
 
     @Column(name = "aptitude_evaluation_score")
-    private BigDecimal AptitudeEvaluationScore;
+    private BigDecimal aptitudeEvaluationScore;
 
     @Column(name = "interview_score")
     private BigDecimal interviewScore;

@@ -1,7 +1,10 @@
 package team.themoment.hellogsmv3.domain.oneseo.dto.response;
 
+import lombok.Builder;
+
 import java.math.BigDecimal;
 
+@Builder
 public record MiddleSchoolAchievementResDto(
 
         TranscriptResDto transcript,
@@ -15,7 +18,6 @@ public record MiddleSchoolAchievementResDto(
         BigDecimal curricularSubtotalScore,
         BigDecimal extraCurricularSubtotalScore,
         BigDecimal artisticScore,
-        Integer attendanceDay,
         BigDecimal attendanceScore,
         BigDecimal volunteerScore
 ) {

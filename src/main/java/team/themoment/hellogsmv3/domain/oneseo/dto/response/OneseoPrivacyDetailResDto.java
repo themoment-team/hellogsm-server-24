@@ -1,11 +1,13 @@
 package team.themoment.hellogsmv3.domain.oneseo.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 
 import java.time.LocalDate;
 
+@Builder
 public record OneseoPrivacyDetailResDto(
 
         String name,
@@ -20,7 +22,7 @@ public record OneseoPrivacyDetailResDto(
         String guardianPhoneNumber,
         String relationshipWithGuardian,
         String schoolName,
-        String schoolLocation,
+        String schoolAddress,
         String schoolTeacherName,
         String schoolTeacherPhoneNumber,
         String profileImg
