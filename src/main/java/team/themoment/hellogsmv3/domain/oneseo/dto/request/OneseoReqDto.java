@@ -33,7 +33,7 @@ public record OneseoReqDto(
         @NotNull
         GraduationType graduationType,
 
-        @Pattern(regexp = "^(?!\\s*$).+")
+        @NotBlank
         String schoolTeacherName,
 
         @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$", message = "유요한 전화번호가 아닙니다.")
