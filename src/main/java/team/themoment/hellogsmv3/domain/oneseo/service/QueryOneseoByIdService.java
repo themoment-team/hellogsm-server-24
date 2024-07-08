@@ -126,7 +126,7 @@ public class QueryOneseoByIdService {
         return FoundOneseoResDto.builder()
                 .oneseoId(oneseo.getId())
                 .submitCode(oneseo.getOneseoSubmitCode())
-                .wantedScreening(oneseo.getAppliedScreening())  // TODO wantedScreenin 추가 후 변경
+                .wantedScreening(oneseo.getWantedScreening())
                 .desiredMajors(DesiredMajorsResDto.builder()
                         .firstDesiredMajor(desiredMajors.getFirstDesiredMajor())
                         .secondDesiredMajor(desiredMajors.getSecondDesiredMajor())
