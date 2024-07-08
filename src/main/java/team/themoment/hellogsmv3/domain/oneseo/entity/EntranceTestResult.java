@@ -1,9 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
@@ -11,6 +9,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
 @Table(name = "tb_entrance_test_result")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EntranceTestResult {
