@@ -1,15 +1,15 @@
 package team.themoment.hellogsmv3.domain.oneseo.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 
 @Getter
 @Entity
 @Table(name = "tb_oneseo_privacy_detail")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class OneseoPrivacyDetail {
 
     @Id

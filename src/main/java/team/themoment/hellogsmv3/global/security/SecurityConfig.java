@@ -214,6 +214,12 @@ public class SecurityConfig {
                         Role.ADMIN.name()
                 )
 
+                // oneseo
+                .requestMatchers(HttpMethod.POST, "/oneseo/v3/oneseo/me").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ROOT.name()
+                )
+
                 .anyRequest().permitAll()
         );
     }

@@ -1,4 +1,4 @@
-package team.themoment.hellogsmv3.domain.application.annotation;
+package team.themoment.hellogsmv3.domain.oneseo.annotation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
