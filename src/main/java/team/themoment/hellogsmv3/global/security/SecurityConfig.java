@@ -219,10 +219,7 @@ public class SecurityConfig {
                         Role.APPLICANT.name(),
                         Role.ROOT.name()
                 )
-                .requestMatchers(HttpMethod.PUT, "/oneseo/v3/oneseo/{memberId}").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
-                .requestMatchers(HttpMethod.GET, "/oneseo/v3/oneseo/{memberId}").hasAnyAuthority(
+                .requestMatchers("/oneseo/v3/oneseo/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
 
