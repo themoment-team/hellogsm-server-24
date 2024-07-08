@@ -73,7 +73,7 @@ public class QueryOneseoByIdService {
             MiddleSchoolAchievement middleSchoolAchievement
     ) {
         return MiddleSchoolAchievementResDto.builder()
-                .transcript(buuildTranscriptResDto(middleSchoolAchievement.getTranscript()))
+                .transcript(buildTranscriptResDto(middleSchoolAchievement.getTranscript()))
                 .totalScore(middleSchoolAchievement.getTotalScore())
                 .percentileRank(middleSchoolAchievement.getPercentileRank())
                 .grade1Semester1Score(middleSchoolAchievement.getGrade1Semester1Score())
@@ -89,7 +89,7 @@ public class QueryOneseoByIdService {
                 .build();
     }
 
-    private TranscriptResDto buuildTranscriptResDto(String transcript) {
+    private TranscriptResDto buildTranscriptResDto(String transcript) {
         Gson gson = new Gson();
         TranscriptResDto transcriptResDto = gson.fromJson(transcript, TranscriptResDto.class);
 
