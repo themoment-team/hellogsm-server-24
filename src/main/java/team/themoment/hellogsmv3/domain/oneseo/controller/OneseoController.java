@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.domain.oneseo.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.oneseo.dto.OneseoStatusReqDto;
@@ -16,7 +17,7 @@ public class OneseoController {
     @PutMapping("/status/{memberId}")
     public CommonApiResponse modifyOneseoStatus(
             @PathVariable Long memberId,
-            @RequestBody OneseoStatusReqDto oneseoStatusReqDto
+            @RequestBody @Valid OneseoStatusReqDto oneseoStatusReqDto
     ) {
         modifyOneseoStatusService.execute(memberId, oneseoStatusReqDto);
         return CommonApiResponse.success("수정되었습니다.");
