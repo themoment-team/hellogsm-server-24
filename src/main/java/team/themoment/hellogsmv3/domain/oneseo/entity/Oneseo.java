@@ -2,9 +2,8 @@ package team.themoment.hellogsmv3.domain.oneseo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
@@ -14,6 +13,9 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 @Entity
 @Table(name = "tb_oneseo")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+@DynamicUpdate
 public class Oneseo {
 
     @Id

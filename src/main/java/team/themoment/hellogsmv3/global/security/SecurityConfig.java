@@ -214,6 +214,15 @@ public class SecurityConfig {
                         Role.ADMIN.name()
                 )
 
+                // oneseo
+                .requestMatchers("/oneseo/v3/oneseo/me").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.PUT, "/oneseo/v3/oneseo/{memberId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
+
                 .anyRequest().permitAll()
         );
     }
