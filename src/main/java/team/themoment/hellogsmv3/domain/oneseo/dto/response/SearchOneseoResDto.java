@@ -1,10 +1,12 @@
 package team.themoment.hellogsmv3.domain.oneseo.dto.response;
 
+import lombok.Builder;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
 import java.math.BigDecimal;
 
+@Builder
 public record SearchOneseoResDto(
 
         Long memberId,
