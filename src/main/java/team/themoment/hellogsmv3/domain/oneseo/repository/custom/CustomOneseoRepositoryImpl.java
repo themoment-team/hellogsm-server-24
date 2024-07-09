@@ -56,7 +56,34 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
 
     @Override
     public Page<Oneseo> findAllByFinalSubmittedAndMemberNameContaining(String keyword, Pageable pageable) {
-        return null;
+
+        List<Oneseo> oneseos = queryFactory.selectFrom(oneseo)
+                .leftJoin(oneseo.member, member).fetchJoin()
+                .leftJoin(entranceTestResult).on(entranceTestResult.oneseo.id.eq(oneseo.id))
+                .where(
+                        oneseo.finalSubmittedYn.eq(YesNo.YES)
+                        .and(member.name.like("%" + keyword + "%"))
+                )
+                .orderBy(
+                        new CaseBuilder()
+                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.YES)).then(5)
+                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.NO)).then(4)
+                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.YES)).then(3)
+                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.NO)).then(2)
+                                .when(entranceTestResult.firstTestPassYn.isNull()).then(1)
+                                .otherwise(0).desc()
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(oneseo.count())
+                .from(oneseo)
+                .where(oneseo.finalSubmittedYn.eq(YesNo.YES))
+                .fetchOne();
+
+        return new PageImpl<>(oneseos, pageable, total);
     }
 
     @Override
