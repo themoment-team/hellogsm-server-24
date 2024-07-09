@@ -59,15 +59,14 @@ public class SearchOneseoService {
             String keyword,
             Pageable pageable
     ) {
-//        if (tag == null) {
-//            return oneseoRepository.findAllByFinalSubmitted(pageable);    // TODO queryDSL로 구현
-//        }
-//        return switch (tag) {
-//            case NAME -> oneseoRepository.findAllByFinalSubmittedAndMemberNameContaining(keyword, pageable);
-//            case SCHOOL -> oneseoRepository.findAllByFinalSubmittedAndSchoolNameContaining(keyword, pageable);
-//            case PHONE_NUMBER -> oneseoRepository.findAllByFinalSubmittedAndPhoneNumberContaining(keyword, pageable);
-//        };
-        return null;
+        if (tag == null) {
+            return oneseoRepository.findAllByFinalSubmitted(pageable);    // TODO queryDSL로 구현
+        }
+        return switch (tag) {
+            case NAME -> oneseoRepository.findAllByFinalSubmittedAndMemberNameContaining(keyword, pageable);
+            case SCHOOL -> oneseoRepository.findAllByFinalSubmittedAndSchoolNameContaining(keyword, pageable);
+            case PHONE_NUMBER -> oneseoRepository.findAllByFinalSubmittedAndPhoneNumberContaining(keyword, pageable);
+        };
     }
 
     private SearchOneseoResDto buildSearchOneseoResDto(Oneseo oneseo) {
