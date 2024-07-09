@@ -157,7 +157,14 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
         Long total = queryFactory
                 .select(oneseo.count())
                 .from(oneseo)
-                .where(oneseo.finalSubmittedYn.eq(YesNo.YES))
+                .where(
+                        oneseo.finalSubmittedYn.eq(YesNo.YES)
+                                .and(
+                                        (oneseo.member.phoneNumber.like("%" + keyword + "%"))
+                                                .or(oneseoPrivacyDetail.guardianPhoneNumber.like("%" + keyword + "%"))
+                                                .or(oneseoPrivacyDetail.schoolTeacherPhoneNumber.like("%" + keyword + "%"))
+                                )
+                )
                 .fetchOne();
 
         return new PageImpl<>(oneseos, pageable, total);
