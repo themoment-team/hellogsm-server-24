@@ -60,7 +60,7 @@ public class SearchOneseoService {
             Pageable pageable
     ) {
         if (tag == null) {
-            return oneseoRepository.findAllByFinalSubmitted(pageable);    // TODO queryDSL로 구현
+            return oneseoRepository.findAllByFinalSubmitted(pageable);
         }
         return switch (tag) {
             case NAME -> oneseoRepository.findAllByFinalSubmittedAndMemberNameContaining(keyword, pageable);
