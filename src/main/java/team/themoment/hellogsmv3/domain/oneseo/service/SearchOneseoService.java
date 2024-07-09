@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.type.SearchTag;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -17,7 +17,7 @@ public class SearchOneseoService {
 
     private final OneseoRepository oneseoRepository;
 
-    public SearchOneseoResDto execute(
+    public SearchOneseosResDto execute(
             Integer page,
             Integer size,
             @Nullable SearchTag tag,
