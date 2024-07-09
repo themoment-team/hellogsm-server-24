@@ -63,7 +63,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
                 .leftJoin(entranceTestResult).on(entranceTestResult.oneseo.id.eq(oneseo.id))
                 .where(
                         oneseo.finalSubmittedYn.eq(YesNo.YES)
-                        .and(member.name.like("%" + keyword + "%"))
+                                .and(oneseo.member.name.like("%" + keyword + "%"))
                 )
                 .orderBy(
                         new CaseBuilder()
@@ -83,7 +83,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
                 .from(oneseo)
                 .where(
                         oneseo.finalSubmittedYn.eq(YesNo.YES)
-                                .and(member.name.like("%" + keyword + "%"))
+                                .and(oneseo.member.name.like("%" + keyword + "%"))
                 )
                 .fetchOne();
 
@@ -117,6 +117,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
         Long total = queryFactory
                 .select(oneseo.count())
                 .from(oneseo)
+                .leftJoin(oneseoPrivacyDetail).on(oneseoPrivacyDetail.oneseo.eq(oneseo))
                 .where(
                         oneseo.finalSubmittedYn.eq(YesNo.YES)
                                 .and(oneseoPrivacyDetail.schoolName.like("%" + keyword + "%"))
@@ -157,6 +158,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
         Long total = queryFactory
                 .select(oneseo.count())
                 .from(oneseo)
+                .leftJoin(oneseoPrivacyDetail).on(oneseoPrivacyDetail.oneseo.eq(oneseo))
                 .where(
                         oneseo.finalSubmittedYn.eq(YesNo.YES)
                                 .and(
