@@ -3,6 +3,7 @@ package team.themoment.hellogsmv3.domain.oneseo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import team.themoment.hellogsmv3.global.common.converter.IntegerListConverter;
 import team.themoment.hellogsmv3.global.common.converter.StringListConverter;
 
 import java.math.BigDecimal;
@@ -25,23 +26,23 @@ public class MiddleSchoolAchievement {  // TODO converter 구현
     @JoinColumn(name = "oneseo_id")
     private Oneseo oneseo;
 
-    @Convert
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_1_1")
     private List<Integer> achievement1_1;
 
-    @Convert
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_1_2")
     private List<Integer> achievement1_2;
 
-    @Convert
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_2_1")
     private List<Integer> achievement2_1;
 
-    @Convert
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_2_2")
     private List<Integer> achievement2_2;
 
-    @Convert
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_3_1")
     private List<Integer> achievement3_1;
 
@@ -53,7 +54,7 @@ public class MiddleSchoolAchievement {  // TODO converter 구현
     @Column(name = "new_subjects")
     private List<String> newSubjects;
 
-    @Convert
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "arts_physical_achievement")
     private List<Integer> artsPhysicalAchievement;
 
@@ -61,15 +62,15 @@ public class MiddleSchoolAchievement {  // TODO converter 구현
     @Column(name = "arts_physical_subjects")
     private List<String> artsPhysicalSubjects;
 
-    @Convert
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "absent_days")
     private List<Integer> absentDays;
 
-    @Convert
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "attendance_days")
     private List<Integer> attendanceDays;
 
-    @Convert
+    @Convert(converter = IntegerListConverter.class)
     @Column(name = "volunteer_time")
     private List<Integer> volunteerTime;
 
