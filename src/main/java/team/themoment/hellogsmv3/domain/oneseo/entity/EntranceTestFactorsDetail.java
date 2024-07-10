@@ -37,19 +37,19 @@ public class EntranceTestFactorsDetail {
     private BigDecimal totalNonSubjectsScore;
 
     @Column(name = "score_1_1")
-    private BigDecimal score11;
+    private BigDecimal score1_1;
 
     @Column(name = "score_1_2")
-    private BigDecimal score12;
+    private BigDecimal score1_2;
 
     @Column(name = "score_2_1")
-    private BigDecimal score21;
+    private BigDecimal score2_1;
 
     @Column(name = "score_2_2")
-    private BigDecimal score22;
+    private BigDecimal score2_2;
 
     @Column(name = "score_3_1")
-    private BigDecimal score31;
+    private BigDecimal score3_1;
 
     @Column(name = "ged_total_score")
     private BigDecimal gedTotalScore;
