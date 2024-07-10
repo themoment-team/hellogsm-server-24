@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-public class MiddleSchoolAchievement {
+public class MiddleSchoolAchievement {  // TODO converter 구현
 
     @Id
     private Long id;
