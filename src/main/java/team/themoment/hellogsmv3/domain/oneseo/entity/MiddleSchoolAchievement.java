@@ -26,61 +26,61 @@ public class MiddleSchoolAchievement {
 
     @Convert
     @Column(name = "achievement_1_1")
-    private List<Integer> achievement_1_1;
+    private List<Integer> achievement1_1;
 
     @Convert
     @Column(name = "achievement_1_2")
-    private List<Integer> achievement_1_2;
+    private List<Integer> achievement1_2;
 
     @Convert
     @Column(name = "achievement_2_1")
-    private List<Integer> achievement_2_1;
+    private List<Integer> achievement2_1;
 
     @Convert
     @Column(name = "achievement_2_2")
-    private List<Integer> achievement_2_2;
+    private List<Integer> achievement2_2;
 
     @Convert
     @Column(name = "achievement_3_1")
-    private List<Integer> achievement_3_1;
+    private List<Integer> achievement3_1;
 
     @Convert
     @Column(name = "general_subjects")
-    private List<String> general_subjects;
+    private List<String> generalSubjects;
 
     @Convert
     @Column(name = "new_subjects")
-    private List<String> new_subjects;
+    private List<String> newSubjects;
 
     @Convert
     @Column(name = "arts_physical_achievement")
-    private List<Integer> arts_physical_achievement;
+    private List<Integer> artsPhysicalAchievement;
 
     @Convert
     @Column(name = "arts_physical_subjects")
-    private List<String> arts_physical_subjects;
+    private List<String> artsPhysicalSubjects;
 
     @Convert
     @Column(name = "absent_days")
-    private List<Integer> absent_days;
+    private List<Integer> absentDays;
 
     @Convert
     @Column(name = "attendance_days")
-    private List<Integer> attendance_days;
+    private List<Integer> attendanceDays;
 
     @Convert
     @Column(name = "volunteer_time")
-    private List<Integer> volunteer_time;
+    private List<Integer> volunteerTime;
 
     @Column(name = "liberal_system")
-    private String liberal_system;
+    private String liberalSystem;
 
     @Column(name = "free_semester")
-    private String free_semester;
+    private String freeSemester;
 
     @Column(name = "ged_total_score")
-    private BigDecimal ged_total_score;
+    private BigDecimal gedTotalScore;
 
     @Column(name = "ged_max_score")
-    private BigDecimal ged_max_score;
+    private BigDecimal gedMaxScore;
 }
