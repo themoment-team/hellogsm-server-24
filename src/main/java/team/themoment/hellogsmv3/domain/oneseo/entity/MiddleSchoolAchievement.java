@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,48 +24,63 @@ public class MiddleSchoolAchievement {
     @JoinColumn(name = "oneseo_id")
     private Oneseo oneseo;
 
-    @Column(name = "transcript", columnDefinition = "TEXT", nullable = false)
-    private String transcript;
+    @Convert
+    @Column(name = "achievement_1_1")
+    private List<Integer> achievement_1_1;
 
-    @Column(name = "percentile_rank", nullable = false)
-    private BigDecimal percentileRank;
+    @Convert
+    @Column(name = "achievement_1_2")
+    private List<Integer> achievement_1_2;
 
-    @Column(name = "total_score", nullable = false)
-    private BigDecimal totalScore;
+    @Convert
+    @Column(name = "achievement_2_1")
+    private List<Integer> achievement_2_1;
 
-    @Column(name = "artistic_score")
-    private BigDecimal artisticScore;
+    @Convert
+    @Column(name = "achievement_2_2")
+    private List<Integer> achievement_2_2;
 
-    @Column(name = "attendance_score")
-    private BigDecimal attendanceScore;
+    @Convert
+    @Column(name = "achievement_3_1")
+    private List<Integer> achievement_3_1;
 
-    @Column(name = "volunteer_score")
-    private BigDecimal volunteerScore;
+    @Convert
+    @Column(name = "general_subjects")
+    private List<String> general_subjects;
 
-    @Column(name = "curricular_subtotal_score")
-    private BigDecimal curricularSubtotalScore;
+    @Convert
+    @Column(name = "new_subjects")
+    private List<String> new_subjects;
 
-    @Column(name = "extra_curricular_subtotal_score")
-    private BigDecimal extraCurricularSubtotalScore;
+    @Convert
+    @Column(name = "arts_sports_achievement")
+    private List<Integer> arts_sports_achievement;
 
-    @Column(name = "ged_max_score")
-    private BigDecimal gedMaxScore;
+    @Convert
+    @Column(name = "arts_sports_subjects")
+    private List<String> arts_sports_subjects;
+
+    @Convert
+    @Column(name = "absent_days")
+    private List<Integer> absent_days;
+
+    @Convert
+    @Column(name = "attendance_days")
+    private List<Integer> attendance_days;
+
+    @Convert
+    @Column(name = "volunteer_time")
+    private List<Integer> volunteer_time;
+
+    @Column(name = "liberal_system")
+    private String liberal_system;
+
+    @Column(name = "free_semester")
+    private String free_semester;
 
     @Column(name = "ged_total_score")
-    private BigDecimal gedTotalScore;
+    private BigDecimal ged_total_score;
 
-    @Column(name = "grade1_semester1_score")
-    private BigDecimal grade1Semester1Score;
-
-    @Column(name = "grade1_semester2_score")
-    private BigDecimal grade1Semester2Score;
-
-    @Column(name = "grade2_semester1_score")
-    private BigDecimal grade2Semester1Score;
-
-    @Column(name = "grade2_semester2_score")
-    private BigDecimal grade2Semester2Score;
-
-    @Column(name = "grade3_semester1_score")
-    private BigDecimal grade3Semester1Score;
+    @Column(name = "ged_max_score")
+    private BigDecimal ged_max_score;
 }
