@@ -53,12 +53,12 @@ public class MiddleSchoolAchievement {
     private List<String> new_subjects;
 
     @Convert
-    @Column(name = "arts_sports_achievement")
-    private List<Integer> arts_sports_achievement;
+    @Column(name = "arts_physical_achievement")
+    private List<Integer> arts_physical_achievement;
 
     @Convert
-    @Column(name = "arts_sports_subjects")
-    private List<String> arts_sports_subjects;
+    @Column(name = "arts_physical_subjects")
+    private List<String> arts_physical_subjects;
 
     @Convert
     @Column(name = "absent_days")
