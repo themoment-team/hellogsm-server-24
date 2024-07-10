@@ -3,6 +3,7 @@ package team.themoment.hellogsmv3.domain.oneseo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import team.themoment.hellogsmv3.global.common.converter.StringListConverter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -44,11 +45,11 @@ public class MiddleSchoolAchievement {  // TODO converter 구현
     @Column(name = "achievement_3_1")
     private List<Integer> achievement3_1;
 
-    @Convert
+    @Convert(converter = StringListConverter.class)
     @Column(name = "general_subjects")
     private List<String> generalSubjects;
 
-    @Convert
+    @Convert(converter = StringListConverter.class)
     @Column(name = "new_subjects")
     private List<String> newSubjects;
 
@@ -56,7 +57,7 @@ public class MiddleSchoolAchievement {  // TODO converter 구현
     @Column(name = "arts_physical_achievement")
     private List<Integer> artsPhysicalAchievement;
 
-    @Convert
+    @Convert(converter = StringListConverter.class)
     @Column(name = "arts_physical_subjects")
     private List<String> artsPhysicalSubjects;
 
