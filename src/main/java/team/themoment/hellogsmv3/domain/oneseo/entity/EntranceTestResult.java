@@ -24,22 +24,26 @@ public class EntranceTestResult {
     @JoinColumn(name = "oneseo_id")
     private Oneseo oneseo;
 
-    @Column(name = "first_test_result_score")
-    private BigDecimal firstTestResultScore;
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "entrance_test_factors_detail_id")
+    private EntranceTestFactorsDetail entranceTestFactorsDetail;
+
+    @Column(name = "document_evaluation_score")
+    private BigDecimal documentEvaluationScore;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "first_test_pass_yn")
     private YesNo firstTestPassYn;
 
-    @Column(name = "second_test_result_score")
-    private BigDecimal secondTestResultScore;
+    @Column(name = "aptitude_evaluation_score")
+    private BigDecimal aptitudeEvaluationScore;
+
+    @Column(name = "interview_score")
+    private BigDecimal interviewScore;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "second_test_pass_yn")
     private YesNo secondTestPassYn;
-
-    @Column(name = "interview_score")
-    private BigDecimal interviewScore;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "decided_major")
