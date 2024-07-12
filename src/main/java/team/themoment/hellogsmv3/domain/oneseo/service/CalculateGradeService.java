@@ -82,11 +82,23 @@ public class CalculateGradeService {
 
         // 출결 성적 (총점: 30점)
         BigDecimal attendanceScore = calcAttendanceScore(
-                middleSchoolAchievement.getAbsentDays(), middleSchoolAchievement.getAttendanceDays());
+                middleSchoolAchievement.getAbsentDays(), middleSchoolAchievement.getAttendanceDays()
+        ).setScale(3, RoundingMode.HALF_UP);
 
         // 봉사 성적 (총점: 30점)
-        BigDecimal volunteerScore = calcVolunteerScore(middleSchoolAchievement.getVolunteerTime());
+        BigDecimal volunteerScore = calcVolunteerScore(middleSchoolAchievement.getVolunteerTime())
+                .setScale(3, RoundingMode.HALF_UP);
 
+        // 비 교과 성적 환산값 (총점: 60점)
+        BigDecimal totalNonSubjectsScore = attendanceScore.add(volunteerScore)
+                .setScale(3, RoundingMode.HALF_UP);
+
+        // 내신 성적 총 점수 (총점: 300점)
+        BigDecimal totalScore = totalSubjectsScore.add(totalNonSubjectsScore)
+                .setScale(3, RoundingMode.HALF_UP);
+
+        // 석차 백분율
+        BigDecimal percentileRank = calcPercentileRank(totalScore);
     }
 
     private BigDecimal calcGeneralScore(List<BigDecimal> achievements, BigDecimal maxPoint) {
@@ -184,6 +196,13 @@ public class CalculateGradeService {
                 return current.add(BigDecimal.valueOf(2));
             }
         });
+    }
+
+    private BigDecimal calcPercentileRank(BigDecimal totalScore) {
+        // (1 - 내신 총 점수 / 300) * 100 (소수점 넷째 자리에서 반올림)
+        return BigDecimal.ONE.subtract(totalScore.divide(BigDecimal.valueOf(300), 20, RoundingMode.HALF_UP))
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(3, RoundingMode.HALF_UP);
     }
 
 }
