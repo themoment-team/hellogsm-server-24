@@ -28,23 +28,23 @@ public class MiddleSchoolAchievement {
 
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_1_1")
-    private List<Integer> achievement1_1;
+    private List<BigDecimal> achievement1_1;
 
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_1_2")
-    private List<Integer> achievement1_2;
+    private List<BigDecimal> achievement1_2;
 
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_2_1")
-    private List<Integer> achievement2_1;
+    private List<BigDecimal> achievement2_1;
 
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_2_2")
-    private List<Integer> achievement2_2;
+    private List<BigDecimal> achievement2_2;
 
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_3_1")
-    private List<Integer> achievement3_1;
+    private List<BigDecimal> achievement3_1;
 
     @Convert(converter = StringListConverter.class)
     @Column(name = "general_subjects")
@@ -56,7 +56,7 @@ public class MiddleSchoolAchievement {
 
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "arts_physical_achievement")
-    private List<Integer> artsPhysicalAchievement;
+    private List<BigDecimal> artsPhysicalAchievement;
 
     @Convert(converter = StringListConverter.class)
     @Column(name = "arts_physical_subjects")
@@ -64,15 +64,15 @@ public class MiddleSchoolAchievement {
 
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "absent_days")
-    private List<Integer> absentDays;
+    private List<BigDecimal> absentDays;
 
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "attendance_days")
-    private List<Integer> attendanceDays;
+    private List<BigDecimal> attendanceDays;
 
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "volunteer_time")
-    private List<Integer> volunteerTime;
+    private List<BigDecimal> volunteerTime;
 
     @Column(name = "liberal_system")
     private String liberalSystem;

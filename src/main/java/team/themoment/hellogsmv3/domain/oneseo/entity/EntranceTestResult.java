@@ -1,9 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
@@ -48,4 +46,9 @@ public class EntranceTestResult {
     @Enumerated(EnumType.STRING)
     @Column(name = "decided_major")
     private Major decidedMajor;
+
+    public EntranceTestResult(Oneseo oneseo, EntranceTestFactorsDetail entranceTestFactorsDetail) {
+        this.oneseo = oneseo;
+        this.entranceTestFactorsDetail = entranceTestFactorsDetail;
+    }
 }
