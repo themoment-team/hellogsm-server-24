@@ -3,22 +3,29 @@ package team.themoment.hellogsmv3.domain.oneseo.dto.response;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Builder
 public record MiddleSchoolAchievementResDto(
 
-        TranscriptResDto transcript,
-        BigDecimal totalScore,
-        BigDecimal percentileRank,
-        BigDecimal grade1Semester1Score,
-        BigDecimal grade1Semester2Score,
-        BigDecimal grade2Semester1Score,
-        BigDecimal grade2Semester2Score,
-        BigDecimal grade3Semester1Score,
-        BigDecimal curricularSubtotalScore,
-        BigDecimal extraCurricularSubtotalScore,
-        BigDecimal artisticScore,
-        BigDecimal attendanceScore,
-        BigDecimal volunteerScore
+        List<Integer> achievement1_1,
+        List<Integer> achievement1_2,
+        List<Integer> achievement2_1,
+        List<Integer> achievement2_2,
+        List<Integer> achievement3_1,
+        List<String> generalSubjects,
+        List<String> newSubjects,
+        List<Integer> artsPhysicalAchievement,
+        List<String> artsPhysicalSubjects,
+        List<Integer> absentDays,
+        List<Integer> attendanceDays,
+        Integer attendanceDay,
+        List<Integer> volunteerTime,
+        String liberalSystem,
+        String freeSemester,
+        BigDecimal gedTotalScore,
+        BigDecimal gedMaxScore
+
+
 ) {
 }

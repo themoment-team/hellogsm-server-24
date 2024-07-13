@@ -11,10 +11,7 @@ public record FoundOneseoResDto(
         Long submitCode,
         Screening wantedScreening,
         DesiredMajorsResDto desiredMajors,
-        YesNo finalSubmittedYn,
-        YesNo realOneseoArrivedYn,
         OneseoPrivacyDetailResDto privacyDetail,
-        MiddleSchoolAchievementResDto middleSchoolAchievement,
-        EntranceTestResultResDto entranceTestResult
+        MiddleSchoolAchievementResDto middleSchoolAchievement
 ) {
 }
