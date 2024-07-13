@@ -49,7 +49,4 @@ public class Oneseo {
     @Enumerated(EnumType.STRING)
     @Column(name = "applied_screening", nullable = false)
     private Screening appliedScreening;
-
-
-
 }
