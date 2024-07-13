@@ -3,8 +3,11 @@ package team.themoment.hellogsmv3.domain.oneseo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import team.themoment.hellogsmv3.global.common.converter.IntegerListConverter;
+import team.themoment.hellogsmv3.global.common.converter.StringListConverter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,48 +26,63 @@ public class MiddleSchoolAchievement {
     @JoinColumn(name = "oneseo_id")
     private Oneseo oneseo;
 
-    @Column(name = "transcript", columnDefinition = "TEXT", nullable = false)
-    private String transcript;
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "achievement_1_1")
+    private List<Integer> achievement1_1;
 
-    @Column(name = "percentile_rank", nullable = false)
-    private BigDecimal percentileRank;
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "achievement_1_2")
+    private List<Integer> achievement1_2;
 
-    @Column(name = "total_score", nullable = false)
-    private BigDecimal totalScore;
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "achievement_2_1")
+    private List<Integer> achievement2_1;
 
-    @Column(name = "artistic_score")
-    private BigDecimal artisticScore;
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "achievement_2_2")
+    private List<Integer> achievement2_2;
 
-    @Column(name = "attendance_score")
-    private BigDecimal attendanceScore;
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "achievement_3_1")
+    private List<Integer> achievement3_1;
 
-    @Column(name = "volunteer_score")
-    private BigDecimal volunteerScore;
+    @Convert(converter = StringListConverter.class)
+    @Column(name = "general_subjects")
+    private List<String> generalSubjects;
 
-    @Column(name = "curricular_subtotal_score")
-    private BigDecimal curricularSubtotalScore;
+    @Convert(converter = StringListConverter.class)
+    @Column(name = "new_subjects")
+    private List<String> newSubjects;
 
-    @Column(name = "extra_curricular_subtotal_score")
-    private BigDecimal extraCurricularSubtotalScore;
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "arts_physical_achievement")
+    private List<Integer> artsPhysicalAchievement;
 
-    @Column(name = "ged_max_score")
-    private BigDecimal gedMaxScore;
+    @Convert(converter = StringListConverter.class)
+    @Column(name = "arts_physical_subjects")
+    private List<String> artsPhysicalSubjects;
+
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "absent_days")
+    private List<Integer> absentDays;
+
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "attendance_days")
+    private List<Integer> attendanceDays;
+
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "volunteer_time")
+    private List<Integer> volunteerTime;
+
+    @Column(name = "liberal_system")
+    private String liberalSystem;
+
+    @Column(name = "free_semester")
+    private String freeSemester;
 
     @Column(name = "ged_total_score")
     private BigDecimal gedTotalScore;
 
-    @Column(name = "grade1_semester1_score")
-    private BigDecimal grade1Semester1Score;
-
-    @Column(name = "grade1_semester2_score")
-    private BigDecimal grade1Semester2Score;
-
-    @Column(name = "grade2_semester1_score")
-    private BigDecimal grade2Semester1Score;
-
-    @Column(name = "grade2_semester2_score")
-    private BigDecimal grade2Semester2Score;
-
-    @Column(name = "grade3_semester1_score")
-    private BigDecimal grade3Semester1Score;
+    @Column(name = "ged_max_score")
+    private BigDecimal gedMaxScore;
 }

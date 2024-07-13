@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
+import java.math.BigDecimal;
+
 @Getter
 @Entity
 @Table(name = "tb_entrance_test_result")
@@ -26,9 +28,18 @@ public class EntranceTestResult {
     @JoinColumn(name = "entrance_test_factors_detail_id")
     private EntranceTestFactorsDetail entranceTestFactorsDetail;
 
+    @Column(name = "document_evaluation_score")
+    private BigDecimal documentEvaluationScore;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "first_test_pass_yn")
     private YesNo firstTestPassYn;
+
+    @Column(name = "aptitude_evaluation_score")
+    private BigDecimal aptitudeEvaluationScore;
+
+    @Column(name = "interview_score")
+    private BigDecimal interviewScore;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "second_test_pass_yn")

@@ -35,7 +35,7 @@ public class OneseoController {
             @AuthRequest Long memberId
     ) {
         modifyOneseoService.execute(reqDto, memberId, false);
-        return CommonApiResponse.created("수정되었습니다.");
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
     @PutMapping("/oneseo/{memberId}")
@@ -44,7 +44,7 @@ public class OneseoController {
             @PathVariable("memberId") Long memberId
     ) {
         modifyOneseoService.execute(reqDto, memberId, true);
-        return CommonApiResponse.created("수정되었습니다.");
+        return CommonApiResponse.success("수정되었습니다.");
     }
 
     @GetMapping("/oneseo/me")

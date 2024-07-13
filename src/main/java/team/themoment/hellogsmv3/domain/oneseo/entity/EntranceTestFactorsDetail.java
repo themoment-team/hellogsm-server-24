@@ -18,14 +18,14 @@ public class EntranceTestFactorsDetail {
     @Column(name = "entrance_test_factors_detail_id")
     private Long id;
 
-    @Column(name = "curricular_subtotal_score")
-    private BigDecimal curricularSubtotalScore;
+    @Column(name = "general_subjects_score")
+    private BigDecimal generalSubjectsScore;
 
-    @Column(name = "extra_curricular_subtotal_score")
-    private BigDecimal extraCurricularSubtotalScore;
+    @Column(name = "arts_physical_subjects_score")
+    private BigDecimal artsPhysicalSubjectsScore;
 
-    @Column(name = "artistic_score")
-    private BigDecimal artisticScore;
+    @Column(name = "total_subjects_score")
+    private BigDecimal totalSubjectsScore;
 
     @Column(name = "attendance_score")
     private BigDecimal attendanceScore;
@@ -33,12 +33,30 @@ public class EntranceTestFactorsDetail {
     @Column(name = "volunteer_score")
     private BigDecimal volunteerScore;
 
-    @Column(name = "document_evaluation_score")
-    private BigDecimal documentEvaluationScore;
+    @Column(name = "total_non_subjects_score")
+    private BigDecimal totalNonSubjectsScore;
 
-    @Column(name = "aptitude_evaluation_score")
-    private BigDecimal aptitudeEvaluationScore;
+    @Column(name = "score_1_1")
+    private BigDecimal score1_1;
 
-    @Column(name = "interview_score")
-    private BigDecimal interviewScore;
+    @Column(name = "score_1_2")
+    private BigDecimal score1_2;
+
+    @Column(name = "score_2_1")
+    private BigDecimal score2_1;
+
+    @Column(name = "score_2_2")
+    private BigDecimal score2_2;
+
+    @Column(name = "score_3_1")
+    private BigDecimal score3_1;
+
+    @Column(name = "ged_total_score")
+    private BigDecimal gedTotalScore;
+
+    @Column(name = "ged_max_score")
+    private BigDecimal gedMaxScore;
+
+    @Column(name = "percentile_rank")
+    private BigDecimal percentileRank;
 }
