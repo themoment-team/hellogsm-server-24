@@ -85,11 +85,11 @@ public class CreateOneseoService {
 
         return MiddleSchoolAchievement.builder()
                 .oneseo(oneseo)
-                .achievement1_1(transcript.achievement1_1())
                 .achievement1_2(transcript.achievement1_2())
                 .achievement2_1(transcript.achievement2_1())
                 .achievement2_2(transcript.achievement2_2())
                 .achievement3_1(transcript.achievement3_1())
+                .achievement3_2(transcript.achievement3_2())
                 .generalSubjects(transcript.generalSubjects())
                 .newSubjects(transcript.newSubjects())
                 .artsPhysicalAchievement(transcript.artsPhysicalAchievement())

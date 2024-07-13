@@ -47,8 +47,9 @@ public class EntranceTestResult {
     @Column(name = "decided_major")
     private Major decidedMajor;
 
-    public EntranceTestResult(Oneseo oneseo, EntranceTestFactorsDetail entranceTestFactorsDetail) {
+    public EntranceTestResult(Oneseo oneseo, EntranceTestFactorsDetail entranceTestFactorsDetail, BigDecimal documentEvaluationScore) {
         this.oneseo = oneseo;
         this.entranceTestFactorsDetail = entranceTestFactorsDetail;
+        this.documentEvaluationScore = documentEvaluationScore;
     }
 }

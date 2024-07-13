@@ -5,11 +5,11 @@ import java.util.List;
 
 public record MiddleSchoolAchievementReqDto(
 
-        List<BigDecimal> achievement1_1,
         List<BigDecimal> achievement1_2,
         List<BigDecimal> achievement2_1,
         List<BigDecimal> achievement2_2,
         List<BigDecimal> achievement3_1,
+        List<BigDecimal> achievement3_2,
         List<String> generalSubjects,
         List<String> newSubjects,
         List<BigDecimal> artsPhysicalAchievement,

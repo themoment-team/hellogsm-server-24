@@ -2,12 +2,11 @@ package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
-import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
-import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
+import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
+import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,54 +20,73 @@ public class CalculateGradeService {
     private final EntranceTestResultRepository entranceTestResultRepository;
     private final EntranceTestFactorsDetailRepository entranceTestFactorsDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
+    private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
 
     public void execute(Oneseo oneseo) {
 
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
+        OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
 
         String liberalSystem = middleSchoolAchievement.getLiberalSystem();
         String freeSemester = middleSchoolAchievement.getFreeSemester();
 
-        /**
-         * 자유학년제, 학기제에 따른 성적계산에 사용되는 학기 성적
-         *
-         * 자유학년제 + 자유학기제 (1-1, 1-2)
-         * - 2-1, 2-2, 3-1, = 54, 54, 72
-         *
-         * 자유학기제 (2-1)
-         * - 1-2, 2-2, 3-1 = 54, 54, 72
-         *
-         * 자유학기제 (2-2)
-         * - 1-2, 2-1, 3-1 = 54, 54, 72
-         *
-         * 자유학기제 (3-1)
-         * - 1-2, 2-1, 2-2 = 54, 54, 72
-         *
-         */
+        BigDecimal achievement1_2 = BigDecimal.ONE;
+        BigDecimal achievement2_1 = BigDecimal.ONE;
+        BigDecimal achievement2_2 = BigDecimal.ONE;
+        BigDecimal achievement3_1 = BigDecimal.ONE;
+        BigDecimal achievement3_2 = BigDecimal.ONE;
 
-        BigDecimal achievement1_2 = calcGeneralScore(
-                middleSchoolAchievement.getAchievement1_2(), BigDecimal.valueOf(
-                liberalSystem.equals("자유학년제") || freeSemester.equals("1-1") || liberalSystem.equals("1-2") ? 0 : 54)
-        );
-        BigDecimal achievement2_1 = calcGeneralScore(
-                middleSchoolAchievement.getAchievement2_1(), BigDecimal.valueOf(
-                        liberalSystem.equals("2-1") ? 0 : 54)
-        );
-        BigDecimal achievement2_2 = calcGeneralScore(
-                middleSchoolAchievement.getAchievement2_2(), BigDecimal.valueOf(
-                        liberalSystem.equals("2-2") ? 0 : (liberalSystem.equals("3-1") ? 72 : 54))
-        );
-        BigDecimal achievement3_1 = calcGeneralScore(
-                middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
-                        liberalSystem.equals("3-1") ? 0 : 72)
-        );
+        switch (oneseoPrivacyDetail.getGraduationType()) {
+            case CANDIDATE -> {
+                achievement1_2 = calcGeneralScore(
+                        middleSchoolAchievement.getAchievement1_2(), BigDecimal.valueOf(
+                                liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 54)
+                );
+                achievement2_1 = calcGeneralScore(
+                        middleSchoolAchievement.getAchievement2_1(), BigDecimal.valueOf(
+                                freeSemester.equals("2-1") ? 0 : 54)
+                );
+                achievement2_2 = calcGeneralScore(
+                        middleSchoolAchievement.getAchievement2_2(), BigDecimal.valueOf(
+                                freeSemester.equals("2-2") ? 0 : (freeSemester.equals("3-1") ? 72 : 54))
+                );
+                achievement3_1 = calcGeneralScore(
+                        middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
+                                freeSemester.equals("3-1") ? 0 : 72)
+                );
+            }
+            case GRADUATE -> {
+                achievement1_2 = calcGeneralScore(
+                        middleSchoolAchievement.getAchievement1_2(), BigDecimal.valueOf(
+                                liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 36)
+                );
+                achievement2_1 = calcGeneralScore(
+                        middleSchoolAchievement.getAchievement2_1(), BigDecimal.valueOf(
+                                freeSemester.equals("2-1") ? 0 : 36)
+                );
+                achievement2_2 = calcGeneralScore(
+                        middleSchoolAchievement.getAchievement2_2(), BigDecimal.valueOf(
+                                freeSemester.equals("2-2") ? 0 :
+                                        (freeSemester.equals("3-1") || freeSemester.equals("3-2") ? 54 : 36))
+                );
+                achievement3_1 = calcGeneralScore(
+                        middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
+                                freeSemester.equals("3-1") ? 0 : 54)
+                );
+                achievement3_2 = calcGeneralScore(
+                        middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
+                                freeSemester.equals("3-2") ? 0 : 54)
+                );
+            }
+        }
 
         // 일반 교과 성적 환산값 (총점: 180점)
         BigDecimal generalSubjectsScore = Stream.of(
                         achievement1_2,
                         achievement2_1,
                         achievement2_2,
-                        achievement3_1).reduce(BigDecimal.ZERO, BigDecimal::add)
+                        achievement3_1,
+                        achievement3_2).reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(3, RoundingMode.HALF_UP);
 
         // 예체능 성적 환산값 (총점: 60점)
@@ -99,6 +117,28 @@ public class CalculateGradeService {
 
         // 석차 백분율
         BigDecimal percentileRank = calcPercentileRank(totalScore);
+
+        EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
+                .generalSubjectsScore(generalSubjectsScore)
+                .attendanceScore(attendanceScore)
+                .totalSubjectsScore(totalSubjectsScore)
+                .attendanceScore(attendanceScore)
+                .volunteerScore(volunteerScore)
+                .totalNonSubjectsScore(totalNonSubjectsScore)
+                .score1_2(achievement1_2)
+                .score2_1(achievement2_1)
+                .score2_2(achievement2_2)
+                .score3_1(achievement3_1)
+                .score3_2(achievement3_2)
+                .gedTotalScore(null)
+                .gedMaxScore(null)
+                .percentileRank(percentileRank)
+                .build();
+
+        EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
+
+        entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
+        entranceTestResultRepository.save(entranceTestResult);
     }
 
     private BigDecimal calcGeneralScore(List<BigDecimal> achievements, BigDecimal maxPoint) {
