@@ -1,6 +1,5 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,13 +35,11 @@ public class QueryOneseoByIdService {
 
         OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto = buildOneseoPrivacyDetailResDto(member, oneseoPrivacyDetail);
         MiddleSchoolAchievementResDto middleSchoolAchievementResDto = buildMiddleSchoolAchievementResDto(middleSchoolAchievement);
-        EntranceTestResultResDto entranceTestResultResDto = buildEntranceTestResultResDto(entranceTestResult);
 
         return buildFoundOneseoResDto(
                 oneseo,
                 oneseoPrivacyDetailResDto,
-                middleSchoolAchievementResDto,
-                entranceTestResultResDto
+                middleSchoolAchievementResDto
         );
     }
 
@@ -73,53 +70,30 @@ public class QueryOneseoByIdService {
             MiddleSchoolAchievement middleSchoolAchievement
     ) {
         return MiddleSchoolAchievementResDto.builder()
-                .transcript(buildTranscriptResDto(middleSchoolAchievement.getTranscript()))
-                .totalScore(middleSchoolAchievement.getTotalScore())
-                .percentileRank(middleSchoolAchievement.getPercentileRank())
-                .grade1Semester1Score(middleSchoolAchievement.getGrade1Semester1Score())
-                .grade1Semester2Score(middleSchoolAchievement.getGrade1Semester2Score())
-                .grade2Semester1Score(middleSchoolAchievement.getGrade2Semester1Score())
-                .grade2Semester2Score(middleSchoolAchievement.getGrade2Semester2Score())
-                .grade3Semester1Score(middleSchoolAchievement.getGrade3Semester1Score())
-                .curricularSubtotalScore(middleSchoolAchievement.getCurricularSubtotalScore())
-                .extraCurricularSubtotalScore(middleSchoolAchievement.getExtraCurricularSubtotalScore())
-                .artisticScore(middleSchoolAchievement.getArtisticScore())
-                .attendanceScore(middleSchoolAchievement.getAttendanceScore())
-                .volunteerScore(middleSchoolAchievement.getVolunteerScore())
-                .build();
-    }
-
-    private TranscriptResDto buildTranscriptResDto(String transcript) {
-        Gson gson = new Gson();
-        TranscriptResDto transcriptResDto = gson.fromJson(transcript, TranscriptResDto.class);
-
-        // TODO attendanceDay 계산 & 값 주입
-
-        return transcriptResDto;
-    }
-
-    private EntranceTestResultResDto buildEntranceTestResultResDto(
-            EntranceTestResult entranceTestResult
-    ) {
-        if (entranceTestResult == null) return null;
-
-        EntranceTestFactorsDetail entranceTestFactorsDetail = entranceTestResult.getEntranceTestFactorsDetail();
-
-        return EntranceTestResultResDto.builder()
-                .documentEvaluationScore(entranceTestFactorsDetail.getDocumentEvaluationScore())
-                .firstTestPassYn(entranceTestResult.getFirstTestPassYn())
-                .aptitudeEvaluationScore(entranceTestFactorsDetail.getAptitudeEvaluationScore())
-                .interviewScore(entranceTestFactorsDetail.getInterviewScore())
-                .secondTestPassYn(entranceTestResult.getSecondTestPassYn())
-                .decidedMajor(entranceTestResult.getDecidedMajor())
+                .achievement1_1(middleSchoolAchievement.getAchievement1_1())
+                .achievement1_2(middleSchoolAchievement.getAchievement1_2())
+                .achievement2_1(middleSchoolAchievement.getAchievement2_1())
+                .achievement2_2(middleSchoolAchievement.getAchievement2_2())
+                .achievement3_1(middleSchoolAchievement.getAchievement3_1())
+                .generalSubjects(middleSchoolAchievement.getGeneralSubjects())
+                .newSubjects(middleSchoolAchievement.getNewSubjects())
+                .artsPhysicalAchievement(middleSchoolAchievement.getArtsPhysicalAchievement())
+                .artsPhysicalSubjects(middleSchoolAchievement.getArtsPhysicalSubjects())
+                .absentDays(middleSchoolAchievement.getAbsentDays())
+                .attendanceDays(middleSchoolAchievement.getAttendanceDays())
+                .attendanceDay(null)    // TODO 출결 환산일수 계산식 추가
+                .volunteerTime(middleSchoolAchievement.getVolunteerTime())
+                .liberalSystem(middleSchoolAchievement.getLiberalSystem())
+                .freeSemester(middleSchoolAchievement.getFreeSemester())
+                .gedTotalScore(middleSchoolAchievement.getGedTotalScore())
+                .gedMaxScore(middleSchoolAchievement.getGedMaxScore())
                 .build();
     }
 
     private FoundOneseoResDto buildFoundOneseoResDto(
             Oneseo oneseo,
             OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto,
-            MiddleSchoolAchievementResDto middleSchoolAchievementResDto,
-            EntranceTestResultResDto entranceTestResultResDto
+            MiddleSchoolAchievementResDto middleSchoolAchievementResDto
     ) {
         DesiredMajors desiredMajors = oneseo.getDesiredMajors();
 
@@ -132,11 +106,8 @@ public class QueryOneseoByIdService {
                         .secondDesiredMajor(desiredMajors.getSecondDesiredMajor())
                         .thirdDesiredMajor(desiredMajors.getThirdDesiredMajor())
                         .build())
-                .finalSubmittedYn(oneseo.getFinalSubmittedYn())
-                .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .privacyDetail(oneseoPrivacyDetailResDto)
                 .middleSchoolAchievement(middleSchoolAchievementResDto)
-                .entranceTestResult(entranceTestResultResDto)
                 .build();
     }
 }
