@@ -3,6 +3,7 @@ package team.themoment.hellogsmv3.domain.oneseo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
@@ -12,6 +13,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,19 +27,24 @@ public class CalculateGradeService {
 
     public void execute(Oneseo oneseo) {
 
-        MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
+
+        GraduationType graduationType = oneseoPrivacyDetail.getGraduationType();
+        if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
+            throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
+
+        MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
 
         String liberalSystem = middleSchoolAchievement.getLiberalSystem();
         String freeSemester = middleSchoolAchievement.getFreeSemester();
 
-        BigDecimal achievement1_2 = BigDecimal.ONE;
-        BigDecimal achievement2_1 = BigDecimal.ONE;
-        BigDecimal achievement2_2 = BigDecimal.ONE;
-        BigDecimal achievement3_1 = BigDecimal.ONE;
-        BigDecimal achievement3_2 = BigDecimal.ONE;
+        BigDecimal achievement1_2 = BigDecimal.ZERO;
+        BigDecimal achievement2_1 = BigDecimal.ZERO;
+        BigDecimal achievement2_2 = BigDecimal.ZERO;
+        BigDecimal achievement3_1 = BigDecimal.ZERO;
+        BigDecimal achievement3_2 = BigDecimal.ZERO;
 
-        switch (oneseoPrivacyDetail.getGraduationType()) {
+        switch (graduationType) {
             case CANDIDATE -> {
                 achievement1_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement1_2(), BigDecimal.valueOf(
@@ -130,8 +138,6 @@ public class CalculateGradeService {
                 .score2_2(achievement2_2)
                 .score3_1(achievement3_1)
                 .score3_2(achievement3_2)
-                .gedTotalScore(null)
-                .gedMaxScore(null)
                 .percentileRank(percentileRank)
                 .build();
 
