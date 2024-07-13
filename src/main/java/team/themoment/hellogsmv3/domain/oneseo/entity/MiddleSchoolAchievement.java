@@ -3,7 +3,7 @@ package team.themoment.hellogsmv3.domain.oneseo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-import team.themoment.hellogsmv3.global.common.converter.IntegerListConverter;
+import team.themoment.hellogsmv3.global.common.converter.BigDecimalListConverter;
 import team.themoment.hellogsmv3.global.common.converter.StringListConverter;
 
 import java.math.BigDecimal;
@@ -26,23 +26,23 @@ public class MiddleSchoolAchievement {
     @JoinColumn(name = "oneseo_id")
     private Oneseo oneseo;
 
-    @Convert(converter = IntegerListConverter.class)
+    @Convert(converter = BigDecimalListConverter.class)
     @Column(name = "achievement_1_2")
     private List<BigDecimal> achievement1_2;
 
-    @Convert(converter = IntegerListConverter.class)
+    @Convert(converter = BigDecimalListConverter.class)
     @Column(name = "achievement_2_1")
     private List<BigDecimal> achievement2_1;
 
-    @Convert(converter = IntegerListConverter.class)
+    @Convert(converter = BigDecimalListConverter.class)
     @Column(name = "achievement_2_2")
     private List<BigDecimal> achievement2_2;
 
-    @Convert(converter = IntegerListConverter.class)
+    @Convert(converter = BigDecimalListConverter.class)
     @Column(name = "achievement_3_1")
     private List<BigDecimal> achievement3_1;
 
-    @Convert(converter = IntegerListConverter.class)
+    @Convert(converter = BigDecimalListConverter.class)
     @Column(name = "achievement_3_2")
     private List<BigDecimal> achievement3_2;
 
@@ -54,7 +54,7 @@ public class MiddleSchoolAchievement {
     @Column(name = "new_subjects")
     private List<String> newSubjects;
 
-    @Convert(converter = IntegerListConverter.class)
+    @Convert(converter = BigDecimalListConverter.class)
     @Column(name = "arts_physical_achievement")
     private List<BigDecimal> artsPhysicalAchievement;
 
@@ -62,15 +62,15 @@ public class MiddleSchoolAchievement {
     @Column(name = "arts_physical_subjects")
     private List<String> artsPhysicalSubjects;
 
-    @Convert(converter = IntegerListConverter.class)
+    @Convert(converter = BigDecimalListConverter.class)
     @Column(name = "absent_days")
     private List<BigDecimal> absentDays;
 
-    @Convert(converter = IntegerListConverter.class)
+    @Convert(converter = BigDecimalListConverter.class)
     @Column(name = "attendance_days")
     private List<BigDecimal> attendanceDays;
 
-    @Convert(converter = IntegerListConverter.class)
+    @Convert(converter = BigDecimalListConverter.class)
     @Column(name = "volunteer_time")
     private List<BigDecimal> volunteerTime;
 

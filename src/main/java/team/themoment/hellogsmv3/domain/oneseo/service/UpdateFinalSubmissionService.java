@@ -7,7 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
+import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
+import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
@@ -19,6 +22,9 @@ public class UpdateFinalSubmissionService {
 
     private final MemberRepository memberRepository;
     private final OneseoRepository oneseoRepository;
+    private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
+    private final CalculateGradeService calculateGradeService;
+    private final CalculateGedService calculateGedService;
 
     @Transactional
     public void execute(Long memberId) {
@@ -31,7 +37,14 @@ public class UpdateFinalSubmissionService {
             throw new ExpectedException("이미 최종제출 되었습니다.", HttpStatus.BAD_REQUEST);
 
         oneseo.updateFinalSubmission();
-        oneseoRepository.save(oneseo);
+
+        OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
+        GraduationType graduationType = oneseoPrivacyDetail.getGraduationType();
+
+        switch (graduationType) {
+            case CANDIDATE, GRADUATE -> calculateGradeService.execute(oneseo, graduationType);
+            case GED -> calculateGedService.execute(oneseo, graduationType);
+        }
     }
 
 }

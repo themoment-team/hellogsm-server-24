@@ -7,7 +7,6 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,13 +22,9 @@ public class CalculateGradeService {
     private final EntranceTestResultRepository entranceTestResultRepository;
     private final EntranceTestFactorsDetailRepository entranceTestFactorsDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
-    private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
 
-    public void execute(Oneseo oneseo) {
+    public void execute(Oneseo oneseo, GraduationType graduationType) {
 
-        OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
-
-        GraduationType graduationType = oneseoPrivacyDetail.getGraduationType();
         if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
 
@@ -48,42 +43,45 @@ public class CalculateGradeService {
             case CANDIDATE -> {
                 achievement1_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement1_2(), BigDecimal.valueOf(
-                                liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 54)
+                                liberalSystem.equals("자유학년제") ||
+                                        (freeSemester != null && freeSemester.equals("1-2")) ? 0 : 54)
                 );
                 achievement2_1 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement2_1(), BigDecimal.valueOf(
-                                freeSemester.equals("2-1") ? 0 : 54)
+                                freeSemester != null && freeSemester.equals("2-1") ? 0 : 54)
                 );
                 achievement2_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement2_2(), BigDecimal.valueOf(
-                                freeSemester.equals("2-2") ? 0 : (freeSemester.equals("3-1") ? 72 : 54))
+                                freeSemester != null && freeSemester.equals("2-2") ? 0 :
+                                        (freeSemester != null && freeSemester.equals("3-1") ? 72 : 54))
                 );
                 achievement3_1 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
-                                freeSemester.equals("3-1") ? 0 : 72)
+                                freeSemester != null && freeSemester.equals("3-1") ? 0 : 72)
                 );
             }
             case GRADUATE -> {
                 achievement1_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement1_2(), BigDecimal.valueOf(
-                                liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 36)
+                                liberalSystem.equals("자유학년제") ||
+                                        (freeSemester != null && freeSemester.equals("1-2")) ? 0 : 36)
                 );
                 achievement2_1 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement2_1(), BigDecimal.valueOf(
-                                freeSemester.equals("2-1") ? 0 : 36)
+                                freeSemester != null && freeSemester.equals("2-1") ? 0 : 36)
                 );
                 achievement2_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement2_2(), BigDecimal.valueOf(
-                                freeSemester.equals("2-2") ? 0 :
-                                        (freeSemester.equals("3-1") || freeSemester.equals("3-2") ? 54 : 36))
+                                freeSemester != null && freeSemester.equals("2-2") ? 0 :
+                                        (freeSemester != null && (freeSemester.equals("3-1") || freeSemester.equals("3-2")) ? 54 : 36))
                 );
                 achievement3_1 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
-                                freeSemester.equals("3-1") ? 0 : 54)
+                                freeSemester != null && freeSemester.equals("3-1") ? 0 : 54)
                 );
                 achievement3_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
-                                freeSemester.equals("3-2") ? 0 : 54)
+                                freeSemester != null && freeSemester.equals("3-2") ? 0 : 54)
                 );
             }
         }

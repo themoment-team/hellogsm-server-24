@@ -7,7 +7,6 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,13 +20,9 @@ public class CalculateGedService {
     private final EntranceTestResultRepository entranceTestResultRepository;
     private final EntranceTestFactorsDetailRepository entranceTestFactorsDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
-    private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
 
-    public void execute(Oneseo oneseo) {
+    public void execute(Oneseo oneseo, GraduationType graduationType) {
 
-        OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
-
-        GraduationType graduationType = oneseoPrivacyDetail.getGraduationType();
         if (!graduationType.equals(GED))
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
 
