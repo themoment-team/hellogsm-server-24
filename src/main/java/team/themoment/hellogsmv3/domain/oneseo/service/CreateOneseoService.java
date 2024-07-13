@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
@@ -15,8 +16,6 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievemen
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
-
-import java.math.BigDecimal;
 
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
@@ -82,26 +81,26 @@ public class CreateOneseoService {
     }
 
     private MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, Oneseo oneseo) {
-
-        // TODO 추후에 성적 환산 로직 추가
+        MiddleSchoolAchievementReqDto transcript = reqDto.transcript();
 
         return MiddleSchoolAchievement.builder()
                 .oneseo(oneseo)
-                .transcript(reqDto.transcript())
-                .percentileRank(BigDecimal.ONE)
-                .totalScore(BigDecimal.ONE)
-                .artisticScore(BigDecimal.ONE)
-                .attendanceScore(BigDecimal.ONE)
-                .volunteerScore(BigDecimal.ONE)
-                .curricularSubtotalScore(BigDecimal.ONE)
-                .extraCurricularSubtotalScore(BigDecimal.ONE)
-                .gedMaxScore(BigDecimal.ONE)
-                .gedTotalScore(BigDecimal.ONE)
-                .grade1Semester1Score(BigDecimal.ONE)
-                .grade1Semester2Score(BigDecimal.ONE)
-                .grade2Semester1Score(BigDecimal.ONE)
-                .grade2Semester2Score(BigDecimal.ONE)
-                .grade3Semester1Score(BigDecimal.ONE)
+                .achievement1_1(transcript.achievement1_1())
+                .achievement1_2(transcript.achievement1_2())
+                .achievement2_1(transcript.achievement2_1())
+                .achievement2_2(transcript.achievement2_2())
+                .achievement3_1(transcript.achievement3_1())
+                .generalSubjects(transcript.generalSubjects())
+                .newSubjects(transcript.newSubjects())
+                .artsPhysicalAchievement(transcript.artsPhysicalAchievement())
+                .artsPhysicalSubjects(transcript.artsPhysicalSubjects())
+                .absentDays(transcript.absentDays())
+                .attendanceDays(transcript.attendanceDays())
+                .volunteerTime(transcript.volunteerTime())
+                .liberalSystem(transcript.liberalSystem())
+                .freeSemester(transcript.freeSemester())
+                .gedTotalScore(transcript.gedTotalScore())
+                .gedMaxScore(transcript.gedMaxScore())
                 .build();
     }
 
