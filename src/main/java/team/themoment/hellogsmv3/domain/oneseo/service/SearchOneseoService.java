@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.ApplicantStatusTag;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoPageInfoDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
@@ -33,7 +33,7 @@ public class SearchOneseoService {
     public SearchOneseosResDto execute(
             Integer page,
             Integer size,
-            ApplicantStatusTag applicantStatusTag,
+            TestResultTag testResultTag,
             ScreeningCategory screeningTag,
             YesNo isSubmitted,
             String keyword
@@ -41,7 +41,7 @@ public class SearchOneseoService {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Oneseo> oneseoPage = findOneseoByTagsAndKeyword(
-                applicantStatusTag,
+                testResultTag,
                 screeningTag,
                 isSubmitted,
                 keyword,
@@ -65,7 +65,7 @@ public class SearchOneseoService {
     }
 
     private Page<Oneseo> findOneseoByTagsAndKeyword(
-            ApplicantStatusTag applicantStatusTag,
+            TestResultTag testResultTag,
             ScreeningCategory screeningTag,
             YesNo isSubmitted,
             String keyword,
@@ -75,7 +75,7 @@ public class SearchOneseoService {
                 keyword,
                 screeningTag,
                 isSubmitted,
-                applicantStatusTag,
+                testResultTag,
                 pageable
         );
     }

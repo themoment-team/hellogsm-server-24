@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.ApplicantStatusTag;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
@@ -34,7 +34,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
             String keyword,
             ScreeningCategory screening,
             YesNo isSubmitted,
-            ApplicantStatusTag applicantStatusTag,
+            TestResultTag testResultTag,
             Pageable pageable
     ) {
 
@@ -42,7 +42,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
                 keyword,
                 screening,
                 isSubmitted,
-                applicantStatusTag
+                testResultTag
         );
 
         List<Oneseo> oneseos = queryFactory.selectFrom(oneseo)
@@ -66,7 +66,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
             String keyword,
             ScreeningCategory screening,
             YesNo isSubmitted,
-            ApplicantStatusTag applicantStatusTag
+            TestResultTag testResultTag
     ) {
 
         BooleanBuilder builder = new BooleanBuilder();
@@ -85,7 +85,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
         if (isSubmitted != null)
             builder.and(oneseo.realOneseoArrivedYn.eq(isSubmitted));
 
-        switch (applicantStatusTag) {
+        switch (testResultTag) {
             case FIRST_PASS ->
                 builder.and(
                         entranceTestResult.firstTestPassYn.eq(YesNo.YES)
