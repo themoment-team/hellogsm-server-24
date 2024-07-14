@@ -90,6 +90,23 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
         return builder;
     }
 
+    private void applyIsSubmittedTag(
+            BooleanBuilder builder,
+            YesNo isSubmitted
+    ) {
+
+        switch (isSubmitted) {
+            case YES ->
+                    builder.and(
+                            oneseo.realOneseoArrivedYn.eq(YesNo.YES)
+                    );
+            case NO ->
+                    builder.and(
+                            oneseo.realOneseoArrivedYn.eq(YesNo.NO)
+                    );
+        }
+    }
+
     private void applyTestResultTag(
             BooleanBuilder builder,
             TestResultTag testResultTag
