@@ -4,11 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.ApplicantStatusTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.ScreeningTag;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.SubmissionStatusTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.SearchOneseoService;
@@ -57,12 +57,12 @@ public class OneseoController {
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size,
             @RequestParam(name = "applicantStatus") ApplicantStatusTag applicantStatus,
-            @RequestParam(name = "screening", required = false) ScreeningTag screening,
-            @RequestParam(name = "submissionStatus", required = false) SubmissionStatusTag submissionStatus,
+            @RequestParam(name = "screening", required = false) ScreeningCategory screening,
+            @RequestParam(name = "isSubmitted", required = false) YesNo isSubmitted,
             @RequestParam(name = "keyword", required = false) String keyword
     ) {
         if (page < 0 || size < 0)
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
-        return searchOneseoService.execute(page, size, applicantStatus, screening, submissionStatus, keyword);
+        return searchOneseoService.execute(page, size, applicantStatus, screening, isSubmitted, keyword);
     }
 }

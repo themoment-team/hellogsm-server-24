@@ -1,17 +1,20 @@
 package team.themoment.hellogsmv3.domain.oneseo.repository.custom;
 
-import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.ApplicantStatusTag;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
 import java.util.List;
 
+import static com.querydsl.core.types.ExpressionUtils.anyOf;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseo.oneseo;
 import static team.themoment.hellogsmv3.domain.member.entity.QMember.member;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QEntranceTestResult.entranceTestResult;
@@ -27,148 +30,78 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Oneseo> findAllByFinalSubmitted(Pageable pageable) {
+    public Page<Oneseo> findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
+            String keyword,
+            ScreeningCategory screening,
+            YesNo isSubmitted,
+            ApplicantStatusTag applicantStatusTag,
+            Pageable pageable
+    ) {
 
-        List<Oneseo> oneseos = queryFactory.selectFrom(oneseo)
-                .leftJoin(oneseo.member, member).fetchJoin()
-                .leftJoin(entranceTestResult).on(entranceTestResult.oneseo.id.eq(oneseo.id))
-                .where(oneseo.finalSubmittedYn.eq(YesNo.YES))
-                .orderBy(
-                        new CaseBuilder()
-                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.YES)).then(5)
-                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.NO)).then(4)
-                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.YES)).then(3)
-                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.NO)).then(2)
-                                .when(entranceTestResult.firstTestPassYn.isNull()).then(1)
-                                .otherwise(0).desc()
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        Long total = queryFactory
-                .select(oneseo.count())
-                .from(oneseo)
-                .where(oneseo.finalSubmittedYn.eq(YesNo.YES))
-                .fetchOne();
-
-        return new PageImpl<>(oneseos, pageable, total);
-    }
-
-    @Override
-    public Page<Oneseo> findAllByFinalSubmittedAndMemberNameContaining(String keyword, Pageable pageable) {
-
-        List<Oneseo> oneseos = queryFactory.selectFrom(oneseo)
-                .leftJoin(oneseo.member, member).fetchJoin()
-                .leftJoin(entranceTestResult).on(entranceTestResult.oneseo.id.eq(oneseo.id))
-                .where(
-                        oneseo.finalSubmittedYn.eq(YesNo.YES)
-                                .and(oneseo.member.name.like("%" + keyword + "%"))
-                )
-                .orderBy(
-                        new CaseBuilder()
-                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.YES)).then(5)
-                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.NO)).then(4)
-                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.YES)).then(3)
-                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.NO)).then(2)
-                                .when(entranceTestResult.firstTestPassYn.isNull()).then(1)
-                                .otherwise(0).desc()
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        Long total = queryFactory
-                .select(oneseo.count())
-                .from(oneseo)
-                .where(
-                        oneseo.finalSubmittedYn.eq(YesNo.YES)
-                                .and(oneseo.member.name.like("%" + keyword + "%"))
-                )
-                .fetchOne();
-
-        return new PageImpl<>(oneseos, pageable, total);
-    }
-
-    @Override
-    public Page<Oneseo> findAllByFinalSubmittedAndSchoolNameContaining(String keyword, Pageable pageable) {
+        BooleanBuilder builder = createBooleanBuilder(
+                keyword,
+                screening,
+                isSubmitted,
+                applicantStatusTag
+        );
 
         List<Oneseo> oneseos = queryFactory.selectFrom(oneseo)
                 .leftJoin(oneseo.member, member).fetchJoin()
                 .leftJoin(oneseoPrivacyDetail).on(oneseoPrivacyDetail.oneseo.eq(oneseo))
-                .leftJoin(entranceTestResult).on(entranceTestResult.oneseo.id.eq(oneseo.id))
-                .where(
-                        oneseo.finalSubmittedYn.eq(YesNo.YES)
-                                .and(oneseoPrivacyDetail.schoolName.like("%" + keyword + "%"))
-                )
-                .orderBy(
-                        new CaseBuilder()
-                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.YES)).then(5)
-                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.NO)).then(4)
-                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.YES)).then(3)
-                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.NO)).then(2)
-                                .when(entranceTestResult.firstTestPassYn.isNull()).then(1)
-                                .otherwise(0).desc()
-                )
+                .leftJoin(entranceTestResult).on(entranceTestResult.id.eq(oneseo.id))
+                .where(builder)
+                .orderBy(oneseo.oneseoSubmitCode.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long total = queryFactory
-                .select(oneseo.count())
-                .from(oneseo)
-                .leftJoin(oneseoPrivacyDetail).on(oneseoPrivacyDetail.oneseo.eq(oneseo))
-                .where(
-                        oneseo.finalSubmittedYn.eq(YesNo.YES)
-                                .and(oneseoPrivacyDetail.schoolName.like("%" + keyword + "%"))
-                )
-                .fetchOne();
-
-        return new PageImpl<>(oneseos, pageable, total);
+        return new PageImpl<>(
+                oneseos,
+                pageable,
+                oneseos.size()
+        );
     }
 
-    @Override
-    public Page<Oneseo> findAllByFinalSubmittedAndPhoneNumberContaining(String keyword, Pageable pageable) {
+    private BooleanBuilder createBooleanBuilder(
+            String keyword,
+            ScreeningCategory screening,
+            YesNo isSubmitted,
+            ApplicantStatusTag applicantStatusTag
+    ) {
 
-        List<Oneseo> oneseos = queryFactory.selectFrom(oneseo)
-                .leftJoin(oneseo.member, member).fetchJoin()
-                .leftJoin(oneseoPrivacyDetail).on(oneseoPrivacyDetail.oneseo.eq(oneseo))
-                .leftJoin(entranceTestResult).on(entranceTestResult.oneseo.id.eq(oneseo.id))
-                .where(
-                        oneseo.finalSubmittedYn.eq(YesNo.YES)
-                                .and(
-                                        (oneseo.member.phoneNumber.like("%" + keyword + "%"))
-                                        .or(oneseoPrivacyDetail.guardianPhoneNumber.like("%" + keyword + "%"))
-                                        .or(oneseoPrivacyDetail.schoolTeacherPhoneNumber.like("%" + keyword + "%"))
-                                )
-                )
-                .orderBy(
-                        new CaseBuilder()
-                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.YES)).then(5)
-                                .when(entranceTestResult.secondTestPassYn.eq(YesNo.NO)).then(4)
-                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.YES)).then(3)
-                                .when(entranceTestResult.firstTestPassYn.eq(YesNo.NO)).then(2)
-                                .when(entranceTestResult.firstTestPassYn.isNull()).then(1)
-                                .otherwise(0).desc()
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(oneseo.finalSubmittedYn.eq(YesNo.YES))
+                .and(
+                        anyOf(
+                                oneseo.member.name.like("%" + keyword + "%"),
+                                oneseoPrivacyDetail.schoolName.like("%" + keyword + "%"),
+                                oneseo.member.phoneNumber.like("%" + keyword + "%")
+                        )
+                );
 
-        Long total = queryFactory
-                .select(oneseo.count())
-                .from(oneseo)
-                .leftJoin(oneseoPrivacyDetail).on(oneseoPrivacyDetail.oneseo.eq(oneseo))
-                .where(
-                        oneseo.finalSubmittedYn.eq(YesNo.YES)
-                                .and(
-                                        (oneseo.member.phoneNumber.like("%" + keyword + "%"))
-                                                .or(oneseoPrivacyDetail.guardianPhoneNumber.like("%" + keyword + "%"))
-                                                .or(oneseoPrivacyDetail.schoolTeacherPhoneNumber.like("%" + keyword + "%"))
-                                )
-                )
-                .fetchOne();
+        if (screening != null)
+            builder.and(oneseo.appliedScreening.stringValue().like("%" + screening + "%"));
 
-        return new PageImpl<>(oneseos, pageable, total);
+        if (isSubmitted != null)
+            builder.and(oneseo.realOneseoArrivedYn.eq(isSubmitted));
+
+        switch (applicantStatusTag) {
+            case FIRST_PASS ->
+                builder.and(
+                        entranceTestResult.firstTestPassYn.eq(YesNo.YES)
+                );
+            case FINAL_PASS ->
+                builder.and(
+                        entranceTestResult.secondTestPassYn.eq(YesNo.YES)
+                );
+            case FALL ->
+                builder.andAnyOf(
+                        entranceTestResult.firstTestPassYn.eq(YesNo.NO),
+                        entranceTestResult.firstTestPassYn.eq(YesNo.NO)
+                );
+        }
+
+        return builder;
     }
+
 }
