@@ -85,23 +85,31 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
         if (isSubmitted != null)
             builder.and(oneseo.realOneseoArrivedYn.eq(isSubmitted));
 
-        switch (testResultTag) {
-            case FIRST_PASS ->
-                builder.and(
-                        entranceTestResult.firstTestPassYn.eq(YesNo.YES)
-                );
-            case FINAL_PASS ->
-                builder.and(
-                        entranceTestResult.secondTestPassYn.eq(YesNo.YES)
-                );
-            case FALL ->
-                builder.andAnyOf(
-                        entranceTestResult.firstTestPassYn.eq(YesNo.NO),
-                        entranceTestResult.firstTestPassYn.eq(YesNo.NO)
-                );
-        }
+        applyTestResultTag(builder, testResultTag);
 
         return builder;
+    }
+
+    private void applyTestResultTag(
+            BooleanBuilder builder,
+            TestResultTag testResultTag
+    ) {
+
+        switch (testResultTag) {
+            case FIRST_PASS ->
+                    builder.and(
+                            entranceTestResult.firstTestPassYn.eq(YesNo.YES)
+                    );
+            case FINAL_PASS ->
+                    builder.and(
+                            entranceTestResult.secondTestPassYn.eq(YesNo.YES)
+                    );
+            case FALL ->
+                    builder.andAnyOf(
+                            entranceTestResult.firstTestPassYn.eq(YesNo.NO),
+                            entranceTestResult.firstTestPassYn.eq(YesNo.NO)
+                    );
+        }
     }
 
 }
