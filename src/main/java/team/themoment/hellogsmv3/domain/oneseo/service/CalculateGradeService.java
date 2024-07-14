@@ -31,7 +31,8 @@ public class CalculateGradeService {
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
 
         String liberalSystem = middleSchoolAchievement.getLiberalSystem();
-        String freeSemester = middleSchoolAchievement.getFreeSemester();
+        String freeSemester = "";
+        freeSemester = middleSchoolAchievement.getFreeSemester();
 
         BigDecimal achievement1_2 = BigDecimal.ZERO;
         BigDecimal achievement2_1 = BigDecimal.ZERO;
@@ -43,45 +44,42 @@ public class CalculateGradeService {
             case CANDIDATE -> {
                 achievement1_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement1_2(), BigDecimal.valueOf(
-                                liberalSystem.equals("자유학년제") ||
-                                        (freeSemester != null && freeSemester.equals("1-2")) ? 0 : 54)
+                                liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 54)
                 );
                 achievement2_1 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement2_1(), BigDecimal.valueOf(
-                                freeSemester != null && freeSemester.equals("2-1") ? 0 : 54)
+                                freeSemester.equals("2-1") ? 0 : 54)
                 );
                 achievement2_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement2_2(), BigDecimal.valueOf(
-                                freeSemester != null && freeSemester.equals("2-2") ? 0 :
-                                        (freeSemester != null && freeSemester.equals("3-1") ? 72 : 54))
+                                freeSemester.equals("2-2") ? 0 : (freeSemester.equals("3-1") ? 72 : 54))
                 );
                 achievement3_1 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
-                                freeSemester != null && freeSemester.equals("3-1") ? 0 : 72)
+                                freeSemester.equals("3-1") ? 0 : 72)
                 );
             }
             case GRADUATE -> {
                 achievement1_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement1_2(), BigDecimal.valueOf(
-                                liberalSystem.equals("자유학년제") ||
-                                        (freeSemester != null && freeSemester.equals("1-2")) ? 0 : 36)
+                                liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 36)
                 );
                 achievement2_1 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement2_1(), BigDecimal.valueOf(
-                                freeSemester != null && freeSemester.equals("2-1") ? 0 : 36)
+                                freeSemester.equals("2-1") ? 0 : 36)
                 );
                 achievement2_2 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement2_2(), BigDecimal.valueOf(
-                                freeSemester != null && freeSemester.equals("2-2") ? 0 :
-                                        (freeSemester != null && (freeSemester.equals("3-1") || freeSemester.equals("3-2")) ? 54 : 36))
+                                freeSemester.equals("2-2") ? 0 :
+                                        (freeSemester.equals("3-1") || freeSemester.equals("3-2")) ? 54 : 36)
                 );
                 achievement3_1 = calcGeneralScore(
                         middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
-                                freeSemester != null && freeSemester.equals("3-1") ? 0 : 54)
+                                freeSemester.equals("3-1") ? 0 : 54)
                 );
                 achievement3_2 = calcGeneralScore(
-                        middleSchoolAchievement.getAchievement3_1(), BigDecimal.valueOf(
-                                freeSemester != null && freeSemester.equals("3-2") ? 0 : 54)
+                        middleSchoolAchievement.getAchievement3_2(), BigDecimal.valueOf(
+                                freeSemester.equals("3-2") ? 0 : 54)
                 );
             }
         }
@@ -121,11 +119,9 @@ public class CalculateGradeService {
         BigDecimal totalScore = totalSubjectsScore.add(totalNonSubjectsScore)
                 .setScale(3, RoundingMode.HALF_UP);
 
-        // 석차 백분율
-        BigDecimal percentileRank = calcPercentileRank(totalScore);
-
         EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
                 .generalSubjectsScore(generalSubjectsScore)
+                .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
                 .attendanceScore(attendanceScore)
                 .totalSubjectsScore(totalSubjectsScore)
                 .attendanceScore(attendanceScore)
@@ -136,7 +132,6 @@ public class CalculateGradeService {
                 .score2_2(achievement2_2)
                 .score3_1(achievement3_1)
                 .score3_2(achievement3_2)
-                .percentileRank(percentileRank)
                 .build();
 
         EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
@@ -187,14 +182,12 @@ public class CalculateGradeService {
         // 3. 각 등급별 갯수를 더한 값에 5를 곰해 총점을 구한다.
         int maxScore = 5 * totalSubjects;
 
-        // TODO 작년 구현에서 과목수가 0일시 36.00점을 반환하는 로직의 존재 이유를 모르겠어서 주석처리
-        /*
-            if (totalSubjects == 0) {
-                return BigDecimal.valueOf(36).setScale(3, RoundingMode.HALF_UP);
-            }
-        */
+        // 과목 수가 0일시 0점 반환
+        if (totalSubjects == 0) {
+            return BigDecimal.ZERO.setScale(3, RoundingMode.HALF_UP);
+        }
 
-        BigDecimal averageOfAchievementScale  = BigDecimal.valueOf(totalScores).divide(BigDecimal.valueOf(maxScore), 3, RoundingMode.HALF_UP);
+        BigDecimal averageOfAchievementScale = BigDecimal.valueOf(totalScores).divide(BigDecimal.valueOf(maxScore), 3, RoundingMode.HALF_UP);
         return BigDecimal.valueOf(60).multiply(averageOfAchievementScale).setScale(3, RoundingMode.HALF_UP);
     }
 
@@ -240,13 +233,6 @@ public class CalculateGradeService {
                 return current.add(BigDecimal.valueOf(2));
             }
         });
-    }
-
-    private BigDecimal calcPercentileRank(BigDecimal totalScore) {
-        // (1 - 내신 총 점수 / 300) * 100 (소수점 넷째 자리에서 반올림)
-        return BigDecimal.ONE.subtract(totalScore.divide(BigDecimal.valueOf(300), 20, RoundingMode.HALF_UP))
-                .multiply(BigDecimal.valueOf(100))
-                .setScale(3, RoundingMode.HALF_UP);
     }
 
 }

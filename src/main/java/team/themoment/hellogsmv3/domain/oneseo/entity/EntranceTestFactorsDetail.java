@@ -60,6 +60,4 @@ public class EntranceTestFactorsDetail {
     @Column(name = "ged_max_score")
     private BigDecimal gedMaxScore;
 
-    @Column(name = "percentile_rank")
-    private BigDecimal percentileRank;
 }
