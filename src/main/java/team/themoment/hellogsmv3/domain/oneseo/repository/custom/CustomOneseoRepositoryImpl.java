@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
 import java.util.List;
@@ -79,15 +80,33 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
                         )
                 );
 
-        if (screening != null)
-            builder.and(oneseo.appliedScreening.stringValue().like("%" + screening + "%"));
-
-        if (isSubmitted != null)
-            builder.and(oneseo.realOneseoArrivedYn.eq(isSubmitted));
-
+        applyScreeningTag(builder, screening);
+        applyIsSubmittedTag(builder, isSubmitted);
         applyTestResultTag(builder, testResultTag);
 
         return builder;
+    }
+
+    private void applyScreeningTag(
+            BooleanBuilder builder,
+            ScreeningCategory screening
+    ) {
+
+        switch (screening) {
+            case GENERAL ->
+                    builder.and(
+                            oneseo.appliedScreening.eq(Screening.GENERAL)
+                    );
+            case SPECIAL ->
+                    builder.and(
+                            oneseo.appliedScreening.eq(Screening.SPECIAL)
+                    );
+            case EXTRA ->
+                    builder.andAnyOf(
+                            oneseo.appliedScreening.eq(Screening.EXTRA_ADMISSION),
+                            oneseo.appliedScreening.eq(Screening.EXTRA_VETERANS)
+                    );
+        }
     }
 
     private void applyIsSubmittedTag(
