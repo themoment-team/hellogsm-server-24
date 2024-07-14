@@ -4,10 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import team.themoment.hellogsmv3.domain.application.type.ApplicationSearchTag;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.ApplicantStatusTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.ScreeningTag;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.SubmissionStatusTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.type.SearchTag;
 import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.SearchOneseoService;
@@ -55,26 +56,13 @@ public class OneseoController {
     public SearchOneseosResDto search(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size,
-            @RequestParam(name = "tag", required = false) String tag,
+            @RequestParam(name = "applicantStatus") ApplicantStatusTag applicantStatus,
+            @RequestParam(name = "screening", required = false) ScreeningTag screening,
+            @RequestParam(name = "submissionStatus", required = false) SubmissionStatusTag submissionStatus,
             @RequestParam(name = "keyword", required = false) String keyword
     ) {
-        validatePageAndSize(page, size);
-        SearchTag searchTag = validateAndConvertTag(tag);
-        return searchOneseoService.execute(page, size, searchTag, keyword);
-    }
-
-    private void validatePageAndSize(Integer page, Integer size) {
         if (page < 0 || size < 0)
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
-    }
-
-    private SearchTag validateAndConvertTag(String tag) {
-        if (tag == null)
-            return null;
-        try {
-            return SearchTag.valueOf(tag);
-        } catch (IllegalArgumentException e) {
-            throw new ExpectedException("유효하지 않은 tag입니다", HttpStatus.BAD_REQUEST);
-        }
+        return searchOneseoService.execute(page, size, applicantStatus, screening, submissionStatus, keyword);
     }
 }
