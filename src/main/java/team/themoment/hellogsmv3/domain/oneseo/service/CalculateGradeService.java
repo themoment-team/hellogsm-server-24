@@ -28,8 +28,7 @@ public class CalculateGradeService {
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
 
         String liberalSystem = dto.liberalSystem();
-        String freeSemester = "";
-        freeSemester = dto.freeSemester();
+        String freeSemester = dto.freeSemester() != null ? dto.freeSemester() : "";
 
         BigDecimal achievement1_2 = BigDecimal.ZERO;
         BigDecimal achievement2_1 = BigDecimal.ZERO;
