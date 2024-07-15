@@ -2,7 +2,7 @@ package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import team.themoment.hellogsmv3.domain.oneseo.dto.MiddleSchoolAchievementData;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
@@ -22,14 +22,14 @@ public class CalculateGradeService {
     private final EntranceTestResultRepository entranceTestResultRepository;
     private final EntranceTestFactorsDetailRepository entranceTestFactorsDetailRepository;
 
-    public void execute(MiddleSchoolAchievementData data, Oneseo oneseo, GraduationType graduationType) {
+    public void execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
 
         if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
 
-        String liberalSystem = data.liberalSystem();
+        String liberalSystem = dto.liberalSystem();
         String freeSemester = "";
-        freeSemester = data.freeSemester();
+        freeSemester = dto.freeSemester();
 
         BigDecimal achievement1_2 = BigDecimal.ZERO;
         BigDecimal achievement2_1 = BigDecimal.ZERO;
@@ -40,42 +40,42 @@ public class CalculateGradeService {
         switch (graduationType) {
             case CANDIDATE -> {
                 achievement1_2 = calcGeneralScore(
-                        data.achievement1_2(), BigDecimal.valueOf(
+                        dto.achievement1_2(), BigDecimal.valueOf(
                                 liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 54)
                 );
                 achievement2_1 = calcGeneralScore(
-                        data.achievement2_1(), BigDecimal.valueOf(
+                        dto.achievement2_1(), BigDecimal.valueOf(
                                 freeSemester.equals("2-1") ? 0 : 54)
                 );
                 achievement2_2 = calcGeneralScore(
-                        data.achievement2_2(), BigDecimal.valueOf(
+                        dto.achievement2_2(), BigDecimal.valueOf(
                                 freeSemester.equals("2-2") ? 0 : (freeSemester.equals("3-1") ? 72 : 54))
                 );
                 achievement3_1 = calcGeneralScore(
-                        data.achievement3_1(), BigDecimal.valueOf(
+                        dto.achievement3_1(), BigDecimal.valueOf(
                                 freeSemester.equals("3-1") ? 0 : 72)
                 );
             }
             case GRADUATE -> {
                 achievement1_2 = calcGeneralScore(
-                        data.achievement1_2(), BigDecimal.valueOf(
+                        dto.achievement1_2(), BigDecimal.valueOf(
                                 liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 36)
                 );
                 achievement2_1 = calcGeneralScore(
-                        data.achievement2_1(), BigDecimal.valueOf(
+                        dto.achievement2_1(), BigDecimal.valueOf(
                                 freeSemester.equals("2-1") ? 0 : 36)
                 );
                 achievement2_2 = calcGeneralScore(
-                        data.achievement2_2(), BigDecimal.valueOf(
+                        dto.achievement2_2(), BigDecimal.valueOf(
                                 freeSemester.equals("2-2") ? 0 :
                                         (freeSemester.equals("3-1") || freeSemester.equals("3-2")) ? 54 : 36)
                 );
                 achievement3_1 = calcGeneralScore(
-                        data.achievement3_1(), BigDecimal.valueOf(
+                        dto.achievement3_1(), BigDecimal.valueOf(
                                 freeSemester.equals("3-1") ? 0 : 54)
                 );
                 achievement3_2 = calcGeneralScore(
-                        data.achievement3_2(), BigDecimal.valueOf(
+                        dto.achievement3_2(), BigDecimal.valueOf(
                                 freeSemester.equals("3-2") ? 0 : 54)
                 );
             }
@@ -91,7 +91,7 @@ public class CalculateGradeService {
                 .setScale(3, RoundingMode.HALF_UP);
 
         // 예체능 성적 환산값 (총점: 60점)
-        BigDecimal artsPhysicalSubjectsScore = calcArtSportsScore(data.artsPhysicalAchievement());
+        BigDecimal artsPhysicalSubjectsScore = calcArtSportsScore(dto.artsPhysicalAchievement());
 
 
         // 교과 성적 환산값 (예체능 성적 + 일반 교과 성적, 총점: 240점)
@@ -101,11 +101,11 @@ public class CalculateGradeService {
 
         // 출결 성적 (총점: 30점)
         BigDecimal attendanceScore = calcAttendanceScore(
-                data.absentDays(), data.attendanceDays()
+                dto.absentDays(), dto.attendanceDays()
         ).setScale(3, RoundingMode.HALF_UP);
 
         // 봉사 성적 (총점: 30점)
-        BigDecimal volunteerScore = calcVolunteerScore(data.volunteerTime())
+        BigDecimal volunteerScore = calcVolunteerScore(dto.volunteerTime())
                 .setScale(3, RoundingMode.HALF_UP);
 
         // 비 교과 성적 환산값 (총점: 60점)

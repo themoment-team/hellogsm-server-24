@@ -2,7 +2,7 @@ package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import team.themoment.hellogsmv3.domain.oneseo.dto.MiddleSchoolAchievementData;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
@@ -20,13 +20,13 @@ public class CalculateGedService {
     private final EntranceTestResultRepository entranceTestResultRepository;
     private final EntranceTestFactorsDetailRepository entranceTestFactorsDetailRepository;
 
-    public void execute(MiddleSchoolAchievementData data, Oneseo oneseo, GraduationType graduationType) {
+    public void execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
 
         if (!graduationType.equals(GED))
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
 
-        BigDecimal gedTotalScore = data.gedTotalScore();
-        BigDecimal gedMaxScore = data.gedMaxScore();
+        BigDecimal gedTotalScore = dto.gedTotalScore();
+        BigDecimal gedMaxScore = dto.gedMaxScore();
 
         // 검정고시 평균 점수
         BigDecimal averageScore = gedTotalScore.divide(gedMaxScore, 2, RoundingMode.HALF_UP)

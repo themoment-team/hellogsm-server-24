@@ -6,12 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
-import team.themoment.hellogsmv3.domain.oneseo.dto.MiddleSchoolAchievementData;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -46,7 +45,7 @@ public class UpdateFinalSubmissionService {
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
 
         GraduationType graduationType = oneseoPrivacyDetail.getGraduationType();
-        MiddleSchoolAchievementData data = MiddleSchoolAchievementData.builder()
+        MiddleSchoolAchievementReqDto data = MiddleSchoolAchievementReqDto.builder()
                 .achievement1_2(middleSchoolAchievement.getAchievement1_2())
                 .achievement2_1(middleSchoolAchievement.getAchievement2_1())
                 .achievement2_2(middleSchoolAchievement.getAchievement2_2())

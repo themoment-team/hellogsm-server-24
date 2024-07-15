@@ -1,8 +1,11 @@
 package team.themoment.hellogsmv3.domain.oneseo.dto.request;
 
+import lombok.Builder;
+
 import java.math.BigDecimal;
 import java.util.List;
 
+@Builder
 public record MiddleSchoolAchievementReqDto(
 
         List<BigDecimal> achievement1_2,
