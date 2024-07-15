@@ -83,7 +83,7 @@ public class SearchOneseoService {
     private SearchOneseoResDto buildSearchOneseoResDto(Oneseo oneseo) {
         Member member = oneseo.getMember();
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
-        Optional<EntranceTestResult> entranceTestResultOpt = entranceTestResultRepository.findByOneseo(oneseo); // TODO 최종제출된 원서는 EntranceTestResult가 무조건 존재해서 Opt 필요없을듯
+        EntranceTestResult entranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);
 
         return SearchOneseoResDto.builder()
                 .memberId(member.getId())
@@ -95,10 +95,10 @@ public class SearchOneseoService {
                 .phoneNumber(member.getPhoneNumber())
                 .guardianPhoneNumber(oneseoPrivacyDetail.getGuardianPhoneNumber())
                 .schoolTeacherPhoneNumber(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber())
-                .firstTestPassYn(entranceTestResultOpt.map(EntranceTestResult::getFirstTestPassYn).orElse(null))
-                .aptitudeEvaluationScore(entranceTestResultOpt.map(EntranceTestResult::getAptitudeEvaluationScore).orElse(null))
-                .interviewScore(entranceTestResultOpt.map(EntranceTestResult::getInterviewScore).orElse(null))
-                .secondTestPassYn(entranceTestResultOpt.map(EntranceTestResult::getSecondTestPassYn).orElse(null))
+                .firstTestPassYn(entranceTestResult.getFirstTestPassYn())
+                .aptitudeEvaluationScore(entranceTestResult.getAptitudeEvaluationScore())
+                .interviewScore(entranceTestResult.getInterviewScore())
+                .secondTestPassYn(entranceTestResult.getSecondTestPassYn())
                 .build();
     }
 }
