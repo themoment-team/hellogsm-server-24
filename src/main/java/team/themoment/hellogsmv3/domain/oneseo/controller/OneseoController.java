@@ -57,12 +57,12 @@ public class OneseoController {
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size,
             @RequestParam(name = "testResultTag") TestResultTag testResultTag,
-            @RequestParam(name = "screening", required = false) ScreeningCategory screening,
+            @RequestParam(name = "screeningTag", required = false) ScreeningCategory screeningTag,
             @RequestParam(name = "isSubmitted", required = false) YesNo isSubmitted,
             @RequestParam(name = "keyword", required = false) String keyword
     ) {
         if (page < 0 || size < 0)
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
-        return searchOneseoService.execute(page, size, testResultTag, screening, isSubmitted, keyword);
+        return searchOneseoService.execute(page, size, testResultTag, screeningTag, isSubmitted, keyword);
     }
 }
