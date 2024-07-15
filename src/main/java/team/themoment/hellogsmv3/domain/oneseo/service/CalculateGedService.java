@@ -2,11 +2,11 @@ package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import team.themoment.hellogsmv3.domain.oneseo.dto.MiddleSchoolAchievementData;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,17 +19,14 @@ public class CalculateGedService {
 
     private final EntranceTestResultRepository entranceTestResultRepository;
     private final EntranceTestFactorsDetailRepository entranceTestFactorsDetailRepository;
-    private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
 
-    public void execute(Oneseo oneseo, GraduationType graduationType) {
+    public void execute(MiddleSchoolAchievementData data, Oneseo oneseo, GraduationType graduationType) {
 
         if (!graduationType.equals(GED))
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
 
-        MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
-
-        BigDecimal gedTotalScore = middleSchoolAchievement.getGedTotalScore();
-        BigDecimal gedMaxScore = middleSchoolAchievement.getGedMaxScore();
+        BigDecimal gedTotalScore = data.gedTotalScore();
+        BigDecimal gedMaxScore = data.gedMaxScore();
 
         // 검정고시 평균 점수
         BigDecimal averageScore = gedTotalScore.divide(gedMaxScore, 2, RoundingMode.HALF_UP)
@@ -38,9 +35,9 @@ public class CalculateGedService {
         // 검정고시 교과 성적 환산 점수 (총점: 240점)
         BigDecimal gedTotalSubjectsScore = calcGedTotalSubjectsScore(averageScore);
 
-        // 검정고시 봉사활동 성적 환산 점수 (총점: 30점)
+        // 검정고시 봉사 성적 환산 점수 (총점: 30점)
         BigDecimal gedVolunteerScore = calcGedVolunteerScore(averageScore);
-        // 검정고시 출석 성적 점수 (총점: 30점)
+        // 검정고시 출결 성적 점수 (총점: 30점)
         BigDecimal gedAttendanceScore = BigDecimal.valueOf(30);
 
         // 검정고시 비 교과 성적 환산 점수 (총점: 60점)
@@ -62,7 +59,6 @@ public class CalculateGedService {
 
         entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
         entranceTestResultRepository.save(entranceTestResult);
-
     }
 
     private BigDecimal calcGedTotalSubjectsScore(BigDecimal averageScore) {
