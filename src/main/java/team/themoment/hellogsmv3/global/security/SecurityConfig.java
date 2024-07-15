@@ -225,6 +225,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/oneseo/v3/aptitude-score/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+                .requestMatchers(HttpMethod.POST, "/oneseo/v3/image").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
                 .anyRequest().permitAll()
         );
     }
