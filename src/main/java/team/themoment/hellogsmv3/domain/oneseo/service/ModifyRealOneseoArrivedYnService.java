@@ -25,7 +25,9 @@ public class ModifyRealOneseoArrivedYnService {
         Oneseo oneseo = oneseoRepository.findByMember(member)
                 .orElseThrow(() -> new ExpectedException("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
 
-        oneseoRepository.save(switchRealOneseoArrivedYn(oneseo));
+        Oneseo modifiedOneseo = switchRealOneseoArrivedYn(oneseo);
+
+        oneseoRepository.save(modifiedOneseo);
     }
 
     private Oneseo switchRealOneseoArrivedYn(Oneseo oneseo) {
