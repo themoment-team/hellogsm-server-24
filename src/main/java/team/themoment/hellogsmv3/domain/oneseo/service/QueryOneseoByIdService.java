@@ -70,11 +70,11 @@ public class QueryOneseoByIdService {
             MiddleSchoolAchievement middleSchoolAchievement
     ) {
         return MiddleSchoolAchievementResDto.builder()
-                .achievement1_1(middleSchoolAchievement.getAchievement1_1())
                 .achievement1_2(middleSchoolAchievement.getAchievement1_2())
                 .achievement2_1(middleSchoolAchievement.getAchievement2_1())
                 .achievement2_2(middleSchoolAchievement.getAchievement2_2())
                 .achievement3_1(middleSchoolAchievement.getAchievement3_1())
+                .achievement3_2(middleSchoolAchievement.getAchievement3_2())
                 .generalSubjects(middleSchoolAchievement.getGeneralSubjects())
                 .newSubjects(middleSchoolAchievement.getNewSubjects())
                 .artsPhysicalAchievement(middleSchoolAchievement.getArtsPhysicalAchievement())
