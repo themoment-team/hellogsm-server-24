@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.AptitudeEvaluationScoreReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
-import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
-import team.themoment.hellogsmv3.domain.oneseo.service.ModifyAptitudeEvaluationScoreService;
-import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
-import team.themoment.hellogsmv3.domain.oneseo.service.ModifyRealOneseoArrivedYnService;
+import team.themoment.hellogsmv3.domain.oneseo.service.*;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 
@@ -21,6 +18,7 @@ public class OneseoController {
     private final ModifyOneseoService modifyOneseoService;
     private final ModifyRealOneseoArrivedYnService modifyRealOneseoArrivedYnService;
     private final ModifyAptitudeEvaluationScoreService modifyAptitudeEvaluationScoreService;
+    private final DeleteOneseoService deleteOneseoService;
 
     @PostMapping("/oneseo/me")
     public CommonApiResponse create(
@@ -64,5 +62,13 @@ public class OneseoController {
     ) {
         modifyAptitudeEvaluationScoreService.execute(memberId, aptitudeEvaluationScoreReqDto);
         return CommonApiResponse.success("수정되었습니다.");
+    }
+
+    @DeleteMapping("/oneseo/me")
+    public CommonApiResponse deleteMyOneseo(
+            @AuthRequest Long memberId
+    ) {
+        deleteOneseoService.execute(memberId);
+        return CommonApiResponse.success("삭제되었습니다.");
     }
 }
