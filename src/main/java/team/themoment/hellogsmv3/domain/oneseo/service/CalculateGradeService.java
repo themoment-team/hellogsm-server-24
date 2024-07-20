@@ -31,50 +31,50 @@ public class CalculateGradeService {
         String liberalSystem = dto.liberalSystem();
         String freeSemester = dto.freeSemester() != null ? dto.freeSemester() : "";
 
-        BigDecimal achievement1_2 = BigDecimal.ZERO;
-        BigDecimal achievement2_1 = BigDecimal.ZERO;
-        BigDecimal achievement2_2 = BigDecimal.ZERO;
-        BigDecimal achievement3_1 = BigDecimal.ZERO;
-        BigDecimal achievement3_2 = BigDecimal.ZERO;
+        BigDecimal score1_2 = BigDecimal.ZERO;
+        BigDecimal score2_1 = BigDecimal.ZERO;
+        BigDecimal score2_2 = BigDecimal.ZERO;
+        BigDecimal score3_1 = BigDecimal.ZERO;
+        BigDecimal score3_2 = BigDecimal.ZERO;
 
         switch (graduationType) {
             case CANDIDATE -> {
-                achievement1_2 = calcGeneralScore(
+                score1_2 = calcGeneralScore(
                         dto.achievement1_2(), BigDecimal.valueOf(
                                 liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 54)
                 );
-                achievement2_1 = calcGeneralScore(
+                score2_1 = calcGeneralScore(
                         dto.achievement2_1(), BigDecimal.valueOf(
                                 freeSemester.equals("2-1") ? 0 : 54)
                 );
-                achievement2_2 = calcGeneralScore(
+                score2_2 = calcGeneralScore(
                         dto.achievement2_2(), BigDecimal.valueOf(
                                 freeSemester.equals("2-2") ? 0 : (freeSemester.equals("3-1") ? 72 : 54))
                 );
-                achievement3_1 = calcGeneralScore(
+                score3_1 = calcGeneralScore(
                         dto.achievement3_1(), BigDecimal.valueOf(
                                 freeSemester.equals("3-1") ? 0 : 72)
                 );
             }
             case GRADUATE -> {
-                achievement1_2 = calcGeneralScore(
+                score1_2 = calcGeneralScore(
                         dto.achievement1_2(), BigDecimal.valueOf(
                                 liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") ? 0 : 36)
                 );
-                achievement2_1 = calcGeneralScore(
+                score2_1 = calcGeneralScore(
                         dto.achievement2_1(), BigDecimal.valueOf(
                                 freeSemester.equals("2-1") ? 0 : 36)
                 );
-                achievement2_2 = calcGeneralScore(
+                score2_2 = calcGeneralScore(
                         dto.achievement2_2(), BigDecimal.valueOf(
                                 freeSemester.equals("2-2") ? 0 :
                                         (freeSemester.equals("3-1") || freeSemester.equals("3-2")) ? 54 : 36)
                 );
-                achievement3_1 = calcGeneralScore(
+                score3_1 = calcGeneralScore(
                         dto.achievement3_1(), BigDecimal.valueOf(
                                 freeSemester.equals("3-1") ? 0 : 54)
                 );
-                achievement3_2 = calcGeneralScore(
+                score3_2 = calcGeneralScore(
                         dto.achievement3_2(), BigDecimal.valueOf(
                                 freeSemester.equals("3-2") ? 0 : 54)
                 );
@@ -83,11 +83,11 @@ public class CalculateGradeService {
 
         // 일반 교과 성적 환산값 (총점: 180점)
         BigDecimal generalSubjectsScore = Stream.of(
-                        achievement1_2,
-                        achievement2_1,
-                        achievement2_2,
-                        achievement3_1,
-                        achievement3_2).reduce(BigDecimal.ZERO, BigDecimal::add)
+                        score1_2,
+                        score2_1,
+                        score2_2,
+                        score3_1,
+                        score3_2).reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(3, RoundingMode.HALF_UP);
 
         // 예체능 성적 환산값 (총점: 60점)
@@ -124,11 +124,11 @@ public class CalculateGradeService {
                 .attendanceScore(attendanceScore)
                 .volunteerScore(volunteerScore)
                 .totalNonSubjectsScore(totalNonSubjectsScore)
-                .score1_2(achievement1_2)
-                .score2_1(achievement2_1)
-                .score2_2(achievement2_2)
-                .score3_1(achievement3_1)
-                .score3_2(achievement3_2)
+                .score1_2(score1_2)
+                .score2_1(score2_1)
+                .score2_2(score2_2)
+                .score3_1(score3_1)a
+                .score3_2(score3_2)
                 .build();
 
         EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
