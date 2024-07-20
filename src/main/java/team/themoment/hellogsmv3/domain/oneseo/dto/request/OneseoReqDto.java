@@ -56,4 +56,5 @@ public record OneseoReqDto(
 
         @NotNull
         Screening screening
-) {}
+) {
+}
