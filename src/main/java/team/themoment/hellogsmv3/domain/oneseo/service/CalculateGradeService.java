@@ -141,9 +141,12 @@ public class CalculateGradeService {
         // 해당 학기의 등급별 점수 배열이 비어있거나 해당 학기의 배점이 없다면 0.000을 반환
         if (achievements == null || achievements.isEmpty() || maxPoint.equals(BigDecimal.ZERO)) return BigDecimal.valueOf(0).setScale(3, RoundingMode.HALF_UP);
 
-        // Integer 리스트를 BigDecimal 리스트로 변경
+        // Integer 리스트를 BigDecimal 리스트로 변경 & 등급 유효성 검사
         List<BigDecimal> convertedAchievements = new ArrayList<>();
-        achievements.forEach(achievement -> convertedAchievements.add(BigDecimal.valueOf(achievement)));
+        achievements.forEach(achievement -> {
+            if (achievement > 5 || achievement < 0) throw new IllegalArgumentException("올바르지 않은 일반교과 등급이 입력되었습니다.");
+            convertedAchievements.add(BigDecimal.valueOf(achievement));
+        });
 
         // 해당 학기에 수강하지 않은 과목이 있다면 제거한 리스트를 반환 (점수가 0인 원소 제거)
         List<BigDecimal> noZeroAchievements = convertedAchievements.stream().filter((score) -> score.compareTo(BigDecimal.ZERO) != 0).toList();
@@ -178,6 +181,8 @@ public class CalculateGradeService {
                 bCount++;
             } else if (score.equals(C)) {
                 cCount++;
+            } else {
+                throw new IllegalArgumentException("올바르지 않은 예체능 등급이 입력되었습니다.");
             }
         }
 
