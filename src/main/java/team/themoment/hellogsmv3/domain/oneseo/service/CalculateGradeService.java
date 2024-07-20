@@ -169,12 +169,12 @@ public class CalculateGradeService {
         // 1. 각 등급별 갯수에 등급별 배점을 곱한 값을 더한다.
         int totalScores = achievements.stream().reduce(0, Integer::sum);
         // 2. 각 등급별 갯수를 모두 더해 성취 수를 구한다.
-        int totalSubjects = achievements.stream().filter(achievement -> achievement != 0).toList().size();
+        int achievementCount = achievements.stream().filter(achievement -> achievement != 0).toList().size();
         // 3. 각 등급별 갯수를 더한 값(성취 수)에 5를 곰해 총점을 구한다.
-        int maxScore = 5 * totalSubjects;
+        int maxScore = 5 * achievementCount;
 
         // 과목 수가 0일시 0점 반환
-        if (totalSubjects == 0) {
+        if (achievementCount == 0) {
             return BigDecimal.ZERO.setScale(3, RoundingMode.HALF_UP);
         }
 
