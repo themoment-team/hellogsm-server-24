@@ -183,9 +183,9 @@ public class CalculateGradeService {
 
         // 1. 각 등급별 갯수에 등급별 배점을 곱한 값을 더한다.
         int totalScores = (aCount * 5) + (bCount * 4) + (cCount * 3);
-        // 2. 각 등급별 갯수를 모두 더해 과목 수를 구한다.
+        // 2. 각 등급별 갯수를 모두 더해 성취 수를 구한다.
         int totalSubjects = aCount + bCount + cCount;
-        // 3. 각 등급별 갯수를 더한 값에 5를 곰해 총점을 구한다.
+        // 3. 각 등급별 갯수를 더한 값(성취 수)에 5를 곰해 총점을 구한다.
         int maxScore = 5 * totalSubjects;
 
         // 과목 수가 0일시 0점 반환
