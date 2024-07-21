@@ -58,7 +58,6 @@ public class CreateOneseoService {
                         .build())
                 .realOneseoArrivedYn(NO)
                 .finalSubmittedYn(NO)
-                .wantedScreening(reqDto.screening())
                 .appliedScreening(reqDto.screening())
                 .build();
     }
