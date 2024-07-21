@@ -37,6 +37,7 @@ public class ModifyRealOneseoArrivedYnService {
                 .desiredMajors(oneseo.getDesiredMajors())
                 .oneseoSubmitCode(oneseo.getOneseoSubmitCode())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn() == YesNo.YES ? YesNo.NO : YesNo.YES)
+                .finalSubmittedYn(oneseo.getFinalSubmittedYn())
                 .appliedScreening(oneseo.getAppliedScreening())
                 .build();
     }
