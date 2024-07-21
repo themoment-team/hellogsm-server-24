@@ -28,7 +28,7 @@ public class Oneseo {
     private Member member;
 
     @Column(name = "oneseo_submit_code")
-    private Long oneseoSubmitCode;
+    private String oneseoSubmitCode;
 
     @NotNull
     @Embedded
@@ -49,4 +49,11 @@ public class Oneseo {
     @Enumerated(EnumType.STRING)
     @Column(name = "applied_screening", nullable = false)
     private Screening appliedScreening;
+
+
+    public Oneseo setOneseoSubmitCode(String submitCode) {
+        this.oneseoSubmitCode = submitCode;
+
+        return this;
+    }
 }
