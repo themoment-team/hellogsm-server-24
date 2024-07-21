@@ -91,6 +91,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
             BooleanBuilder builder,
             ScreeningCategory screening
     ) {
+        if (screening == null) return;
 
         switch (screening) {
             case GENERAL ->
@@ -113,6 +114,8 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
             BooleanBuilder builder,
             YesNo isSubmitted
     ) {
+        if (isSubmitted == null) return;
+
 
         switch (isSubmitted) {
             case YES ->

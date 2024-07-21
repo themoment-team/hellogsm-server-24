@@ -223,7 +223,8 @@ public class SecurityConfig {
                         Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.GET, "/oneseo/v3/oneseo/search").hasAnyAuthority(
-                        Role.ADMIN.name()
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
                 )
 
                 .anyRequest().permitAll()
