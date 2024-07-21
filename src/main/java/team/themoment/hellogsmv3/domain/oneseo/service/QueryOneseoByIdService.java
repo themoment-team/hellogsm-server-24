@@ -8,7 +8,6 @@ import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
-import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -22,7 +21,6 @@ public class QueryOneseoByIdService {
     private final MemberRepository memberRepository;
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
-    private final EntranceTestResultRepository entranceTestResultRepository;
 
     public FoundOneseoResDto execute(Long memberId) {
         Member member = memberRepository.findById(memberId)
