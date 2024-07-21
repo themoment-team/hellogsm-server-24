@@ -19,7 +19,6 @@ public record MiddleSchoolAchievementResDto(
         List<String> artsPhysicalSubjects,
         List<BigDecimal> absentDays,
         List<BigDecimal> attendanceDays,
-        BigDecimal attendanceDay,
         List<BigDecimal> volunteerTime,
         String liberalSystem,
         String freeSemester,

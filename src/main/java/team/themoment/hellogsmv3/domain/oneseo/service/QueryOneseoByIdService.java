@@ -78,7 +78,6 @@ public class QueryOneseoByIdService {
                 .artsPhysicalSubjects(middleSchoolAchievement.getArtsPhysicalSubjects())
                 .absentDays(middleSchoolAchievement.getAbsentDays())
                 .attendanceDays(middleSchoolAchievement.getAttendanceDays())
-                .attendanceDay(null)    // TODO 출결 환산일수 계산식 추가
                 .volunteerTime(middleSchoolAchievement.getVolunteerTime())
                 .liberalSystem(middleSchoolAchievement.getLiberalSystem())
                 .freeSemester(middleSchoolAchievement.getFreeSemester())
