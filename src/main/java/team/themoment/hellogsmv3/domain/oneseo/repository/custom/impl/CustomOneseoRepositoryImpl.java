@@ -10,6 +10,7 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.custom.CustomOneseoRep
 import static team.themoment.hellogsmv3.domain.member.entity.QMember.member;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseo.oneseo;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseoPrivacyDetail.oneseoPrivacyDetail;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 )
                 .from(oneseo, oneseoPrivacyDetail)
                 .join(oneseo.member, member)
+                .where(oneseo.finalSubmittedYn.eq(YES))
                 .fetch();
     }
 }
