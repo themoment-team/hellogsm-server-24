@@ -33,7 +33,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
     @Override
     public Page<Oneseo> findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
             String keyword,
-            ScreeningCategory screening,
+            ScreeningCategory screeningTag,
             YesNo isSubmitted,
             TestResultTag testResultTag,
             Pageable pageable
@@ -41,7 +41,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
 
         BooleanBuilder builder = createBooleanBuilder(
                 keyword,
-                screening,
+                screeningTag,
                 isSubmitted,
                 testResultTag
         );
@@ -65,7 +65,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
 
     private BooleanBuilder createBooleanBuilder(
             String keyword,
-            ScreeningCategory screening,
+            ScreeningCategory screeningTag,
             YesNo isSubmitted,
             TestResultTag testResultTag
     ) {
@@ -80,7 +80,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
                         )
                 );
 
-        applyScreeningTag(builder, screening);
+        applyScreeningTag(builder, screeningTag);
         applyIsSubmittedTag(builder, isSubmitted);
         applyTestResultTag(builder, testResultTag);
 
@@ -89,11 +89,11 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
 
     private void applyScreeningTag(
             BooleanBuilder builder,
-            ScreeningCategory screening
+            ScreeningCategory screeningTag
     ) {
-        if (screening == null) return;
+        if (screeningTag == null) return;
 
-        switch (screening) {
+        switch (screeningTag) {
             case GENERAL ->
                     builder.and(
                             oneseo.appliedScreening.eq(Screening.GENERAL)
