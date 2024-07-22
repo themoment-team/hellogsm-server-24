@@ -46,6 +46,11 @@ public class ModifyRealOneseoArrivedYnService {
     }
 
     private void assignSubmitCode(Oneseo oneseo) {
+        if (oneseo.getRealOneseoArrivedYn().equals(YesNo.NO)) {
+            oneseo.setOneseoSubmitCode(null);
+            return;
+        }
+
         Integer maxSubmitCodeNumber = oneseoRepository.findMaxSubmitCodeByScreening(oneseo.getAppliedScreening());
         int newSubmitCodeNumber = (maxSubmitCodeNumber != null ? maxSubmitCodeNumber : 0) + 1;
 
