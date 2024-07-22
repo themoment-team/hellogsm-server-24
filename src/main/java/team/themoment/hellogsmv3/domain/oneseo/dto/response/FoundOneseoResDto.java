@@ -8,7 +8,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 public record FoundOneseoResDto(
 
         Long oneseoId,
-        Long submitCode,
+        String submitCode,
         Screening wantedScreening,
         DesiredMajorsResDto desiredMajors,
         OneseoPrivacyDetailResDto privacyDetail,
