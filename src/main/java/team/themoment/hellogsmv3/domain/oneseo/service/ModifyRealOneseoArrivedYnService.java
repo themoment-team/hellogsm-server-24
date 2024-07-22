@@ -52,18 +52,10 @@ public class ModifyRealOneseoArrivedYnService {
         String submitCode;
         ScreeningCategory screeningCategory = oneseo.getAppliedScreening().getScreeningCategory();
         switch (screeningCategory) {
-            case GENERAL -> {
-                submitCode = "A-" + newSubmitCodeNumber;
-            }
-            case SPECIAL -> {
-                submitCode = "B-" + newSubmitCodeNumber;
-            }
-            case EXTRA -> {
-                submitCode = "C-" + newSubmitCodeNumber;
-            }
-            default -> {
-                throw new IllegalArgumentException("Unexpected value: " + screeningCategory);
-            }
+            case GENERAL -> submitCode = "A-" + newSubmitCodeNumber;
+            case SPECIAL -> submitCode = "B-" + newSubmitCodeNumber;
+            case EXTRA -> submitCode = "C-" + newSubmitCodeNumber;
+            default -> throw new IllegalArgumentException("Unexpected value: " + screeningCategory);
         }
 
         oneseo.setOneseoSubmitCode(submitCode);
