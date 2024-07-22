@@ -30,7 +30,7 @@ public class Oneseo {
     private Member member;
 
     @Column(name = "oneseo_submit_code")
-    private Long oneseoSubmitCode;
+    private String oneseoSubmitCode;
 
     @NotNull
     @Embedded
