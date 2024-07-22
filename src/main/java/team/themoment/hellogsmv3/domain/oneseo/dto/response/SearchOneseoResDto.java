@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public record SearchOneseoResDto(
 
         Long memberId,
-        Long submitCode,
+        String submitCode,
         YesNo realOneseoArrivedYn,
         String name,
         Screening screening,
