@@ -83,26 +83,26 @@ public class CreateOneseoService {
     }
 
     private MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, Oneseo oneseo) {
-        MiddleSchoolAchievementReqDto transcript = reqDto.transcript();
+        MiddleSchoolAchievementReqDto middleSchoolAchievement = reqDto.middleSchoolAchievement();
 
         return MiddleSchoolAchievement.builder()
                 .oneseo(oneseo)
-                .achievement1_2(validationGeneralAchievement(transcript.achievement1_2()))
-                .achievement2_1(validationGeneralAchievement(transcript.achievement2_1()))
-                .achievement2_2(validationGeneralAchievement(transcript.achievement2_2()))
-                .achievement3_1(validationGeneralAchievement(transcript.achievement3_1()))
-                .achievement3_2(validationGeneralAchievement(transcript.achievement3_2()))
-                .generalSubjects(transcript.generalSubjects())
-                .newSubjects(transcript.newSubjects())
-                .artsPhysicalAchievement(validationArtsPhysicalAchievement(transcript.artsPhysicalAchievement()))
-                .artsPhysicalSubjects(transcript.artsPhysicalSubjects())
-                .absentDays(transcript.absentDays())
-                .attendanceDays(transcript.attendanceDays())
-                .volunteerTime(transcript.volunteerTime())
-                .liberalSystem(transcript.liberalSystem())
-                .freeSemester(transcript.freeSemester())
-                .gedTotalScore(transcript.gedTotalScore())
-                .gedMaxScore(transcript.gedMaxScore())
+                .achievement1_2(validationGeneralAchievement(middleSchoolAchievement.achievement1_2()))
+                .achievement2_1(validationGeneralAchievement(middleSchoolAchievement.achievement2_1()))
+                .achievement2_2(validationGeneralAchievement(middleSchoolAchievement.achievement2_2()))
+                .achievement3_1(validationGeneralAchievement(middleSchoolAchievement.achievement3_1()))
+                .achievement3_2(validationGeneralAchievement(middleSchoolAchievement.achievement3_2()))
+                .generalSubjects(middleSchoolAchievement.generalSubjects())
+                .newSubjects(middleSchoolAchievement.newSubjects())
+                .artsPhysicalAchievement(validationArtsPhysicalAchievement(middleSchoolAchievement.artsPhysicalAchievement()))
+                .artsPhysicalSubjects(middleSchoolAchievement.artsPhysicalSubjects())
+                .absentDays(middleSchoolAchievement.absentDays())
+                .attendanceDays(middleSchoolAchievement.attendanceDays())
+                .volunteerTime(middleSchoolAchievement.volunteerTime())
+                .liberalSystem(middleSchoolAchievement.liberalSystem())
+                .freeSemester(middleSchoolAchievement.freeSemester())
+                .gedTotalScore(middleSchoolAchievement.gedTotalScore())
+                .gedMaxScore(middleSchoolAchievement.gedMaxScore())
                 .build();
     }
 

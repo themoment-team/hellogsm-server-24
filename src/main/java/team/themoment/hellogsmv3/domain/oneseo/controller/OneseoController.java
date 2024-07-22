@@ -47,7 +47,7 @@ public class OneseoController {
     }
 
     @PatchMapping("/final-submit")
-    public CommonApiResponse finalSubmission(
+    public CommonApiResponse finalSubmit(
             @AuthRequest Long memberId
     ) {
         updateFinalSubmissionService.execute(memberId);
