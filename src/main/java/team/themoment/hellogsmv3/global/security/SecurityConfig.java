@@ -226,7 +226,12 @@ public class SecurityConfig {
                         Role.ADMIN.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.PUT, "/oneseo/v3/final-submit").hasAnyAuthority(
+                        Role.APPLICANT.name()
+                )
 
+                // mock score calculate
+                .requestMatchers(HttpMethod.POST, "/oneseo/v3/calculate-mock-score").permitAll()
                 .anyRequest().permitAll()
         );
     }

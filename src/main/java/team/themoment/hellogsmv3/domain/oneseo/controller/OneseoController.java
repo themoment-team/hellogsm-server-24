@@ -12,6 +12,11 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.SearchOneseoService;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
+import team.themoment.hellogsmv3.domain.oneseo.service.CalculateMockScoreService;
+import team.themoment.hellogsmv3.domain.oneseo.service.UpdateFinalSubmissionService;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
@@ -24,6 +29,8 @@ public class OneseoController {
     private final CreateOneseoService createOneseoService;
     private final ModifyOneseoService modifyOneseoService;
     private final SearchOneseoService searchOneseoService;
+    private final UpdateFinalSubmissionService updateFinalSubmissionService;
+    private final CalculateMockScoreService calculateMockScoreService;
 
     @PostMapping("/oneseo/me")
     public CommonApiResponse create(
@@ -65,4 +72,21 @@ public class OneseoController {
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
         return searchOneseoService.execute(page, size, testResultTag, screeningTag, isSubmitted, keyword);
     }
+
+    @PatchMapping("/final-submit")
+    public CommonApiResponse finalSubmit(
+            @AuthRequest Long memberId
+    ) {
+        updateFinalSubmissionService.execute(memberId);
+        return CommonApiResponse.success("수정되었습니다.");
+    }
+
+    @PostMapping("/calculate-mock-score")
+    public MockScoreResDto calcMockScore(
+            @RequestBody MiddleSchoolAchievementReqDto dto,
+            @RequestParam("graduationType") GraduationType graduationType
+        ) {
+        return calculateMockScoreService.execute(dto, graduationType);
+    }
+
 }

@@ -21,7 +21,7 @@ import jakarta.validation.Valid;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.ModifyApplicationService;
-import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissionService;
+import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationFinalSubmissionService;
 import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationStatusService;
 
 
@@ -37,7 +37,7 @@ public class ApplicationController {
     private final QueryAllApplicationService queryAllApplicationService;
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
-    private final UpdateFinalSubmissionService updateFinalSubmissionService;
+    private final UpdateApplicationFinalSubmissionService updateFinalSubmissionService;
     private final UpdateApplicationStatusService updateApplicationStatusService;
     private final QueryAdmissionTicketsService queryAdmissionTicketsService;
     private final DeleteApplicationByAuthIdService deleteApplicationByAuthIdService;
