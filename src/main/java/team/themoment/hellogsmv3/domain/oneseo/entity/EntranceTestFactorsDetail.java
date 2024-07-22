@@ -36,9 +36,6 @@ public class EntranceTestFactorsDetail {
     @Column(name = "total_non_subjects_score")
     private BigDecimal totalNonSubjectsScore;
 
-    @Column(name = "score_1_1")
-    private BigDecimal score1_1;
-
     @Column(name = "score_1_2")
     private BigDecimal score1_2;
 
@@ -54,6 +51,4 @@ public class EntranceTestFactorsDetail {
     @Column(name = "score_3_2")
     private BigDecimal score3_2;
 
-    @Column(name = "percentile_rank")
-    private BigDecimal percentileRank;
 }
