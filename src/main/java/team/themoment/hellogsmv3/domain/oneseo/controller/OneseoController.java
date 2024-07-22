@@ -5,17 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.SearchOneseoService;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.service.CalculateMockScoreService;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
+import team.themoment.hellogsmv3.domain.oneseo.service.QueryOneseoByIdService;
 import team.themoment.hellogsmv3.domain.oneseo.service.UpdateFinalSubmissionService;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
@@ -29,6 +31,7 @@ public class OneseoController {
     private final CreateOneseoService createOneseoService;
     private final ModifyOneseoService modifyOneseoService;
     private final SearchOneseoService searchOneseoService;
+    private final QueryOneseoByIdService queryOneseoByIdService;
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
     private final CalculateMockScoreService calculateMockScoreService;
 
@@ -71,6 +74,20 @@ public class OneseoController {
         if (page < 0 || size < 0)
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
         return searchOneseoService.execute(page, size, testResultTag, screeningTag, isSubmitted, keyword);
+    }
+
+    @GetMapping("/oneseo/me")
+    public FoundOneseoResDto find(
+            @AuthRequest Long memberId
+    ) {
+        return queryOneseoByIdService.execute(memberId);
+    }
+
+    @GetMapping("/oneseo/{memberId}")
+    public FoundOneseoResDto findByAdmin(
+            @PathVariable Long memberId
+    ) {
+        return queryOneseoByIdService.execute(memberId);
     }
 
     @PatchMapping("/final-submit")
