@@ -91,27 +91,27 @@ public class ModifyOneseoService {
     }
 
     private MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, MiddleSchoolAchievement middleSchoolAchievement, Oneseo oneseo) {
-        MiddleSchoolAchievementReqDto transcript = reqDto.transcript();
+        MiddleSchoolAchievementReqDto updatedMiddleSchoolAchievement = reqDto.middleSchoolAchievement();
 
         return MiddleSchoolAchievement.builder()
                 .id(middleSchoolAchievement.getId())
                 .oneseo(oneseo)
-                .achievement1_2(validationGeneralAchievement(transcript.achievement1_2()))
-                .achievement2_1(validationGeneralAchievement(transcript.achievement2_1()))
-                .achievement2_2(validationGeneralAchievement(transcript.achievement2_2()))
-                .achievement3_1(validationGeneralAchievement(transcript.achievement3_1()))
-                .achievement3_2(validationGeneralAchievement(transcript.achievement3_2()))
-                .generalSubjects(transcript.generalSubjects())
-                .newSubjects(transcript.newSubjects())
-                .artsPhysicalAchievement(validationArtsPhysicalAchievement(transcript.artsPhysicalAchievement()))
-                .artsPhysicalSubjects(transcript.artsPhysicalSubjects())
-                .absentDays(transcript.absentDays())
-                .attendanceDays(transcript.attendanceDays())
-                .volunteerTime(transcript.volunteerTime())
-                .liberalSystem(transcript.liberalSystem())
-                .freeSemester(transcript.freeSemester())
-                .gedTotalScore(transcript.gedTotalScore())
-                .gedMaxScore(transcript.gedMaxScore())
+                .achievement1_2(validationGeneralAchievement(updatedMiddleSchoolAchievement.achievement1_2()))
+                .achievement2_1(validationGeneralAchievement(updatedMiddleSchoolAchievement.achievement2_1()))
+                .achievement2_2(validationGeneralAchievement(updatedMiddleSchoolAchievement.achievement2_2()))
+                .achievement3_1(validationGeneralAchievement(updatedMiddleSchoolAchievement.achievement3_1()))
+                .achievement3_2(validationGeneralAchievement(updatedMiddleSchoolAchievement.achievement3_2()))
+                .generalSubjects(updatedMiddleSchoolAchievement.generalSubjects())
+                .newSubjects(updatedMiddleSchoolAchievement.newSubjects())
+                .artsPhysicalAchievement(validationArtsPhysicalAchievement(updatedMiddleSchoolAchievement.artsPhysicalAchievement()))
+                .artsPhysicalSubjects(updatedMiddleSchoolAchievement.artsPhysicalSubjects())
+                .absentDays(updatedMiddleSchoolAchievement.absentDays())
+                .attendanceDays(updatedMiddleSchoolAchievement.attendanceDays())
+                .volunteerTime(updatedMiddleSchoolAchievement.volunteerTime())
+                .liberalSystem(updatedMiddleSchoolAchievement.liberalSystem())
+                .freeSemester(updatedMiddleSchoolAchievement.freeSemester())
+                .gedTotalScore(updatedMiddleSchoolAchievement.gedTotalScore())
+                .gedMaxScore(updatedMiddleSchoolAchievement.gedMaxScore())
                 .build();
     }
 

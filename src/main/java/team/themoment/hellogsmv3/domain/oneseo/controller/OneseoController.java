@@ -3,8 +3,12 @@ package team.themoment.hellogsmv3.domain.oneseo.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
+import team.themoment.hellogsmv3.domain.oneseo.service.CalculateMockScoreService;
 import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.QueryOneseoByIdService;
@@ -21,6 +25,7 @@ public class OneseoController {
     private final ModifyOneseoService modifyOneseoService;
     private final QueryOneseoByIdService queryOneseoByIdService;
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
+    private final CalculateMockScoreService calculateMockScoreService;
 
     @PostMapping("/oneseo/me")
     public CommonApiResponse create(
@@ -64,10 +69,19 @@ public class OneseoController {
     }
 
     @PatchMapping("/final-submit")
-    public CommonApiResponse finalSubmission(
+    public CommonApiResponse finalSubmit(
             @AuthRequest Long memberId
     ) {
         updateFinalSubmissionService.execute(memberId);
         return CommonApiResponse.success("수정되었습니다.");
     }
+
+    @PostMapping("/calculate-mock-score")
+    public MockScoreResDto calcMockScore(
+            @RequestBody MiddleSchoolAchievementReqDto dto,
+            @RequestParam("graduationType") GraduationType graduationType
+        ) {
+        return calculateMockScoreService.execute(dto, graduationType);
+    }
+
 }

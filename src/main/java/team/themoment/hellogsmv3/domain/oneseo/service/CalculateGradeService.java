@@ -1,8 +1,10 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
@@ -29,7 +31,7 @@ public class CalculateGradeService {
     private BigDecimal score3_1 = BigDecimal.ZERO;
     private BigDecimal score3_2 = BigDecimal.ZERO;
 
-    public void execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
+    public MockScoreResDto execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
 
         if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
@@ -65,25 +67,37 @@ public class CalculateGradeService {
         BigDecimal totalScore = totalSubjectsScore.add(totalNonSubjectsScore)
                 .setScale(3, RoundingMode.HALF_UP);
 
-        EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
-                .generalSubjectsScore(generalSubjectsScore)
-                .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
-                .attendanceScore(attendanceScore)
-                .totalSubjectsScore(totalSubjectsScore)
-                .attendanceScore(attendanceScore)
-                .volunteerScore(volunteerScore)
-                .totalNonSubjectsScore(totalNonSubjectsScore)
-                .score1_2(score1_2)
-                .score2_1(score2_1)
-                .score2_2(score2_2)
-                .score3_1(score3_1)
-                .score3_2(score3_2)
-                .build();
+        if (oneseo != null) {
+            EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
+                    .generalSubjectsScore(generalSubjectsScore)
+                    .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
+                    .totalSubjectsScore(totalSubjectsScore)
+                    .attendanceScore(attendanceScore)
+                    .volunteerScore(volunteerScore)
+                    .totalNonSubjectsScore(totalNonSubjectsScore)
+                    .score1_2(score1_2)
+                    .score2_1(score2_1)
+                    .score2_2(score2_2)
+                    .score3_1(score3_1)
+                    .score3_2(score3_2)
+                    .build();
 
-        EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
+            EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
 
-        entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
-        entranceTestResultRepository.save(entranceTestResult);
+            entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
+            entranceTestResultRepository.save(entranceTestResult);
+            return null;
+        } else {
+            return MockScoreResDto.builder()
+                    .generalSubjectsScore(generalSubjectsScore)
+                    .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
+                    .totalSubjectsScore(totalSubjectsScore)
+                    .volunteerScore(volunteerScore)
+                    .attendanceScore(attendanceScore)
+                    .totalNonSubjectsScore(totalNonSubjectsScore)
+                    .totalScore(totalScore)
+                    .build();
+        }
     }
 
     private BigDecimal calcGeneralSubjectsScore(MiddleSchoolAchievementReqDto dto, GraduationType graduationType, String liberalSystem, String freeSemester) {
