@@ -68,20 +68,28 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
     ) {
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(oneseo.finalSubmittedYn.eq(YesNo.YES))
-                .and(
-                        anyOf(
-                                oneseo.member.name.like("%" + keyword + "%"),
-                                oneseoPrivacyDetail.schoolName.like("%" + keyword + "%"),
-                                oneseo.member.phoneNumber.like("%" + keyword + "%")
-                        )
-                );
-
+        builder.and(oneseo.finalSubmittedYn.eq(YesNo.YES));
+        applyKeyword(builder, keyword);
         applyScreeningTag(builder, screeningTag);
         applyIsSubmittedTag(builder, isSubmitted);
         applyTestResultTag(builder, testResultTag);
 
         return builder;
+    }
+
+    private void applyKeyword(
+            BooleanBuilder builder,
+            String keyword
+    ) {
+        if (keyword == null) return;
+
+        builder.and(
+                anyOf(
+                        oneseo.member.name.like("%" + keyword + "%"),
+                        oneseoPrivacyDetail.schoolName.like("%" + keyword + "%"),
+                        oneseo.member.phoneNumber.like("%" + keyword + "%")
+                )
+        );
     }
 
     private void applyScreeningTag(
