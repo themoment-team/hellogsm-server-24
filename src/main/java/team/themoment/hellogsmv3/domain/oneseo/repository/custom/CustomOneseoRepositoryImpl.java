@@ -21,9 +21,6 @@ import static team.themoment.hellogsmv3.domain.member.entity.QMember.member;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QEntranceTestResult.entranceTestResult;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseoPrivacyDetail.oneseoPrivacyDetail;
 
-
-
-
 @Repository
 @RequiredArgsConstructor
 public class CustomOneseoRepositoryImpl implements CustomOneseoRepository{
