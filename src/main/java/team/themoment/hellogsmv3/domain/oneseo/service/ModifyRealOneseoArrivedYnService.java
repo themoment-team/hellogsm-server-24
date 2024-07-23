@@ -16,14 +16,14 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 public class ModifyRealOneseoArrivedYnService {
 
     private final MemberService memberService;
+    private final OneseoService oneseoService;
     private final OneseoRepository oneseoRepository;
 
     @Transactional
     public void execute(Long memberId) {
         Member member = memberService.findByIdOrThrow(memberId);
 
-        Oneseo oneseo = oneseoRepository.findByMember(member)
-                .orElseThrow(() -> new ExpectedException("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
+        Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
         oneseo.switchRealOneseoArrivedYn();
 
