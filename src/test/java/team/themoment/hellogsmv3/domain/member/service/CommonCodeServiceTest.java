@@ -43,6 +43,7 @@ class CommonCodeServiceTest {
         private final String validCode = "validCode";
         private final String validPhoneNumber = "010-1234-5678";
         private final String invalidCode = "invalidCode";
+        private final String invalidPhoneNumber = "010-8765-4321";
         private AuthenticationCode authenticationCode;
 
         @BeforeEach
@@ -134,6 +135,28 @@ class CommonCodeServiceTest {
                 });
 
                 assertEquals("유효하지 않은 요청입니다. 이전 혹은 잘못된 형식의 code입니다.", exception.getMessage());
+                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+            }
+        }
+
+        @Nested
+        @DisplayName("잘못된 전화번호가 주어지면")
+        class Context_with_invalid_phone_number {
+
+            @BeforeEach
+            void setUp() {
+                authenticationCode.authenticatedAuthenticationCode();
+                given(codeRepository.findByMemberId(memberId)).willReturn(Optional.of(authenticationCode));
+            }
+
+            @Test
+            @DisplayName("ExpectedException을 던진다")
+            void it_throws_expected_exception() {
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> {
+                    commonCodeService.validateAndDelete(memberId, validCode, invalidPhoneNumber);
+                });
+
+                assertEquals("유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", exception.getMessage());
                 assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             }
         }
