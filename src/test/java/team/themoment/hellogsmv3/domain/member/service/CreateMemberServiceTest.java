@@ -7,17 +7,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import team.themoment.hellogsmv3.domain.member.dto.CreateMemberReqDto;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -85,6 +88,28 @@ class CreateMemberServiceTest {
                                 member.getRole().equals(Role.APPLICANT)
                 ));
                 assertEquals(Role.APPLICANT, result);
+            }
+        }
+
+        @Nested
+        @DisplayName("회원 ID가 유효하지 않으면")
+        class Context_with_invalid_member_id {
+
+            @BeforeEach
+            void setUp() {
+                given(memberRepository.findById(memberId)).willReturn(Optional.empty());
+                doNothing().when(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
+            }
+
+            @Test
+            @DisplayName("ExpectedException을 던진다")
+            void it_throws_expected_exception() {
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> {
+                    createMemberService.execute(reqDto, memberId);
+                });
+
+                assertEquals("존재하지 않는 지원자입니다. member ID: " + memberId, exception.getMessage());
+                assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
             }
         }
     }
