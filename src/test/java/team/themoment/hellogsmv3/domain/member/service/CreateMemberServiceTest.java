@@ -1,0 +1,91 @@
+package team.themoment.hellogsmv3.domain.member.service;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import team.themoment.hellogsmv3.domain.member.dto.CreateMemberReqDto;
+import team.themoment.hellogsmv3.domain.member.entity.Member;
+import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
+import team.themoment.hellogsmv3.domain.member.entity.type.Role;
+import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
+import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+
+@DisplayName("CreateMemberService 클래스의")
+class CreateMemberServiceTest {
+
+    @Mock
+    private MemberRepository memberRepository;
+
+    @Mock
+    private CommonCodeService commonCodeService;
+
+    @InjectMocks
+    private CreateMemberService createMemberService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Nested
+    @DisplayName("execute 메소드는")
+    class Describe_execute {
+
+        private final Long memberId = 1L;
+        private final CreateMemberReqDto reqDto = new CreateMemberReqDto(
+                "validCode",
+                "최장우",
+                "01012345678",
+                Sex.MALE,
+                LocalDate.of(2006, 3, 6)
+        );
+
+        @Nested
+        @DisplayName("유효한 회원 ID와 요청 데이터가 주어지면")
+        class Context_with_valid_member_id_and_request_data {
+
+            private Member existingMember;
+
+            @BeforeEach
+            void setUp() {
+                existingMember = Member.builder()
+                        .id(memberId)
+                        .email("jangwooooo@example.com")
+                        .authReferrerType(AuthReferrerType.GOOGLE)
+                        .build();
+                given(memberRepository.findById(memberId)).willReturn(Optional.of(existingMember));
+                doNothing().when(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
+            }
+
+            @Test
+            @DisplayName("새로운 회원을 생성하고 저장 후 Role을 반환한다")
+            void it_creates_and_saves_new_member() {
+                Role result = createMemberService.execute(reqDto, memberId);
+
+                verify(memberRepository).save(org.mockito.ArgumentMatchers.argThat(
+                        member -> member.getId().equals(existingMember.getId()) &&
+                                member.getEmail().equals(existingMember.getEmail()) &&
+                                member.getAuthReferrerType().equals(existingMember.getAuthReferrerType()) &&
+                                member.getName().equals(reqDto.name()) &&
+                                member.getBirth().equals(reqDto.birth()) &&
+                                member.getPhoneNumber().equals(reqDto.phoneNumber()) &&
+                                member.getSex().equals(reqDto.sex()) &&
+                                member.getRole().equals(Role.APPLICANT)
+                ));
+                assertEquals(Role.APPLICANT, result);
+            }
+        }
+    }
+}
