@@ -25,20 +25,8 @@ public class ModifyRealOneseoArrivedYnService {
         Oneseo oneseo = oneseoRepository.findByMember(member)
                 .orElseThrow(() -> new ExpectedException("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
 
-        Oneseo modifiedOneseo = switchRealOneseoArrivedYn(oneseo);
+        oneseo.switchRealOneseoArrivedYn();
 
-        oneseoRepository.save(modifiedOneseo);
-    }
-
-    private Oneseo switchRealOneseoArrivedYn(Oneseo oneseo) {
-        return Oneseo.builder()
-                .id(oneseo.getId())
-                .member(oneseo.getMember())
-                .desiredMajors(oneseo.getDesiredMajors())
-                .oneseoSubmitCode(oneseo.getOneseoSubmitCode())
-                .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn() == YesNo.YES ? YesNo.NO : YesNo.YES)
-                .finalSubmittedYn(oneseo.getFinalSubmittedYn())
-                .appliedScreening(oneseo.getAppliedScreening())
-                .build();
+        oneseoRepository.save(oneseo);
     }
 }
