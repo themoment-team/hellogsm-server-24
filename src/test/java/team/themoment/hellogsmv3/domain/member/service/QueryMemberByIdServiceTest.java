@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberResDto;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -66,6 +68,29 @@ class QueryMemberByIdServiceTest {
                 assertEquals(LocalDate.of(2006, 3, 6), result.birth());
                 assertEquals("01012345678", result.phoneNumber());
                 assertEquals(Sex.MALE, result.sex());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 ID가 주어지면")
+        class Context_with_non_existing_member_id {
+
+            private final Long memberId = 2L;
+
+            @BeforeEach
+            void setUp() {
+                given(memberRepository.findById(memberId)).willReturn(Optional.empty());
+            }
+
+            @Test
+            @DisplayName("ExpectedException을 던진다")
+            void it_throws_expected_exception() {
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> {
+                    queryMemberByIdService.execute(memberId);
+                });
+
+                assertEquals("존재하지 않는 지원자입니다. member ID: " + memberId, exception.getMessage());
+                assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
             }
         }
     }
