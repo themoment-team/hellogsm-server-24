@@ -31,22 +31,8 @@ public class ModifyAptitudeEvaluationScoreService {
         EntranceTestResult entranceTestResult = entranceTestResultRepository.findEntranceTestResultByOneseo(oneseo)
                 .orElseThrow(() -> new ExpectedException("해당 지원자의 입학 시험 결과를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
 
-        EntranceTestResult modifiedEntranceTestResult = modifyAptitudeEvaluationScore(entranceTestResult, aptitudeEvaluationScoreReqDto.aptitudeEvaluationScore());
+        entranceTestResult.modifyAptitudeEvaluationScore(aptitudeEvaluationScoreReqDto.aptitudeEvaluationScore());
 
-        entranceTestResultRepository.save(modifiedEntranceTestResult);
-    }
-
-    private EntranceTestResult modifyAptitudeEvaluationScore(EntranceTestResult entranceTestResult, BigDecimal aptitudeEvaluationScore) {
-        return EntranceTestResult.builder()
-                .id(entranceTestResult.getId())
-                .oneseo(entranceTestResult.getOneseo())
-                .entranceTestFactorsDetail(entranceTestResult.getEntranceTestFactorsDetail())
-                .documentEvaluationScore(entranceTestResult.getDocumentEvaluationScore())
-                .firstTestPassYn(entranceTestResult.getFirstTestPassYn())
-                .aptitudeEvaluationScore(aptitudeEvaluationScore)
-                .interviewScore(entranceTestResult.getInterviewScore())
-                .secondTestPassYn(entranceTestResult.getSecondTestPassYn())
-                .decidedMajor(entranceTestResult.getDecidedMajor())
-                .build();
+        entranceTestResultRepository.save(entranceTestResult);
     }
 }
