@@ -93,5 +93,26 @@ class CommonCodeServiceTest {
                 assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             }
         }
+
+        @Nested
+        @DisplayName("인증코드가 인증받지 않았다면")
+        class Context_with_unauthenticated_code {
+
+            @BeforeEach
+            void setUp() {
+                given(codeRepository.findByMemberId(memberId)).willReturn(Optional.of(authenticationCode));
+            }
+
+            @Test
+            @DisplayName("ExpectedException을 던진다")
+            void it_throws_expected_exception_when_code_is_not_authenticated() {
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> {
+                    commonCodeService.validateAndDelete(memberId, validCode, validPhoneNumber);
+                });
+
+                assertEquals("유효하지 않은 요청입니다. 인증받지 않은 code입니다.", exception.getMessage());
+                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+            }
+        }
     }
 }
