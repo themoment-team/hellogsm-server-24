@@ -43,11 +43,10 @@ class QueryMemberByIdServiceTest {
         class Context_with_existing_member_id {
 
             private final Long memberId = 1L;
-            private Member member;
 
             @BeforeEach
             void setUp() {
-                member = Member.builder()
+                Member member = Member.builder()
                         .id(memberId)
                         .name("최장우")
                         .birth(LocalDate.of(2006, 3, 6))
