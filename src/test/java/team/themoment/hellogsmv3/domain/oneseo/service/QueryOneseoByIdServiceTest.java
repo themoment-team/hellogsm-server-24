@@ -105,6 +105,24 @@ class QueryOneseoByIdServiceTest {
                 assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
             }
         }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 ID가 주어지면")
+        class Context_with_non_existing_member_id {
+
+            @Test
+            @DisplayName("ExpectedException을 던진다")
+            void it_throws_expected_exception() {
+                given(memberRepository.findById(memberId)).willReturn(Optional.empty());
+
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> {
+                    queryOneseoByIdService.execute(memberId);
+                });
+
+                assertEquals("존재하지 않는 지원자입니다. member ID: " + memberId, exception.getMessage());
+                assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+            }
+        }
     }
 
     private Member buildMember(Long memberId) {
