@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.AptitudeEvaluationScoreReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
-import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
-import team.themoment.hellogsmv3.domain.oneseo.service.ModifyAptitudeEvaluationScoreService;
-import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
-import team.themoment.hellogsmv3.domain.oneseo.service.ModifyRealOneseoArrivedYnService;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.AdmissionTicketsResDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.ArrivedStatusResDto;
+import team.themoment.hellogsmv3.domain.oneseo.service.*;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/oneseo/v3")
@@ -21,6 +22,8 @@ public class OneseoController {
     private final ModifyOneseoService modifyOneseoService;
     private final ModifyRealOneseoArrivedYnService modifyRealOneseoArrivedYnService;
     private final ModifyAptitudeEvaluationScoreService modifyAptitudeEvaluationScoreService;
+    private final DeleteOneseoService deleteOneseoService;
+    private final QueryAdmissionTicketsService queryAdmissionTicketsService;
 
     @PostMapping("/oneseo/me")
     public CommonApiResponse create(
@@ -50,11 +53,10 @@ public class OneseoController {
     }
 
     @PatchMapping("/arrived-status/{memberId}")
-    public CommonApiResponse modifyArrivedStatus(
+    public ArrivedStatusResDto modifyArrivedStatus(
             @PathVariable Long memberId
     ) {
-        modifyRealOneseoArrivedYnService.execute(memberId);
-        return CommonApiResponse.success("수정되었습니다.");
+        return modifyRealOneseoArrivedYnService.execute(memberId);
     }
 
     @PatchMapping("/aptitude-score/{memberId}")
@@ -64,5 +66,19 @@ public class OneseoController {
     ) {
         modifyAptitudeEvaluationScoreService.execute(memberId, aptitudeEvaluationScoreReqDto);
         return CommonApiResponse.success("수정되었습니다.");
+    }
+
+    @DeleteMapping("/oneseo/me")
+    public CommonApiResponse deleteMyOneseo(
+            @AuthRequest Long memberId
+    ) {
+        deleteOneseoService.execute(memberId);
+        return CommonApiResponse.success("삭제되었습니다.");
+    }
+
+    @GetMapping("/admission-tickets")
+    public List<AdmissionTicketsResDto> getAdmissionTickets(
+    ) {
+        return queryAdmissionTicketsService.execute();
     }
 }
