@@ -52,4 +52,10 @@ public class EntranceTestResult {
     public void modifyAptitudeEvaluationScore(BigDecimal aptitudeEvaluationScore) {
         this.aptitudeEvaluationScore = aptitudeEvaluationScore;
     }
+
+    public EntranceTestResult(Oneseo oneseo, EntranceTestFactorsDetail entranceTestFactorsDetail, BigDecimal documentEvaluationScore) {
+        this.oneseo = oneseo;
+        this.entranceTestFactorsDetail = entranceTestFactorsDetail;
+        this.documentEvaluationScore = documentEvaluationScore;
+    }
 }

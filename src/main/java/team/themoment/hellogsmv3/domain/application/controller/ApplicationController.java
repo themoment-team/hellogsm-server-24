@@ -12,7 +12,7 @@ import team.themoment.hellogsmv3.domain.application.service.DeleteApplicationByA
 import team.themoment.hellogsmv3.domain.application.service.QueryAllApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.QueryApplicationByIdService;
 import team.themoment.hellogsmv3.domain.application.service.SearchApplicationService;
-import team.themoment.hellogsmv3.domain.application.type.SearchTag;
+import team.themoment.hellogsmv3.domain.application.type.ApplicationSearchTag;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
@@ -20,7 +20,7 @@ import jakarta.validation.Valid;
 import team.themoment.hellogsmv3.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsmv3.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsmv3.domain.application.service.ModifyApplicationService;
-import team.themoment.hellogsmv3.domain.application.service.UpdateFinalSubmissionService;
+import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationFinalSubmissionService;
 import team.themoment.hellogsmv3.domain.application.service.UpdateApplicationStatusService;
 
 
@@ -36,7 +36,7 @@ public class ApplicationController {
     private final QueryAllApplicationService queryAllApplicationService;
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
-    private final UpdateFinalSubmissionService updateFinalSubmissionService;
+    private final UpdateApplicationFinalSubmissionService updateFinalSubmissionService;
     private final UpdateApplicationStatusService updateApplicationStatusService;
     private final DeleteApplicationByAuthIdService deleteApplicationByAuthIdService;
 
@@ -58,8 +58,8 @@ public class ApplicationController {
             @RequestParam(name = "keyword", required = false) String keyword
     ) {
         validatePageAndSize(page, size);
-        SearchTag searchTag = validateAndConvertTag(tag);
-        return searchApplicationService.execute(page, size, searchTag, keyword);
+        ApplicationSearchTag applicationSearchTag = validateAndConvertTag(tag);
+        return searchApplicationService.execute(page, size, applicationSearchTag, keyword);
     }
 
     @GetMapping("/application/all")
@@ -120,12 +120,12 @@ public class ApplicationController {
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
     }
 
-    private SearchTag validateAndConvertTag(String tag) {
+    private ApplicationSearchTag validateAndConvertTag(String tag) {
         if (tag == null) {
             return null;
         }
         try {
-            return SearchTag.valueOf(tag);
+            return ApplicationSearchTag.valueOf(tag);
         } catch (IllegalArgumentException e) {
             throw new ExpectedException("유효하지 않은 tag입니다", HttpStatus.BAD_REQUEST);
         }

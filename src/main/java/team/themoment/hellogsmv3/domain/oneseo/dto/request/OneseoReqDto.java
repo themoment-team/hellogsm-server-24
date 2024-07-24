@@ -48,7 +48,7 @@ public record OneseoReqDto(
         @NotNull
         Major thirdDesiredMajor,
 
-        MiddleSchoolAchievementReqDto transcript,
+        MiddleSchoolAchievementReqDto middleSchoolAchievement,
 
         String schoolName,
 

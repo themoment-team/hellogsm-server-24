@@ -17,6 +17,8 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRep
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import java.util.List;
+
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @Service
@@ -80,26 +82,26 @@ public class CreateOneseoService {
     }
 
     private MiddleSchoolAchievement buildMiddleSchoolAchievement(OneseoReqDto reqDto, Oneseo oneseo) {
-        MiddleSchoolAchievementReqDto transcript = reqDto.transcript();
+        MiddleSchoolAchievementReqDto middleSchoolAchievement = reqDto.middleSchoolAchievement();
 
         return MiddleSchoolAchievement.builder()
                 .oneseo(oneseo)
-                .achievement1_1(transcript.achievement1_1())
-                .achievement1_2(transcript.achievement1_2())
-                .achievement2_1(transcript.achievement2_1())
-                .achievement2_2(transcript.achievement2_2())
-                .achievement3_1(transcript.achievement3_1())
-                .generalSubjects(transcript.generalSubjects())
-                .newSubjects(transcript.newSubjects())
-                .artsPhysicalAchievement(transcript.artsPhysicalAchievement())
-                .artsPhysicalSubjects(transcript.artsPhysicalSubjects())
-                .absentDays(transcript.absentDays())
-                .attendanceDays(transcript.attendanceDays())
-                .volunteerTime(transcript.volunteerTime())
-                .liberalSystem(transcript.liberalSystem())
-                .freeSemester(transcript.freeSemester())
-                .gedTotalScore(transcript.gedTotalScore())
-                .gedMaxScore(transcript.gedMaxScore())
+                .achievement1_2(validationGeneralAchievement(middleSchoolAchievement.achievement1_2()))
+                .achievement2_1(validationGeneralAchievement(middleSchoolAchievement.achievement2_1()))
+                .achievement2_2(validationGeneralAchievement(middleSchoolAchievement.achievement2_2()))
+                .achievement3_1(validationGeneralAchievement(middleSchoolAchievement.achievement3_1()))
+                .achievement3_2(validationGeneralAchievement(middleSchoolAchievement.achievement3_2()))
+                .generalSubjects(middleSchoolAchievement.generalSubjects())
+                .newSubjects(middleSchoolAchievement.newSubjects())
+                .artsPhysicalAchievement(validationArtsPhysicalAchievement(middleSchoolAchievement.artsPhysicalAchievement()))
+                .artsPhysicalSubjects(middleSchoolAchievement.artsPhysicalSubjects())
+                .absentDays(middleSchoolAchievement.absentDays())
+                .attendanceDays(middleSchoolAchievement.attendanceDays())
+                .volunteerTime(middleSchoolAchievement.volunteerTime())
+                .liberalSystem(middleSchoolAchievement.liberalSystem())
+                .freeSemester(middleSchoolAchievement.freeSemester())
+                .gedTotalScore(middleSchoolAchievement.gedTotalScore())
+                .gedMaxScore(middleSchoolAchievement.gedMaxScore())
                 .build();
     }
 
@@ -107,6 +109,26 @@ public class CreateOneseoService {
         if (oneseoRepository.existsByMember(currentMember)) {
             throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private List<Integer> validationGeneralAchievement(List<Integer> achievements)  {
+        if (achievements == null) return null;
+
+        achievements.forEach(achievement -> {
+            if (achievement > 5 || achievement < 0) throw new ExpectedException("올바르지 않은 일반교과 등급이 입력되었습니다.", HttpStatus.BAD_REQUEST);
+        });
+
+        return achievements;
+    }
+
+    private List<Integer> validationArtsPhysicalAchievement(List<Integer> achievements)  {
+        if (achievements == null) return null;
+
+        achievements.forEach(achievement -> {
+            if (achievement > 5 || achievement < 3) throw new ExpectedException("올바르지 않은 예체능 등급이 입력되었습니다.", HttpStatus.BAD_REQUEST);
+        });
+
+        return achievements;
     }
 
 }

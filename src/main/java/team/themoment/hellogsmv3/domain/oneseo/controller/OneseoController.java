@@ -2,14 +2,31 @@ package team.themoment.hellogsmv3.domain.oneseo.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.AptitudeEvaluationScoreReqDto;
+import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.AdmissionTicketsResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.ArrivedStatusResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.*;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
+import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
+import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
+import team.themoment.hellogsmv3.domain.oneseo.service.SearchOneseoService;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
+import team.themoment.hellogsmv3.domain.oneseo.service.CalculateMockScoreService;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
+import team.themoment.hellogsmv3.domain.oneseo.service.QueryOneseoByIdService;
+import team.themoment.hellogsmv3.domain.oneseo.service.UpdateFinalSubmissionService;
+import team.themoment.hellogsmv3.domain.oneseo.service.ModifyRealOneseoArrivedYnService;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
+import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.List;
 
@@ -24,6 +41,10 @@ public class OneseoController {
     private final ModifyAptitudeEvaluationScoreService modifyAptitudeEvaluationScoreService;
     private final DeleteOneseoService deleteOneseoService;
     private final QueryAdmissionTicketsService queryAdmissionTicketsService;
+    private final SearchOneseoService searchOneseoService;
+    private final QueryOneseoByIdService queryOneseoByIdService;
+    private final UpdateFinalSubmissionService updateFinalSubmissionService;
+    private final CalculateMockScoreService calculateMockScoreService;
 
     @PostMapping("/oneseo/me")
     public CommonApiResponse create(
@@ -67,6 +88,51 @@ public class OneseoController {
         modifyAptitudeEvaluationScoreService.execute(memberId, aptitudeEvaluationScoreReqDto);
         return CommonApiResponse.success("수정되었습니다.");
     }
+
+    @GetMapping("/oneseo/search")
+    public SearchOneseosResDto search(
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size,
+            @RequestParam(name = "testResultTag") TestResultTag testResultTag,
+            @RequestParam(name = "screeningTag", required = false) ScreeningCategory screeningTag,
+            @RequestParam(name = "isSubmitted", required = false) YesNo isSubmitted,
+            @RequestParam(name = "keyword", required = false) String keyword
+    ) {
+        if (page < 0 || size < 0)
+            throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
+        return searchOneseoService.execute(page, size, testResultTag, screeningTag, isSubmitted, keyword);
+    }
+
+    @GetMapping("/oneseo/me")
+    public FoundOneseoResDto find(
+            @AuthRequest Long memberId
+    ) {
+        return queryOneseoByIdService.execute(memberId);
+    }
+
+    @GetMapping("/oneseo/{memberId}")
+    public FoundOneseoResDto findByAdmin(
+            @PathVariable Long memberId
+    ) {
+        return queryOneseoByIdService.execute(memberId);
+    }
+
+    @PatchMapping("/final-submit")
+    public CommonApiResponse finalSubmit(
+            @AuthRequest Long memberId
+    ) {
+        updateFinalSubmissionService.execute(memberId);
+        return CommonApiResponse.success("수정되었습니다.");
+    }
+
+    @PostMapping("/calculate-mock-score")
+    public MockScoreResDto calcMockScore(
+            @RequestBody MiddleSchoolAchievementReqDto dto,
+            @RequestParam("graduationType") GraduationType graduationType
+        ) {
+        return calculateMockScoreService.execute(dto, graduationType);
+    }
+
 
     @DeleteMapping("/oneseo/me")
     public CommonApiResponse deleteMyOneseo(

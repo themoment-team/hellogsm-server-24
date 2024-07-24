@@ -1,4 +1,4 @@
-package team.themoment.hellogsmv3.domain.oneseo.dto.request;
+package team.themoment.hellogsmv3.domain.oneseo.dto.response;
 
 import lombok.Builder;
 
@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
-public record MiddleSchoolAchievementReqDto(
+public record MiddleSchoolAchievementResDto(
 
         List<Integer> achievement1_2,
         List<Integer> achievement2_1,
@@ -24,5 +24,7 @@ public record MiddleSchoolAchievementReqDto(
         String freeSemester,
         BigDecimal gedTotalScore,
         BigDecimal gedMaxScore
+
+
 ) {
 }

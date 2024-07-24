@@ -9,6 +9,8 @@ import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
+
 @Getter
 @Entity
 @Table(name = "tb_oneseo")
@@ -28,7 +30,7 @@ public class Oneseo {
     private Member member;
 
     @Column(name = "oneseo_submit_code")
-    private Long oneseoSubmitCode;
+    private String oneseoSubmitCode;
 
     @NotNull
     @Embedded
@@ -43,8 +45,16 @@ public class Oneseo {
     private YesNo finalSubmittedYn;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "wanted_screening", nullable = false)
+    private Screening wantedScreening;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "applied_screening", nullable = false)
     private Screening appliedScreening;
+
+    public void updateFinalSubmission() {
+        this.finalSubmittedYn = YES;
+    }
 
     public void switchRealOneseoArrivedYn() {
         this.realOneseoArrivedYn = this.realOneseoArrivedYn == YesNo.YES ? YesNo.NO : YesNo.YES;
