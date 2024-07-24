@@ -50,10 +50,13 @@ public class Oneseo {
     @Column(name = "applied_screening", nullable = false)
     private Screening appliedScreening;
 
-
     public Oneseo setOneseoSubmitCode(String submitCode) {
         this.oneseoSubmitCode = submitCode;
 
         return this;
+    }
+
+    public void switchRealOneseoArrivedYn() {
+        this.realOneseoArrivedYn = this.realOneseoArrivedYn == YesNo.YES ? YesNo.NO : YesNo.YES;
     }
 }
