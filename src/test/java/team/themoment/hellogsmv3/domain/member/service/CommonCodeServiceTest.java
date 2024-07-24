@@ -41,9 +41,9 @@ class CommonCodeServiceTest {
 
         private final Long memberId = 1L;
         private final String validCode = "validCode";
-        private final String validPhoneNumber = "010-1234-5678";
+        private final String validPhoneNumber = "01012345678";
         private final String invalidCode = "invalidCode";
-        private final String invalidPhoneNumber = "010-8765-4321";
+        private final String invalidPhoneNumber = "01087654321";
         private AuthenticationCode authenticationCode;
 
         @BeforeEach
