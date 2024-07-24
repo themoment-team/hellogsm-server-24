@@ -22,7 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("CreateMemberService 클래스의")
@@ -69,7 +69,7 @@ class CreateMemberServiceTest {
                         .authReferrerType(AuthReferrerType.GOOGLE)
                         .build();
                 given(memberRepository.findById(memberId)).willReturn(Optional.of(existingMember));
-                doNothing().when(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
+                willDoNothing().given(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
             }
 
             @Test
@@ -98,7 +98,7 @@ class CreateMemberServiceTest {
             @BeforeEach
             void setUp() {
                 given(memberRepository.findById(memberId)).willReturn(Optional.empty());
-                doNothing().when(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
+                willDoNothing().given(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
             }
 
             @Test
