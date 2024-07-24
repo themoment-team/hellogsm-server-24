@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.AptitudeEvaluationScoreReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.AdmissionTicketsResDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.ArrivedStatusResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.*;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
@@ -52,11 +53,10 @@ public class OneseoController {
     }
 
     @PatchMapping("/arrived-status/{memberId}")
-    public CommonApiResponse modifyArrivedStatus(
+    public ArrivedStatusResDto modifyArrivedStatus(
             @PathVariable Long memberId
     ) {
-        modifyRealOneseoArrivedYnService.execute(memberId);
-        return CommonApiResponse.success("수정되었습니다.");
+        return modifyRealOneseoArrivedYnService.execute(memberId);
     }
 
     @PatchMapping("/aptitude-score/{memberId}")
