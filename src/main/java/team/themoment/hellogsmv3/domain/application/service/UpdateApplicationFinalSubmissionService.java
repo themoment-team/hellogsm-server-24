@@ -12,7 +12,7 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateFinalSubmissionService {
+public class UpdateApplicationFinalSubmissionService {
 
     private final ApplicantService applicantService;
     private final ApplicationRepository applicationRepository;

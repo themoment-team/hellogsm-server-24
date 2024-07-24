@@ -17,7 +17,7 @@ import team.themoment.hellogsmv3.domain.application.entity.abs.AbstractPersonalI
 import team.themoment.hellogsmv3.domain.application.repo.ApplicationRepository;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
-import team.themoment.hellogsmv3.domain.application.type.SearchTag;
+import team.themoment.hellogsmv3.domain.application.type.ApplicationSearchTag;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +29,7 @@ public class SearchApplicationService {
 
     private final ApplicationRepository applicationRepository;
 
-    public SearchApplicationsResDto execute(Integer page, Integer size, @Nullable SearchTag tag, @Nullable String keyword) {
+    public SearchApplicationsResDto execute(Integer page, Integer size, @Nullable ApplicationSearchTag tag, @Nullable String keyword) {
         Pageable pageable = PageRequest.of(page, size);
         Page<AbstractApplication> applicationPage = applicationPage(tag, keyword, pageable);
         ApplicationListInfoDto paginationInfo = new ApplicationListInfoDto(applicationPage.getTotalPages(), applicationPage.getTotalElements());
@@ -45,7 +45,7 @@ public class SearchApplicationService {
         );
     }
 
-    private Page<AbstractApplication> applicationPage(SearchTag tag, String keyword, Pageable pageable) {
+    private Page<AbstractApplication> applicationPage(ApplicationSearchTag tag, String keyword, Pageable pageable) {
         if (tag == null) {
             return applicationRepository.findAllByFinalSubmitted(pageable);
         }
