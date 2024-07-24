@@ -12,18 +12,25 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
+import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
+import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 
+import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @DisplayName("SearchOneseoService 클래스의")
 class SearchOneseoServiceAdditionalTests {
@@ -50,11 +57,11 @@ class SearchOneseoServiceAdditionalTests {
     class Describe_execute {
 
         private final int page = 0;
-        private final int size = 10;
+        private final int size = 3;
         private final TestResultTag testResultTag = TestResultTag.ALL;
         private final ScreeningCategory screeningTag = ScreeningCategory.GENERAL;
         private final YesNo isSubmitted = YesNo.YES;
-        private final String keyword = "홍길동";
+        private final String keyword = "최장우";
 
         @Nested
         @DisplayName("검색 결과가 없을 때")
@@ -80,5 +87,81 @@ class SearchOneseoServiceAdditionalTests {
                 assertEquals(0, result.oneseos().size());
             }
         }
+
+        @Nested
+        @DisplayName("필터링 조건에 따라")
+        class Context_with_filtering {
+
+            private Member member;
+            private Oneseo oneseo;
+            private OneseoPrivacyDetail oneseoPrivacyDetail;
+
+            @BeforeEach
+            void setUp() {
+                Pageable pageable = PageRequest.of(page, size);
+                member = buildMember();
+                oneseo = buildOneseo(member);
+                Page<Oneseo> oneseoPage = new PageImpl<>(List.of(oneseo), pageable, 1);
+
+                oneseoPrivacyDetail = buildOneseoPrivacyDetail();
+                EntranceTestResult entranceTestResult = mock(EntranceTestResult.class);
+
+                given(oneseoRepository.findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
+                        keyword, screeningTag, isSubmitted, testResultTag, pageable
+                )).willReturn(oneseoPage);
+                given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(oneseoPrivacyDetail);
+                given(entranceTestResultRepository.findByOneseo(oneseo)).willReturn(entranceTestResult);
+                stubEntranceTestResult(entranceTestResult);
+            }
+
+            @Test
+            @DisplayName("적절한 데이터를 반환한다")
+            void it_returns_filtered_results() {
+                SearchOneseosResDto result = searchOneseoService.execute(page, size, testResultTag, screeningTag, isSubmitted, keyword);
+
+                assertEquals(1, result.info().totalElements());
+                assertEquals(1, result.info().totalPages());
+                assertEquals(1, result.oneseos().size());
+
+                assertEquals(member.getName(), result.oneseos().get(0).name());
+                assertEquals(member.getPhoneNumber(), result.oneseos().get(0).phoneNumber());
+                assertEquals(oneseo.getOneseoSubmitCode(), result.oneseos().get(0).submitCode());
+                assertEquals(oneseo.getAppliedScreening(), result.oneseos().get(0).screening());
+                assertEquals(oneseoPrivacyDetail.getSchoolName(), result.oneseos().get(0).schoolName());
+                assertEquals(oneseoPrivacyDetail.getGuardianPhoneNumber(), result.oneseos().get(0).guardianPhoneNumber());
+            }
+        }
+    }
+
+    private OneseoPrivacyDetail buildOneseoPrivacyDetail() {
+        return OneseoPrivacyDetail.builder()
+                .schoolName("양산중학교")
+                .guardianPhoneNumber("01012345678")
+                .schoolTeacherPhoneNumber("01087654321")
+                .build();
+    }
+
+    private Member buildMember() {
+        return Member.builder()
+                .id(1L)
+                .name("최장우")
+                .phoneNumber("01044448888")
+                .build();
+    }
+
+    private Oneseo buildOneseo(Member member) {
+        return Oneseo.builder()
+                .member(member)
+                .oneseoSubmitCode("submit code")
+                .realOneseoArrivedYn(YesNo.YES)
+                .appliedScreening(Screening.GENERAL)
+                .build();
+    }
+
+    private void stubEntranceTestResult(EntranceTestResult entranceTestResult) {
+        given(entranceTestResult.getFirstTestPassYn()).willReturn(YesNo.YES);
+        given(entranceTestResult.getAptitudeEvaluationScore()).willReturn(BigDecimal.TEN);
+        given(entranceTestResult.getInterviewScore()).willReturn(BigDecimal.TEN);
+        given(entranceTestResult.getFirstTestPassYn()).willReturn(YesNo.YES);
     }
 }
