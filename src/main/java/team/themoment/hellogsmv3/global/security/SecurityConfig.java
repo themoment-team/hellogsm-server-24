@@ -222,6 +222,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/oneseo/v3/oneseo/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+                .requestMatchers(HttpMethod.PATCH, "/oneseo/v3/arrived-status/{memberId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .requestMatchers(HttpMethod.PATCH, "/oneseo/v3/aptitude-score/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )

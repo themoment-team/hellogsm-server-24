@@ -45,4 +45,8 @@ public class Oneseo {
     @Enumerated(EnumType.STRING)
     @Column(name = "applied_screening", nullable = false)
     private Screening appliedScreening;
+
+    public void switchRealOneseoArrivedYn() {
+        this.realOneseoArrivedYn = this.realOneseoArrivedYn == YesNo.YES ? YesNo.NO : YesNo.YES;
+    }
 }
