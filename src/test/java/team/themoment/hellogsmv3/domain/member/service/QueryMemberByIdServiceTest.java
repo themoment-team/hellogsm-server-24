@@ -38,11 +38,11 @@ class QueryMemberByIdServiceTest {
     @DisplayName("execute 메소드는")
     class Describe_execute {
 
+        private final Long memberId = 1L;
+
         @Nested
         @DisplayName("존재하는 회원 ID가 주어지면")
         class Context_with_existing_member_id {
-
-            private final Long memberId = 1L;
 
             @BeforeEach
             void setUp() {
@@ -73,8 +73,6 @@ class QueryMemberByIdServiceTest {
         @Nested
         @DisplayName("존재하지 않는 회원 ID가 주어지면")
         class Context_with_non_existing_member_id {
-
-            private final Long memberId = 2L;
 
             @BeforeEach
             void setUp() {
