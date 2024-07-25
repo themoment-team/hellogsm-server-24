@@ -10,7 +10,7 @@ import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.thirdParty.aws.s3.service.UploadImageService;
 
 @RestController
-@RequestMapping("/application/v3")
+@RequestMapping("/oneseo/v3")
 @RequiredArgsConstructor
 public class S3Controller {
 
