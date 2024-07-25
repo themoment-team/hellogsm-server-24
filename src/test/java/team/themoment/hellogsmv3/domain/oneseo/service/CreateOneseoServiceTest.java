@@ -124,7 +124,7 @@ class CreateOneseoServiceTest {
 
 
         @Nested
-        @DisplayName("유효하지 않은 교과 성적 점수가 입력되었다면")
+        @DisplayName("유효하지 않은 일반교과 등급이 입력되었다면")
         class Context_with_invalid_general_achievement {
 
             @BeforeEach
@@ -155,7 +155,7 @@ class CreateOneseoServiceTest {
         }
 
         @Nested
-        @DisplayName("유효하지 않은 예체능 성적 점수가 입력되었다면")
+        @DisplayName("유효하지 않은 예체능 등급이 입력되었다면")
         class Context_with_invalid_arts_physical_achievement {
 
             @BeforeEach
