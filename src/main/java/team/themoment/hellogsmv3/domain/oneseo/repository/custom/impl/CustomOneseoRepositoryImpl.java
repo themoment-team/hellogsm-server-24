@@ -4,15 +4,15 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.AdmissionTicketsResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.custom.CustomOneseoRepository;
 
@@ -48,6 +48,16 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 .join(oneseo.member, member)
                 .where(oneseo.finalSubmittedYn.eq(YES))
                 .fetch();
+    }
+
+    @Override
+    public Integer findMaxSubmitCodeByScreening(Screening screening) {
+        return queryFactory
+                .select(oneseo.oneseoSubmitCode.substring(2).castToNum(Integer.class))
+                .from(oneseo)
+                .where(oneseo.appliedScreening.eq(screening))
+                .orderBy(oneseo.oneseoSubmitCode.substring(2).castToNum(Integer.class).desc())
+                .fetchFirst();
     }
 
     @Override
