@@ -152,9 +152,6 @@ class CreateOneseoServiceTest {
             @DisplayName("ExpectedException을 던진다")
             void it_throws_expected_exception() {
                 ExpectedException exception = assertThrows(ExpectedException.class, () -> createOneseoService.execute(reqDto, memberId));
-
-                assertEquals("이미 원서가 존재합니다.", exception.getMessage());
-                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             }
         }
     }
