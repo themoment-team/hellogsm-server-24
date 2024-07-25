@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
@@ -25,15 +26,14 @@ import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 @RequiredArgsConstructor
 public class CreateOneseoService {
 
-    private final MemberRepository memberRepository;
     private final OneseoRepository oneseoRepository;
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
+    private final MemberService memberService;
 
     @Transactional
     public void execute(OneseoReqDto reqDto, Long memberId) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
+        Member currentMember = memberService.findByIdOrThrow(memberId);
 
         isExistOneseo(currentMember);
 
