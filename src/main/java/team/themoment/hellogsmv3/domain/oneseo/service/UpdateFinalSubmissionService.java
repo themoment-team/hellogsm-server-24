@@ -23,8 +23,6 @@ import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 @RequiredArgsConstructor
 public class UpdateFinalSubmissionService {
 
-    private final MemberRepository memberRepository;
-    private final OneseoRepository oneseoRepository;
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
     private final CalculateGradeService calculateGradeService;
