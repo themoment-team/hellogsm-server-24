@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
@@ -22,19 +23,17 @@ import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 @RequiredArgsConstructor
 public class UpdateFinalSubmissionService {
 
-    private final MemberRepository memberRepository;
-    private final OneseoRepository oneseoRepository;
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
     private final CalculateGradeService calculateGradeService;
     private final CalculateGedService calculateGedService;
+    private final MemberService memberService;
+    private final OneseoService oneseoService;
 
     @Transactional
     public void execute(Long memberId) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
-        Oneseo oneseo = oneseoRepository.findByMember(currentMember)
-                .orElseThrow(() -> new ExpectedException("원서 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+        Member currentMember = memberService.findByIdOrThrow(memberId);
+        Oneseo oneseo = oneseoService.findByMemberOrThrow(currentMember);
 
         if (oneseo.getFinalSubmittedYn().equals(YES))
             throw new ExpectedException("이미 최종제출 되었습니다.", HttpStatus.BAD_REQUEST);

@@ -7,6 +7,9 @@ import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.AdmissionTicketsResDto;
+
+import java.util.List;
 
 public interface CustomOneseoRepository {
 
@@ -19,4 +22,6 @@ public interface CustomOneseoRepository {
             TestResultTag testResultTag,
             Pageable pageable
     );
+
+    List<AdmissionTicketsResDto> findAdmissionTickets();
 }

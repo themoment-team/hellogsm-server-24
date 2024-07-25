@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.ArrivedStatusResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -19,15 +20,16 @@ public class ModifyRealOneseoArrivedYnService {
     private final OneseoRepository oneseoRepository;
 
     @Transactional
-    public void execute(Long memberId) {
+    public ArrivedStatusResDto execute(Long memberId) {
         Member member = memberService.findByIdOrThrow(memberId);
 
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
         oneseo.switchRealOneseoArrivedYn();
         assignSubmitCode(oneseo);
+        Oneseo modifiedOneseo = oneseoRepository.save(oneseo);
 
-        oneseoRepository.save(oneseo);
+        return new ArrivedStatusResDto(modifiedOneseo.getRealOneseoArrivedYn());
     }
 
     private void assignSubmitCode(Oneseo oneseo) {
