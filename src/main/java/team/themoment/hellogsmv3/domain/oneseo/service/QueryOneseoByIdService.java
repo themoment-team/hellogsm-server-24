@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
@@ -17,16 +18,14 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 @RequiredArgsConstructor
 public class QueryOneseoByIdService {
 
-    private final OneseoRepository oneseoRepository;
-    private final MemberRepository memberRepository;
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
+    private final MemberService memberService;
+    private final OneseoService oneseoService;
 
     public FoundOneseoResDto execute(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
-        Oneseo oneseo = oneseoRepository.findByMember(member)
-                .orElseThrow(() -> new ExpectedException("원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
+        Member member = memberService.findByIdOrThrow(memberId);
+        Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
 
