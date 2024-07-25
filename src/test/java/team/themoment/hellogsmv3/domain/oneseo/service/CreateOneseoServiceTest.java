@@ -152,6 +152,39 @@ class CreateOneseoServiceTest {
             @DisplayName("ExpectedException을 던진다")
             void it_throws_expected_exception() {
                 ExpectedException exception = assertThrows(ExpectedException.class, () -> createOneseoService.execute(reqDto, memberId));
+
+                assertEquals("올바르지 않은 일반교과 등급이 입력되었습니다.", exception.getMessage());
+                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 예체능 성적 점수가 입력되었다면")
+        class Context_with_invalid_arts_physical_achievement {
+
+            private Member existingMember;
+            private MiddleSchoolAchievementReqDto middleSchoolAchievementReqDto;
+
+            @BeforeEach
+            void setUp() {
+                existingMember = mock(Member.class);
+                middleSchoolAchievementReqDto = mock(MiddleSchoolAchievementReqDto.class);
+
+                given(memberRepository.findById(memberId)).willReturn(Optional.of(existingMember));
+                given(oneseoRepository.existsByMember(existingMember)).willReturn(false);
+                given(reqDto.middleSchoolAchievement()).willReturn(middleSchoolAchievementReqDto);
+
+                List<Integer> invalidAchievements = Arrays.asList(0, 1, 2, 6);
+                given(middleSchoolAchievementReqDto.artsPhysicalAchievement()).willReturn(invalidAchievements);
+            }
+
+            @Test
+            @DisplayName("ExpectedException을 던진다")
+            void it_throws_expected_exception() {
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> createOneseoService.execute(reqDto, memberId));
+
+                assertEquals("올바르지 않은 예체능 등급이 입력되었습니다.", exception.getMessage());
+                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             }
         }
     }
