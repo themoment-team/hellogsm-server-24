@@ -19,14 +19,13 @@ import java.math.BigDecimal;
 public class ModifyAptitudeEvaluationScoreService {
 
     private final MemberService memberService;
-    private final OneseoRepository oneseoRepository;
+    private final OneseoService oneseoService;
     private final EntranceTestResultRepository entranceTestResultRepository;
 
     public void execute(Long memberId, AptitudeEvaluationScoreReqDto aptitudeEvaluationScoreReqDto) {
         Member member = memberService.findByIdOrThrow(memberId);
 
-        Oneseo oneseo = oneseoRepository.findByMember(member)
-                .orElseThrow(() -> new ExpectedException("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
+        Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
         EntranceTestResult entranceTestResult = entranceTestResultRepository.findEntranceTestResultByOneseo(oneseo)
                 .orElseThrow(() -> new ExpectedException("해당 지원자의 입학 시험 결과를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
