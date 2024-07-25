@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
 @Table(name = "tb_entrance_test_result")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EntranceTestResult {
@@ -46,6 +48,10 @@ public class EntranceTestResult {
     @Enumerated(EnumType.STRING)
     @Column(name = "decided_major")
     private Major decidedMajor;
+
+    public void modifyAptitudeEvaluationScore(BigDecimal aptitudeEvaluationScore) {
+        this.aptitudeEvaluationScore = aptitudeEvaluationScore;
+    }
 
     public EntranceTestResult(Oneseo oneseo, EntranceTestFactorsDetail entranceTestFactorsDetail, BigDecimal documentEvaluationScore) {
         this.oneseo = oneseo;
