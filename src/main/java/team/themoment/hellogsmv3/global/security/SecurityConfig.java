@@ -219,12 +219,22 @@ public class SecurityConfig {
                         Role.APPLICANT.name(),
                         Role.ROOT.name()
                 )
-                .requestMatchers(HttpMethod.PUT, "/oneseo/v3/oneseo/{memberId}").hasAnyAuthority(
+                .requestMatchers("/oneseo/v3/oneseo/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.PATCH, "/oneseo/v3/arrived-status/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/oneseo/v3/oneseo/search").hasAnyAuthority(
+                        Role.ADMIN.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.PUT, "/oneseo/v3/final-submit").hasAnyAuthority(
+                        Role.APPLICANT.name()
+                )
+
+                // mock score calculate
+                .requestMatchers(HttpMethod.POST, "/oneseo/v3/calculate-mock-score").permitAll()
                 .anyRequest().permitAll()
         );
     }

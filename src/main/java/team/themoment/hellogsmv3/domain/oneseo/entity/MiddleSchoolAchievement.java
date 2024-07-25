@@ -27,10 +27,6 @@ public class MiddleSchoolAchievement {
     private Oneseo oneseo;
 
     @Convert(converter = IntegerListConverter.class)
-    @Column(name = "achievement_1_1")
-    private List<Integer> achievement1_1;
-
-    @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_1_2")
     private List<Integer> achievement1_2;
 
@@ -45,6 +41,10 @@ public class MiddleSchoolAchievement {
     @Convert(converter = IntegerListConverter.class)
     @Column(name = "achievement_3_1")
     private List<Integer> achievement3_1;
+
+    @Convert(converter = IntegerListConverter.class)
+    @Column(name = "achievement_3_2")
+    private List<Integer> achievement3_2;
 
     @Convert(converter = StringListConverter.class)
     @Column(name = "general_subjects")

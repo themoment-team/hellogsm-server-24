@@ -1,9 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -11,6 +9,8 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "tb_entrance_test_factors_detail")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class EntranceTestFactorsDetail {
 
     @Id
@@ -36,9 +36,6 @@ public class EntranceTestFactorsDetail {
     @Column(name = "total_non_subjects_score")
     private BigDecimal totalNonSubjectsScore;
 
-    @Column(name = "score_1_1")
-    private BigDecimal score1_1;
-
     @Column(name = "score_1_2")
     private BigDecimal score1_2;
 
@@ -51,12 +48,7 @@ public class EntranceTestFactorsDetail {
     @Column(name = "score_3_1")
     private BigDecimal score3_1;
 
-    @Column(name = "ged_total_score")
-    private BigDecimal gedTotalScore;
+    @Column(name = "score_3_2")
+    private BigDecimal score3_2;
 
-    @Column(name = "ged_max_score")
-    private BigDecimal gedMaxScore;
-
-    @Column(name = "percentile_rank")
-    private BigDecimal percentileRank;
 }

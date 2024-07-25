@@ -9,6 +9,8 @@ import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
+
 @Getter
 @Entity
 @Table(name = "tb_oneseo")
@@ -54,6 +56,10 @@ public class Oneseo {
         this.oneseoSubmitCode = submitCode;
 
         return this;
+    }
+
+    public void updateFinalSubmission() {
+        this.finalSubmittedYn = YES;
     }
 
     public void switchRealOneseoArrivedYn() {
