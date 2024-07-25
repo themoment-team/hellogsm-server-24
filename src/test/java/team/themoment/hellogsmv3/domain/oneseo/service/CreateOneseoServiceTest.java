@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
-import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
@@ -22,7 +22,6 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,13 +32,13 @@ import static org.mockito.Mockito.*;
 class CreateOneseoServiceTest {
 
     @Mock
-    private MemberRepository memberRepository;
-    @Mock
     private OneseoRepository oneseoRepository;
     @Mock
     private OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     @Mock
     private MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
+    @Mock
+    private MemberService memberService;
 
     @InjectMocks
     private CreateOneseoService createOneseoService;
@@ -60,15 +59,12 @@ class CreateOneseoServiceTest {
         @DisplayName("유효한 회원 ID와 요청 데이터가 주어지면")
         class Context_with_valid_member_id_and_request_data {
 
-            private Member existingMember;
-            private MiddleSchoolAchievementReqDto middleSchoolAchievementReqDto;
-
             @BeforeEach
             void setUp() {
-                existingMember = mock(Member.class);
-                middleSchoolAchievementReqDto = mock(MiddleSchoolAchievementReqDto.class);
+                Member existingMember = mock(Member.class);
+                MiddleSchoolAchievementReqDto middleSchoolAchievementReqDto = mock(MiddleSchoolAchievementReqDto.class);
 
-                given(memberRepository.findById(memberId)).willReturn(Optional.of(existingMember));
+                given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
                 given(oneseoRepository.existsByMember(existingMember)).willReturn(false);
                 given(reqDto.middleSchoolAchievement()).willReturn(middleSchoolAchievementReqDto);
             }
@@ -90,7 +86,8 @@ class CreateOneseoServiceTest {
 
             @BeforeEach
             void setUp() {
-                given(memberRepository.findById(memberId)).willReturn(Optional.empty());
+                doThrow(new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND))
+                        .when(memberService).findByIdOrThrow(memberId);
             }
 
             @Test
@@ -109,7 +106,9 @@ class CreateOneseoServiceTest {
 
             @BeforeEach
             void setUp() {
-                given(memberRepository.findById(memberId)).willReturn(Optional.of(mock(Member.class)));
+                Member existingMember = mock(Member.class);
+
+                given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
                 given(oneseoRepository.existsByMember(any(Member.class))).willReturn(true);
             }
 
@@ -128,15 +127,12 @@ class CreateOneseoServiceTest {
         @DisplayName("유효하지 않은 교과 성적 점수가 입력되었다면")
         class Context_with_invalid_general_achievement {
 
-            private Member existingMember;
-            private MiddleSchoolAchievementReqDto middleSchoolAchievementReqDto;
-
             @BeforeEach
             void setUp() {
-                existingMember = mock(Member.class);
-                middleSchoolAchievementReqDto = mock(MiddleSchoolAchievementReqDto.class);
+                Member existingMember = mock(Member.class);
+                MiddleSchoolAchievementReqDto middleSchoolAchievementReqDto = mock(MiddleSchoolAchievementReqDto.class);
 
-                given(memberRepository.findById(memberId)).willReturn(Optional.of(existingMember));
+                given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
                 given(oneseoRepository.existsByMember(existingMember)).willReturn(false);
                 given(reqDto.middleSchoolAchievement()).willReturn(middleSchoolAchievementReqDto);
 
@@ -162,15 +158,12 @@ class CreateOneseoServiceTest {
         @DisplayName("유효하지 않은 예체능 성적 점수가 입력되었다면")
         class Context_with_invalid_arts_physical_achievement {
 
-            private Member existingMember;
-            private MiddleSchoolAchievementReqDto middleSchoolAchievementReqDto;
-
             @BeforeEach
             void setUp() {
-                existingMember = mock(Member.class);
-                middleSchoolAchievementReqDto = mock(MiddleSchoolAchievementReqDto.class);
+                Member existingMember = mock(Member.class);
+                MiddleSchoolAchievementReqDto middleSchoolAchievementReqDto = mock(MiddleSchoolAchievementReqDto.class);
 
-                given(memberRepository.findById(memberId)).willReturn(Optional.of(existingMember));
+                given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
                 given(oneseoRepository.existsByMember(existingMember)).willReturn(false);
                 given(reqDto.middleSchoolAchievement()).willReturn(middleSchoolAchievementReqDto);
 
