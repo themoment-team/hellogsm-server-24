@@ -67,6 +67,7 @@ public class ModifyOneseoService {
                         .build())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .finalSubmittedYn(oneseo.getFinalSubmittedYn())
+                .wantedScreening(reqDto.screening())
                 .appliedScreening(reqDto.screening())
                 .build();
     }
