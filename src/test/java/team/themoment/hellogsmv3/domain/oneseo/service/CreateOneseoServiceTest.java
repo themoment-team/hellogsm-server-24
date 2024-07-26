@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -15,6 +16,9 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -27,6 +31,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.*;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Major.*;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.*;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @DisplayName("CreateOneseoService 클래스의")
 class CreateOneseoServiceTest {
@@ -55,6 +63,69 @@ class CreateOneseoServiceTest {
         private final Long memberId = 1L;
         private final OneseoReqDto reqDto = mock(OneseoReqDto.class);
 
+        List<Integer> achievement = Arrays.asList(5, 5, 5, 5, 5, 5, 5, 5, 5);
+        List<String> generalSubjects = Arrays.asList("국어", "도덕", "사회", "역사", "수학", "과학", "기술가정", "영어");
+        List<String> newSubjects = Arrays.asList("프로그래밍");
+        List<Integer> artsPhysicalAchievement = Arrays.asList(5, 5, 5, 5, 5, 5, 5, 5, 5);
+        List<String> artsPhysicalSubjects = Arrays.asList("체육", "미술", "음악");
+        List<Integer> absentDays = Arrays.asList(0, 0, 0);
+        List<Integer> attendanceDays = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0);
+        List<Integer> volunteerTime = Arrays.asList(10, 0, 2);
+        String liberalSystem = "자유학기제";
+        String freeSemester = "3-1";
+
+        MiddleSchoolAchievementReqDto middleSchoolAchievementReqDto = MiddleSchoolAchievementReqDto.builder()
+                .achievement1_2(null)
+                .achievement2_1(achievement)
+                .achievement2_2(achievement)
+                .achievement3_1(achievement)
+                .achievement3_2(null)
+                .generalSubjects(generalSubjects)
+                .newSubjects(newSubjects)
+                .artsPhysicalAchievement(artsPhysicalAchievement)
+                .artsPhysicalSubjects(artsPhysicalSubjects)
+                .absentDays(absentDays)
+                .attendanceDays(attendanceDays)
+                .volunteerTime(volunteerTime)
+                .liberalSystem(liberalSystem)
+                .freeSemester(freeSemester)
+                .build();
+
+        String guardianName = "김보호";
+        String guardianPhoneNumber = "01000000001";
+        String relationshipWithGuardian = "모";
+        String profileImg = "https://abc";
+        String address = "광주광역시 광산구 송정동 상무대로 312";
+        String detailAddress = "101동 1404호";
+        GraduationType graduationType = CANDIDATE;
+        String schoolTeacherName = "김선생";
+        String schoolTeacherPhoneNumber = "01000000002";
+        Major firstDesiredMajor = SW;
+        Major secondDesiredMajor = AI;
+        Major thirdDesiredMajor = IOT;
+        String schoolName = "금호중앙중학교";
+        String schoolAddress = "광주 어딘가";
+        Screening screening = GENERAL;
+
+        OneseoReqDto oneseoReqDto = new OneseoReqDto(
+                guardianName,
+                guardianPhoneNumber,
+                relationshipWithGuardian,
+                profileImg,
+                address,
+                detailAddress,
+                graduationType,
+                schoolTeacherName,
+                schoolTeacherPhoneNumber,
+                firstDesiredMajor,
+                secondDesiredMajor,
+                thirdDesiredMajor,
+                middleSchoolAchievementReqDto,
+                schoolName,
+                schoolAddress,
+                screening
+        );
+
         @Nested
         @DisplayName("유효한 회원 ID와 요청 데이터가 주어지면")
         class Context_with_valid_member_id_and_request_data {
@@ -62,21 +133,65 @@ class CreateOneseoServiceTest {
             @BeforeEach
             void setUp() {
                 Member existingMember = mock(Member.class);
-                MiddleSchoolAchievementReqDto middleSchoolAchievementReqDto = mock(MiddleSchoolAchievementReqDto.class);
 
                 given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
                 given(oneseoRepository.existsByMember(existingMember)).willReturn(false);
-                given(reqDto.middleSchoolAchievement()).willReturn(middleSchoolAchievementReqDto);
             }
 
             @Test
             @DisplayName("새로운 Oneseo, OneseoPrivacyDetail, MiddleSchoolAchievement 엔티티를 생성하고 저장한다")
             void it_creates_and_saves_new_entities() {
-                createOneseoService.execute(reqDto, memberId);
+                createOneseoService.execute(oneseoReqDto, memberId);
 
-                verify(oneseoRepository).save(any(Oneseo.class));
-                verify(oneseoPrivacyDetailRepository).save(any(OneseoPrivacyDetail.class));
-                verify(middleSchoolAchievementRepository).save(any(MiddleSchoolAchievement.class));
+                ArgumentCaptor<Oneseo> oneseoCaptor = ArgumentCaptor.forClass(Oneseo.class);
+                ArgumentCaptor<OneseoPrivacyDetail> oneseoPrivacyDetailCaptor = ArgumentCaptor.forClass(OneseoPrivacyDetail.class);
+                ArgumentCaptor<MiddleSchoolAchievement> middleSchoolAchievementCaptor = ArgumentCaptor.forClass(MiddleSchoolAchievement.class);
+
+                verify(oneseoRepository).save(oneseoCaptor.capture());
+                verify(oneseoPrivacyDetailRepository).save(oneseoPrivacyDetailCaptor.capture());
+                verify(middleSchoolAchievementRepository).save(middleSchoolAchievementCaptor.capture());
+
+                Oneseo capturedOneseo = oneseoCaptor.getValue();
+                OneseoPrivacyDetail capturedPrivacyDetail = oneseoPrivacyDetailCaptor.getValue();
+                MiddleSchoolAchievement capturedAchievement = middleSchoolAchievementCaptor.getValue();
+
+                assertEquals(null, capturedOneseo.getOneseoSubmitCode());
+                assertEquals(firstDesiredMajor, capturedOneseo.getDesiredMajors().getFirstDesiredMajor());
+                assertEquals(secondDesiredMajor, capturedOneseo.getDesiredMajors().getSecondDesiredMajor());
+                assertEquals(thirdDesiredMajor, capturedOneseo.getDesiredMajors().getThirdDesiredMajor());
+                assertEquals(NO, capturedOneseo.getRealOneseoArrivedYn());
+                assertEquals(NO, capturedOneseo.getFinalSubmittedYn());
+                assertEquals(screening, capturedOneseo.getWantedScreening());
+                assertEquals(screening, capturedOneseo.getAppliedScreening());
+
+                assertEquals(graduationType, capturedPrivacyDetail.getGraduationType());
+                assertEquals(address, capturedPrivacyDetail.getAddress());
+                assertEquals(detailAddress, capturedPrivacyDetail.getDetailAddress());
+                assertEquals(profileImg, capturedPrivacyDetail.getProfileImg());
+                assertEquals(guardianName, capturedPrivacyDetail.getGuardianName());
+                assertEquals(guardianPhoneNumber, capturedPrivacyDetail.getGuardianPhoneNumber());
+                assertEquals(relationshipWithGuardian, capturedPrivacyDetail.getRelationshipWithGuardian());
+                assertEquals(schoolAddress, capturedPrivacyDetail.getSchoolAddress());
+                assertEquals(schoolName, capturedPrivacyDetail.getSchoolName());
+                assertEquals(schoolTeacherName, capturedPrivacyDetail.getSchoolTeacherName());
+                assertEquals(schoolTeacherPhoneNumber, capturedPrivacyDetail.getSchoolTeacherPhoneNumber());
+
+                assertEquals(null, capturedAchievement.getAchievement1_2());
+                assertEquals(achievement, capturedAchievement.getAchievement2_1());
+                assertEquals(achievement, capturedAchievement.getAchievement2_1());
+                assertEquals(achievement, capturedAchievement.getAchievement3_1());
+                assertEquals(null, capturedAchievement.getAchievement3_2());
+                assertEquals(generalSubjects, capturedAchievement.getGeneralSubjects());
+                assertEquals(newSubjects, capturedAchievement.getNewSubjects());
+                assertEquals(artsPhysicalAchievement, capturedAchievement.getArtsPhysicalAchievement());
+                assertEquals(artsPhysicalSubjects, capturedAchievement.getArtsPhysicalSubjects());
+                assertEquals(absentDays, capturedAchievement.getAbsentDays());
+                assertEquals(attendanceDays, capturedAchievement.getAttendanceDays());
+                assertEquals(volunteerTime, capturedAchievement.getVolunteerTime());
+                assertEquals(liberalSystem, capturedAchievement.getLiberalSystem());
+                assertEquals(freeSemester, capturedAchievement.getFreeSemester());
+                assertEquals(null, capturedAchievement.getGedTotalScore());
+                assertEquals(null, capturedAchievement.getGedMaxScore());
             }
         }
 
