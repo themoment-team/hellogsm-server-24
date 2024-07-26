@@ -155,7 +155,7 @@ public class OneseoController {
     }
 
     @GetMapping("/excel")
-    public CommonApiResponse downloadExcel(
+    public void downloadExcel(
             HttpServletResponse response
     ) {
         Workbook workbook = downloadExcelService.execute();
@@ -165,8 +165,7 @@ public class OneseoController {
             workbook.write(response.getOutputStream());
             workbook.close();
         } catch (IOException ex) {
-            throw new RuntimeException("파일 작성과정에서 예외가 발생하였습니다.");
+            throw new RuntimeException("파일 작성과정에서 예외가 발생하였습니다.", ex);
         }
-        return CommonApiResponse.success("다운되었습니다.");
     }
 }
