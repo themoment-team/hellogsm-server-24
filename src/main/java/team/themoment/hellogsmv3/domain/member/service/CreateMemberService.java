@@ -11,6 +11,8 @@ import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import static team.themoment.hellogsmv3.domain.member.entity.type.Role.*;
+
 @Service
 @RequiredArgsConstructor
 public class CreateMemberService {
@@ -26,6 +28,9 @@ public class CreateMemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
 
+        if (member.getRole().equals(APPLICANT))
+            throw new ExpectedException("이미 회원가입 하였습니다.", HttpStatus.BAD_REQUEST);
+
         Member newMember = Member.builder()
                 .id(member.getId())
                 .email(member.getEmail())
@@ -34,7 +39,7 @@ public class CreateMemberService {
                 .birth(reqDto.birth())
                 .phoneNumber(reqDto.phoneNumber())
                 .sex(reqDto.sex())
-                .role(Role.APPLICANT)
+                .role(APPLICANT)
                 .build();
 
         memberRepository.save(newMember);
