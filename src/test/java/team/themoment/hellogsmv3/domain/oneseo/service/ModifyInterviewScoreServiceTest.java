@@ -128,7 +128,7 @@ class ModifyInterviewScoreServiceTest {
             }
 
             @Test
-            @DisplayName("인터뷰 점수를 수정하고 저장한다")
+            @DisplayName("변경된 심층면점 점수를 수정하고 저장한다")
             void it_modifies_and_saves_interview_score() {
                 modifyInterviewScoreService.execute(memberId, reqDto);
 
