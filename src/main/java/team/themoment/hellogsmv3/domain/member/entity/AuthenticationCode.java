@@ -23,20 +23,20 @@ public class AuthenticationCode {
     private LocalDateTime createdAt;
     private int count;
 
-    public AuthenticationCode updatedCode(String code, LocalDateTime createdAt, boolean isTest) {
+    public AuthenticationCode updatedCode(String code, LocalDateTime createdAt, Boolean isTest) {
         this.code = code;
         this.createdAt = createdAt;
         this.count = !isTest ? (count + 1) : 0; // 테스트 상황이라면 count가 증가하지 않음
         return this;
     }
 
-    public AuthenticationCode(Long memberId, String code, String phoneNumber, LocalDateTime createdAt, boolean isTest) {
+    public AuthenticationCode(Long memberId, String code, String phoneNumber, LocalDateTime createdAt) {
         this.memberId = memberId;
         this.code = code;
         this.authenticated = false;
         this.phoneNumber = phoneNumber;
         this.createdAt = createdAt;
-        this.count = !isTest ? 1 : 0;
+        this.count = 1;
     }
 
     public void authenticatedAuthenticationCode() {
