@@ -22,7 +22,7 @@ public abstract class GenerateCodeService {
             boolean isTest) {
 
         return authCode == null ?
-                new AuthenticationCode(memberId, code, phoneNumber, LocalDateTime.now()) :
+                new AuthenticationCode(memberId, code, phoneNumber, LocalDateTime.now(), isTest) :
                 authCode.updatedCode(code, LocalDateTime.now(), isTest);
     }
 
