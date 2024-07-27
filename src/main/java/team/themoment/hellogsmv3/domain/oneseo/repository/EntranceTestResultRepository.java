@@ -12,7 +12,5 @@ public interface EntranceTestResultRepository extends JpaRepository<EntranceTest
 
     Optional<EntranceTestResult> findEntranceTestResultByOneseo(Oneseo oneseo);
     EntranceTestResult findByOneseo(Oneseo oneseo);
-    Boolean existsByFirstTestPassYn(YesNo firstTestPassYn);
-    Boolean existsBySecondTestPassYn(YesNo secondTestPassYn);
     List<EntranceTestResult> findAllByFirstTestPassYnOrSecondTestPassYnAndOneseoFinalSubmittedYn(YesNo firstTestPassYn, YesNo secondTestPassYn, YesNo finalSubmittedYn);
 }

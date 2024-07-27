@@ -12,7 +12,6 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
@@ -33,10 +32,9 @@ public class DownloadExcelService {
     private final OneseoRepository oneseoRepository;
     private final EntranceTestResultRepository entranceTestResultRepository;
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
-    private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
 
     private static final List<String> HEADER_NAMES = List.of(
-            "순번", "접수번호", "성명", "1지망", "2지망", "3지망", "생년월일", "성별", "지역명", "출신학교",
+            "순번", "접수번호", "성명", "1지망", "2지망", "3지망", "생년월일", "성별", "상세주소", "출신학교",
             "학력", "합격전형", "일반교과점수", "예체능점수", "비교과점수", "출석점수", "봉사점수", "전형총점",
             "인적성평가점수", "면접점수", "최종점수", "최종학과", "지원자연락처", "부모연락처", "담임연락처"
     );
@@ -75,10 +73,11 @@ public class DownloadExcelService {
         }
     }
 
-    private void addDataToRow(Row row, List<String> data) {
-        for (int i = 0; i < data.size(); i++) {
-            Cell cell = row.createCell(i);
-            cell.setCellValue(data.get(i));
+    private void addDataToRow(Row row, List<String> dataList) {
+        int cellCount = 0;
+        for (String data : dataList) {
+            Cell cell = row.createCell(cellCount++);
+            cell.setCellValue(data);
         }
     }
 
@@ -147,15 +146,15 @@ public class DownloadExcelService {
                     String.valueOf(entranceTestResult.getDocumentEvaluationScore()),
                     String.valueOf(entranceTestResult.getAptitudeEvaluationScore()),
                     String.valueOf(entranceTestResult.getInterviewScore()),
-                    finalScore == null ? "" : String.valueOf(finalScore),
-                    entranceTestResult.getDecidedMajor() == null ? "" : String.valueOf(entranceTestResult.getDecidedMajor()),
+                    String.valueOf(finalScore),
+                    String.valueOf(entranceTestResult.getDecidedMajor()),
                     oneseo.getMember().getPhoneNumber(),
                     oneseoPrivacyDetail.getGuardianPhoneNumber(),
                     oneseoPrivacyDetail.getSchoolTeacherPhoneNumber()
             );
 
 
-            sheetData.add(rowData.stream().map(data -> data == null ? "" : data).collect(Collectors.toList()));
+            sheetData.add(rowData.stream().map(data -> data.equals("null")? "" : data).collect(Collectors.toList()));
         }
 
         return sheetData;
@@ -171,4 +170,3 @@ public class DownloadExcelService {
                 .add(entranceTestResult.getInterviewScore());
     }
 }
-
