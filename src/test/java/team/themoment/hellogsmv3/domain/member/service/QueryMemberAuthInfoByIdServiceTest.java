@@ -1,4 +1,4 @@
-package team.themoment.hellogsmv3.domain.member;
+package team.themoment.hellogsmv3.domain.member.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +13,6 @@ import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
-import team.themoment.hellogsmv3.domain.member.service.QueryMemberAuthInfoByIdService;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.Optional;
