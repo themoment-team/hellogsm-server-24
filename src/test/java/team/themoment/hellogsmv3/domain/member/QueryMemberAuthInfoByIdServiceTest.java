@@ -44,15 +44,15 @@ public class QueryMemberAuthInfoByIdServiceTest {
         @Nested
         @DisplayName("존재하는 회원 ID가 주어지면")
         class Context_with_existing_member_id {
+            Member member = Member.builder()
+                    .id(memberId)
+                    .email("email@email.com")
+                    .authReferrerType(AuthReferrerType.GOOGLE)
+                    .role(Role.APPLICANT)
+                    .build();
 
             @BeforeEach
             void setUp() {
-                Member member = Member.builder()
-                        .id(memberId)
-                        .email("email@email.com")
-                        .authReferrerType(AuthReferrerType.GOOGLE)
-                        .role(Role.APPLICANT)
-                        .build();
                 given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
             }
 
@@ -61,11 +61,10 @@ public class QueryMemberAuthInfoByIdServiceTest {
             void it_return_member_auth_info() {
                 FoundMemberAuthInfoResDto result = queryMemberAuthInfoByIdService.execute(memberId);
 
-                assertEquals(memberId, result.memberId());
-                assertEquals("email@email.com", result.email());
-                assertEquals(AuthReferrerType.GOOGLE, result.authReferrerType());
-                assertEquals(Role.APPLICANT, result.role());
-                assertEquals(Role.APPLICANT, result.role());
+                assertEquals(member.getId(), result.memberId());
+                assertEquals(member.getEmail(), result.email());
+                assertEquals(member.getAuthReferrerType(), result.authReferrerType());
+                assertEquals(member.getRole(), result.role());
             }
         }
 
