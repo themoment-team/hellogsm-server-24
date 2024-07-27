@@ -81,7 +81,7 @@ class GenerateCodeServiceImplTest {
             }
 
             @Test
-            @DisplayName("예외를 던진다")
+            @DisplayName("ExpectedException을 던진다")
             void it_throws_an_exception() {
                 ExpectedException exception = assertThrows(ExpectedException.class, () -> generateCodeServiceImpl.execute(memberId, reqDto));
                 assertEquals("너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요. 특정 시간 내 제한 횟수인 5회를 초과하였습니다.", exception.getMessage());
