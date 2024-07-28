@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
@@ -14,7 +13,6 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
-import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -56,8 +54,8 @@ public class DownloadExcelService {
     private List<Sheet> createSheets(Workbook workbook) {
         return List.of(
                 workbook.createSheet("일반전형"),
-                workbook.createSheet("사회전형"),
                 workbook.createSheet("특별전형"),
+                workbook.createSheet("정원외 특별전형"),
                 workbook.createSheet("불합격")
         );
     }
