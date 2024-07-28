@@ -63,6 +63,7 @@ class GenerateCodeServiceImplTest {
                 assertEquals(memberId, savedAuthCode.getMemberId());
                 assertEquals(reqDto.phoneNumber(), savedAuthCode.getPhoneNumber());
                 assertEquals(code, savedAuthCode.getCode());
+                assertEquals(1, savedAuthCode.getCount());
             }
         }
 
