@@ -52,7 +52,8 @@ class CommonCodeServiceTest {
                     memberId,
                     validCode,
                     validPhoneNumber,
-                    LocalDateTime.now()
+                    LocalDateTime.now(),
+                    false
             );
         }
 
