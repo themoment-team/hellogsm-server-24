@@ -6,11 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.AptitudeEvaluationScoreReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.*;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.AdmissionTicketsResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.ArrivedStatusResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.*;
@@ -44,6 +41,7 @@ public class OneseoController {
     private final ModifyOneseoService modifyOneseoService;
     private final ModifyRealOneseoArrivedYnService modifyRealOneseoArrivedYnService;
     private final ModifyAptitudeEvaluationScoreService modifyAptitudeEvaluationScoreService;
+    private final ModifyInterviewScoreService modifyInterviewScoreService;
     private final DeleteOneseoService deleteOneseoService;
     private final QueryAdmissionTicketsService queryAdmissionTicketsService;
     private final DownloadExcelService downloadExcelService;
@@ -95,6 +93,15 @@ public class OneseoController {
         return CommonApiResponse.success("수정되었습니다.");
     }
 
+    @PatchMapping("/interview-score/{memberId}")
+    public CommonApiResponse modifyInterviewScore(
+            @PathVariable Long memberId,
+            @RequestBody @Valid InterviewScoreReqDto reqDto
+    ) {
+        modifyInterviewScoreService.execute(memberId, reqDto);
+        return CommonApiResponse.success("수정되었습니다.");
+    }
+
     @GetMapping("/oneseo/search")
     public SearchOneseosResDto search(
             @RequestParam("page") Integer page,
@@ -138,7 +145,6 @@ public class OneseoController {
         ) {
         return calculateMockScoreService.execute(dto, graduationType);
     }
-
 
     @DeleteMapping("/oneseo/me")
     public CommonApiResponse deleteMyOneseo(
