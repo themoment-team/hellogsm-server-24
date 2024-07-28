@@ -138,16 +138,28 @@ class ModifyOneseoServiceTest {
             @Test
             @DisplayName("기존의 Oneseo, OneseoPrivacyDetail, MiddleSchoolAchievement 엔티티를 수정하고 저장한다")
             void it_modifies_and_saves_existing_entities() {
+
+                Oneseo oneseo = Oneseo.builder()
+                        .id(1L)
+                        .finalSubmittedYn(NO)
+                        .build();
+
+                OneseoPrivacyDetail oneseoPrivacyDetail = OneseoPrivacyDetail.builder()
+                        .id(1L)
+                        .oneseo(oneseo)
+                        .build();
+
+                MiddleSchoolAchievement middleSchoolAchievement = MiddleSchoolAchievement.builder()
+                        .id(1L)
+                        .oneseo(oneseo)
+                        .build();
+
                 Member existingMember = mock(Member.class);
-                Oneseo existingOneseo = mock(Oneseo.class);
-                OneseoPrivacyDetail existingPrivacyDetail = mock(OneseoPrivacyDetail.class);
-                MiddleSchoolAchievement existingAchievement = mock(MiddleSchoolAchievement.class);
 
                 given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
-                given(oneseoService.findByMemberOrThrow(existingMember)).willReturn(existingOneseo);
-                given(oneseoPrivacyDetailRepository.findByOneseo(existingOneseo)).willReturn(existingPrivacyDetail);
-                given(middleSchoolAchievementRepository.findByOneseo(existingOneseo)).willReturn(existingAchievement);
-                given(existingOneseo.getFinalSubmittedYn()).willReturn(NO);
+                given(oneseoService.findByMemberOrThrow(existingMember)).willReturn(oneseo);
+                given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(oneseoPrivacyDetail);
+                given(middleSchoolAchievementRepository.findByOneseo(oneseo)).willReturn(middleSchoolAchievement);
 
                 modifyOneseoService.execute(oneseoReqDto, memberId, false);
                 ArgumentCaptor<Oneseo> oneseoCaptor = ArgumentCaptor.forClass(Oneseo.class);
@@ -162,13 +174,15 @@ class ModifyOneseoServiceTest {
                 OneseoPrivacyDetail capturedPrivacyDetail = oneseoPrivacyDetailCaptor.getValue();
                 MiddleSchoolAchievement capturedAchievement = middleSchoolAchievementCaptor.getValue();
 
-
+                assertEquals(oneseo.getId(), capturedOneseo.getId());
                 assertEquals(firstDesiredMajor, capturedOneseo.getDesiredMajors().getFirstDesiredMajor());
                 assertEquals(secondDesiredMajor, capturedOneseo.getDesiredMajors().getSecondDesiredMajor());
                 assertEquals(thirdDesiredMajor, capturedOneseo.getDesiredMajors().getThirdDesiredMajor());
                 assertEquals(screening, capturedOneseo.getWantedScreening());
                 assertEquals(screening, capturedOneseo.getAppliedScreening());
 
+                assertEquals(oneseoPrivacyDetail.getId(), capturedPrivacyDetail.getId());
+                assertEquals(oneseoPrivacyDetail.getOneseo(), capturedPrivacyDetail.getOneseo());
                 assertEquals(graduationType, capturedPrivacyDetail.getGraduationType());
                 assertEquals(address, capturedPrivacyDetail.getAddress());
                 assertEquals(detailAddress, capturedPrivacyDetail.getDetailAddress());
@@ -181,6 +195,8 @@ class ModifyOneseoServiceTest {
                 assertEquals(schoolTeacherName, capturedPrivacyDetail.getSchoolTeacherName());
                 assertEquals(schoolTeacherPhoneNumber, capturedPrivacyDetail.getSchoolTeacherPhoneNumber());
 
+                assertEquals(middleSchoolAchievement.getId(), capturedAchievement.getId());
+                assertEquals(middleSchoolAchievement.getOneseo(), capturedAchievement.getOneseo());
                 assertEquals(null, capturedAchievement.getAchievement1_2());
                 assertEquals(achievement, capturedAchievement.getAchievement2_1());
                 assertEquals(achievement, capturedAchievement.getAchievement2_1());
