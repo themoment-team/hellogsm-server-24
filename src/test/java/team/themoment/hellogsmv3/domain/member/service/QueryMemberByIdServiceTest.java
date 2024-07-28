@@ -44,9 +44,11 @@ class QueryMemberByIdServiceTest {
         @DisplayName("존재하는 회원 ID가 주어지면")
         class Context_with_existing_member_id {
 
+            private Member member;
+
             @BeforeEach
             void setUp() {
-                Member member = Member.builder()
+                member = Member.builder()
                         .id(memberId)
                         .name("최장우")
                         .birth(LocalDate.of(2006, 3, 6))
@@ -62,11 +64,11 @@ class QueryMemberByIdServiceTest {
             void it_returns_member_info() {
                 FoundMemberResDto result = queryMemberByIdService.execute(memberId);
 
-                assertEquals(memberId, result.memberId());
-                assertEquals("최장우", result.name());
-                assertEquals(LocalDate.of(2006, 3, 6), result.birth());
-                assertEquals("01012345678", result.phoneNumber());
-                assertEquals(Sex.MALE, result.sex());
+                assertEquals(member.getId(), result.memberId());
+                assertEquals(member.getName(), result.name());
+                assertEquals(member.getBirth(), result.birth());
+                assertEquals(member.getPhoneNumber(), result.phoneNumber());
+                assertEquals(member.getSex(), result.sex());
             }
         }
 
