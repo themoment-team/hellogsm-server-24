@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import team.themoment.hellogsmv3.domain.member.dto.CreateMemberReqDto;
+import team.themoment.hellogsmv3.domain.member.dto.request.CreateMemberReqDto;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
@@ -67,6 +67,7 @@ class CreateMemberServiceTest {
                         .id(memberId)
                         .email("jangwooooo@example.com")
                         .authReferrerType(AuthReferrerType.GOOGLE)
+                        .role(Role.UNAUTHENTICATED)
                         .build();
                 given(memberRepository.findById(memberId)).willReturn(Optional.of(existingMember));
                 willDoNothing().given(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
