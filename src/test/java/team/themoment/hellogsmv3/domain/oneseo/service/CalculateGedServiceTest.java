@@ -71,35 +71,35 @@ class CalculateGedServiceTest {
                 verify(entranceTestFactorsDetailRepository).save(any(EntranceTestFactorsDetail.class));
                 verify(entranceTestResultRepository).save(any(EntranceTestResult.class));
             }
+
+            @Test
+            @DisplayName("graduationType이 GED라면 올바른 내신 성적을 계산하고 결과를 저장한다")
+            void it_ged_calculates_and_save_results() {
+                reqDto = MiddleSchoolAchievementReqDto.builder()
+                        .gedTotalScore(BigDecimal.valueOf(480))
+                        .gedMaxScore(BigDecimal.valueOf(600))
+                        .build();
+
+                calculateGedService.execute(reqDto, oneseo, GED);
+
+                ArgumentCaptor<EntranceTestFactorsDetail> entranceTestFactorsDetailArgumentCaptor = ArgumentCaptor.forClass(EntranceTestFactorsDetail.class);
+                ArgumentCaptor<EntranceTestResult> entranceTestResultArgumentCaptor = ArgumentCaptor.forClass(EntranceTestResult.class);
+
+                verify(entranceTestFactorsDetailRepository).save(entranceTestFactorsDetailArgumentCaptor.capture());
+                verify(entranceTestResultRepository).save(entranceTestResultArgumentCaptor.capture());
+
+                EntranceTestFactorsDetail capturedEntranceTestFactorsDetailArgument = entranceTestFactorsDetailArgumentCaptor.getValue();
+                EntranceTestResult capturedEntranceTestResult = entranceTestResultArgumentCaptor.getValue();
+
+                assertEquals(BigDecimal.valueOf(144).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getTotalSubjectsScore());
+                assertEquals(BigDecimal.valueOf(30).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getAttendanceScore().setScale(3, UP));
+                assertEquals(BigDecimal.valueOf(20).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getVolunteerScore());
+                assertEquals(BigDecimal.valueOf(50).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getTotalNonSubjectsScore());
+
+                assertEquals(BigDecimal.valueOf(194).setScale(3, UP), capturedEntranceTestResult.getDocumentEvaluationScore());
+            }
+
         }
-
-        @Test
-        @DisplayName("graduationType이 GED라면 올바른 내신 성적을 계산하고 결과를 저장한다")
-        void it_ged_calculates_and_save_results() {
-            reqDto = MiddleSchoolAchievementReqDto.builder()
-                    .gedTotalScore(BigDecimal.valueOf(480))
-                    .gedMaxScore(BigDecimal.valueOf(600))
-                    .build();
-
-            calculateGedService.execute(reqDto, oneseo, GED);
-
-            ArgumentCaptor<EntranceTestFactorsDetail> entranceTestFactorsDetailArgumentCaptor = ArgumentCaptor.forClass(EntranceTestFactorsDetail.class);
-            ArgumentCaptor<EntranceTestResult> entranceTestResultArgumentCaptor = ArgumentCaptor.forClass(EntranceTestResult.class);
-
-            verify(entranceTestFactorsDetailRepository).save(entranceTestFactorsDetailArgumentCaptor.capture());
-            verify(entranceTestResultRepository).save(entranceTestResultArgumentCaptor.capture());
-
-            EntranceTestFactorsDetail capturedEntranceTestFactorsDetailArgument = entranceTestFactorsDetailArgumentCaptor.getValue();
-            EntranceTestResult capturedEntranceTestResult = entranceTestResultArgumentCaptor.getValue();
-
-            assertEquals(BigDecimal.valueOf(144).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getTotalSubjectsScore());
-            assertEquals(BigDecimal.valueOf(30).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getAttendanceScore().setScale(3, UP));
-            assertEquals(BigDecimal.valueOf(20).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getVolunteerScore());
-            assertEquals(BigDecimal.valueOf(50).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getTotalNonSubjectsScore());
-
-            assertEquals(BigDecimal.valueOf(194).setScale(3, UP), capturedEntranceTestResult.getDocumentEvaluationScore());
-        }
-
 
         @Nested
         @DisplayName("유효하지 않은 graduationType이 주어지면")
