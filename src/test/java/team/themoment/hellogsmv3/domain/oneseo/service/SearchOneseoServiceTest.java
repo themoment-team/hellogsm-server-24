@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoPageInfoDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
@@ -95,6 +97,7 @@ class SearchOneseoServiceTest {
             private Member member;
             private Oneseo oneseo;
             private OneseoPrivacyDetail oneseoPrivacyDetail;
+            private EntranceTestResult entranceTestResult;
 
             @BeforeEach
             void setUp() {
@@ -104,7 +107,7 @@ class SearchOneseoServiceTest {
                 Page<Oneseo> oneseoPage = new PageImpl<>(List.of(oneseo), pageable, 1);
 
                 oneseoPrivacyDetail = buildOneseoPrivacyDetail();
-                EntranceTestResult entranceTestResult = mock(EntranceTestResult.class);
+                entranceTestResult = mock(EntranceTestResult.class);
 
                 given(oneseoRepository.findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
                         keyword, screeningTag, isSubmitted, testResultTag, pageable
@@ -119,16 +122,24 @@ class SearchOneseoServiceTest {
             void it_returns_filtered_results() {
                 SearchOneseosResDto result = searchOneseoService.execute(page, size, testResultTag, screeningTag, isSubmitted, keyword);
 
-                assertEquals(1, result.info().totalElements());
-                assertEquals(1, result.info().totalPages());
-                assertEquals(1, result.oneseos().size());
+                SearchOneseoPageInfoDto searchOneseoPageInfoDto = result.info();
+                assertEquals(1, searchOneseoPageInfoDto.totalElements());
+                assertEquals(1, searchOneseoPageInfoDto.totalPages());
 
-                assertEquals(member.getName(), result.oneseos().get(0).name());
-                assertEquals(member.getPhoneNumber(), result.oneseos().get(0).phoneNumber());
-                assertEquals(oneseo.getOneseoSubmitCode(), result.oneseos().get(0).submitCode());
-                assertEquals(oneseo.getAppliedScreening(), result.oneseos().get(0).screening());
-                assertEquals(oneseoPrivacyDetail.getSchoolName(), result.oneseos().get(0).schoolName());
-                assertEquals(oneseoPrivacyDetail.getGuardianPhoneNumber(), result.oneseos().get(0).guardianPhoneNumber());
+                SearchOneseoResDto searchOneseoResDto = result.oneseos().get(0);
+                assertEquals(member.getId(), searchOneseoResDto.memberId());
+                assertEquals(oneseo.getOneseoSubmitCode(), searchOneseoResDto.submitCode());
+                assertEquals(oneseo.getRealOneseoArrivedYn(), searchOneseoResDto.realOneseoArrivedYn());
+                assertEquals(member.getName(), searchOneseoResDto.name());
+                assertEquals(oneseo.getAppliedScreening(), searchOneseoResDto.screening());
+                assertEquals(oneseoPrivacyDetail.getSchoolName(), searchOneseoResDto.schoolName());
+                assertEquals(member.getPhoneNumber(), searchOneseoResDto.phoneNumber());
+                assertEquals(oneseoPrivacyDetail.getGuardianPhoneNumber(), searchOneseoResDto.guardianPhoneNumber());
+                assertEquals(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber(), searchOneseoResDto.schoolTeacherPhoneNumber());
+                assertEquals(entranceTestResult.getFirstTestPassYn(), searchOneseoResDto.firstTestPassYn());
+                assertEquals(entranceTestResult.getAptitudeEvaluationScore(), searchOneseoResDto.aptitudeEvaluationScore());
+                assertEquals(entranceTestResult.getInterviewScore(), searchOneseoResDto.interviewScore());
+                assertEquals(entranceTestResult.getSecondTestPassYn(), searchOneseoResDto.secondTestPassYn());
             }
         }
     }
