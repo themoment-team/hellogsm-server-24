@@ -90,11 +90,46 @@ class QueryOneseoByIdServiceTest {
                 assertEquals(oneseo.getId(), result.oneseoId());
                 assertEquals(oneseo.getOneseoSubmitCode(), result.submitCode());
                 assertEquals(oneseo.getWantedScreening(), result.wantedScreening());
-                assertEquals(oneseo.getDesiredMajors().getFirstDesiredMajor(), result.desiredMajors().firstDesiredMajor());
-                assertEquals(member.getName(), result.privacyDetail().name());
-                assertEquals(oneseoPrivacyDetail.getGuardianName(), result.privacyDetail().guardianName());
-                assertEquals(middleSchoolAchievement.getAchievement3_1(), result.middleSchoolAchievement().achievement3_1());
-                assertEquals(middleSchoolAchievement.getGedTotalScore(), result.middleSchoolAchievement().gedTotalScore());
+
+                DesiredMajorsResDto desiredMajorsResDto = result.desiredMajors();
+                assertEquals(oneseo.getDesiredMajors().getFirstDesiredMajor(), desiredMajorsResDto.firstDesiredMajor());
+                assertEquals(oneseo.getDesiredMajors().getSecondDesiredMajor(), desiredMajorsResDto.secondDesiredMajor());
+                assertEquals(oneseo.getDesiredMajors().getThirdDesiredMajor(), desiredMajorsResDto.thirdDesiredMajor());
+
+                OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto = result.privacyDetail();
+                assertEquals(member.getName(), oneseoPrivacyDetailResDto.name());
+                assertEquals(member.getSex(), oneseoPrivacyDetailResDto.sex());
+                assertEquals(member.getBirth(), oneseoPrivacyDetailResDto.birth());
+                assertEquals(member.getPhoneNumber(), oneseoPrivacyDetailResDto.phoneNumber());
+                assertEquals(oneseoPrivacyDetail.getGraduationType(), oneseoPrivacyDetailResDto.graduationType());
+                assertEquals(oneseoPrivacyDetail.getAddress(), oneseoPrivacyDetailResDto.address());
+                assertEquals(oneseoPrivacyDetail.getDetailAddress(), oneseoPrivacyDetailResDto.detailAddress());
+                assertEquals(oneseoPrivacyDetail.getGuardianName(), oneseoPrivacyDetailResDto.guardianName());
+                assertEquals(oneseoPrivacyDetail.getGuardianPhoneNumber(), oneseoPrivacyDetailResDto.guardianPhoneNumber());
+                assertEquals(oneseoPrivacyDetail.getRelationshipWithGuardian(), oneseoPrivacyDetailResDto.relationshipWithGuardian());
+                assertEquals(oneseoPrivacyDetail.getSchoolName(), oneseoPrivacyDetailResDto.schoolName());
+                assertEquals(oneseoPrivacyDetail.getSchoolAddress(), oneseoPrivacyDetailResDto.schoolAddress());
+                assertEquals(oneseoPrivacyDetail.getSchoolTeacherName(), oneseoPrivacyDetailResDto.schoolTeacherName());
+                assertEquals(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber(), oneseoPrivacyDetailResDto.schoolTeacherPhoneNumber());
+                assertEquals(oneseoPrivacyDetail.getProfileImg(), oneseoPrivacyDetailResDto.profileImg());
+
+                MiddleSchoolAchievementResDto middleSchoolAchievementResDto = result.middleSchoolAchievement();
+                assertEquals(middleSchoolAchievement.getAchievement1_2(), middleSchoolAchievementResDto.achievement1_2());
+                assertEquals(middleSchoolAchievement.getAchievement2_1(), middleSchoolAchievementResDto.achievement2_1());
+                assertEquals(middleSchoolAchievement.getAchievement2_2(), middleSchoolAchievementResDto.achievement2_2());
+                assertEquals(middleSchoolAchievement.getAchievement3_1(), middleSchoolAchievementResDto.achievement3_1());
+                assertEquals(middleSchoolAchievement.getAchievement3_2(), middleSchoolAchievementResDto.achievement3_2());
+                assertEquals(middleSchoolAchievement.getGeneralSubjects(), middleSchoolAchievementResDto.generalSubjects());
+                assertEquals(middleSchoolAchievement.getNewSubjects(), middleSchoolAchievementResDto.newSubjects());
+                assertEquals(middleSchoolAchievement.getArtsPhysicalAchievement(), middleSchoolAchievementResDto.artsPhysicalAchievement());
+                assertEquals(middleSchoolAchievement.getArtsPhysicalSubjects(), middleSchoolAchievementResDto.artsPhysicalSubjects());
+                assertEquals(middleSchoolAchievement.getAbsentDays(), middleSchoolAchievementResDto.absentDays());
+                assertEquals(middleSchoolAchievement.getAttendanceDays(), middleSchoolAchievementResDto.attendanceDays());
+                assertEquals(middleSchoolAchievement.getVolunteerTime(), middleSchoolAchievementResDto.volunteerTime());
+                assertEquals(middleSchoolAchievement.getLiberalSystem(), middleSchoolAchievementResDto.liberalSystem());
+                assertEquals(middleSchoolAchievement.getFreeSemester(), middleSchoolAchievementResDto.freeSemester());
+                assertEquals(middleSchoolAchievement.getGedTotalScore(), middleSchoolAchievementResDto.gedTotalScore());
+                assertEquals(middleSchoolAchievement.getGedMaxScore(), middleSchoolAchievementResDto.gedMaxScore());
             }
 
             void setUp_it_throws_expected_exception() {
