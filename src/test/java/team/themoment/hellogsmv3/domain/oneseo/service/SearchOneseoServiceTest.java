@@ -33,7 +33,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @DisplayName("SearchOneseoService 클래스의")
-class SearchOneseoServiceAdditionalTests {
+class SearchOneseoServiceTest {
 
     @Mock
     private OneseoRepository oneseoRepository;
