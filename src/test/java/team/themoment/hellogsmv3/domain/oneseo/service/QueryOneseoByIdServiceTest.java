@@ -24,7 +24,6 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -64,18 +63,27 @@ class QueryOneseoByIdServiceTest {
         @DisplayName("존재하는 회원 ID가 주어졌을 때")
         class Context_with_existing_member_id {
 
-            @Test
-            @DisplayName("원서가 존재한다면 원서 관련 정보(개인정보, 중학교성취도, 전형 등)를 반환한다")
-            void it_returns_oneseo() {
-                Member member = buildMember(memberId);
-                Oneseo oneseo = buildOneseo(member);
-                OneseoPrivacyDetail oneseoPrivacyDetail = buildOneseoPrivacyDetail();
-                MiddleSchoolAchievement middleSchoolAchievement = buildMiddleSchoolAchievement();
+            private Member member;
+            private Oneseo oneseo;
+            private OneseoPrivacyDetail oneseoPrivacyDetail;
+            private MiddleSchoolAchievement middleSchoolAchievement;
+
+            void setUp_it_returns_oneseo() {
+                member = buildMember(memberId);
+                oneseo = buildOneseo(member);
+                oneseoPrivacyDetail = buildOneseoPrivacyDetail();
+                middleSchoolAchievement = buildMiddleSchoolAchievement();
 
                 given(memberService.findByIdOrThrow(memberId)).willReturn(member);
                 given(oneseoService.findByMemberOrThrow(member)).willReturn(oneseo);
                 given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(oneseoPrivacyDetail);
                 given(middleSchoolAchievementRepository.findByOneseo(oneseo)).willReturn(middleSchoolAchievement);
+            }
+
+            @Test
+            @DisplayName("원서가 존재한다면 원서 관련 정보(개인정보, 중학교성취도, 전형 등)를 반환한다")
+            void it_returns_oneseo() {
+                setUp_it_returns_oneseo();
 
                 FoundOneseoResDto result = queryOneseoByIdService.execute(memberId);
 
@@ -89,15 +97,19 @@ class QueryOneseoByIdServiceTest {
                 assertEquals(middleSchoolAchievement.getGedTotalScore(), result.middleSchoolAchievement().gedTotalScore());
             }
 
-            @Test
-            @DisplayName("원서가 존재하지 않는다면 ExpectedException을 던진다")
-            void it_throws_expected_exception() {
-                Member member = buildMember(memberId);
+            void setUp_it_throws_expected_exception() {
+                member = buildMember(memberId);
 
                 given(memberService.findByIdOrThrow(memberId)).willReturn(member);
                 when(oneseoService.findByMemberOrThrow(member)).thenThrow(
                         new ExpectedException("원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND)
                 );
+            }
+
+            @Test
+            @DisplayName("원서가 존재하지 않는다면 ExpectedException을 던진다")
+            void it_throws_expected_exception() {
+                setUp_it_throws_expected_exception();
 
                 ExpectedException exception = assertThrows(ExpectedException.class, () -> {
                     queryOneseoByIdService.execute(memberId);
@@ -112,13 +124,16 @@ class QueryOneseoByIdServiceTest {
         @DisplayName("존재하지 않는 회원 ID가 주어지면")
         class Context_with_non_existing_member_id {
 
-            @Test
-            @DisplayName("ExpectedException을 던진다")
-            void it_throws_expected_exception() {
+            @BeforeEach
+            void setUp() {
                 when(memberService.findByIdOrThrow(memberId)).thenThrow(
                         new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND)
                 );
+            }
 
+            @Test
+            @DisplayName("ExpectedException을 던진다")
+            void it_throws_expected_exception() {
                 ExpectedException exception = assertThrows(ExpectedException.class, () -> {
                     queryOneseoByIdService.execute(memberId);
                 });
