@@ -35,8 +35,8 @@ public class DownloadExcelService {
 
     private static final List<String> HEADER_NAMES = List.of(
             "순번", "접수번호", "성명", "1지망", "2지망", "3지망", "생년월일", "성별", "상세주소", "출신학교",
-            "학력", "합격전형", "일반교과점수", "예체능점수", "비교과점수", "출석점수", "봉사점수", "전형총점",
-            "인적성평가점수", "면접점수", "최종점수", "최종학과", "지원자연락처", "부모연락처", "담임연락처"
+            "학력", "적용전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
+            "직무적성소양평가점수", "심층면접점수", "최종점수", "최종학과", "지원자연락처", "보호자연락처", "담임연락처"
     );
 
     public Workbook execute() {
@@ -139,7 +139,6 @@ public class DownloadExcelService {
                     String.valueOf(oneseo.getAppliedScreening()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getGeneralSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getArtsPhysicalSubjectsScore()),
-                    String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getTotalNonSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getAttendanceScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getVolunteerScore()),
                     String.valueOf(entranceTestResult.getDocumentEvaluationScore()),
