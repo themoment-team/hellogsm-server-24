@@ -118,8 +118,7 @@ public class DownloadExcelService {
         int index = 1;
 
         for (Oneseo oneseo : oneseoList) {
-            EntranceTestResult entranceTestResult = entranceTestResultRepository.findEntranceTestResultByOneseo(oneseo)
-                    .orElseThrow(() -> new ExpectedException("해당 원서로 입학 시험 결과를 찾을 수 없습니다. oneseo ID: " + oneseo.getId(), HttpStatus.NOT_FOUND));
+            EntranceTestResult entranceTestResult = entranceTestResultRepository.findEntranceTestResultByOneseo(oneseo);
 
             OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
 

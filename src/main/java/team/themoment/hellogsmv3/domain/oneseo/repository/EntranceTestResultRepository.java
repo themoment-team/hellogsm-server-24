@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface EntranceTestResultRepository extends JpaRepository<EntranceTestResult, Long> {
 
-    Optional<EntranceTestResult> findEntranceTestResultByOneseo(Oneseo oneseo);
+    EntranceTestResult findEntranceTestResultByOneseo(Oneseo oneseo);
     EntranceTestResult findByOneseo(Oneseo oneseo);
     List<EntranceTestResult> findAllByFirstTestPassYnOrSecondTestPassYnAndOneseoFinalSubmittedYn(YesNo firstTestPassYn, YesNo secondTestPassYn, YesNo finalSubmittedYn);
 }
