@@ -126,7 +126,7 @@ public class CreateOneseoService {
         if (achievements == null) return null;
 
         achievements.forEach(achievement -> {
-            if (achievement > 5 || achievement < 3) throw new ExpectedException("올바르지 않은 예체능 등급이 입력되었습니다.", HttpStatus.BAD_REQUEST);
+            if (achievement != 0 && (achievement > 5 || achievement < 3)) throw new ExpectedException("올바르지 않은 예체능 등급이 입력되었습니다.", HttpStatus.BAD_REQUEST);
         });
 
         return achievements;

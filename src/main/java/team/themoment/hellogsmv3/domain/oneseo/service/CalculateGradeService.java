@@ -181,7 +181,7 @@ public class CalculateGradeService {
 
     private BigDecimal calcArtSportsScore(List<Integer> achievements) {
         achievements.forEach(achievement -> {
-            if (achievement > 5 || achievement < 3) throw new IllegalArgumentException("올바르지 않은 예체능 등급이 입력되었습니다.");
+            if (achievement != 0 && (achievement > 5 || achievement < 3)) throw new IllegalArgumentException("올바르지 않은 예체능 등급이 입력되었습니다.");
         });
 
         // 1. 각 등급별 갯수에 등급별 배점을 곱한 값을 더한다.

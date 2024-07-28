@@ -228,6 +228,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/oneseo/v3/aptitude-score/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+                .requestMatchers(HttpMethod.PATCH, "/oneseo/v3/interview-score/{memberId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .requestMatchers(HttpMethod.POST, "/oneseo/v3/image").hasAnyAuthority(
                         Role.APPLICANT.name(),
                         Role.ADMIN.name(),
@@ -243,6 +246,9 @@ public class SecurityConfig {
                 )
                 .requestMatchers(HttpMethod.PUT, "/oneseo/v3/final-submit").hasAnyAuthority(
                         Role.APPLICANT.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/oneseo/v3/admission-tickets").hasAnyAuthority(
+                        Role.ADMIN.name()
                 )
 
                 // mock score calculate
