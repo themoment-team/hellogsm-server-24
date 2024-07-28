@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.NO;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.YES;
 
@@ -89,7 +91,7 @@ public class DownloadExcelService {
     }
 
     private List<List<String>> getOneseoData(Screening screening) {
-        List<Oneseo> oneseoList = oneseoRepository.findAllByAppliedScreeningAndFinalSubmittedYn(screening, YesNo.YES);
+        List<Oneseo> oneseoList = oneseoRepository.findAllByAppliedScreeningAndFinalSubmittedYn(screening, YES);
         return oneseoToExcelDataList(oneseoList);
     }
 
@@ -122,6 +124,28 @@ public class DownloadExcelService {
 
             BigDecimal finalScore = calculateFinalScore(entranceTestResult);
 
+            String sex = null;
+            String graduationType = null;
+            String appliedScreening = null;
+
+            switch (oneseo.getMember().getSex()) {
+                case MALE -> sex = "남자";
+                case FEMALE -> sex = "여자";
+            }
+
+            switch (oneseoPrivacyDetail.getGraduationType()) {
+                case CANDIDATE -> graduationType = "졸업예정자";
+                case GRADUATE -> graduationType = "졸업자";
+                case GED -> graduationType = "검정고시";
+            }
+
+            switch (oneseo.getAppliedScreening()) {
+                case GENERAL -> appliedScreening = "일반전형";
+                case SPECIAL -> appliedScreening = "특별전형";
+                case EXTRA_VETERANS -> appliedScreening = "국가보훈대상자";
+                case EXTRA_ADMISSION -> appliedScreening = "특례입학대상자";
+            }
+
             List<String> rowData = List.of(
                     String.valueOf(index++),
                     String.valueOf(oneseo.getOneseoSubmitCode()),
@@ -130,11 +154,11 @@ public class DownloadExcelService {
                     String.valueOf(oneseo.getDesiredMajors().getSecondDesiredMajor()),
                     String.valueOf(oneseo.getDesiredMajors().getThirdDesiredMajor()),
                     String.valueOf(oneseo.getMember().getBirth()),
-                    String.valueOf(oneseo.getMember().getSex()),
+                    String.valueOf(sex),
                     (oneseoPrivacyDetail.getAddress() + oneseoPrivacyDetail.getDetailAddress()),
                     String.valueOf(oneseoPrivacyDetail.getSchoolName()),
-                    String.valueOf(oneseoPrivacyDetail.getGraduationType()),
-                    String.valueOf(oneseo.getAppliedScreening()),
+                    String.valueOf(graduationType),
+                    String.valueOf(appliedScreening),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getGeneralSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getArtsPhysicalSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getAttendanceScore()),
