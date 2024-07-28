@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
-import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
@@ -19,7 +19,6 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.math.BigDecimal;
@@ -30,15 +29,16 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @DisplayName("QueryOneseoByIdService 클래스의")
 class QueryOneseoByIdServiceTest {
 
     @Mock
-    private OneseoRepository oneseoRepository;
+    private OneseoService oneseoService;
 
     @Mock
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
     @Mock
     private OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
@@ -72,8 +72,8 @@ class QueryOneseoByIdServiceTest {
                 OneseoPrivacyDetail oneseoPrivacyDetail = buildOneseoPrivacyDetail();
                 MiddleSchoolAchievement middleSchoolAchievement = buildMiddleSchoolAchievement();
 
-                given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
-                given(oneseoRepository.findByMember(member)).willReturn(Optional.of(oneseo));
+                given(memberService.findByIdOrThrow(memberId)).willReturn(member);
+                given(oneseoService.findByMemberOrThrow(member)).willReturn(oneseo);
                 given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(oneseoPrivacyDetail);
                 given(middleSchoolAchievementRepository.findByOneseo(oneseo)).willReturn(middleSchoolAchievement);
 
@@ -94,8 +94,10 @@ class QueryOneseoByIdServiceTest {
             void it_throws_expected_exception() {
                 Member member = buildMember(memberId);
 
-                given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
-                given(oneseoRepository.findByMember(member)).willReturn(Optional.empty());
+                given(memberService.findByIdOrThrow(memberId)).willReturn(member);
+                when(oneseoService.findByMemberOrThrow(member)).thenThrow(
+                        new ExpectedException("원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND)
+                );
 
                 ExpectedException exception = assertThrows(ExpectedException.class, () -> {
                     queryOneseoByIdService.execute(memberId);
@@ -113,7 +115,9 @@ class QueryOneseoByIdServiceTest {
             @Test
             @DisplayName("ExpectedException을 던진다")
             void it_throws_expected_exception() {
-                given(memberRepository.findById(memberId)).willReturn(Optional.empty());
+                when(memberService.findByIdOrThrow(memberId)).thenThrow(
+                        new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND)
+                );
 
                 ExpectedException exception = assertThrows(ExpectedException.class, () -> {
                     queryOneseoByIdService.execute(memberId);
