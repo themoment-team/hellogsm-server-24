@@ -59,7 +59,7 @@ class CalculateGradeServiceTest {
         class Context_with_valid_graduationType {
 
             @Test
-            @DisplayName("내신 성적을 계산하고 결과를 저장한다")
+            @DisplayName("성적을 계산하고 결과를 저장한다")
             void it_calculates_and_saves_results() {
                 reqDto = MiddleSchoolAchievementReqDto.builder()
                         .achievement1_2(Arrays.asList(5, 5, 5, 5, 5, 5, 5, 5, 0))
