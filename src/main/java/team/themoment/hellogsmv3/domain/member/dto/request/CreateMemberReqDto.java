@@ -7,7 +7,7 @@ import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
 
 import java.time.LocalDate;
 
-public record ModifyMemberReqDto(
+public record CreateMemberReqDto(
 
         @NotBlank String code,
         @NotBlank String name,

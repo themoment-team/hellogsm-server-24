@@ -12,6 +12,6 @@ public record AdmissionTicketsResDto(
         String profileImg,
         String schoolName,
         Screening appliedScreening,
-        Long oneseoSubmitCode
+        String oneseoSubmitCode
 ) {
 }

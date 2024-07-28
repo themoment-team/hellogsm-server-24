@@ -5,7 +5,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import team.themoment.hellogsmv3.domain.member.dto.request.ModifyMemberReqDto;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 import team.themoment.hellogsmv3.domain.member.entity.type.Sex;

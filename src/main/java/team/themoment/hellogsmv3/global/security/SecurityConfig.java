@@ -193,11 +193,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/member/v3/member/me/send-code-test").hasAnyAuthority(
                         Role.ROOT.name()
                 )
-                .requestMatchers(HttpMethod.PUT, "/member/v3/member/me").hasAnyAuthority(
-                        Role.APPLICANT.name(),
-                        Role.ADMIN.name(),
-                        Role.ROOT.name()
-                )
                 .requestMatchers(HttpMethod.POST, "/member/v3/member/me").hasAnyAuthority(
                         Role.UNAUTHENTICATED.name(),
                         Role.APPLICANT.name(),
@@ -228,6 +223,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/oneseo/v3/aptitude-score/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+                .requestMatchers(HttpMethod.PATCH, "/oneseo/v3/interview-score/{memberId}").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
                 .requestMatchers(HttpMethod.POST, "/oneseo/v3/image").hasAnyAuthority(
                         Role.APPLICANT.name(),
                         Role.ADMIN.name(),
@@ -245,6 +243,9 @@ public class SecurityConfig {
                         Role.APPLICANT.name()
                 )
                 .requestMatchers(HttpMethod.GET, "oneseo/v3/excel").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/oneseo/v3/admission-tickets").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
 
