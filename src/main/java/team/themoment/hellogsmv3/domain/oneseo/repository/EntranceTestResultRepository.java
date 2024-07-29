@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EntranceTestResultRepository extends JpaRepository<EntranceTestResult, Long> {
-
-    EntranceTestResult findEntranceTestResultByOneseo(Oneseo oneseo);
     EntranceTestResult findByOneseo(Oneseo oneseo);
     List<EntranceTestResult> findAllByFirstTestPassYnOrSecondTestPassYnAndOneseoFinalSubmittedYn(YesNo firstTestPassYn, YesNo secondTestPassYn, YesNo finalSubmittedYn);
 }

@@ -27,7 +27,7 @@ public class ModifyAptitudeEvaluationScoreService {
 
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
-        EntranceTestResult entranceTestResult = entranceTestResultRepository.findEntranceTestResultByOneseo(oneseo);
+        EntranceTestResult entranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);
 
         entranceTestResult.modifyAptitudeEvaluationScore(aptitudeEvaluationScoreReqDto.aptitudeEvaluationScore());
 
