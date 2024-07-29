@@ -1,8 +1,10 @@
 package team.themoment.hellogsmv3.domain.oneseo.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.*;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
@@ -25,6 +27,9 @@ import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -39,6 +44,7 @@ public class OneseoController {
     private final ModifyInterviewScoreService modifyInterviewScoreService;
     private final DeleteOneseoService deleteOneseoService;
     private final QueryAdmissionTicketsService queryAdmissionTicketsService;
+    private final DownloadExcelService downloadExcelService;
     private final SearchOneseoService searchOneseoService;
     private final QueryOneseoByIdService queryOneseoByIdService;
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
@@ -152,5 +158,20 @@ public class OneseoController {
     public List<AdmissionTicketsResDto> getAdmissionTickets(
     ) {
         return queryAdmissionTicketsService.execute();
+    }
+
+    @GetMapping("/excel")
+    public void downloadExcel(
+            HttpServletResponse response
+    ) {
+        Workbook workbook = downloadExcelService.execute();
+        try {
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8");
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("지원자 입학정보.xlsx", StandardCharsets.UTF_8).replace("+", "%20"));
+            workbook.write(response.getOutputStream());
+            workbook.close();
+        } catch (IOException ex) {
+            throw new RuntimeException("파일 작성과정에서 예외가 발생하였습니다.", ex);
+        }
     }
 }
