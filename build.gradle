@@ -59,14 +59,19 @@ dependencies {
 
     /** aws **/
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.1'
+
+    /** excel **/
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
-        }
-    }
+def querydslSrcDir = "$projectDir/build/generated"
+
+clean {
+    delete file(querydslSrcDir)
+}
+
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(querydslSrcDir)
 }
 
 tasks.named('bootBuildImage') {
