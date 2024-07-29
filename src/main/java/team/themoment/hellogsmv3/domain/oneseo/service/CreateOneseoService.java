@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ public class CreateOneseoService {
     private final MemberService memberService;
 
     @Transactional
+    @CacheEvict(value = "oneseo", key = "#memberId")
     public void execute(OneseoReqDto reqDto, Long memberId) {
         Member currentMember = memberService.findByIdOrThrow(memberId);
 
