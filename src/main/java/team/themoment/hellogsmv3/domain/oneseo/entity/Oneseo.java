@@ -13,7 +13,7 @@ import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @Getter
 @Entity
-@Table(name = "tb_oneseo")
+@Table(name = "tb_oneseo", indexes = @Index(name = "idx_final_submitted_yn", columnList = "final_submitted_yn"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
