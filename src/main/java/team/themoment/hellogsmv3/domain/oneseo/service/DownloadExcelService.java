@@ -181,6 +181,7 @@ public class DownloadExcelService {
     }
 
     private BigDecimal calculateFinalScore(EntranceTestResult entranceTestResult) {
+        //TODO 최종점수 계산 변경하기
         if (entranceTestResult.getSecondTestPassYn() == null) {
             return null;
         }
