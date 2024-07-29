@@ -51,6 +51,7 @@ public class UploadImageServiceTest {
     @Nested
     @DisplayName("execute 메소드는")
     class Describe_execute {
+        String s3Key = "some-key";
 
         @Nested
         @DisplayName("파일이 존재하지 않을 경우")
@@ -90,7 +91,7 @@ public class UploadImageServiceTest {
 
             @BeforeEach
             void setUp() throws Exception {
-                URL mockUrl = new URL("https://bucket-name.s3.amazonaws.com/some-key");
+                URL mockUrl = new URL("https://bucket-name.s3.amazonaws.com/" + s3Key);
                 when(mockS3Resource.getURL()).thenReturn(mockUrl);
 
                 given(s3Template.upload(
@@ -107,7 +108,7 @@ public class UploadImageServiceTest {
                 String result = uploadImageService.execute(file);
 
                 assertNotNull(result);
-                assertTrue(result.contains("some-key"));
+                assertTrue(result.contains(s3Key));
             }
         }
 
@@ -121,7 +122,7 @@ public class UploadImageServiceTest {
             void setUp() {
                 when(s3Template.upload(
                         s3Environment.bucketName(),
-                        "some-key",
+                        s3Key,
                         inputStream,
                         ObjectMetadata.builder().contentType("jpg").build()
                 )).thenThrow(new RuntimeException("AWS S3 upload error"));
