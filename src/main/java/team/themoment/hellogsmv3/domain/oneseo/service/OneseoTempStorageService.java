@@ -19,7 +19,7 @@ public class OneseoTempStorageService {
     private final MemberService memberService;
 
     @CachePut(value = "oneseo", key = "#memberId")
-    public FoundOneseoResDto execute(OneseoReqDto reqDto, Long memberId) {
+    public FoundOneseoResDto execute(OneseoReqDto reqDto,Integer step, Long memberId) {
         Member member = memberService.findByIdOrThrow(memberId);
 
         OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto = buildOneseoPrivacyDetailResDto(member, reqDto);
@@ -28,7 +28,8 @@ public class OneseoTempStorageService {
         return buildFoundOneseoResDto(
                 reqDto,
                 oneseoPrivacyDetailResDto,
-                middleSchoolAchievementResDto
+                middleSchoolAchievementResDto,
+                step
         );
     }
 
@@ -84,7 +85,8 @@ public class OneseoTempStorageService {
     private FoundOneseoResDto buildFoundOneseoResDto(
             OneseoReqDto reqDto,
             OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto,
-            MiddleSchoolAchievementResDto middleSchoolAchievementResDto
+            MiddleSchoolAchievementResDto middleSchoolAchievementResDto,
+            Integer step
     ) {
 
         return FoundOneseoResDto.builder()
@@ -98,6 +100,7 @@ public class OneseoTempStorageService {
                         .build())
                 .privacyDetail(oneseoPrivacyDetailResDto)
                 .middleSchoolAchievement(middleSchoolAchievementResDto)
+                .step(step)
                 .build();
     }
 }
