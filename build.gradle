@@ -62,6 +62,9 @@ dependencies {
 
     /** excel **/
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
+
+    /** jackson **/
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
 def querydslSrcDir = "$projectDir/build/generated"

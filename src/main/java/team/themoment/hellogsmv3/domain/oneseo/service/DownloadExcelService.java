@@ -118,7 +118,7 @@ public class DownloadExcelService {
         int index = 1;
 
         for (Oneseo oneseo : oneseoList) {
-            EntranceTestResult entranceTestResult = entranceTestResultRepository.findEntranceTestResultByOneseo(oneseo);
+            EntranceTestResult entranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);
 
             OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
 

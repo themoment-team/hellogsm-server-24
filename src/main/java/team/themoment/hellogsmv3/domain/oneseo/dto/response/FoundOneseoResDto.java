@@ -1,8 +1,8 @@
 package team.themoment.hellogsmv3.domain.oneseo.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
 @Builder
 public record FoundOneseoResDto(
@@ -12,6 +12,8 @@ public record FoundOneseoResDto(
         Screening wantedScreening,
         DesiredMajorsResDto desiredMajors,
         OneseoPrivacyDetailResDto privacyDetail,
-        MiddleSchoolAchievementResDto middleSchoolAchievement
+        MiddleSchoolAchievementResDto middleSchoolAchievement,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        Integer step
 ) {
 }

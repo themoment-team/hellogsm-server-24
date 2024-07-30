@@ -49,6 +49,7 @@ public class OneseoController {
     private final QueryOneseoByIdService queryOneseoByIdService;
     private final UpdateFinalSubmissionService updateFinalSubmissionService;
     private final CalculateMockScoreService calculateMockScoreService;
+    private final OneseoTempStorageService oneseoTempStorageService;
 
     @PostMapping("/oneseo/me")
     public CommonApiResponse create(
@@ -158,6 +159,16 @@ public class OneseoController {
     public List<AdmissionTicketsResDto> getAdmissionTickets(
     ) {
         return queryAdmissionTicketsService.execute();
+    }
+
+    @PostMapping("/temp-storage")
+    public CommonApiResponse temp(
+            @RequestBody @Valid OneseoReqDto reqDto,
+            @RequestParam Integer step,
+            @AuthRequest Long memberId
+    ) {
+        oneseoTempStorageService.execute(reqDto, step, memberId);
+        return CommonApiResponse.success("임시저장되었습니다.");
     }
 
     @GetMapping("/excel")
