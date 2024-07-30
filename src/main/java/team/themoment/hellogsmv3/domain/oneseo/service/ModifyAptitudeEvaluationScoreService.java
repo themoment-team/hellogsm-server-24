@@ -27,8 +27,7 @@ public class ModifyAptitudeEvaluationScoreService {
 
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
-        EntranceTestResult entranceTestResult = entranceTestResultRepository.findEntranceTestResultByOneseo(oneseo)
-                .orElseThrow(() -> new ExpectedException("해당 지원자의 입학 시험 결과를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
+        EntranceTestResult entranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);
 
         entranceTestResult.modifyAptitudeEvaluationScore(aptitudeEvaluationScoreReqDto.aptitudeEvaluationScore());
 
