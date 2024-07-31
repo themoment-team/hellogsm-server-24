@@ -47,6 +47,10 @@ class CreateOneseoServiceTest {
     private MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
     @Mock
     private MemberService memberService;
+    @Mock
+    private CalculateGradeService calculateGradeService;
+    @Mock
+    private CalculateGedService calculateGedService;
 
     @InjectMocks
     private CreateOneseoService createOneseoService;
