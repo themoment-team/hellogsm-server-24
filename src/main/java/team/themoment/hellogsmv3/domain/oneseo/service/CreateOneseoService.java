@@ -64,7 +64,6 @@ public class CreateOneseoService {
                 .liberalSystem(middleSchoolAchievement.getLiberalSystem())
                 .freeSemester(middleSchoolAchievement.getFreeSemester())
                 .gedTotalScore(middleSchoolAchievement.getGedTotalScore())
-                .gedMaxScore(middleSchoolAchievement.getGedMaxScore())
                 .build();
 
         switch (graduationType) {
@@ -130,7 +129,6 @@ public class CreateOneseoService {
                 .liberalSystem(middleSchoolAchievement.liberalSystem())
                 .freeSemester(middleSchoolAchievement.freeSemester())
                 .gedTotalScore(middleSchoolAchievement.gedTotalScore())
-                .gedMaxScore(middleSchoolAchievement.gedMaxScore())
                 .build();
     }
 

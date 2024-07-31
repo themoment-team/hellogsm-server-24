@@ -78,7 +78,6 @@ public class OneseoTempStorageService {
                 .liberalSystem(middleSchoolAchievement.liberalSystem())
                 .freeSemester(middleSchoolAchievement.freeSemester())
                 .gedTotalScore(middleSchoolAchievement.gedTotalScore())
-                .gedMaxScore(middleSchoolAchievement.gedMaxScore())
                 .build();
     }
 
