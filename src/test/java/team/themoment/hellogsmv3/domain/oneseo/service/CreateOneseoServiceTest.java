@@ -194,7 +194,6 @@ class CreateOneseoServiceTest {
                 assertEquals(liberalSystem, capturedAchievement.getLiberalSystem());
                 assertEquals(freeSemester, capturedAchievement.getFreeSemester());
                 assertEquals(null, capturedAchievement.getGedTotalScore());
-                assertEquals(null, capturedAchievement.getGedMaxScore());
             }
         }
 

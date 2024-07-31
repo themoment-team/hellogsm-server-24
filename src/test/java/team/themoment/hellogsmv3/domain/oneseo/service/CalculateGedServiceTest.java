@@ -63,7 +63,6 @@ class CalculateGedServiceTest {
             void it_calculates_and_saves_results() {
                 reqDto = MiddleSchoolAchievementReqDto.builder()
                         .gedTotalScore(BigDecimal.valueOf(480))
-                        .gedMaxScore(BigDecimal.valueOf(600))
                         .build();
 
                 calculateGedService.execute(reqDto, oneseo, GED);
@@ -76,8 +75,7 @@ class CalculateGedServiceTest {
             @DisplayName("graduationType이 GED라면 올바른 내신 성적을 계산하고 결과를 저장한다")
             void it_ged_calculates_and_save_results() {
                 reqDto = MiddleSchoolAchievementReqDto.builder()
-                        .gedTotalScore(BigDecimal.valueOf(480))
-                        .gedMaxScore(BigDecimal.valueOf(600))
+                        .gedTotalScore(BigDecimal.valueOf(536.91))
                         .build();
 
                 calculateGedService.execute(reqDto, oneseo, GED);
@@ -91,12 +89,12 @@ class CalculateGedServiceTest {
                 EntranceTestFactorsDetail capturedEntranceTestFactorsDetailArgument = entranceTestFactorsDetailArgumentCaptor.getValue();
                 EntranceTestResult capturedEntranceTestResult = entranceTestResultArgumentCaptor.getValue();
 
-                assertEquals(BigDecimal.valueOf(144).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getTotalSubjectsScore());
+                assertEquals(BigDecimal.valueOf(189.528).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getTotalSubjectsScore());
                 assertEquals(BigDecimal.valueOf(30).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getAttendanceScore().setScale(3, UP));
-                assertEquals(BigDecimal.valueOf(20).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getVolunteerScore());
-                assertEquals(BigDecimal.valueOf(50).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getTotalNonSubjectsScore());
+                assertEquals(BigDecimal.valueOf(24.743).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getVolunteerScore());
+                assertEquals(BigDecimal.valueOf(54.743).setScale(3, UP), capturedEntranceTestFactorsDetailArgument.getTotalNonSubjectsScore());
 
-                assertEquals(BigDecimal.valueOf(194).setScale(3, UP), capturedEntranceTestResult.getDocumentEvaluationScore());
+                assertEquals(BigDecimal.valueOf(244.271).setScale(3, UP), capturedEntranceTestResult.getDocumentEvaluationScore());
             }
 
         }
@@ -110,7 +108,6 @@ class CalculateGedServiceTest {
             void it_throw_exception() {
                 reqDto = MiddleSchoolAchievementReqDto.builder()
                         .gedTotalScore(BigDecimal.valueOf(480))
-                        .gedMaxScore(BigDecimal.valueOf(600))
                         .build();
 
                 IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->

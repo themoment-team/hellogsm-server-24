@@ -82,7 +82,4 @@ public class MiddleSchoolAchievement {
 
     @Column(name = "ged_total_score")
     private BigDecimal gedTotalScore;
-
-    @Column(name = "ged_max_score")
-    private BigDecimal gedMaxScore;
 }
