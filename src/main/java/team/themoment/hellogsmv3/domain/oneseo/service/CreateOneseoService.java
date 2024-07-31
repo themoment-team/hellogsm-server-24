@@ -61,7 +61,6 @@ public class CreateOneseoService {
                         .thirdDesiredMajor(reqDto.thirdDesiredMajor())
                         .build())
                 .realOneseoArrivedYn(NO)
-                .finalSubmittedYn(NO)
                 .wantedScreening(reqDto.screening())
                 .appliedScreening(reqDto.screening())
                 .build();

@@ -38,11 +38,9 @@ public class ModifyOneseoService {
     private final MemberService memberService;
 
     @Transactional
-    public void execute(OneseoReqDto reqDto, Long memberId, boolean isAdmin) {
+    public void execute(OneseoReqDto reqDto, Long memberId) {
         Member currentMember = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(currentMember);
-
-        isNotFinalSubmitted(isAdmin, oneseo);
 
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
@@ -66,7 +64,6 @@ public class ModifyOneseoService {
                         .thirdDesiredMajor(reqDto.thirdDesiredMajor())
                         .build())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
-                .finalSubmittedYn(oneseo.getFinalSubmittedYn())
                 .wantedScreening(reqDto.screening())
                 .appliedScreening(reqDto.screening())
                 .build();
@@ -119,11 +116,6 @@ public class ModifyOneseoService {
         oneseoRepository.save(modifiedOneseo);
         oneseoPrivacyDetailRepository.save(modifiedOneseoPrivacyDetail);
         middleSchoolAchievementRepository.save(modifiedMiddleSchoolAchievement);
-    }
-
-    private void isNotFinalSubmitted(boolean isAdmin, Oneseo oneseo) {
-        if (!isAdmin && oneseo.getFinalSubmittedYn().equals(YES))
-            throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
     }
 
     private void saveHistoryIfScreeningChange(Screening afterScreening, Oneseo oneseo) {
