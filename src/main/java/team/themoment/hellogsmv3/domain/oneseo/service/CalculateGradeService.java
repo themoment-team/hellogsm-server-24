@@ -68,24 +68,42 @@ public class CalculateGradeService {
                 .setScale(3, RoundingMode.HALF_UP);
 
         if (oneseo != null) {
-            EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
-                    .generalSubjectsScore(generalSubjectsScore)
-                    .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
-                    .totalSubjectsScore(totalSubjectsScore)
-                    .attendanceScore(attendanceScore)
-                    .volunteerScore(volunteerScore)
-                    .totalNonSubjectsScore(totalNonSubjectsScore)
-                    .score1_2(score1_2)
-                    .score2_1(score2_1)
-                    .score2_2(score2_2)
-                    .score3_1(score3_1)
-                    .score3_2(score3_2)
-                    .build();
+            EntranceTestResult findEntranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);
 
-            EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
+            if (findEntranceTestResult == null) {
+                EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
+                        .generalSubjectsScore(generalSubjectsScore)
+                        .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
+                        .totalSubjectsScore(totalSubjectsScore)
+                        .attendanceScore(attendanceScore)
+                        .volunteerScore(volunteerScore)
+                        .totalNonSubjectsScore(totalNonSubjectsScore)
+                        .score1_2(score1_2)
+                        .score2_1(score2_1)
+                        .score2_2(score2_2)
+                        .score3_1(score3_1)
+                        .score3_2(score3_2)
+                        .build();
 
-            entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
-            entranceTestResultRepository.save(entranceTestResult);
+                EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
+
+                entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
+                entranceTestResultRepository.save(entranceTestResult);
+            } else {
+                EntranceTestFactorsDetail findEntranceTestFactorsDetail = findEntranceTestResult.getEntranceTestFactorsDetail();
+
+                findEntranceTestFactorsDetail.updateEntranceTestFactorsDetail(
+                        generalSubjectsScore, artsPhysicalSubjectsScore, totalSubjectsScore,
+                        attendanceScore, volunteerScore, totalNonSubjectsScore,
+                        score1_2, score2_1, score2_2, score3_1, score3_2
+                );
+
+                findEntranceTestResult.modifyDocumentEvaluationScore(totalScore);
+
+                entranceTestFactorsDetailRepository.save(findEntranceTestFactorsDetail);
+                entranceTestResultRepository.save(findEntranceTestResult);
+            }
+
             return null;
         } else {
             return MockScoreResDto.builder()

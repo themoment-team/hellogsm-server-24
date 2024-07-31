@@ -14,6 +14,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -31,6 +32,8 @@ public class CreateOneseoService {
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
     private final MemberService memberService;
+    private final CalculateGradeService calculateGradeService;
+    private final CalculateGedService calculateGedService;
 
     @Transactional
     @CacheEvict(value = "oneseo", key = "#memberId")
@@ -44,6 +47,28 @@ public class CreateOneseoService {
         MiddleSchoolAchievement middleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, oneseo);
 
         saveEntities(oneseo, oneseoPrivacyDetail, middleSchoolAchievement);
+
+        GraduationType graduationType = oneseoPrivacyDetail.getGraduationType();
+        MiddleSchoolAchievementReqDto data = MiddleSchoolAchievementReqDto.builder()
+                .achievement1_2(middleSchoolAchievement.getAchievement1_2())
+                .achievement2_1(middleSchoolAchievement.getAchievement2_1())
+                .achievement2_2(middleSchoolAchievement.getAchievement2_2())
+                .achievement3_1(middleSchoolAchievement.getAchievement3_1())
+                .achievement3_2(middleSchoolAchievement.getAchievement3_2())
+                .artsPhysicalAchievement(middleSchoolAchievement.getArtsPhysicalAchievement())
+                .absentDays(middleSchoolAchievement.getAbsentDays())
+                .attendanceDays(middleSchoolAchievement.getAttendanceDays())
+                .volunteerTime(middleSchoolAchievement.getVolunteerTime())
+                .liberalSystem(middleSchoolAchievement.getLiberalSystem())
+                .freeSemester(middleSchoolAchievement.getFreeSemester())
+                .gedTotalScore(middleSchoolAchievement.getGedTotalScore())
+                .gedMaxScore(middleSchoolAchievement.getGedMaxScore())
+                .build();
+
+        switch (graduationType) {
+            case CANDIDATE, GRADUATE -> calculateGradeService.execute(data, oneseo, graduationType);
+            case GED -> calculateGedService.execute(data, oneseo, graduationType);
+        }
     }
 
     private void saveEntities(Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, MiddleSchoolAchievement middleSchoolAchievement) {
