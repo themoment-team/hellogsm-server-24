@@ -46,7 +46,6 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 )
                 .from(oneseo, oneseoPrivacyDetail)
                 .join(oneseo.member, member)
-                .where(oneseo.finalSubmittedYn.eq(YES))
                 .fetch();
     }
 
@@ -101,7 +100,6 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
     ) {
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(oneseo.finalSubmittedYn.eq(YesNo.YES));
         applyKeyword(builder, keyword);
         applyScreeningTag(builder, screeningTag);
         applyIsSubmittedTag(builder, isSubmitted);

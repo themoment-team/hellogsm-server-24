@@ -32,6 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.GED;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Major.*;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.GENERAL;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.SPECIAL;
@@ -53,6 +54,10 @@ class ModifyOneseoServiceTest {
     private OneseoService oneseoService;
     @Mock
     private MemberService memberService;
+    @Mock
+    private CalculateGradeService calculateGradeService;
+    @Mock
+    private CalculateGedService calculateGedService;
 
     @InjectMocks
     private ModifyOneseoService modifyOneseoService;
@@ -141,12 +146,12 @@ class ModifyOneseoServiceTest {
 
                 Oneseo oneseo = Oneseo.builder()
                         .id(1L)
-                        .finalSubmittedYn(NO)
                         .build();
 
                 OneseoPrivacyDetail oneseoPrivacyDetail = OneseoPrivacyDetail.builder()
                         .id(1L)
                         .oneseo(oneseo)
+                        .graduationType(CANDIDATE)
                         .build();
 
                 MiddleSchoolAchievement middleSchoolAchievement = MiddleSchoolAchievement.builder()
@@ -161,7 +166,7 @@ class ModifyOneseoServiceTest {
                 given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(oneseoPrivacyDetail);
                 given(middleSchoolAchievementRepository.findByOneseo(oneseo)).willReturn(middleSchoolAchievement);
 
-                modifyOneseoService.execute(oneseoReqDto, memberId, false);
+                modifyOneseoService.execute(oneseoReqDto, memberId);
                 ArgumentCaptor<Oneseo> oneseoCaptor = ArgumentCaptor.forClass(Oneseo.class);
                 ArgumentCaptor<OneseoPrivacyDetail> oneseoPrivacyDetailCaptor = ArgumentCaptor.forClass(OneseoPrivacyDetail.class);
                 ArgumentCaptor<MiddleSchoolAchievement> middleSchoolAchievementCaptor = ArgumentCaptor.forClass(MiddleSchoolAchievement.class);
@@ -169,6 +174,7 @@ class ModifyOneseoServiceTest {
                 verify(oneseoRepository).save(oneseoCaptor.capture());
                 verify(oneseoPrivacyDetailRepository).save(oneseoPrivacyDetailCaptor.capture());
                 verify(middleSchoolAchievementRepository).save(middleSchoolAchievementCaptor.capture());
+                verify(calculateGradeService).execute(any(MiddleSchoolAchievementReqDto.class), eq(oneseo), eq(CANDIDATE));
 
                 Oneseo capturedOneseo = oneseoCaptor.getValue();
                 OneseoPrivacyDetail capturedPrivacyDetail = oneseoPrivacyDetailCaptor.getValue();
@@ -230,13 +236,14 @@ class ModifyOneseoServiceTest {
                 given(oneseoService.findByMemberOrThrow(existingMember)).willReturn(existingOneseo);
                 given(oneseoPrivacyDetailRepository.findByOneseo(existingOneseo)).willReturn(existingPrivacyDetail);
                 given(middleSchoolAchievementRepository.findByOneseo(existingOneseo)).willReturn(existingAchievement);
-                given(existingOneseo.getFinalSubmittedYn()).willReturn(NO);
                 given(existingOneseo.getAppliedScreening()).willReturn(beforeScreening);
+                given(existingPrivacyDetail.getGraduationType()).willReturn(GED);
 
-                modifyOneseoService.execute(oneseoReqDto, memberId, false);
+                modifyOneseoService.execute(oneseoReqDto, memberId);
                 ArgumentCaptor<ScreeningChangeHistory> screeningChangeHistoryArgumentCaptor = ArgumentCaptor.forClass(ScreeningChangeHistory.class);
 
                 verify(screeningChangeHistoryRepository).save(screeningChangeHistoryArgumentCaptor.capture());
+                verify(calculateGedService).execute(any(MiddleSchoolAchievementReqDto.class), eq(existingOneseo), eq(GED));
 
                 ScreeningChangeHistory capturedScreeningChangeHistory = screeningChangeHistoryArgumentCaptor.getValue();
 
@@ -258,7 +265,7 @@ class ModifyOneseoServiceTest {
             @Test
             @DisplayName("ExpectedException을 던진다")
             void it_throws_an_exception() {
-                ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyOneseoService.execute(oneseoReqDto, memberId, false));
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyOneseoService.execute(oneseoReqDto, memberId));
                 assertEquals("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, exception.getMessage());
                 assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             }
@@ -279,31 +286,8 @@ class ModifyOneseoServiceTest {
             @Test
             @DisplayName("ExpectedException을 던진다")
             void it_throws_an_exception() {
-                ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyOneseoService.execute(oneseoReqDto, memberId, false));
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyOneseoService.execute(oneseoReqDto, memberId));
                 assertEquals("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, exception.getMessage());
-                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
-            }
-        }
-
-        @Nested
-        @DisplayName("기존의 Oneseo 엔티티가 최종 제출 상태라면")
-        class Context_with_final_submitted_oneseo {
-
-            @BeforeEach
-            void setUp() {
-                Member existingMember = mock(Member.class);
-                Oneseo existingOneseo = mock(Oneseo.class);
-
-                given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
-                given(oneseoService.findByMemberOrThrow(existingMember)).willReturn(existingOneseo);
-                given(existingOneseo.getFinalSubmittedYn()).willReturn(YES);
-            }
-
-            @Test
-            @DisplayName("ExpectedException을 던진다")
-            void it_throws_an_exception() {
-                ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyOneseoService.execute(oneseoReqDto, memberId, false));
-                assertEquals("최종제출이 완료된 원서는 수정할 수 없습니다.", exception.getMessage());
                 assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             }
         }

@@ -8,9 +8,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -22,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.NO;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.YES;
 
@@ -92,14 +89,14 @@ public class DownloadExcelService {
     }
 
     private List<List<String>> getOneseoData(Screening screening) {
-        List<Oneseo> oneseoList = oneseoRepository.findAllByAppliedScreeningAndFinalSubmittedYn(screening, YES);
+        List<Oneseo> oneseoList = oneseoRepository.findAllByAppliedScreening(screening);
         return oneseoToExcelDataList(oneseoList);
     }
 
     private List<List<String>> getCombinedExtraScreeningData() {
         List<Oneseo> extraOneseoList = Stream.concat(
-                oneseoRepository.findAllByAppliedScreeningAndFinalSubmittedYn(Screening.EXTRA_VETERANS, YES).stream(),
-                oneseoRepository.findAllByAppliedScreeningAndFinalSubmittedYn(Screening.EXTRA_ADMISSION, YES).stream()
+                oneseoRepository.findAllByAppliedScreening(Screening.EXTRA_VETERANS).stream(),
+                oneseoRepository.findAllByAppliedScreening(Screening.EXTRA_ADMISSION).stream()
         ).collect(Collectors.toList());
 
         return oneseoToExcelDataList(extraOneseoList);
@@ -107,7 +104,7 @@ public class DownloadExcelService {
 
     private List<List<String>> getFallenData() {
         List<Oneseo> fallenOneseo = entranceTestResultRepository
-                .findAllByFirstTestPassYnOrSecondTestPassYnAndOneseoFinalSubmittedYn(NO, NO, YES).stream()
+                .findAllByFirstTestPassYnOrSecondTestPassYn(NO, NO).stream()
                 .map(EntranceTestResult::getOneseo)
                 .collect(Collectors.toList());
 

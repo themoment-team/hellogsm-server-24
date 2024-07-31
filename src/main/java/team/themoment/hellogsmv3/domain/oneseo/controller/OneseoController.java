@@ -21,7 +21,6 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.CalculateMockScoreService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.QueryOneseoByIdService;
-import team.themoment.hellogsmv3.domain.oneseo.service.UpdateFinalSubmissionService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyRealOneseoArrivedYnService;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
@@ -42,12 +41,10 @@ public class OneseoController {
     private final ModifyRealOneseoArrivedYnService modifyRealOneseoArrivedYnService;
     private final ModifyAptitudeEvaluationScoreService modifyAptitudeEvaluationScoreService;
     private final ModifyInterviewScoreService modifyInterviewScoreService;
-    private final DeleteOneseoService deleteOneseoService;
     private final QueryAdmissionTicketsService queryAdmissionTicketsService;
     private final DownloadExcelService downloadExcelService;
     private final SearchOneseoService searchOneseoService;
     private final QueryOneseoByIdService queryOneseoByIdService;
-    private final UpdateFinalSubmissionService updateFinalSubmissionService;
     private final CalculateMockScoreService calculateMockScoreService;
     private final OneseoTempStorageService oneseoTempStorageService;
 
@@ -60,21 +57,12 @@ public class OneseoController {
         return CommonApiResponse.created("생성되었습니다.");
     }
 
-    @PutMapping("/oneseo/me")
-    public CommonApiResponse modify(
-            @RequestBody @Valid OneseoReqDto reqDto,
-            @AuthRequest Long memberId
-    ) {
-        modifyOneseoService.execute(reqDto, memberId, false);
-        return CommonApiResponse.success("수정되었습니다.");
-    }
-
     @PutMapping("/oneseo/{memberId}")
     public CommonApiResponse modifyByAdmin(
             @RequestBody @Valid OneseoReqDto reqDto,
             @PathVariable("memberId") Long memberId
     ) {
-        modifyOneseoService.execute(reqDto, memberId, true);
+        modifyOneseoService.execute(reqDto, memberId);
         return CommonApiResponse.success("수정되었습니다.");
     }
 
@@ -131,28 +119,12 @@ public class OneseoController {
         return queryOneseoByIdService.execute(memberId);
     }
 
-    @PatchMapping("/final-submit")
-    public CommonApiResponse finalSubmit(
-            @AuthRequest Long memberId
-    ) {
-        updateFinalSubmissionService.execute(memberId);
-        return CommonApiResponse.success("수정되었습니다.");
-    }
-
     @PostMapping("/calculate-mock-score")
     public MockScoreResDto calcMockScore(
             @RequestBody MiddleSchoolAchievementReqDto dto,
             @RequestParam("graduationType") GraduationType graduationType
         ) {
         return calculateMockScoreService.execute(dto, graduationType);
-    }
-
-    @DeleteMapping("/oneseo/me")
-    public CommonApiResponse deleteMyOneseo(
-            @AuthRequest Long memberId
-    ) {
-        deleteOneseoService.execute(memberId);
-        return CommonApiResponse.success("삭제되었습니다.");
     }
 
     @GetMapping("/admission-tickets")

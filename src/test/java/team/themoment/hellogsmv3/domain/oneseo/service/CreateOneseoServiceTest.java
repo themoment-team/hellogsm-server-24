@@ -47,6 +47,10 @@ class CreateOneseoServiceTest {
     private MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
     @Mock
     private MemberService memberService;
+    @Mock
+    private CalculateGradeService calculateGradeService;
+    @Mock
+    private CalculateGedService calculateGedService;
 
     @InjectMocks
     private CreateOneseoService createOneseoService;
@@ -160,7 +164,6 @@ class CreateOneseoServiceTest {
                 assertEquals(secondDesiredMajor, capturedOneseo.getDesiredMajors().getSecondDesiredMajor());
                 assertEquals(thirdDesiredMajor, capturedOneseo.getDesiredMajors().getThirdDesiredMajor());
                 assertEquals(NO, capturedOneseo.getRealOneseoArrivedYn());
-                assertEquals(NO, capturedOneseo.getFinalSubmittedYn());
                 assertEquals(screening, capturedOneseo.getWantedScreening());
                 assertEquals(screening, capturedOneseo.getAppliedScreening());
 

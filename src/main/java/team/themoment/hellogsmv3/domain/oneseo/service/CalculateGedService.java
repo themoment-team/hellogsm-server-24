@@ -50,17 +50,34 @@ public class CalculateGedService {
                 .setScale(3, RoundingMode.HALF_UP);
 
         if (oneseo != null) {
-            EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
-                    .attendanceScore(gedAttendanceScore)
-                    .volunteerScore(gedVolunteerScore)
-                    .totalSubjectsScore(gedTotalSubjectsScore)
-                    .totalNonSubjectsScore(gedTotalNonSubjectsScore)
-                    .build();
+            EntranceTestResult findEntranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);
 
-            EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
+            if (findEntranceTestResult == null) {
+                EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
+                        .attendanceScore(gedAttendanceScore)
+                        .volunteerScore(gedVolunteerScore)
+                        .totalSubjectsScore(gedTotalSubjectsScore)
+                        .totalNonSubjectsScore(gedTotalNonSubjectsScore)
+                        .build();
 
-            entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
-            entranceTestResultRepository.save(entranceTestResult);
+                EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
+
+                entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
+                entranceTestResultRepository.save(entranceTestResult);
+            } else {
+                EntranceTestFactorsDetail findEntranceTestFactorsDetail = findEntranceTestResult.getEntranceTestFactorsDetail();
+
+                findEntranceTestFactorsDetail.updateGedEntranceTestFactorsDetail(
+                        gedAttendanceScore, gedVolunteerScore,
+                        gedTotalSubjectsScore, gedTotalNonSubjectsScore
+                );
+
+                findEntranceTestResult.modifyDocumentEvaluationScore(totalScore);
+
+                entranceTestFactorsDetailRepository.save(findEntranceTestFactorsDetail);
+                entranceTestResultRepository.save(findEntranceTestResult);
+            }
+
             return null;
         } else {
             return MockScoreResDto.builder()

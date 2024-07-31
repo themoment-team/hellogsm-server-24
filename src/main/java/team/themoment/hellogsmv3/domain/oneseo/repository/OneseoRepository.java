@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface OneseoRepository extends JpaRepository<Oneseo, Long>, CustomOneseoRepository {
     boolean existsByMember(Member member);
     Optional<Oneseo> findByMember(Member member);
-    List<Oneseo> findAllByAppliedScreeningAndFinalSubmittedYn(Screening screening, YesNo finalSubmittedYn);
+    List<Oneseo> findAllByAppliedScreening(Screening screening);
 }

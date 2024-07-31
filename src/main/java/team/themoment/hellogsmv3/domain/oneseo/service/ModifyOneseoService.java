@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
-import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
@@ -14,6 +13,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.ScreeningChangeHistory;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
@@ -21,10 +21,7 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.ScreeningChangeHistoryRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
-import java.math.BigDecimal;
 import java.util.List;
-
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,13 +33,13 @@ public class ModifyOneseoService {
     private final ScreeningChangeHistoryRepository screeningChangeHistoryRepository;
     private final OneseoService oneseoService;
     private final MemberService memberService;
+    private final CalculateGradeService calculateGradeService;
+    private final CalculateGedService calculateGedService;
 
     @Transactional
-    public void execute(OneseoReqDto reqDto, Long memberId, boolean isAdmin) {
+    public void execute(OneseoReqDto reqDto, Long memberId) {
         Member currentMember = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(currentMember);
-
-        isNotFinalSubmitted(isAdmin, oneseo);
 
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
@@ -54,6 +51,31 @@ public class ModifyOneseoService {
         MiddleSchoolAchievement modifiedMiddleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, middleSchoolAchievement, oneseo);
 
         saveModifiedEntities(modifiedOneseo, modifiedOneseoPrivacyDetail, modifiedMiddleSchoolAchievement);
+
+        calculateMiddleSchoolAchievement(oneseoPrivacyDetail.getGraduationType(), middleSchoolAchievement, oneseo);
+    }
+
+    private void calculateMiddleSchoolAchievement(GraduationType graduationType, MiddleSchoolAchievement middleSchoolAchievement, Oneseo oneseo) {
+        MiddleSchoolAchievementReqDto data = MiddleSchoolAchievementReqDto.builder()
+                .achievement1_2(middleSchoolAchievement.getAchievement1_2())
+                .achievement2_1(middleSchoolAchievement.getAchievement2_1())
+                .achievement2_2(middleSchoolAchievement.getAchievement2_2())
+                .achievement3_1(middleSchoolAchievement.getAchievement3_1())
+                .achievement3_2(middleSchoolAchievement.getAchievement3_2())
+                .artsPhysicalAchievement(middleSchoolAchievement.getArtsPhysicalAchievement())
+                .absentDays(middleSchoolAchievement.getAbsentDays())
+                .attendanceDays(middleSchoolAchievement.getAttendanceDays())
+                .volunteerTime(middleSchoolAchievement.getVolunteerTime())
+                .liberalSystem(middleSchoolAchievement.getLiberalSystem())
+                .freeSemester(middleSchoolAchievement.getFreeSemester())
+                .gedTotalScore(middleSchoolAchievement.getGedTotalScore())
+                .gedMaxScore(middleSchoolAchievement.getGedMaxScore())
+                .build();
+
+        switch (graduationType) {
+            case CANDIDATE, GRADUATE -> calculateGradeService.execute(data, oneseo, graduationType);
+            case GED -> calculateGedService.execute(data, oneseo, graduationType);
+        }
     }
 
     private Oneseo buildOneseo(OneseoReqDto reqDto, Oneseo oneseo, Member currentMember) {
@@ -66,7 +88,6 @@ public class ModifyOneseoService {
                         .thirdDesiredMajor(reqDto.thirdDesiredMajor())
                         .build())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
-                .finalSubmittedYn(oneseo.getFinalSubmittedYn())
                 .wantedScreening(reqDto.screening())
                 .appliedScreening(reqDto.screening())
                 .build();
@@ -119,11 +140,6 @@ public class ModifyOneseoService {
         oneseoRepository.save(modifiedOneseo);
         oneseoPrivacyDetailRepository.save(modifiedOneseoPrivacyDetail);
         middleSchoolAchievementRepository.save(modifiedMiddleSchoolAchievement);
-    }
-
-    private void isNotFinalSubmitted(boolean isAdmin, Oneseo oneseo) {
-        if (!isAdmin && oneseo.getFinalSubmittedYn().equals(YES))
-            throw new ExpectedException("최종제출이 완료된 원서는 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
     }
 
     private void saveHistoryIfScreeningChange(Screening afterScreening, Oneseo oneseo) {
