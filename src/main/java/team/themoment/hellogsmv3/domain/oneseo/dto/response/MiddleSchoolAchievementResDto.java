@@ -22,9 +22,7 @@ public record MiddleSchoolAchievementResDto(
         List<Integer> volunteerTime,
         String liberalSystem,
         String freeSemester,
-        BigDecimal gedTotalScore,
-        BigDecimal gedMaxScore
-
+        BigDecimal gedTotalScore
 
 ) {
 }
