@@ -16,6 +16,7 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRep
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -181,13 +182,16 @@ public class DownloadExcelService {
     }
 
     private BigDecimal calculateFinalScore(EntranceTestResult entranceTestResult) {
-        //TODO 최종점수 계산 변경하기
         if (entranceTestResult.getSecondTestPassYn() == null) {
             return null;
         }
 
-        return entranceTestResult.getDocumentEvaluationScore()
-                .add(entranceTestResult.getAptitudeEvaluationScore())
-                .add(entranceTestResult.getInterviewScore());
+        BigDecimal documentEvaluationScore = entranceTestResult.getDocumentEvaluationScore()
+                .divide(BigDecimal.valueOf(3), 3, RoundingMode.HALF_UP);
+
+        return documentEvaluationScore.multiply(BigDecimal.valueOf(0.5))
+                .add(entranceTestResult.getAptitudeEvaluationScore().multiply(BigDecimal.valueOf(0.3)))
+                .add(entranceTestResult.getInterviewScore().multiply(BigDecimal.valueOf(0.2)))
+                .setScale(3, RoundingMode.HALF_UP);
     }
 }
