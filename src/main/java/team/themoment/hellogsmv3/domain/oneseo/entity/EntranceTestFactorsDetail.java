@@ -51,7 +51,7 @@ public class EntranceTestFactorsDetail {
     @Column(name = "score_3_2")
     private BigDecimal score3_2;
 
-    public void updateEntranceTestFactorsDetail(
+    public void updateGradeEntranceTestFactorsDetail(
             BigDecimal generalSubjectsScore, BigDecimal artsPhysicalSubjectsScore,
             BigDecimal totalSubjectsScore, BigDecimal attendanceScore,
             BigDecimal volunteerScore, BigDecimal totalNonSubjectsScore,
@@ -68,5 +68,22 @@ public class EntranceTestFactorsDetail {
         this.score2_2 = score2_2;
         this.score3_1 = score3_1;
         this.score3_2 = score3_2;
+    }
+
+    public void updateGedEntranceTestFactorsDetail(
+            BigDecimal attendanceScore, BigDecimal volunteerScore,
+            BigDecimal totalSubjectsScore, BigDecimal totalNonSubjectsScore
+    ) {
+        this.attendanceScore = attendanceScore;
+        this.volunteerScore = volunteerScore;
+        this.totalSubjectsScore = totalSubjectsScore;
+        this.totalNonSubjectsScore = totalNonSubjectsScore;
+        this.generalSubjectsScore = null;
+        this.artsPhysicalSubjectsScore = null;
+        this.score1_2 = null;
+        this.score2_1 = null;
+        this.score2_2 = null;
+        this.score3_1 = null;
+        this.score3_2 = null;
     }
 }

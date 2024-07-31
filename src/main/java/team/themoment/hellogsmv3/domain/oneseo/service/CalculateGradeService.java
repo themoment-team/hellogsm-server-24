@@ -1,7 +1,6 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
@@ -92,7 +91,7 @@ public class CalculateGradeService {
             } else {
                 EntranceTestFactorsDetail findEntranceTestFactorsDetail = findEntranceTestResult.getEntranceTestFactorsDetail();
 
-                findEntranceTestFactorsDetail.updateEntranceTestFactorsDetail(
+                findEntranceTestFactorsDetail.updateGradeEntranceTestFactorsDetail(
                         generalSubjectsScore, artsPhysicalSubjectsScore, totalSubjectsScore,
                         attendanceScore, volunteerScore, totalNonSubjectsScore,
                         score1_2, score2_1, score2_2, score3_1, score3_2
