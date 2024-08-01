@@ -79,7 +79,6 @@ public class QueryOneseoByIdService {
                 .liberalSystem(middleSchoolAchievement.getLiberalSystem())
                 .freeSemester(middleSchoolAchievement.getFreeSemester())
                 .gedTotalScore(middleSchoolAchievement.getGedTotalScore())
-                .gedMaxScore(middleSchoolAchievement.getGedMaxScore())
                 .build();
     }
 

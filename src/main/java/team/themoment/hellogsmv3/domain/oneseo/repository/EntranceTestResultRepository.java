@@ -6,9 +6,8 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EntranceTestResultRepository extends JpaRepository<EntranceTestResult, Long> {
     EntranceTestResult findByOneseo(Oneseo oneseo);
-    List<EntranceTestResult> findAllByFirstTestPassYnOrSecondTestPassYnAndOneseoFinalSubmittedYn(YesNo firstTestPassYn, YesNo secondTestPassYn, YesNo finalSubmittedYn);
+    List<EntranceTestResult> findAllByFirstTestPassYnOrSecondTestPassYn(YesNo firstTestPassYn, YesNo secondTestPassYn);
 }

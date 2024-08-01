@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
-import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
@@ -14,6 +13,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -31,6 +31,8 @@ public class CreateOneseoService {
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
     private final MemberService memberService;
+    private final CalculateGradeService calculateGradeService;
+    private final CalculateGedService calculateGedService;
 
     @Transactional
     @CacheEvict(value = "oneseo", key = "#memberId")
@@ -44,6 +46,30 @@ public class CreateOneseoService {
         MiddleSchoolAchievement middleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, oneseo);
 
         saveEntities(oneseo, oneseoPrivacyDetail, middleSchoolAchievement);
+
+        calculateMiddleSchoolAchievement(oneseoPrivacyDetail.getGraduationType(), middleSchoolAchievement, oneseo);
+    }
+
+    private void calculateMiddleSchoolAchievement(GraduationType graduationType, MiddleSchoolAchievement middleSchoolAchievement, Oneseo oneseo) {
+        MiddleSchoolAchievementReqDto data = MiddleSchoolAchievementReqDto.builder()
+                .achievement1_2(middleSchoolAchievement.getAchievement1_2())
+                .achievement2_1(middleSchoolAchievement.getAchievement2_1())
+                .achievement2_2(middleSchoolAchievement.getAchievement2_2())
+                .achievement3_1(middleSchoolAchievement.getAchievement3_1())
+                .achievement3_2(middleSchoolAchievement.getAchievement3_2())
+                .artsPhysicalAchievement(middleSchoolAchievement.getArtsPhysicalAchievement())
+                .absentDays(middleSchoolAchievement.getAbsentDays())
+                .attendanceDays(middleSchoolAchievement.getAttendanceDays())
+                .volunteerTime(middleSchoolAchievement.getVolunteerTime())
+                .liberalSystem(middleSchoolAchievement.getLiberalSystem())
+                .freeSemester(middleSchoolAchievement.getFreeSemester())
+                .gedTotalScore(middleSchoolAchievement.getGedTotalScore())
+                .build();
+
+        switch (graduationType) {
+            case CANDIDATE, GRADUATE -> calculateGradeService.execute(data, oneseo, graduationType);
+            case GED -> calculateGedService.execute(data, oneseo, graduationType);
+        }
     }
 
     private void saveEntities(Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, MiddleSchoolAchievement middleSchoolAchievement) {
@@ -61,7 +87,6 @@ public class CreateOneseoService {
                         .thirdDesiredMajor(reqDto.thirdDesiredMajor())
                         .build())
                 .realOneseoArrivedYn(NO)
-                .finalSubmittedYn(NO)
                 .wantedScreening(reqDto.screening())
                 .appliedScreening(reqDto.screening())
                 .build();
@@ -104,7 +129,6 @@ public class CreateOneseoService {
                 .liberalSystem(middleSchoolAchievement.liberalSystem())
                 .freeSemester(middleSchoolAchievement.freeSemester())
                 .gedTotalScore(middleSchoolAchievement.gedTotalScore())
-                .gedMaxScore(middleSchoolAchievement.gedMaxScore())
                 .build();
     }
 

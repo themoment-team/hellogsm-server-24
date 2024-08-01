@@ -8,20 +8,18 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.NO;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.YES;
 
@@ -91,14 +89,14 @@ public class DownloadExcelService {
     }
 
     private List<List<String>> getOneseoData(Screening screening) {
-        List<Oneseo> oneseoList = oneseoRepository.findAllByAppliedScreeningAndFinalSubmittedYn(screening, YES);
+        List<Oneseo> oneseoList = oneseoRepository.findAllByAppliedScreening(screening);
         return oneseoToExcelDataList(oneseoList);
     }
 
     private List<List<String>> getCombinedExtraScreeningData() {
         List<Oneseo> extraOneseoList = Stream.concat(
-                oneseoRepository.findAllByAppliedScreeningAndFinalSubmittedYn(Screening.EXTRA_VETERANS, YES).stream(),
-                oneseoRepository.findAllByAppliedScreeningAndFinalSubmittedYn(Screening.EXTRA_ADMISSION, YES).stream()
+                oneseoRepository.findAllByAppliedScreening(Screening.EXTRA_VETERANS).stream(),
+                oneseoRepository.findAllByAppliedScreening(Screening.EXTRA_ADMISSION).stream()
         ).collect(Collectors.toList());
 
         return oneseoToExcelDataList(extraOneseoList);
@@ -106,7 +104,7 @@ public class DownloadExcelService {
 
     private List<List<String>> getFallenData() {
         List<Oneseo> fallenOneseo = entranceTestResultRepository
-                .findAllByFirstTestPassYnOrSecondTestPassYnAndOneseoFinalSubmittedYn(NO, NO, YES).stream()
+                .findAllByFirstTestPassYnOrSecondTestPassYn(NO, NO).stream()
                 .map(EntranceTestResult::getOneseo)
                 .collect(Collectors.toList());
 
@@ -181,13 +179,16 @@ public class DownloadExcelService {
     }
 
     private BigDecimal calculateFinalScore(EntranceTestResult entranceTestResult) {
-        //TODO 최종점수 계산 변경하기
         if (entranceTestResult.getSecondTestPassYn() == null) {
             return null;
         }
 
-        return entranceTestResult.getDocumentEvaluationScore()
-                .add(entranceTestResult.getAptitudeEvaluationScore())
-                .add(entranceTestResult.getInterviewScore());
+        BigDecimal documentEvaluationScore = entranceTestResult.getDocumentEvaluationScore()
+                .divide(BigDecimal.valueOf(3), 3, RoundingMode.HALF_UP);
+
+        return documentEvaluationScore.multiply(BigDecimal.valueOf(0.5))
+                .add(entranceTestResult.getAptitudeEvaluationScore().multiply(BigDecimal.valueOf(0.3)))
+                .add(entranceTestResult.getInterviewScore().multiply(BigDecimal.valueOf(0.2)))
+                .setScale(3, RoundingMode.HALF_UP);
     }
 }
