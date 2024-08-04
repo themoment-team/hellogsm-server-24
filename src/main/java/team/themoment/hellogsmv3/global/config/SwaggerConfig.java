@@ -19,6 +19,7 @@ public class SwaggerConfig {
     private Info apiInfo() {
         return new Info()
                 .title("Hello, GSM 2024")
-                .description("광주소프트웨어마이스터고등학교 입학지원 시스템");
+                .description("광주소프트웨어마이스터고등학교 입학지원 시스템")
+                .version("1.0");
     }
 }
