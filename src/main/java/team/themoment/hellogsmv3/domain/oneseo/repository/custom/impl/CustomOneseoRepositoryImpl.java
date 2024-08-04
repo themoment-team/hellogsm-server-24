@@ -5,6 +5,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -60,7 +61,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
     }
 
     @Override
-    public Page<Oneseo> findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
+    public Page<SearchOneseoResDto> findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
             String keyword,
             ScreeningCategory screeningTag,
             YesNo isSubmitted,
@@ -75,10 +76,27 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 testResultTag
         );
 
-        List<Oneseo> oneseos = queryFactory.selectFrom(oneseo)
-                .leftJoin(oneseo.member, member).fetchJoin()
-                .leftJoin(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail).fetchJoin()
-                .leftJoin(oneseo.entranceTestResult, entranceTestResult).fetchJoin()
+        List<SearchOneseoResDto> oneseos = queryFactory
+                .select(Projections.constructor(
+                        SearchOneseoResDto.class,
+                        oneseo.member.id,
+                        oneseo.oneseoSubmitCode,
+                        oneseo.realOneseoArrivedYn,
+                        oneseo.member.name,
+                        oneseo.appliedScreening,
+                        oneseo.oneseoPrivacyDetail.schoolName,
+                        oneseo.member.phoneNumber,
+                        oneseo.oneseoPrivacyDetail.guardianPhoneNumber,
+                        oneseo.oneseoPrivacyDetail.schoolTeacherPhoneNumber,
+                        oneseo.entranceTestResult.firstTestPassYn,
+                        oneseo.entranceTestResult.aptitudeEvaluationScore,
+                        oneseo.entranceTestResult.interviewScore,
+                        oneseo.entranceTestResult.secondTestPassYn
+                ))
+                .from(oneseo)
+                .leftJoin(oneseo.member, member)
+                .leftJoin(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
+                .leftJoin(oneseo.entranceTestResult, entranceTestResult)
                 .where(builder)
                 .orderBy(oneseo.oneseoSubmitCode.desc())
                 .offset(pageable.getOffset())

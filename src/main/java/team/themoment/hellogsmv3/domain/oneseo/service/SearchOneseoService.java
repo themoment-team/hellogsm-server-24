@@ -35,7 +35,7 @@ public class SearchOneseoService {
     ) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Oneseo> oneseoPage = findOneseoByTagsAndKeyword(
+        Page<SearchOneseoResDto> oneseoPage = findOneseoByTagsAndKeyword(
                 testResultTag,
                 screeningTag,
                 isSubmitted,
@@ -48,18 +48,13 @@ public class SearchOneseoService {
                 .totalElements(oneseoPage.getTotalElements())
                 .build();
 
-        List<Oneseo> oneseos = oneseoPage.getContent();
-        List<SearchOneseoResDto> searchOneseoResDtos = oneseos.stream()
-                .map(this::buildSearchOneseoResDto)
-                .toList();
-
         return SearchOneseosResDto.builder()
                 .info(infoDto)
-                .oneseos(searchOneseoResDtos)
+                .oneseos(oneseoPage.getContent())
                 .build();
     }
 
-    private Page<Oneseo> findOneseoByTagsAndKeyword(
+    private Page<SearchOneseoResDto> findOneseoByTagsAndKeyword(
             TestResultTag testResultTag,
             ScreeningCategory screeningTag,
             YesNo isSubmitted,
@@ -73,27 +68,5 @@ public class SearchOneseoService {
                 testResultTag,
                 pageable
         );
-    }
-
-    private SearchOneseoResDto buildSearchOneseoResDto(Oneseo oneseo) {
-        Member member = oneseo.getMember();
-        OneseoPrivacyDetail oneseoPrivacyDetail = oneseo.getOneseoPrivacyDetail();
-        EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();
-
-        return SearchOneseoResDto.builder()
-                .memberId(member.getId())
-                .submitCode(oneseo.getOneseoSubmitCode())
-                .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
-                .name(member.getName())
-                .screening(oneseo.getAppliedScreening())
-                .schoolName(oneseoPrivacyDetail.getSchoolName())
-                .phoneNumber(member.getPhoneNumber())
-                .guardianPhoneNumber(oneseoPrivacyDetail.getGuardianPhoneNumber())
-                .schoolTeacherPhoneNumber(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber())
-                .firstTestPassYn(entranceTestResult.getFirstTestPassYn())
-                .aptitudeEvaluationScore(entranceTestResult.getAptitudeEvaluationScore())
-                .interviewScore(entranceTestResult.getInterviewScore())
-                .secondTestPassYn(entranceTestResult.getSecondTestPassYn())
-                .build();
     }
 }
