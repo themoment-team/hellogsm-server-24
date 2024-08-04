@@ -13,8 +13,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member findByIdOrThrow(Long memberId) {
-        return memberRepository.findById(memberId)
+    public Member findByIdOrThrow(Long memberId) {return memberRepository.findById(memberId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
     }
 }
