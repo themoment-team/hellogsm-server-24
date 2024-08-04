@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.domain.oneseo.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -50,6 +51,7 @@ public class OneseoController {
     private final CalculateMockScoreService calculateMockScoreService;
     private final OneseoTempStorageService oneseoTempStorageService;
 
+    @Operation(summary = "내 원서 등록", description = "원서를 등록합니다.")
     @PostMapping("/oneseo/me")
     public CommonApiResponse create(
             @RequestBody @Valid OneseoReqDto reqDto,
@@ -59,6 +61,7 @@ public class OneseoController {
         return CommonApiResponse.created("생성되었습니다.");
     }
 
+    @Operation(summary = "원서 수정", description = "맴버 id로 원서를 수정합니다.")
     @PutMapping("/oneseo/{memberId}")
     public CommonApiResponse modifyByAdmin(
             @RequestBody @Valid OneseoReqDto reqDto,
@@ -68,6 +71,7 @@ public class OneseoController {
         return CommonApiResponse.success("수정되었습니다.");
     }
 
+    @Operation(summary = "실물 원서 제출 여부 수정", description = "맴버 id로 원서의 실물 원서 제출 여부를 수정합니다.")
     @PatchMapping("/arrived-status/{memberId}")
     public ArrivedStatusResDto modifyArrivedStatus(
             @PathVariable Long memberId
@@ -75,6 +79,7 @@ public class OneseoController {
         return modifyRealOneseoArrivedYnService.execute(memberId);
     }
 
+    @Operation(summary = "적성 검사 점수 기입", description = "맴버 id로 원서의 적성 검사 점수를 기입합니다.")
     @PatchMapping("/aptitude-score/{memberId}")
     public CommonApiResponse modifyAptitudeScore(
             @PathVariable Long memberId,
@@ -84,6 +89,7 @@ public class OneseoController {
         return CommonApiResponse.success("수정되었습니다.");
     }
 
+    @Operation(summary = "심층 면접 검사 점수 기입", description = "맴버 id로 원서의 심층 면접 검사 점수를 기입합니다.")
     @PatchMapping("/interview-score/{memberId}")
     public CommonApiResponse modifyInterviewScore(
             @PathVariable Long memberId,
@@ -93,6 +99,7 @@ public class OneseoController {
         return CommonApiResponse.success("수정되었습니다.");
     }
 
+    @Operation(summary = "원서 검색", description = "조건을 파라미터로 받아 원서를 검색합니다.")
     @GetMapping("/oneseo/search")
     public SearchOneseosResDto search(
             @RequestParam("page") Integer page,
@@ -107,6 +114,7 @@ public class OneseoController {
         return searchOneseoService.execute(page, size, testResultTag, screeningTag, isSubmitted, keyword);
     }
 
+    @Operation(summary = "내 원서 조회", description = "내 원서 정보를 조회합니다. 임시 저장된 원서가 있다면 임시 저장된 원서를 조회합니다.")
     @GetMapping("/oneseo/me")
     public FoundOneseoResDto find(
             @AuthRequest Long memberId
@@ -114,6 +122,7 @@ public class OneseoController {
         return queryOneseoByIdService.execute(memberId);
     }
 
+    @Operation(summary = "원서 조회", description = "맴버 id로 원서 정보를 조회합니다.")
     @GetMapping("/oneseo/{memberId}")
     public FoundOneseoResDto findByAdmin(
             @PathVariable Long memberId
@@ -121,6 +130,7 @@ public class OneseoController {
         return queryOneseoByIdService.execute(memberId);
     }
 
+    @Operation(summary = "모의 성적 계산", description = "성적 점수를 입력받아 모의 성적 환산값을 반환합니다.")
     @PostMapping("/calculate-mock-score")
     public MockScoreResDto calcMockScore(
             @RequestBody MiddleSchoolAchievementReqDto dto,
@@ -129,12 +139,14 @@ public class OneseoController {
         return calculateMockScoreService.execute(dto, graduationType);
     }
 
+    @Operation(summary = "수험표 출력", description = "모든 원서의 수험표 정보를 반환합니다.")
     @GetMapping("/admission-tickets")
     public List<AdmissionTicketsResDto> getAdmissionTickets(
     ) {
         return queryAdmissionTicketsService.execute();
     }
 
+    @Operation(summary = "원서 임시 저장", description = "원서 정보를 임시 저장합니다.")
     @PostMapping("/temp-storage")
     public CommonApiResponse temp(
             @RequestBody @Valid OneseoReqDto reqDto,
@@ -145,6 +157,7 @@ public class OneseoController {
         return CommonApiResponse.success("임시저장되었습니다.");
     }
 
+    @Operation(summary = "엑셀 출력", description = "모든 원서의 정보를 엑셀 파일로 반환합니다.")
     @GetMapping("/excel")
     public void downloadExcel(
             HttpServletResponse response

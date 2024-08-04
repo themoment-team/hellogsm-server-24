@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.global.thirdParty.aws.s3.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ public class S3Controller {
 
     private final UploadImageService uploadImageService;
 
+    @Operation(summary = "증명사진 등록", description = "증명사진 이미지를 요청받아 등록합니다.")
     @PostMapping("/image")
     public CommonApiResponse uploadImage(
             @RequestParam(value = "file") MultipartFile multipartFile

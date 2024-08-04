@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.domain.member.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -35,6 +36,7 @@ public class MemberController {
     private final CreateMemberService createMemberService;
     private final QueryMemberAuthInfoByIdService queryMemberAuthInfoByIdService;
 
+    @Operation(summary = "인증코드 전송", description = "전화번호를 요청받아 인증코드를 전송합니다.")
     @PostMapping("/member/me/send-code")
     public CommonApiResponse sendCode(
         @AuthRequest Long memberId, 
@@ -44,12 +46,14 @@ public class MemberController {
         return CommonApiResponse.success("전송되었습니다.");
     }
 
+    @Operation(summary = "인증코드 테스트 전송", description = "전화번호를 요청받아 인증코드를 반환합니다. 횟수가 제한이 없습니다.")
     @PostMapping("/member/me/send-code-test")
     public CommonApiResponse sendCodeTest(@AuthRequest Long memberId, @RequestBody GenerateCodeReqDto reqDto) {
         String code = generateTestCodeService.execute(memberId, reqDto);
         return CommonApiResponse.success("전송되었습니다. : " + code);
     }
 
+    @Operation(summary = "인증코드 인증", description = "인증코드를 요청받아 인증을 진행합니다.")
     @PostMapping("/member/me/auth-code")
     public CommonApiResponse authCode(
             @AuthRequest Long memberId,
@@ -59,6 +63,7 @@ public class MemberController {
         return CommonApiResponse.success("인증되었습니다.");
     }
 
+    @Operation(summary = "내 맴버 조회", description = "내 맴버 정보를 조회합니다.")
     @GetMapping("/member/me")
     public FoundMemberResDto find(
             @AuthRequest Long memberId
@@ -66,6 +71,7 @@ public class MemberController {
         return queryMemberByIdService.execute(memberId);
     }
 
+    @Operation(summary = "맴버 조회", description = "맴버 id로 맴버 정보를 조회합니다.")
     @GetMapping("/member/{memberId}")
     public FoundMemberResDto findByMemberId(
             @PathVariable Long memberId
@@ -73,6 +79,7 @@ public class MemberController {
         return queryMemberByIdService.execute(memberId);
     }
 
+    @Operation(summary = "내 맴버 등록", description = "인증코드와 맴버 정보를 요청받아 맴버를 등록합니다.")
     @PostMapping("/member/me")
     public CommonApiResponse create(
             HttpServletRequest httpServletRequest,
@@ -84,6 +91,7 @@ public class MemberController {
         return CommonApiResponse.created("본인인증이 완료되었습니다.");
     }
 
+    @Operation(summary = "내 인증 정보 조회", description = "내 인증 정보를 조회합니다.")
     @GetMapping("/auth-info/me")
     public FoundMemberAuthInfoResDto findAuthInfo(
             @AuthRequest Long memberId
@@ -91,6 +99,7 @@ public class MemberController {
         return queryMemberAuthInfoByIdService.execute(memberId);
     }
 
+    @Operation(summary = "인정 정보 조회", description = "맴버 id로 인증 정보를 조회합니다.")
     @GetMapping("/auth-info/{memberId}")
     public FoundMemberAuthInfoResDto findAuthInfoByMemberId(
             @PathVariable Long memberId

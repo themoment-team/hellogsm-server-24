@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.global.security.auth;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +22,7 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 @RequiredArgsConstructor
 public class AuthController {
 
+    @Operation(summary = "로그아웃", description = "로그아웃을 진행합니다.")
     @GetMapping("/logout")
     public CommonApiResponse logout(HttpServletRequest req, HttpServletResponse res){
         logoutProcess(req, res, SecurityContextHolder.getContext().getAuthentication());
