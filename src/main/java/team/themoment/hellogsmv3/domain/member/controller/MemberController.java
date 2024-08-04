@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.domain.member.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
 
+@Tag(name = "Member API", description = "맴버 관련 API입니다.")
 @RestController
 @RequestMapping("/member/v3")
 @RequiredArgsConstructor

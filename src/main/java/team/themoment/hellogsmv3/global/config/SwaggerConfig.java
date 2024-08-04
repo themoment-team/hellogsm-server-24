@@ -16,7 +16,7 @@ public class SwaggerConfig {
     public GroupedOpenApi api() {
         return GroupedOpenApi.builder()
                 .group("Hello, GSM 2024 API")
-                .pathsToMatch("/member/**", "/oneseo/**")
+                .pathsToMatch("/member/**", "/oneseo/**", "/auth/**")
                 .build();
     }
 }

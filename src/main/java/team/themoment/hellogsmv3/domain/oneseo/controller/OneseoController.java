@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.domain.oneseo.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+@Tag(name = "Oneseo API", description = "원서 관련 API입니다.")
 @RestController
 @RequestMapping("/oneseo/v3")
 @RequiredArgsConstructor

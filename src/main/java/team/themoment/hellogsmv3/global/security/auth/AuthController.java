@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.global.security.auth;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+@Tag(name = "Auth API", description = "인증 관련 API입니다.")
 @RestController
 @RequestMapping("/auth/v3")
 @RequiredArgsConstructor
