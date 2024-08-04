@@ -2,13 +2,18 @@ package team.themoment.hellogsmv3.global.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
 import org.springframework.http.HttpStatus;
 
 public record CommonApiResponse<T>(
+        @Schema(description = "상태 메시지", nullable = false, example = "OK")
         HttpStatus status,
+        @Schema(description = "상태 코드", nullable = false, example = "200")
         int code,
+        @Schema(description = "메시지", nullable = false, example = "완료되었습니다.")
         String message,
+        @Schema(description = "데이터", nullable = true)
         @JsonInclude(Include.NON_NULL)
         T data
 ) {
