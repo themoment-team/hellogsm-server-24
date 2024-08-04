@@ -50,7 +50,7 @@ public class ModifyInterviewScoreServiceTest {
         private final BigDecimal updatedInterviewScore = BigDecimal.valueOf(99.25);
 
         @Nested
-        @DisplayName("존재하는 회원 ID와 인터뷰 점수가 주어지면")
+        @DisplayName("존재하는 회원 ID와 심층면접 점수가 주어지면")
         class Context_with_existing_member_id_and_interview_score {
 
             EntranceTestResult entranceTestResult;
