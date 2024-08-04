@@ -72,7 +72,7 @@ class SearchOneseoServiceTest {
             @BeforeEach
             void setUp() {
                 Pageable pageable = PageRequest.of(page, size);
-                Page<Oneseo> emptyPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
+                Page<SearchOneseoResDto> emptyPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
 
                 given(oneseoRepository.findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
                         keyword, screeningTag, isSubmitted, testResultTag, pageable
@@ -107,8 +107,8 @@ class SearchOneseoServiceTest {
                 oneseoPrivacyDetail = buildOneseoPrivacyDetail();
                 entranceTestResult = mock(EntranceTestResult.class);
 
-                oneseo = buildOneseo(member, oneseoPrivacyDetail, entranceTestResult);
-                Page<Oneseo> oneseoPage = new PageImpl<>(List.of(oneseo), pageable, 1);
+                SearchOneseoResDto searchOneseoResDto = buildSearchOneseDto(member, oneseo, oneseoPrivacyDetail, entranceTestResult);
+                Page<SearchOneseoResDto> oneseoPage = new PageImpl<>(List.of(searchOneseoResDto), pageable, 1);
 
                 given(oneseoRepository.findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
                         keyword, screeningTag, isSubmitted, testResultTag, pageable
@@ -159,14 +159,25 @@ class SearchOneseoServiceTest {
                 .build();
     }
 
-    private Oneseo buildOneseo(Member member, OneseoPrivacyDetail oneseoPrivacyDetail, EntranceTestResult entranceTestResult) {
-        return Oneseo.builder()
-                .member(member)
-                .oneseoSubmitCode("submit code")
-                .realOneseoArrivedYn(YesNo.YES)
-                .appliedScreening(Screening.GENERAL)
-                .oneseoPrivacyDetail(oneseoPrivacyDetail)
-                .entranceTestResult(entranceTestResult)
+    private Oneseo buildOneseo() {
+
+    }
+
+    private SearchOneseoResDto buildSearchOneseDto(Member member, Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, EntranceTestResult entranceTestResult) {
+        return SearchOneseoResDto.builder()
+                .memberId(member.getId())
+                .submitCode(oneseo.getOneseoSubmitCode())
+                .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
+                .name(member.getName())
+                .screening(oneseo.getAppliedScreening())
+                .schoolName(oneseoPrivacyDetail.getSchoolName())
+                .phoneNumber(member.getPhoneNumber())
+                .guardianPhoneNumber(oneseoPrivacyDetail.getGuardianPhoneNumber())
+                .schoolTeacherPhoneNumber(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber())
+                .firstTestPassYn(entranceTestResult.getFirstTestPassYn())
+                .aptitudeEvaluationScore(entranceTestResult.getAptitudeEvaluationScore())
+                .interviewScore(entranceTestResult.getInterviewScore())
+                .secondTestPassYn(entranceTestResult.getSecondTestPassYn())
                 .build();
     }
 
