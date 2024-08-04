@@ -103,17 +103,16 @@ class SearchOneseoServiceTest {
             void setUp() {
                 Pageable pageable = PageRequest.of(page, size);
                 member = buildMember();
-                oneseo = buildOneseo(member);
-                Page<Oneseo> oneseoPage = new PageImpl<>(List.of(oneseo), pageable, 1);
 
                 oneseoPrivacyDetail = buildOneseoPrivacyDetail();
                 entranceTestResult = mock(EntranceTestResult.class);
 
+                oneseo = buildOneseo(member, oneseoPrivacyDetail, entranceTestResult);
+                Page<Oneseo> oneseoPage = new PageImpl<>(List.of(oneseo), pageable, 1);
+
                 given(oneseoRepository.findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
                         keyword, screeningTag, isSubmitted, testResultTag, pageable
                 )).willReturn(oneseoPage);
-                given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(oneseoPrivacyDetail);
-                given(entranceTestResultRepository.findByOneseo(oneseo)).willReturn(entranceTestResult);
                 stubEntranceTestResult(entranceTestResult);
             }
 
@@ -160,12 +159,14 @@ class SearchOneseoServiceTest {
                 .build();
     }
 
-    private Oneseo buildOneseo(Member member) {
+    private Oneseo buildOneseo(Member member, OneseoPrivacyDetail oneseoPrivacyDetail, EntranceTestResult entranceTestResult) {
         return Oneseo.builder()
                 .member(member)
                 .oneseoSubmitCode("submit code")
                 .realOneseoArrivedYn(YesNo.YES)
                 .appliedScreening(Screening.GENERAL)
+                .oneseoPrivacyDetail(oneseoPrivacyDetail)
+                .entranceTestResult(entranceTestResult)
                 .build();
     }
 
