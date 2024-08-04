@@ -94,9 +94,9 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                         oneseo.entranceTestResult.secondTestPassYn
                 ))
                 .from(oneseo)
-                .leftJoin(oneseo.member, member)
-                .leftJoin(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
-                .leftJoin(oneseo.entranceTestResult, entranceTestResult)
+                .join(oneseo.member, member)
+                .join(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
+                .join(oneseo.entranceTestResult, entranceTestResult)
                 .where(builder)
                 .orderBy(oneseo.oneseoSubmitCode.desc())
                 .offset(pageable.getOffset())
