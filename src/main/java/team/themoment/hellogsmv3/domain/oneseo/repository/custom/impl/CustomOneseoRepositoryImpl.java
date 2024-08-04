@@ -77,8 +77,8 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
 
         List<Oneseo> oneseos = queryFactory.selectFrom(oneseo)
                 .leftJoin(oneseo.member, member).fetchJoin()
-                .leftJoin(oneseoPrivacyDetail).on(oneseoPrivacyDetail.oneseo.eq(oneseo))
-                .leftJoin(entranceTestResult).on(entranceTestResult.id.eq(oneseo.id))
+                .leftJoin(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail).fetchJoin()
+                .leftJoin(oneseo.entranceTestResult, entranceTestResult).fetchJoin()
                 .where(builder)
                 .orderBy(oneseo.oneseoSubmitCode.desc())
                 .offset(pageable.getOffset())

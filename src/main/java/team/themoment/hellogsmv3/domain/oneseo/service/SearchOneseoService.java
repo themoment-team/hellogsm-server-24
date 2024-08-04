@@ -15,20 +15,15 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
-import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SearchOneseoService {
 
     private final OneseoRepository oneseoRepository;
-    private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
-    private final EntranceTestResultRepository entranceTestResultRepository;
 
     public SearchOneseosResDto execute(
             Integer page,
@@ -82,8 +77,8 @@ public class SearchOneseoService {
 
     private SearchOneseoResDto buildSearchOneseoResDto(Oneseo oneseo) {
         Member member = oneseo.getMember();
-        OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
-        EntranceTestResult entranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);
+        OneseoPrivacyDetail oneseoPrivacyDetail = oneseo.getOneseoPrivacyDetail();
+        EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();
 
         return SearchOneseoResDto.builder()
                 .memberId(member.getId())
