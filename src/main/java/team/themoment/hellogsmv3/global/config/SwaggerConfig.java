@@ -9,16 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-
-//    @Bean
-//    public GroupedOpenApi api() {
-//        return GroupedOpenApi.builder()
-//                .group("ONESEO")
-//                .pathsToMatch("/oneseo/**")
-//                .packagesToScan("team.themoment.hellogsmv3.domain.oneseo.controller")
-//                .build();
-//    }
-
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
