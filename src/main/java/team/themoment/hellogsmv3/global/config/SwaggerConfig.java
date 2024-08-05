@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 
-import java.lang.reflect.Field;
-
 @OpenAPIDefinition(
         info = @Info(title = "Hello, GSM 2024",
                 description = "광주소프트웨어마이스터고등학교 입학지원 시스템",
@@ -34,33 +32,37 @@ public class SwaggerConfig {
     @Bean
     public OperationCustomizer operationCustomizer() {
         return (operation, handlerMethod) -> {
-            this.addResponseBodyWrapperSchemaExample(operation, CommonApiResponse.class, "data");
+            Class<?> returnType = handlerMethod.getMethod().getReturnType();
+            if (CommonApiResponse.class.isAssignableFrom(returnType)) {
+                this.addResponseBodyWrapperSchemaExample(operation, true);
+            } else {
+                this.addResponseBodyWrapperSchemaExample(operation, false);
+            }
             return operation;
         };
     }
 
-    private void addResponseBodyWrapperSchemaExample(Operation operation, Class<?> type, String wrapFieldName) {
+    private void addResponseBodyWrapperSchemaExample(Operation operation, boolean hideDataField) {
         final Content content = operation.getResponses().get("200").getContent();
         if (content != null) {
             content.keySet()
                     .forEach(mediaTypeKey -> {
                         final MediaType mediaType = content.get(mediaTypeKey);
-                        mediaType.schema(wrapSchema(mediaType.getSchema(), type, wrapFieldName));
+                        Schema<?> originalSchema = mediaType.getSchema();
+                        mediaType.schema(wrapSchema(originalSchema, hideDataField));
                     });
         }
     }
 
     @SneakyThrows
-    private <T> Schema<T> wrapSchema(Schema<?> originalSchema, Class<T> type, String wrapFieldName) {
-        final Schema<T> wrapperSchema = new Schema<>();
-        final T instance = type.getDeclaredConstructor().newInstance();
+    private Schema<?> wrapSchema(Schema<?> originalSchema, boolean hideDataField) {
+        final Schema<?> wrapperSchema = new Schema<>();
 
-        for (Field field : type.getDeclaredFields()) {
-            field.setAccessible(true);
-            wrapperSchema.addProperty(field.getName(), new Schema<>().example(field.get(instance)));
-            field.setAccessible(false);
-        }
-        wrapperSchema.addProperty(wrapFieldName, originalSchema);
+        wrapperSchema.addProperty("status", new Schema<>().type("string").example("OK"));
+        wrapperSchema.addProperty("code", new Schema<>().type("integer").example(200));
+        wrapperSchema.addProperty("message", new Schema<>().type("string").example("OK"));
+        if (!hideDataField) wrapperSchema.addProperty("data", originalSchema);
+
         return wrapperSchema;
     }
 }
