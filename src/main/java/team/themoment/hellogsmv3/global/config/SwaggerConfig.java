@@ -6,12 +6,22 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import lombok.SneakyThrows;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.HandlerMethod;
+import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @OpenAPIDefinition(
         info = @Info(title = "Hello, GSM 2024",
@@ -32,14 +42,37 @@ public class SwaggerConfig {
     @Bean
     public OperationCustomizer operationCustomizer() {
         return (operation, handlerMethod) -> {
+            removeAuthRequestParameters(operation, handlerMethod);
+
             Class<?> returnType = handlerMethod.getMethod().getReturnType();
-            if (CommonApiResponse.class.isAssignableFrom(returnType)) {
-                this.addResponseBodyWrapperSchemaExample(operation, true);
-            } else {
-                this.addResponseBodyWrapperSchemaExample(operation, false);
-            }
+            this.addResponseBodyWrapperSchemaExample(operation, CommonApiResponse.class.isAssignableFrom(returnType));
+
             return operation;
         };
+    }
+
+    private void removeAuthRequestParameters(Operation operation, HandlerMethod handlerMethod) {
+        List<Parameter> parameters = operation.getParameters();
+        if (parameters != null) {
+            operation.setParameters(
+                    parameters.stream()
+                            .filter(param -> !isAuthRequestParameter(handlerMethod, param))
+                            .collect(toList())
+            );
+        }
+    }
+
+    private boolean isAuthRequestParameter(HandlerMethod handlerMethod, Parameter parameter) {
+        Annotation[][] parameterAnnotations = handlerMethod.getMethod().getParameterAnnotations();
+        for (Annotation[] parameterAnnotation : parameterAnnotations) {
+            for (Annotation annotation : parameterAnnotation) {
+                if (annotation.annotationType().equals(AuthRequest.class)) {
+                    return parameter.getName() != null && parameter.getName().equals("memberId");
+                }
+            }
+        }
+
+        return false;
     }
 
     private void addResponseBodyWrapperSchemaExample(Operation operation, boolean hideDataField) {

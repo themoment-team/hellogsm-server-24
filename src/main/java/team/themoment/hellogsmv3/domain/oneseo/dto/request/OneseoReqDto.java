@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.domain.oneseo.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -10,6 +11,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
 @ValidDesiredMajors
 public record OneseoReqDto(
+        @Schema(description = "보호자 이름", defaultValue = "김보호")
         @NotBlank
         String guardianName,
 
