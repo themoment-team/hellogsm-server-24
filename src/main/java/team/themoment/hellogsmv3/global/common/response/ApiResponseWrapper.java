@@ -3,6 +3,7 @@ package team.themoment.hellogsmv3.global.common.response;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -31,7 +32,7 @@ public class ApiResponseWrapper implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body,
                                   MethodParameter returnType,
-                                  org.springframework.http.MediaType selectedContentType,
+                                  MediaType selectedContentType,
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
 
@@ -62,7 +63,7 @@ public class ApiResponseWrapper implements ResponseBodyAdvice<Object> {
 
     private static Object byPassResponse(Object body, ServerHttpResponse response) {
         CommonApiResponse<?> commonApiMessageResponse = (CommonApiResponse<?>) body;
-        response.setStatusCode(commonApiMessageResponse.status());
+        response.setStatusCode(commonApiMessageResponse.getStatus());
         return body;
     }
 
