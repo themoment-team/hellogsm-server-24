@@ -53,8 +53,8 @@ public class OneseoServiceTest {
             @Test
             @DisplayName("Oneseo 객체를 반환한다.")
             void it_returns_oneseo() {
-                Oneseo findOneseo = oneseoService.findByMemberOrThrow(member);
-                assertEquals(oneseo, findOneseo);
+                Oneseo foundOneseo = oneseoService.findByMemberOrThrow(member);
+                assertEquals(oneseo, foundOneseo);
             }
         }
 
