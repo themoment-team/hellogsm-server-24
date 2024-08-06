@@ -181,7 +181,7 @@ public class DownloadExcelServiceTest {
                     .name("홍길동")
                     .sex(Sex.MALE)
                     .birth(LocalDate.of(2024, 7, 31))
-                    .phoneNumber("010-1234-5678")
+                    .phoneNumber("01012345678")
                     .build();
 
             DesiredMajors desiredMajors = DesiredMajors.builder()
@@ -228,8 +228,8 @@ public class DownloadExcelServiceTest {
                     .schoolName("광주소프트웨어마이스터고등학교")
                     .address("광주광역시 광산구 송정동 상무대로 312")
                     .detailAddress("동행관")
-                    .guardianPhoneNumber("010-8765-4321")
-                    .schoolTeacherPhoneNumber("010-1234-4321")
+                    .guardianPhoneNumber("01087654321")
+                    .schoolTeacherPhoneNumber("01012344321")
                     .graduationType(GraduationType.GRADUATE)
                     .build();
         }
