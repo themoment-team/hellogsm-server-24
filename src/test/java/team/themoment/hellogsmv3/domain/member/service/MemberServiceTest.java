@@ -53,8 +53,8 @@ public class MemberServiceTest {
             @Test
             @DisplayName("회원 정보를 반환한다.")
             void it_returns_member() {
-                Member findMember = memberService.findByIdOrThrow(memberId);
-                assertEquals(member, findMember);
+                Member foundMember = memberService.findByIdOrThrow(memberId);
+                assertEquals(member, foundMember);
             }
         }
 
