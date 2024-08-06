@@ -20,10 +20,7 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
-import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 
 import java.math.BigDecimal;
@@ -104,7 +101,7 @@ class SearchOneseoServiceTest {
                 oneseoPrivacyDetail = buildOneseoPrivacyDetail();
                 entranceTestResult = buildEntranceTestResult();
 
-                SearchOneseoResDto searchOneseoResDto = buildSearchOneseDto(member, oneseo, oneseoPrivacyDetail, entranceTestResult);
+                SearchOneseoResDto searchOneseoResDto = buildSearchOneseoDto(member, oneseo, oneseoPrivacyDetail, entranceTestResult);
                 Page<SearchOneseoResDto> oneseoPage = new PageImpl<>(List.of(searchOneseoResDto), pageable, 1);
 
                 given(oneseoRepository.findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
@@ -164,7 +161,7 @@ class SearchOneseoServiceTest {
                 .build();
     }
 
-    private SearchOneseoResDto buildSearchOneseDto(Member member, Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, EntranceTestResult entranceTestResult) {
+    private SearchOneseoResDto buildSearchOneseoDto(Member member, Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, EntranceTestResult entranceTestResult) {
         return SearchOneseoResDto.builder()
                 .memberId(member.getId())
                 .submitCode(oneseo.getOneseoSubmitCode())
