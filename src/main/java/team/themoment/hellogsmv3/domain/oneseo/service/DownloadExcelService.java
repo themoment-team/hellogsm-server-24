@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.NO;
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.YES;
 
 @Service
 @RequiredArgsConstructor
@@ -170,7 +169,6 @@ public class DownloadExcelService {
                     oneseoPrivacyDetail.getGuardianPhoneNumber(),
                     oneseoPrivacyDetail.getSchoolTeacherPhoneNumber()
             );
-
 
             sheetData.add(rowData.stream().map(data -> data.equals("null")? "" : data).collect(Collectors.toList()));
         }
