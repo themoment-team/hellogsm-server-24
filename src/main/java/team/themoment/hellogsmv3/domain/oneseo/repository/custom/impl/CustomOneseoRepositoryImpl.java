@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
@@ -103,11 +104,15 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(
-                oneseos,
-                pageable,
-                oneseos.size()
-        );
+        return PageableExecutionUtils.getPage(oneseos, pageable, () -> getTotalCount(builder));
+    }
+
+    private long getTotalCount(BooleanBuilder builder) {
+        return queryFactory
+                .select(oneseo.count())
+                .from(oneseo)
+                .where(builder)
+                .fetchFirst();
     }
 
     private BooleanBuilder createBooleanBuilder(
