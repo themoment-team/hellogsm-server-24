@@ -20,10 +20,14 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
     public Object resolveArgument(MethodParameter parameter,
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
-                                  WebDataBinderFactory binderFactory) throws Exception {
+                                  WebDataBinderFactory binderFactory) {
 
-        OAuth2User oAuth2User = (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return Long.valueOf(oAuth2User.getName());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        if (principal instanceof OAuth2User) {
+            return Long.valueOf(((OAuth2User) principal).getName());
+        } else {
+            throw new IllegalStateException("현재 인증되어있는 유저의 principal이 유효하지 않습니다.");
+        }
     }
 }

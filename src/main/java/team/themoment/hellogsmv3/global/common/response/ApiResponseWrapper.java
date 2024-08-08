@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import org.springframework.util.AntPathMatcher;
@@ -15,7 +14,7 @@ import org.springframework.util.AntPathMatcher;
 import java.util.Arrays;
 import java.util.Map;
 
-@RestControllerAdvice(annotations = RestController.class)
+@RestControllerAdvice
 public class ApiResponseWrapper implements ResponseBodyAdvice<Object> {
 
     private static final String[] NOT_WRAPPING_URL = {
