@@ -42,10 +42,11 @@ public class LoggingFilter extends OncePerRequestFilter {
             return;
         }
 
-        long startTime = System.currentTimeMillis();
-        UUID logId = UUID.randomUUID();
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+
+        UUID logId = UUID.randomUUID();
+        long startTime = System.currentTimeMillis();
 
         try {
             requestLogging(requestWrapper, logId);
