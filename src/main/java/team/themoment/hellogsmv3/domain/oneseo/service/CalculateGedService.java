@@ -27,10 +27,10 @@ public class CalculateGedService {
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
 
         BigDecimal gedTotalScore = dto.gedTotalScore();
-        BigDecimal gedMaxScore = dto.gedMaxScore();
+        BigDecimal gedMaxScore = BigDecimal.valueOf(600);
 
         // 검정고시 평균 점수
-        BigDecimal averageScore = gedTotalScore.divide(gedMaxScore, 2, RoundingMode.HALF_UP)
+        BigDecimal averageScore = gedTotalScore.divide(gedMaxScore, 5, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100));
 
         // 검정고시 교과 성적 환산 점수 (총점: 240점)
@@ -38,6 +38,7 @@ public class CalculateGedService {
 
         // 검정고시 봉사 성적 환산 점수 (총점: 30점)
         BigDecimal gedVolunteerScore = calcGedVolunteerScore(averageScore);
+
         // 검정고시 출결 성적 점수 (총점: 30점)
         BigDecimal gedAttendanceScore = BigDecimal.valueOf(30);
 
@@ -50,17 +51,34 @@ public class CalculateGedService {
                 .setScale(3, RoundingMode.HALF_UP);
 
         if (oneseo != null) {
-            EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
-                    .attendanceScore(gedAttendanceScore)
-                    .volunteerScore(gedVolunteerScore)
-                    .totalSubjectsScore(gedTotalSubjectsScore)
-                    .totalNonSubjectsScore(gedTotalNonSubjectsScore)
-                    .build();
+            EntranceTestResult findEntranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);
 
-            EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
+            if (findEntranceTestResult == null) {
+                EntranceTestFactorsDetail entranceTestFactorsDetail = EntranceTestFactorsDetail.builder()
+                        .attendanceScore(gedAttendanceScore)
+                        .volunteerScore(gedVolunteerScore)
+                        .totalSubjectsScore(gedTotalSubjectsScore)
+                        .totalNonSubjectsScore(gedTotalNonSubjectsScore)
+                        .build();
 
-            entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
-            entranceTestResultRepository.save(entranceTestResult);
+                EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
+
+                entranceTestFactorsDetailRepository.save(entranceTestFactorsDetail);
+                entranceTestResultRepository.save(entranceTestResult);
+            } else {
+                EntranceTestFactorsDetail findEntranceTestFactorsDetail = findEntranceTestResult.getEntranceTestFactorsDetail();
+
+                findEntranceTestFactorsDetail.updateGedEntranceTestFactorsDetail(
+                        gedAttendanceScore, gedVolunteerScore,
+                        gedTotalSubjectsScore, gedTotalNonSubjectsScore
+                );
+
+                findEntranceTestResult.modifyDocumentEvaluationScore(totalScore);
+
+                entranceTestFactorsDetailRepository.save(findEntranceTestFactorsDetail);
+                entranceTestResultRepository.save(findEntranceTestResult);
+            }
+
             return null;
         } else {
             return MockScoreResDto.builder()
@@ -75,14 +93,14 @@ public class CalculateGedService {
 
     private BigDecimal calcGedTotalSubjectsScore(BigDecimal averageScore) {
         return averageScore.subtract(BigDecimal.valueOf(50))
-                .divide(BigDecimal.valueOf(50), 20, RoundingMode.HALF_UP)
+                .divide(BigDecimal.valueOf(50), 5, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(240))
                 .setScale(3, RoundingMode.HALF_UP);
     }
 
     private BigDecimal calcGedVolunteerScore(BigDecimal averageScore) {
         return averageScore.subtract(BigDecimal.valueOf(40))
-                .divide(BigDecimal.valueOf(60), 20, RoundingMode.HALF_UP)
+                .divide(BigDecimal.valueOf(60), 5, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(30))
                 .setScale(3, RoundingMode.HALF_UP);
     }

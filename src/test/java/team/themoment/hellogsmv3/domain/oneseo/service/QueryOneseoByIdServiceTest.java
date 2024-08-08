@@ -129,7 +129,6 @@ class QueryOneseoByIdServiceTest {
                 assertEquals(middleSchoolAchievement.getLiberalSystem(), middleSchoolAchievementResDto.liberalSystem());
                 assertEquals(middleSchoolAchievement.getFreeSemester(), middleSchoolAchievementResDto.freeSemester());
                 assertEquals(middleSchoolAchievement.getGedTotalScore(), middleSchoolAchievementResDto.gedTotalScore());
-                assertEquals(middleSchoolAchievement.getGedMaxScore(), middleSchoolAchievementResDto.gedMaxScore());
             }
 
             void setUp_it_throws_expected_exception() {
@@ -236,7 +235,6 @@ class QueryOneseoByIdServiceTest {
                 .liberalSystem("자유학년제")
                 .freeSemester(null)
                 .gedTotalScore(bigDecimal)
-                .gedMaxScore(bigDecimal)
                 .build();
     }
 }

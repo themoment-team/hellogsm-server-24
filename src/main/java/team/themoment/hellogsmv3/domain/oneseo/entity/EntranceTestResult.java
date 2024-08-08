@@ -57,6 +57,10 @@ public class EntranceTestResult {
         this.interviewScore = interviewScore;
     }
 
+    public void modifyDocumentEvaluationScore(BigDecimal documentEvaluationScore) {
+        this.documentEvaluationScore = documentEvaluationScore;
+    }
+
     public EntranceTestResult(Oneseo oneseo, EntranceTestFactorsDetail entranceTestFactorsDetail, BigDecimal documentEvaluationScore) {
         this.oneseo = oneseo;
         this.entranceTestFactorsDetail = entranceTestFactorsDetail;

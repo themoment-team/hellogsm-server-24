@@ -1,8 +1,12 @@
 package team.themoment.hellogsmv3.domain.oneseo.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.*;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
@@ -19,14 +23,17 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.CalculateMockScoreService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.QueryOneseoByIdService;
-import team.themoment.hellogsmv3.domain.oneseo.service.UpdateFinalSubmissionService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyRealOneseoArrivedYnService;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+@Tag(name = "Oneseo API", description = "원서 관련 API입니다.")
 @RestController
 @RequestMapping("/oneseo/v3")
 @RequiredArgsConstructor
@@ -37,13 +44,14 @@ public class OneseoController {
     private final ModifyRealOneseoArrivedYnService modifyRealOneseoArrivedYnService;
     private final ModifyAptitudeEvaluationScoreService modifyAptitudeEvaluationScoreService;
     private final ModifyInterviewScoreService modifyInterviewScoreService;
-    private final DeleteOneseoService deleteOneseoService;
     private final QueryAdmissionTicketsService queryAdmissionTicketsService;
+    private final DownloadExcelService downloadExcelService;
     private final SearchOneseoService searchOneseoService;
     private final QueryOneseoByIdService queryOneseoByIdService;
-    private final UpdateFinalSubmissionService updateFinalSubmissionService;
     private final CalculateMockScoreService calculateMockScoreService;
+    private final OneseoTempStorageService oneseoTempStorageService;
 
+    @Operation(summary = "내 원서 등록", description = "원서를 등록합니다.")
     @PostMapping("/oneseo/me")
     public CommonApiResponse create(
             @RequestBody @Valid OneseoReqDto reqDto,
@@ -53,24 +61,17 @@ public class OneseoController {
         return CommonApiResponse.created("생성되었습니다.");
     }
 
-    @PutMapping("/oneseo/me")
-    public CommonApiResponse modify(
-            @RequestBody @Valid OneseoReqDto reqDto,
-            @AuthRequest Long memberId
-    ) {
-        modifyOneseoService.execute(reqDto, memberId, false);
-        return CommonApiResponse.success("수정되었습니다.");
-    }
-
+    @Operation(summary = "원서 수정", description = "맴버 id로 원서를 수정합니다.")
     @PutMapping("/oneseo/{memberId}")
     public CommonApiResponse modifyByAdmin(
             @RequestBody @Valid OneseoReqDto reqDto,
             @PathVariable("memberId") Long memberId
     ) {
-        modifyOneseoService.execute(reqDto, memberId, true);
+        modifyOneseoService.execute(reqDto, memberId);
         return CommonApiResponse.success("수정되었습니다.");
     }
 
+    @Operation(summary = "실물 원서 제출 여부 수정", description = "맴버 id로 원서의 실물 원서 제출 여부를 수정합니다.")
     @PatchMapping("/arrived-status/{memberId}")
     public ArrivedStatusResDto modifyArrivedStatus(
             @PathVariable Long memberId
@@ -78,6 +79,7 @@ public class OneseoController {
         return modifyRealOneseoArrivedYnService.execute(memberId);
     }
 
+    @Operation(summary = "적성 검사 점수 기입", description = "맴버 id로 원서의 적성 검사 점수를 기입합니다.")
     @PatchMapping("/aptitude-score/{memberId}")
     public CommonApiResponse modifyAptitudeScore(
             @PathVariable Long memberId,
@@ -87,6 +89,7 @@ public class OneseoController {
         return CommonApiResponse.success("수정되었습니다.");
     }
 
+    @Operation(summary = "심층 면접 검사 점수 기입", description = "맴버 id로 원서의 심층 면접 검사 점수를 기입합니다.")
     @PatchMapping("/interview-score/{memberId}")
     public CommonApiResponse modifyInterviewScore(
             @PathVariable Long memberId,
@@ -96,6 +99,7 @@ public class OneseoController {
         return CommonApiResponse.success("수정되었습니다.");
     }
 
+    @Operation(summary = "원서 검색", description = "조건을 파라미터로 받아 원서를 검색합니다.")
     @GetMapping("/oneseo/search")
     public SearchOneseosResDto search(
             @RequestParam("page") Integer page,
@@ -110,6 +114,7 @@ public class OneseoController {
         return searchOneseoService.execute(page, size, testResultTag, screeningTag, isSubmitted, keyword);
     }
 
+    @Operation(summary = "내 원서 조회", description = "내 원서 정보를 조회합니다. 임시 저장된 원서가 있다면 임시 저장된 원서를 조회합니다.")
     @GetMapping("/oneseo/me")
     public FoundOneseoResDto find(
             @AuthRequest Long memberId
@@ -117,6 +122,7 @@ public class OneseoController {
         return queryOneseoByIdService.execute(memberId);
     }
 
+    @Operation(summary = "원서 조회", description = "맴버 id로 원서 정보를 조회합니다.")
     @GetMapping("/oneseo/{memberId}")
     public FoundOneseoResDto findByAdmin(
             @PathVariable Long memberId
@@ -124,14 +130,7 @@ public class OneseoController {
         return queryOneseoByIdService.execute(memberId);
     }
 
-    @PatchMapping("/final-submit")
-    public CommonApiResponse finalSubmit(
-            @AuthRequest Long memberId
-    ) {
-        updateFinalSubmissionService.execute(memberId);
-        return CommonApiResponse.success("수정되었습니다.");
-    }
-
+    @Operation(summary = "모의 성적 계산", description = "성적 점수를 입력받아 모의 성적 환산값을 반환합니다.")
     @PostMapping("/calculate-mock-score")
     public MockScoreResDto calcMockScore(
             @RequestBody MiddleSchoolAchievementReqDto dto,
@@ -140,17 +139,37 @@ public class OneseoController {
         return calculateMockScoreService.execute(dto, graduationType);
     }
 
-    @DeleteMapping("/oneseo/me")
-    public CommonApiResponse deleteMyOneseo(
-            @AuthRequest Long memberId
-    ) {
-        deleteOneseoService.execute(memberId);
-        return CommonApiResponse.success("삭제되었습니다.");
-    }
-
+    @Operation(summary = "수험표 출력", description = "모든 원서의 수험표 정보를 반환합니다.")
     @GetMapping("/admission-tickets")
     public List<AdmissionTicketsResDto> getAdmissionTickets(
     ) {
         return queryAdmissionTicketsService.execute();
+    }
+
+    @Operation(summary = "원서 임시 저장", description = "원서 정보를 임시 저장합니다.")
+    @PostMapping("/temp-storage")
+    public CommonApiResponse temp(
+            @RequestBody @Valid OneseoReqDto reqDto,
+            @RequestParam Integer step,
+            @AuthRequest Long memberId
+    ) {
+        oneseoTempStorageService.execute(reqDto, step, memberId);
+        return CommonApiResponse.success("임시저장되었습니다.");
+    }
+
+    @Operation(summary = "엑셀 출력", description = "모든 원서의 정보를 엑셀 파일로 반환합니다.")
+    @GetMapping("/excel")
+    public void downloadExcel(
+            HttpServletResponse response
+    ) {
+        Workbook workbook = downloadExcelService.execute();
+        try {
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8");
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("지원자 입학정보.xlsx", StandardCharsets.UTF_8).replace("+", "%20"));
+            workbook.write(response.getOutputStream());
+            workbook.close();
+        } catch (IOException ex) {
+            throw new RuntimeException("파일 작성과정에서 예외가 발생하였습니다.", ex);
+        }
     }
 }

@@ -9,8 +9,6 @@ import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
-
 @Getter
 @Entity
 @Table(name = "tb_oneseo", indexes = @Index(name = "idx_final_submitted_yn", columnList = "final_submitted_yn"))
@@ -29,6 +27,12 @@ public class Oneseo {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(mappedBy = "oneseo")
+    private EntranceTestResult entranceTestResult;
+
+    @OneToOne(mappedBy = "oneseo")
+    private OneseoPrivacyDetail oneseoPrivacyDetail;
+
     @Column(name = "oneseo_submit_code")
     private String oneseoSubmitCode;
 
@@ -39,10 +43,6 @@ public class Oneseo {
     @Enumerated(EnumType.STRING)
     @Column(name = "real_oneseo_arrived_yn", nullable = false)
     private YesNo realOneseoArrivedYn;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "final_submitted_yn", nullable = false)
-    private YesNo finalSubmittedYn;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "wanted_screening", nullable = false)
@@ -56,10 +56,6 @@ public class Oneseo {
         this.oneseoSubmitCode = submitCode;
 
         return this;
-    }
-
-    public void updateFinalSubmission() {
-        this.finalSubmittedYn = YES;
     }
 
     public void switchRealOneseoArrivedYn() {

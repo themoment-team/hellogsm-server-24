@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.domain.oneseo.repository.custom;
 
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,7 @@ public interface CustomOneseoRepository {
 
     Integer findMaxSubmitCodeByScreening(Screening screening);
 
-    Page<Oneseo> findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
+    Page<SearchOneseoResDto> findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
             String keyword,
             ScreeningCategory screening,
             YesNo isSubmitted,

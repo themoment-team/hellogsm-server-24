@@ -1,18 +1,15 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
-import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
-import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +20,7 @@ public class QueryOneseoByIdService {
     private final MemberService memberService;
     private final OneseoService oneseoService;
 
+    @Cacheable(value = "oneseo", key = "#memberId")
     public FoundOneseoResDto execute(Long memberId) {
         Member member = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
@@ -81,7 +79,6 @@ public class QueryOneseoByIdService {
                 .liberalSystem(middleSchoolAchievement.getLiberalSystem())
                 .freeSemester(middleSchoolAchievement.getFreeSemester())
                 .gedTotalScore(middleSchoolAchievement.getGedTotalScore())
-                .gedMaxScore(middleSchoolAchievement.getGedMaxScore())
                 .build();
     }
 

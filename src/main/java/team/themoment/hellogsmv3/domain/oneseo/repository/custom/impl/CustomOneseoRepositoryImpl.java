@@ -4,7 +4,9 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -46,7 +48,6 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 )
                 .from(oneseo, oneseoPrivacyDetail)
                 .join(oneseo.member, member)
-                .where(oneseo.finalSubmittedYn.eq(YES))
                 .fetch();
     }
 
@@ -61,7 +62,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
     }
 
     @Override
-    public Page<Oneseo> findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
+    public Page<SearchOneseoResDto> findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
             String keyword,
             ScreeningCategory screeningTag,
             YesNo isSubmitted,
@@ -76,21 +77,42 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 testResultTag
         );
 
-        List<Oneseo> oneseos = queryFactory.selectFrom(oneseo)
-                .leftJoin(oneseo.member, member).fetchJoin()
-                .leftJoin(oneseoPrivacyDetail).on(oneseoPrivacyDetail.oneseo.eq(oneseo))
-                .leftJoin(entranceTestResult).on(entranceTestResult.id.eq(oneseo.id))
+        List<SearchOneseoResDto> oneseos = queryFactory
+                .select(Projections.constructor(
+                        SearchOneseoResDto.class,
+                        oneseo.member.id,
+                        oneseo.oneseoSubmitCode,
+                        oneseo.realOneseoArrivedYn,
+                        oneseo.member.name,
+                        oneseo.appliedScreening,
+                        oneseo.oneseoPrivacyDetail.schoolName,
+                        oneseo.member.phoneNumber,
+                        oneseo.oneseoPrivacyDetail.guardianPhoneNumber,
+                        oneseo.oneseoPrivacyDetail.schoolTeacherPhoneNumber,
+                        oneseo.entranceTestResult.firstTestPassYn,
+                        oneseo.entranceTestResult.aptitudeEvaluationScore,
+                        oneseo.entranceTestResult.interviewScore,
+                        oneseo.entranceTestResult.secondTestPassYn
+                ))
+                .from(oneseo)
+                .join(oneseo.member, member)
+                .join(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
+                .join(oneseo.entranceTestResult, entranceTestResult)
                 .where(builder)
                 .orderBy(oneseo.oneseoSubmitCode.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(
-                oneseos,
-                pageable,
-                oneseos.size()
-        );
+        return PageableExecutionUtils.getPage(oneseos, pageable, () -> getTotalCount(builder));
+    }
+
+    private long getTotalCount(BooleanBuilder builder) {
+        return queryFactory
+                .select(oneseo.count())
+                .from(oneseo)
+                .where(builder)
+                .fetchFirst();
     }
 
     private BooleanBuilder createBooleanBuilder(
@@ -101,7 +123,6 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
     ) {
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(oneseo.finalSubmittedYn.eq(YesNo.YES));
         applyKeyword(builder, keyword);
         applyScreeningTag(builder, screeningTag);
         applyIsSubmittedTag(builder, isSubmitted);

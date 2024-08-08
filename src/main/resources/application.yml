@@ -55,6 +55,8 @@ spring:
 
   mvc:
     throw-exception-if-no-handler-found: true
+    converters:
+      preferred-json-mapper: jackson
   web:
     resources:
       add-mappings: false
@@ -84,3 +86,19 @@ auth:
     - '*'
   loginEndPointBaseUri: /auth/v3/oauth2/authorization
   loginProcessingUri: /login/oauth2/code/*
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    groups:
+      enabled: true
+  swagger-ui:
+    enabled: true
+    disable-swagger-default-url: true
+    display-request-duration: true
+    tags-sorter: alpha
+    operations-sorter: method
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true

@@ -1,43 +1,46 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
-import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
+import team.themoment.hellogsmv3.domain.oneseo.entity.ScreeningChangeHistory;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
+import team.themoment.hellogsmv3.domain.oneseo.repository.ScreeningChangeHistoryRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.*;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.GED;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Major.*;
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.*;
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.GENERAL;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.SPECIAL;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.NO;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.YES;
 
-@DisplayName("CreateOneseoService 클래스의")
-class CreateOneseoServiceTest {
+@DisplayName("ModifyOneseoService 클래스의")
+class ModifyOneseoServiceTest {
 
     @Mock
     private OneseoRepository oneseoRepository;
@@ -46,6 +49,10 @@ class CreateOneseoServiceTest {
     @Mock
     private MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
     @Mock
+    private ScreeningChangeHistoryRepository screeningChangeHistoryRepository;
+    @Mock
+    private OneseoService oneseoService;
+    @Mock
     private MemberService memberService;
     @Mock
     private CalculateGradeService calculateGradeService;
@@ -53,7 +60,7 @@ class CreateOneseoServiceTest {
     private CalculateGedService calculateGedService;
 
     @InjectMocks
-    private CreateOneseoService createOneseoService;
+    private ModifyOneseoService modifyOneseoService;
 
     @BeforeEach
     void setUp() {
@@ -65,7 +72,6 @@ class CreateOneseoServiceTest {
     class Describe_execute {
 
         private final Long memberId = 1L;
-        private final OneseoReqDto reqDto = mock(OneseoReqDto.class);
 
         List<Integer> achievement = Arrays.asList(5, 5, 5, 5, 5, 5, 5, 5, 5);
         List<String> generalSubjects = Arrays.asList("국어", "도덕", "사회", "역사", "수학", "과학", "기술가정", "영어");
@@ -74,7 +80,7 @@ class CreateOneseoServiceTest {
         List<String> artsPhysicalSubjects = Arrays.asList("체육", "미술", "음악");
         List<Integer> absentDays = Arrays.asList(0, 0, 0);
         List<Integer> attendanceDays = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0);
-        List<Integer> volunteerTime = Arrays.asList(10, 0, 2);
+        List<Integer> volunteerTime = Arrays.asList(2, 0, 10);
         String liberalSystem = "자유학기제";
         String freeSemester = "3-1";
 
@@ -134,19 +140,33 @@ class CreateOneseoServiceTest {
         @DisplayName("유효한 회원 ID와 요청 데이터가 주어지면")
         class Context_with_valid_member_id_and_request_data {
 
-            @BeforeEach
-            void setUp() {
+            @Test
+            @DisplayName("기존의 Oneseo, OneseoPrivacyDetail, MiddleSchoolAchievement 엔티티를 수정하고 저장한다")
+            void it_modifies_and_saves_existing_entities() {
+
+                Oneseo oneseo = Oneseo.builder()
+                        .id(1L)
+                        .build();
+
+                OneseoPrivacyDetail oneseoPrivacyDetail = OneseoPrivacyDetail.builder()
+                        .id(1L)
+                        .oneseo(oneseo)
+                        .graduationType(CANDIDATE)
+                        .build();
+
+                MiddleSchoolAchievement middleSchoolAchievement = MiddleSchoolAchievement.builder()
+                        .id(1L)
+                        .oneseo(oneseo)
+                        .build();
+
                 Member existingMember = mock(Member.class);
 
                 given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
-                given(oneseoRepository.existsByMember(existingMember)).willReturn(false);
-            }
+                given(oneseoService.findByMemberOrThrow(existingMember)).willReturn(oneseo);
+                given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(oneseoPrivacyDetail);
+                given(middleSchoolAchievementRepository.findByOneseo(oneseo)).willReturn(middleSchoolAchievement);
 
-            @Test
-            @DisplayName("새로운 Oneseo, OneseoPrivacyDetail, MiddleSchoolAchievement 엔티티를 생성하고 저장한다")
-            void it_creates_and_saves_new_entities() {
-                createOneseoService.execute(oneseoReqDto, memberId);
-
+                modifyOneseoService.execute(oneseoReqDto, memberId);
                 ArgumentCaptor<Oneseo> oneseoCaptor = ArgumentCaptor.forClass(Oneseo.class);
                 ArgumentCaptor<OneseoPrivacyDetail> oneseoPrivacyDetailCaptor = ArgumentCaptor.forClass(OneseoPrivacyDetail.class);
                 ArgumentCaptor<MiddleSchoolAchievement> middleSchoolAchievementCaptor = ArgumentCaptor.forClass(MiddleSchoolAchievement.class);
@@ -154,19 +174,21 @@ class CreateOneseoServiceTest {
                 verify(oneseoRepository).save(oneseoCaptor.capture());
                 verify(oneseoPrivacyDetailRepository).save(oneseoPrivacyDetailCaptor.capture());
                 verify(middleSchoolAchievementRepository).save(middleSchoolAchievementCaptor.capture());
+                verify(calculateGradeService).execute(any(MiddleSchoolAchievementReqDto.class), eq(oneseo), eq(CANDIDATE));
 
                 Oneseo capturedOneseo = oneseoCaptor.getValue();
                 OneseoPrivacyDetail capturedPrivacyDetail = oneseoPrivacyDetailCaptor.getValue();
                 MiddleSchoolAchievement capturedAchievement = middleSchoolAchievementCaptor.getValue();
 
-                assertEquals(null, capturedOneseo.getOneseoSubmitCode());
+                assertEquals(oneseo.getId(), capturedOneseo.getId());
                 assertEquals(firstDesiredMajor, capturedOneseo.getDesiredMajors().getFirstDesiredMajor());
                 assertEquals(secondDesiredMajor, capturedOneseo.getDesiredMajors().getSecondDesiredMajor());
                 assertEquals(thirdDesiredMajor, capturedOneseo.getDesiredMajors().getThirdDesiredMajor());
-                assertEquals(NO, capturedOneseo.getRealOneseoArrivedYn());
                 assertEquals(screening, capturedOneseo.getWantedScreening());
                 assertEquals(screening, capturedOneseo.getAppliedScreening());
 
+                assertEquals(oneseoPrivacyDetail.getId(), capturedPrivacyDetail.getId());
+                assertEquals(oneseoPrivacyDetail.getOneseo(), capturedPrivacyDetail.getOneseo());
                 assertEquals(graduationType, capturedPrivacyDetail.getGraduationType());
                 assertEquals(address, capturedPrivacyDetail.getAddress());
                 assertEquals(detailAddress, capturedPrivacyDetail.getDetailAddress());
@@ -179,6 +201,8 @@ class CreateOneseoServiceTest {
                 assertEquals(schoolTeacherName, capturedPrivacyDetail.getSchoolTeacherName());
                 assertEquals(schoolTeacherPhoneNumber, capturedPrivacyDetail.getSchoolTeacherPhoneNumber());
 
+                assertEquals(middleSchoolAchievement.getId(), capturedAchievement.getId());
+                assertEquals(middleSchoolAchievement.getOneseo(), capturedAchievement.getOneseo());
                 assertEquals(null, capturedAchievement.getAchievement1_2());
                 assertEquals(achievement, capturedAchievement.getAchievement2_1());
                 assertEquals(achievement, capturedAchievement.getAchievement2_1());
@@ -195,6 +219,36 @@ class CreateOneseoServiceTest {
                 assertEquals(freeSemester, capturedAchievement.getFreeSemester());
                 assertEquals(null, capturedAchievement.getGedTotalScore());
             }
+
+            @Test
+            @DisplayName("전형이 변경되었다면 히스토리를 남긴다.")
+            void it_change_screening_entity_save() {
+                Screening beforeScreening = SPECIAL;
+                Screening afterScreening = GENERAL;
+
+                Member existingMember = mock(Member.class);
+                Oneseo existingOneseo = mock(Oneseo.class);
+                OneseoPrivacyDetail existingPrivacyDetail = mock(OneseoPrivacyDetail.class);
+                MiddleSchoolAchievement existingAchievement = mock(MiddleSchoolAchievement.class);
+
+                given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
+                given(oneseoService.findByMemberOrThrow(existingMember)).willReturn(existingOneseo);
+                given(oneseoPrivacyDetailRepository.findByOneseo(existingOneseo)).willReturn(existingPrivacyDetail);
+                given(middleSchoolAchievementRepository.findByOneseo(existingOneseo)).willReturn(existingAchievement);
+                given(existingOneseo.getAppliedScreening()).willReturn(beforeScreening);
+                given(existingPrivacyDetail.getGraduationType()).willReturn(GED);
+
+                modifyOneseoService.execute(oneseoReqDto, memberId);
+                ArgumentCaptor<ScreeningChangeHistory> screeningChangeHistoryArgumentCaptor = ArgumentCaptor.forClass(ScreeningChangeHistory.class);
+
+                verify(screeningChangeHistoryRepository).save(screeningChangeHistoryArgumentCaptor.capture());
+                verify(calculateGedService).execute(any(MiddleSchoolAchievementReqDto.class), eq(existingOneseo), eq(GED));
+
+                ScreeningChangeHistory capturedScreeningChangeHistory = screeningChangeHistoryArgumentCaptor.getValue();
+
+                assertEquals(beforeScreening, capturedScreeningChangeHistory.getBeforeScreening());
+                assertEquals(afterScreening, capturedScreeningChangeHistory.getAfterScreening());
+            }
         }
 
         @Nested
@@ -203,83 +257,36 @@ class CreateOneseoServiceTest {
 
             @BeforeEach
             void setUp() {
-                doThrow(new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND))
+                doThrow(new ExpectedException("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.BAD_REQUEST))
                         .when(memberService).findByIdOrThrow(memberId);
             }
 
             @Test
             @DisplayName("ExpectedException을 던진다")
-            void it_throws_expected_exception() {
-                ExpectedException exception = assertThrows(ExpectedException.class, () -> createOneseoService.execute(reqDto, memberId));
-
-                assertEquals("존재하지 않는 지원자입니다. member ID: " + memberId, exception.getMessage());
-                assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+            void it_throws_an_exception() {
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyOneseoService.execute(oneseoReqDto, memberId));
+                assertEquals("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, exception.getMessage());
+                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             }
         }
 
         @Nested
-        @DisplayName("이미 Oneseo가 존재하면")
-        class Context_with_existing_oneseo {
+        @DisplayName("기존의 Oneseo 엔티티가 존재하지 않으면")
+        class Context_with_no_existing_oneseo {
 
             @BeforeEach
             void setUp() {
                 Member existingMember = mock(Member.class);
-
                 given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
-                given(oneseoRepository.existsByMember(any(Member.class))).willReturn(true);
+                doThrow(new ExpectedException("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, HttpStatus.BAD_REQUEST))
+                        .when(oneseoService).findByMemberOrThrow(existingMember);
             }
 
             @Test
             @DisplayName("ExpectedException을 던진다")
-            void it_throws_expected_exception() {
-                ExpectedException exception = assertThrows(ExpectedException.class, () -> createOneseoService.execute(reqDto, memberId));
-
-                assertEquals("이미 원서가 존재합니다.", exception.getMessage());
-                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
-            }
-        }
-
-
-        @Nested
-        @DisplayName("유효하지 않은 교과 등급이 입력되었을 때")
-        class Context_with_invalid_achievement {
-
-            MiddleSchoolAchievementReqDto invalidMiddleSchoolAchievementReqDto = mock(MiddleSchoolAchievementReqDto.class);
-
-            @BeforeEach
-            void setUp() {
-                Member existingMember = mock(Member.class);
-
-                given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
-                given(oneseoRepository.existsByMember(existingMember)).willReturn(false);
-                given(reqDto.middleSchoolAchievement()).willReturn(invalidMiddleSchoolAchievementReqDto);
-            }
-
-            @Test
-            @DisplayName("일반교과 등급이 유효하지 않다면 ExpectedException을 던진다")
-            void it_general_throws_expected_exception() {
-                List<Integer> invalidGeneralAchievements = Arrays.asList(6, 0);
-                given(invalidMiddleSchoolAchievementReqDto.achievement1_2()).willReturn(invalidGeneralAchievements);
-                given(invalidMiddleSchoolAchievementReqDto.achievement2_1()).willReturn(invalidGeneralAchievements);
-                given(invalidMiddleSchoolAchievementReqDto.achievement2_2()).willReturn(invalidGeneralAchievements);
-                given(invalidMiddleSchoolAchievementReqDto.achievement3_1()).willReturn(invalidGeneralAchievements);
-                given(invalidMiddleSchoolAchievementReqDto.achievement3_2()).willReturn(invalidGeneralAchievements);
-
-                ExpectedException exception = assertThrows(ExpectedException.class, () -> createOneseoService.execute(reqDto, memberId));
-
-                assertEquals("올바르지 않은 일반교과 등급이 입력되었습니다.", exception.getMessage());
-                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
-            }
-
-            @Test
-            @DisplayName("예체능 등급이 유효하지 않다면 ExpectedException을 던진다")
-            void it_art_throws_expected_exception() {
-                List<Integer> invalidArtAchievements = Arrays.asList(0, 1, 2, 6);
-                given(invalidMiddleSchoolAchievementReqDto.artsPhysicalAchievement()).willReturn(invalidArtAchievements);
-
-                ExpectedException exception = assertThrows(ExpectedException.class, () -> createOneseoService.execute(reqDto, memberId));
-
-                assertEquals("올바르지 않은 예체능 등급이 입력되었습니다.", exception.getMessage());
+            void it_throws_an_exception() {
+                ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyOneseoService.execute(oneseoReqDto, memberId));
+                assertEquals("해당 지원자의 원서를 찾을 수 없습니다. member ID: " + memberId, exception.getMessage());
                 assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             }
         }

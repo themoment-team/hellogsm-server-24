@@ -20,10 +20,7 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
-import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 
 import java.math.BigDecimal;
@@ -33,18 +30,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.*;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @DisplayName("SearchOneseoService 클래스의")
 class SearchOneseoServiceTest {
 
     @Mock
     private OneseoRepository oneseoRepository;
-
-    @Mock
-    private OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
-
-    @Mock
-    private EntranceTestResultRepository entranceTestResultRepository;
 
     @InjectMocks
     private SearchOneseoService searchOneseoService;
@@ -62,7 +55,7 @@ class SearchOneseoServiceTest {
         private final int size = 3;
         private final TestResultTag testResultTag = TestResultTag.ALL;
         private final ScreeningCategory screeningTag = ScreeningCategory.GENERAL;
-        private final YesNo isSubmitted = YesNo.YES;
+        private final YesNo isSubmitted = YES;
         private final String keyword = "최장우";
 
         @Nested
@@ -72,7 +65,7 @@ class SearchOneseoServiceTest {
             @BeforeEach
             void setUp() {
                 Pageable pageable = PageRequest.of(page, size);
-                Page<Oneseo> emptyPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
+                Page<SearchOneseoResDto> emptyPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
 
                 given(oneseoRepository.findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
                         keyword, screeningTag, isSubmitted, testResultTag, pageable
@@ -103,18 +96,17 @@ class SearchOneseoServiceTest {
             void setUp() {
                 Pageable pageable = PageRequest.of(page, size);
                 member = buildMember();
-                oneseo = buildOneseo(member);
-                Page<Oneseo> oneseoPage = new PageImpl<>(List.of(oneseo), pageable, 1);
+                oneseo = buildOneseo();
 
                 oneseoPrivacyDetail = buildOneseoPrivacyDetail();
-                entranceTestResult = mock(EntranceTestResult.class);
+                entranceTestResult = buildEntranceTestResult();
+
+                SearchOneseoResDto searchOneseoResDto = buildSearchOneseoDto(member, oneseo, oneseoPrivacyDetail, entranceTestResult);
+                Page<SearchOneseoResDto> oneseoPage = new PageImpl<>(List.of(searchOneseoResDto), pageable, 1);
 
                 given(oneseoRepository.findAllByKeywordAndScreeningAndSubmissionStatusAndTestResult(
                         keyword, screeningTag, isSubmitted, testResultTag, pageable
                 )).willReturn(oneseoPage);
-                given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(oneseoPrivacyDetail);
-                given(entranceTestResultRepository.findByOneseo(oneseo)).willReturn(entranceTestResult);
-                stubEntranceTestResult(entranceTestResult);
             }
 
             @Test
@@ -160,19 +152,40 @@ class SearchOneseoServiceTest {
                 .build();
     }
 
-    private Oneseo buildOneseo(Member member) {
+    private Oneseo buildOneseo() {
         return Oneseo.builder()
-                .member(member)
-                .oneseoSubmitCode("submit code")
-                .realOneseoArrivedYn(YesNo.YES)
-                .appliedScreening(Screening.GENERAL)
+                .id(1L)
+                .oneseoSubmitCode("A-1")
+                .realOneseoArrivedYn(YES)
+                .appliedScreening(GENERAL)
                 .build();
     }
 
-    private void stubEntranceTestResult(EntranceTestResult entranceTestResult) {
-        given(entranceTestResult.getFirstTestPassYn()).willReturn(YesNo.YES);
-        given(entranceTestResult.getAptitudeEvaluationScore()).willReturn(BigDecimal.TEN);
-        given(entranceTestResult.getInterviewScore()).willReturn(BigDecimal.TEN);
-        given(entranceTestResult.getFirstTestPassYn()).willReturn(YesNo.YES);
+    private SearchOneseoResDto buildSearchOneseoDto(Member member, Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, EntranceTestResult entranceTestResult) {
+        return SearchOneseoResDto.builder()
+                .memberId(member.getId())
+                .submitCode(oneseo.getOneseoSubmitCode())
+                .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
+                .name(member.getName())
+                .screening(oneseo.getAppliedScreening())
+                .schoolName(oneseoPrivacyDetail.getSchoolName())
+                .phoneNumber(member.getPhoneNumber())
+                .guardianPhoneNumber(oneseoPrivacyDetail.getGuardianPhoneNumber())
+                .schoolTeacherPhoneNumber(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber())
+                .firstTestPassYn(entranceTestResult.getFirstTestPassYn())
+                .aptitudeEvaluationScore(entranceTestResult.getAptitudeEvaluationScore())
+                .interviewScore(entranceTestResult.getInterviewScore())
+                .secondTestPassYn(entranceTestResult.getSecondTestPassYn())
+                .build();
+    }
+
+    private EntranceTestResult buildEntranceTestResult() {
+        return EntranceTestResult.builder()
+                .id(1L)
+                .firstTestPassYn(YES)
+                .aptitudeEvaluationScore(BigDecimal.TEN)
+                .interviewScore(BigDecimal.TEN)
+                .secondTestPassYn(YES)
+                .build();
     }
 }
