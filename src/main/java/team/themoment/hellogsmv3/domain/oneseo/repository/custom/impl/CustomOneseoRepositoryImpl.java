@@ -205,7 +205,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
             case FALL ->
                     builder.andAnyOf(
                             entranceTestResult.firstTestPassYn.eq(YesNo.NO),
-                            entranceTestResult.firstTestPassYn.eq(YesNo.NO)
+                            entranceTestResult.secondTestPassYn.eq(YesNo.NO)
                     );
         }
     }
