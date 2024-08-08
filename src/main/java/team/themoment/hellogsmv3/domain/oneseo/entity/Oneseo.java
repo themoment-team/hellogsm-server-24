@@ -11,7 +11,10 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
 @Getter
 @Entity
-@Table(name = "tb_oneseo")
+@Table(name = "tb_oneseo", indexes = {
+        @Index(name = "idx_applied_screening_and_real_oneseo_arrived_yn", columnList = "applied_screening, real_oneseo_arrived_yn"),
+        @Index(name = "idx_real_oneseo_arrived_yn", columnList = "real_oneseo_arrived_yn")
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
