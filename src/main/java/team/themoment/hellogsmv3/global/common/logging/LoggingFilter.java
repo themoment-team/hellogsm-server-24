@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -21,8 +22,25 @@ public class LoggingFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(LoggingFilter.class);
 
+    private static final String[] NOT_LOGGING_URL = {
+            "/api-docs/**", "/swagger-ui/**"
+    };
+
+    private final AntPathMatcher matcher = new AntPathMatcher();
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
+
+        if (isNotLoggingURL(request.getRequestURI())) {
+            try {
+                filterChain.doFilter(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
+
         long startTime = System.currentTimeMillis();
         UUID logId = UUID.randomUUID();
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
@@ -36,6 +54,11 @@ public class LoggingFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isNotLoggingURL(String requestURI) {
+        return Arrays.stream(NOT_LOGGING_URL)
+                .anyMatch(pattern -> matcher.match(pattern, requestURI));
     }
 
     private void requestLogging(ContentCachingRequestWrapper request, UUID logId) {
