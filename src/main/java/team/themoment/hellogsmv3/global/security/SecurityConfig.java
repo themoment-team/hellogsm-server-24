@@ -9,10 +9,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
+import team.themoment.hellogsmv3.global.common.logging.LoggingFilter;
 import team.themoment.hellogsmv3.global.security.auth.AuthEnvironment;
 import team.themoment.hellogsmv3.global.security.handler.CustomAccessDeniedHandler;
 import team.themoment.hellogsmv3.global.security.handler.CustomAuthenticationEntryPoint;
@@ -26,6 +28,7 @@ public class SecurityConfig {
     private final AuthEnvironment authEnv;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final LoggingFilter loggingFilter;
 
     @Configuration
     @EnableWebSecurity
@@ -38,6 +41,7 @@ public class SecurityConfig {
             oauth2Login(http);
             exceptionHandling(http);
             authorizeHttpRequests(http);
+            addLoggingFilter(http);
 
             return http.build();
         }
@@ -253,5 +257,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/oneseo/v3/calculate-mock-score").permitAll()
                 .anyRequest().permitAll()
         );
+    }
+
+    private void addLoggingFilter(HttpSecurity http) {
+        http.addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
