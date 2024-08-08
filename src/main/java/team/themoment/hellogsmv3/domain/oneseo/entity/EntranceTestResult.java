@@ -11,7 +11,10 @@ import java.math.BigDecimal;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name = "tb_entrance_test_result")
+@Table(name = "tb_entrance_test_result", indexes = {
+        @Index(name = "idx_first_test_pass_yn", columnList = "first_test_pass_yn"),
+        @Index(name = "idx_second_test_pass_yn", columnList = "second_test_pass_yn")
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EntranceTestResult {
 
