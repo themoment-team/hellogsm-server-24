@@ -13,6 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
@@ -47,12 +48,19 @@ public class LoggingFilter extends OncePerRequestFilter {
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
 
         try {
-            filterChain.doFilter(requestWrapper, responseWrapper);
             requestLogging(requestWrapper, logId);
-            responseLogging(responseWrapper, startTime, logId);
-            responseWrapper.copyBodyToResponse();
+            filterChain.doFilter(requestWrapper, responseWrapper);
         } catch (Exception e) {
+            log.error("LoggingFilter의 FilterChain에서 예외가 발생했습니다.");
             e.printStackTrace();
+        } finally {
+            responseLogging(responseWrapper, startTime, logId);
+            try {
+                responseWrapper.copyBodyToResponse();
+            } catch (IOException e) {
+                log.error("LoggingFilter에서 response body를 출력하는 도중 예외가 발생했습니다.");
+                e.printStackTrace();
+            }
         }
     }
 
