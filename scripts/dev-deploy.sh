@@ -2,6 +2,8 @@
 BUILD_JAR=/home/ec2-user/builds/build/libs/hellogsm-server-24-0.0.1-SNAPSHOT.jar
 JAR_NAME=hellogsm-server-24-0.0.1-SNAPSHOT.jar
 
+DEPLOY_PATH=/home/ec2-user/builds/build/libs/
+
 CURRENT_PID=$(pgrep -f $JAR_NAME)
 if [ -z $CURRENT_PID ]
 then
@@ -12,6 +14,8 @@ else
   sleep 5
 fi
 
-chmod +x $BUILD_JAR
+DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 
-nohup java -jar $BUILD_JAR --spring.profiles.active=dev > /dev/null 2> /dev/null < /dev/null &
+chmod +x $DEPLOY_JAR
+
+nohup java -jar $DEPLOY_JAR --spring.profiles.active=dev
