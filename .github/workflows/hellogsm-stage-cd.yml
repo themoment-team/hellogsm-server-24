@@ -27,7 +27,7 @@ jobs:
       - name : Setup Gradls's permission
         run : chmod +x gradlew
 
-      - name: make yml file
+      - name: Make yml file
         run: touch ./src/main/resources/application-dev.yml
 
           echo "${{ secrets.DEV_WEB_YML }}" > ./src/main/resources/application-dev.yml
