@@ -52,4 +52,4 @@ jobs:
         run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/dev/$GITHUB_SHA.zip
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name hellogsm-dev-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name dev-web-server --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=dev/$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name hellogsm-dev-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name hello-stage --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=dev/$GITHUB_SHA.zip
