@@ -28,9 +28,9 @@ jobs:
         run : chmod +x gradlew
 
       - name: make yml file
-        run: touch ./hellogsm-server-2024/src/main/resources/application-dev.yml
+        run: touch ./src/main/resources/application-dev.yml
 
-          echo "${{ secrets.DEV_WEB_YML }}" > ./hellogsm-server-2024/src/main/resources/application-dev.yml
+          echo "${{ secrets.DEV_WEB_YML }}" > ./src/main/resources/application-dev.yml
 
         shell: bash
 
