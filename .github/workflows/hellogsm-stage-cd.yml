@@ -2,9 +2,7 @@ name: HelloGSM stage CD workflow
 
 on:
   push:
-    branches: [ "*" ]
-  pull_request:
-    branches: [ "*" ]
+    branches: [ "develop" ]
   workflow_dispatch:
 
 jobs:
