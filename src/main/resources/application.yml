@@ -87,6 +87,10 @@ auth:
   loginEndPointBaseUri: /auth/v3/oauth2/authorization
   loginProcessingUri: /login/oauth2/code/*
 
+schedule:
+  startReceptionDate: ${START_RECEPTION_DATE}
+  endReceptionDate: ${END_RECEPTION_DATE}
+
 springdoc:
   api-docs:
     path: /api-docs
