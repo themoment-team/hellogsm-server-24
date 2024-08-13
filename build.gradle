@@ -51,7 +51,7 @@ dependencies {
 
     /** lombok **/
     compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'\
+    annotationProcessor 'org.projectlombok:lombok'
 
     /** object serialize **/
     implementation 'com.google.code.gson:gson:2.10.1'
@@ -59,6 +59,7 @@ dependencies {
 
     /** aws **/
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.1'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns:3.0.1'
 
     /** excel **/
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
