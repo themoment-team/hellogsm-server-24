@@ -24,7 +24,6 @@ import team.themoment.hellogsmv3.global.security.handler.CustomAuthenticationEnt
 import team.themoment.hellogsmv3.global.security.handler.CustomUrlAuthenticationSuccessHandler;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Arrays;
 
 @Configuration
