@@ -72,6 +72,8 @@ spring:
         static: ${AWS_REGION}
       stack:
         auto: false
+      sns:
+        region: ${AWS_SNS_REGION}
 
   servlet:
     multipart:
