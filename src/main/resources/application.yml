@@ -108,3 +108,10 @@ springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
   writer-with-default-pretty-printer: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: ${ACTUATOR_BASE_PATH}
