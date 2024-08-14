@@ -53,7 +53,7 @@ class GenerateCodeServiceImplTest {
             }
 
             @Test
-            @DisplayName("새로운 코드를 생성하고 저장한다")
+            @DisplayName("새로운 코드를 생성하고 저장 후 인증번호를 전송한다")
             void it_generates_and_saves_a_new_code() {
                 String code = generateCodeServiceImpl.execute(memberId, reqDto);
 
