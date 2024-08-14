@@ -37,14 +37,14 @@ public class TimeBasedFilter extends OncePerRequestFilter {
         }
     }
 
-    public TimeBasedFilter addFilter(HttpMethod httpMethod, String url, LocalDateTime startTime, LocalDateTime endTime) {
-        urlTimeRanges.put(url + ":" + httpMethod, new TimeRange(startTime, endTime));
+    public TimeBasedFilter addFilter(HttpMethod httpMethod, String uri, LocalDateTime startTime, LocalDateTime endTime) {
+        urlTimeRanges.put(uri + ":" + httpMethod, new TimeRange(startTime, endTime));
         return this;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String requestUrl = request.getRequestURI();
+        String requestUri = request.getRequestURI();
         HttpMethod requestMethod;
 
         try {
@@ -55,7 +55,7 @@ public class TimeBasedFilter extends OncePerRequestFilter {
         }
 
         LocalDateTime currentTime = LocalDateTime.now();
-        String timeRangeKey = requestUrl + ":" + requestMethod;
+        String timeRangeKey = requestUri + ":" + requestMethod;
 
         if (urlTimeRanges.containsKey(timeRangeKey)) {
             TimeRange timeRange = urlTimeRanges.get(timeRangeKey);
