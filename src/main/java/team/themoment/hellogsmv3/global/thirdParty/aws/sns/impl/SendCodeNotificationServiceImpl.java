@@ -13,10 +13,20 @@ public class SendCodeNotificationServiceImpl implements SendCodeNotificationServ
 
     @Override
     public void execute(String phoneNumber, String code) {
-        sendSmsService.execute(phoneNumber, createMessage(code));
+        sendSmsService.execute(phoneNumber, createContentMessage(code), createFooterMessage());
     }
 
-    private static String createMessage(String code) {
-        return "[Hello, GSM] 본인인증번호 [" + code + "]를 입력해주세요.";
+    private static String createContentMessage(String code) {
+        return String.format(
+                """
+                [Hello, GSM | 광주소프트웨어마이스터고등학교 입학지원시스템]
+                
+                인증번호 [%s]를 입력해주세요.
+                """, code
+        );
+    }
+
+    private static String createFooterMessage() {
+        return "- 본인이 요청한게 아니라면 행정실 062-949-6800으로 문의해주세요. ";
     }
 }

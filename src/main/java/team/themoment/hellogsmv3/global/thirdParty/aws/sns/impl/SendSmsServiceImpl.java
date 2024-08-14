@@ -19,16 +19,23 @@ public class SendSmsServiceImpl implements SendSmsService {
     private final AwsTemplate<Void> executeWithExceptionHandle;
 
     @Override
-    public void execute(String phoneNumber, String message) {
+    public void execute(String phoneNumber, String contentMessage, String footerMessage) {
         executeWithExceptionHandle.execute(() -> {
             smsTemplate.send(
                     createPhoneNumber(phoneNumber),
-                    message,
+                    contentMessage,
                     SmsMessageAttributes.builder()
                             .smsType(TRANSACTIONAL)
                             .senderID(SENDER_ID)
-                            .build()
-            );
+                            .build());
+
+            smsTemplate.send(
+                    createPhoneNumber(phoneNumber),
+                    footerMessage,
+                    SmsMessageAttributes.builder()
+                            .smsType(TRANSACTIONAL)
+                            .senderID(SENDER_ID)
+                            .build());
             return null;
         });
     }
