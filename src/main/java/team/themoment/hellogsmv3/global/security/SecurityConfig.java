@@ -1,5 +1,6 @@
 package team.themoment.hellogsmv3.global.security;
 
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,19 +17,35 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.global.common.logging.LoggingFilter;
 import team.themoment.hellogsmv3.global.security.auth.AuthEnvironment;
+import team.themoment.hellogsmv3.global.security.data.ScheduleEnvironment;
+import team.themoment.hellogsmv3.global.security.filter.TimeBasedFilter;
 import team.themoment.hellogsmv3.global.security.handler.CustomAccessDeniedHandler;
 import team.themoment.hellogsmv3.global.security.handler.CustomAuthenticationEntryPoint;
 import team.themoment.hellogsmv3.global.security.handler.CustomUrlAuthenticationSuccessHandler;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final ScheduleEnvironment scheduleEnv;
     private final AuthEnvironment authEnv;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final LoggingFilter loggingFilter;
+
+    @Bean
+    public Filter timeBasedFilter() {
+        LocalDateTime startReception = scheduleEnv.startReceptionDate();
+        LocalDateTime endReception = scheduleEnv.endReceptionDate();
+
+        return new TimeBasedFilter()
+                .addFilter(HttpMethod.POST, "/oneseo/v3/temp-storage", startReception, endReception)
+                .addFilter(HttpMethod.POST, "/oneseo/v3/oneseo/me", startReception, endReception)
+                .addFilter(HttpMethod.GET, "/oneseo/v3/oneseo/me", startReception, endReception)
+                .addFilter(HttpMethod.POST, "/oneseo/v3/image", startReception, endReception);
+    }
 
     @Configuration
     @EnableWebSecurity
