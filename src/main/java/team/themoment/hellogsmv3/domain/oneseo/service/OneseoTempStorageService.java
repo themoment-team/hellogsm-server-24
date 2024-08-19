@@ -12,13 +12,15 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.MiddleSchoolAchievementResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.OneseoPrivacyDetailResDto;
 
+import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.*;
+
 @Service
 @RequiredArgsConstructor
 public class OneseoTempStorageService {
 
     private final MemberService memberService;
 
-    @CachePut(value = "oneseo", key = "#memberId")
+    @CachePut(value = ONESEO_CACHE_VALUE, key = "#memberId")
     public FoundOneseoResDto execute(OneseoReqDto reqDto,Integer step, Long memberId) {
         Member member = memberService.findByIdOrThrow(memberId);
 

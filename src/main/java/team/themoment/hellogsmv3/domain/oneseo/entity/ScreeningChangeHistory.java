@@ -19,7 +19,7 @@ public class ScreeningChangeHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "entrance _test_result_id")
+    @Column(name = "entrance_test_result_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -20,7 +20,7 @@ public class EntranceTestResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "entrance _test_result_id")
+    @Column(name = "entrance_test_result_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)

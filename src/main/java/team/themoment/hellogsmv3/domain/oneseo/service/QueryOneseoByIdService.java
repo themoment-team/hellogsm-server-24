@@ -11,6 +11,8 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 
+import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.ONESEO_CACHE_VALUE;
+
 @Service
 @RequiredArgsConstructor
 public class QueryOneseoByIdService {
@@ -20,7 +22,7 @@ public class QueryOneseoByIdService {
     private final MemberService memberService;
     private final OneseoService oneseoService;
 
-    @Cacheable(value = "oneseo", key = "#memberId")
+    @Cacheable(value = ONESEO_CACHE_VALUE, key = "#memberId")
     public FoundOneseoResDto execute(Long memberId) {
         Member member = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);

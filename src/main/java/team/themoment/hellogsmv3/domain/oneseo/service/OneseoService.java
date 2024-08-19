@@ -12,6 +12,7 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 @RequiredArgsConstructor
 public class OneseoService {
 
+    public static final String ONESEO_CACHE_VALUE = "oneseo";
     private final OneseoRepository oneseoRepository;
 
     public Oneseo findByMemberOrThrow(Member member) {
