@@ -6,6 +6,7 @@ import java.util.List;
 
 @ConfigurationProperties(prefix = "auth")
 public record AuthEnvironment(
+        String redirectDryRunBaseUri,
         String redirectBaseUri,
         String redirectAdminUri,
         String redirectLoginFailureUri,

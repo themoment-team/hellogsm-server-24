@@ -15,6 +15,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+    private final String redirectDryRunBaseUri;
     private final String redirectBaseUri;
     private final String redirectAdminUri;
 
@@ -27,22 +28,26 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(authority -> Role.ADMIN.name().equals(authority.getAuthority()));
 
+        String dryrun = request.getHeader("X-HG-ENV");
+        boolean isDryrun = Boolean.parseBoolean(dryrun != null ? dryrun : "false");
+
         String redirectUrlWithParameter = UriComponentsBuilder
-                .fromUriString(getTargetUrl(isAdmin))
+                .fromUriString(getTargetUrl(isAdmin, isDryrun))
                 .queryParam("verification", !isUnAuthentication)
                 .build()
                 .toUriString();
+
 
         response.sendRedirect(redirectUrlWithParameter);
 
         clearAuthenticationAttributes(request);
     }
 
-    protected final String getTargetUrl(boolean isAdmin) {
+    protected final String getTargetUrl(boolean isAdmin, boolean isDryrun) {
         if (isAdmin) {
             return redirectAdminUri;
         } else {
-            return redirectBaseUri;
+            return isDryrun ? redirectDryRunBaseUri : redirectBaseUri;
         }
     }
 

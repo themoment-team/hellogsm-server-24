@@ -81,7 +81,8 @@ spring:
       max-request-size: 5MB
 
 auth:
-  redirect-base-uri: http://localhost:8080/
+  redirect-dryrun-base-uri: http://localhost:3000
+  redirect-base-uri: http://localhost:8080
   redirect-login-failure-uri: http://localhost:8080/auth/error
   redirect-admin-uri: http://localhost:8080/admin
   allowed-origins:
