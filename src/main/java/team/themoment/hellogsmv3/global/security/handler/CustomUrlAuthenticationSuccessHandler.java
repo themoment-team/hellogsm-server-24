@@ -17,9 +17,9 @@ import static team.themoment.hellogsmv3.global.security.data.HeaderConstant.*;
 @RequiredArgsConstructor
 public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final String redirectDryRunBaseUri;
-    private final String redirectBaseUri;
-    private final String redirectAdminUri;
+    private final String redirectDryRunBaseUrl;
+    private final String redirectStudentUrl;
+    private final String redirectAdminUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -46,10 +46,10 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
     }
 
     protected final String getTargetUrl(boolean isAdmin, boolean isDryrun) {
-        if (isDryrun) return redirectDryRunBaseUri;
+        if (isDryrun) return redirectDryRunBaseUrl;
         return isAdmin
-                ? redirectAdminUri
-                : redirectBaseUri;
+                ? redirectAdminUrl
+                : redirectStudentUrl;
     }
 
     protected final void clearAuthenticationAttributes(HttpServletRequest request) {
