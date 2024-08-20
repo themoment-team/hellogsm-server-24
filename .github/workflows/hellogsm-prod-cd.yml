@@ -18,21 +18,17 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
 
-      - name: Gradle Caching
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
-      - name: Make application.yml
-        run: |
-          mkdir -p ./src/main/resources
-          echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
+      - name : Setup Gradle's permission
+        run : chmod +x gradlew
+
+      - name: Make yml file
+        run: touch ./src/main/resources/application-dev.yml
+          echo "${{ secrets.PROD_WEB_YML }}" > ./src/main/resources/application-prod.yml
         shell: bash
         
       - name: Grant execute permission for gradlew
@@ -40,12 +36,10 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
-        
+
       - name: Make zip file
-        run: |
-          mkdir deploy
-          cp ./build/libs/*.jar ./deploy/
-          zip -r -qq -j ./spring-build.zip ./deploy
+        run: zip -r ./$GITHUB_SHA.zip .
+        shell: bash
           
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -53,10 +47,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-        
-      - name: Make zip file
-        run: zip -r ./$GITHUB_SHA.zip .
-        shell: bash
 
       - name: Upload to S3
         run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/prod/$GITHUB_SHA.zip
