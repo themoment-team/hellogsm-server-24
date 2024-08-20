@@ -50,3 +50,6 @@ jobs:
 
       - name: Upload to S3
         run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/prod/$GITHUB_SHA.zip
+
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name hellogsm-prod-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name hellogsm-prod-deploy-group --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=dev/$GITHUB_SHA.zip
