@@ -3,7 +3,10 @@ name: HelloGSM stage CD workflow
 on:
   push:
     branches:
-      - "develop"
+      - "*"
+  pull_request:
+    branches:
+      - "*"
   workflow_dispatch:
 
 jobs:
