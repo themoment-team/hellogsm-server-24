@@ -46,11 +46,10 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
     }
 
     protected final String getTargetUrl(boolean isAdmin, boolean isDryrun) {
-        if (isAdmin) {
-            return redirectAdminUri;
-        } else {
-            return isDryrun ? redirectDryRunBaseUri : redirectBaseUri;
-        }
+        if (isDryrun) return redirectDryRunBaseUri;
+        return isAdmin
+                ? redirectAdminUri
+                : redirectBaseUri;
     }
 
     protected final void clearAuthenticationAttributes(HttpServletRequest request) {
