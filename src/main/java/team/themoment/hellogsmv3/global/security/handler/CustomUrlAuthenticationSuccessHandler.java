@@ -12,6 +12,8 @@ import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 
 import java.io.IOException;
 
+import static team.themoment.hellogsmv3.global.security.data.HeaderConstant.*;
+
 @RequiredArgsConstructor
 public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -28,7 +30,7 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(authority -> Role.ADMIN.name().equals(authority.getAuthority()));
 
-        String dryrun = request.getHeader("X-HG-ENV");
+        String dryrun = request.getHeader(X_H_ENV.getContent());
         boolean isDryrun = Boolean.parseBoolean(dryrun != null ? dryrun : "false");
 
         String redirectUrlWithParameter = UriComponentsBuilder
