@@ -1,21 +1,21 @@
 #!/bin/bash
+
+# 변수 설정
 BUILD_JAR=/home/ec2-user/builds/build/libs/hellogsm-server-24-0.0.1-SNAPSHOT.jar
 JAR_NAME=hellogsm-server-24-0.0.1-SNAPSHOT.jar
+IMAGE_NAME=hellogsm-stage-server:latest
+CONTAINER_NAME=hellogsm-stage-server
 
-DEPLOY_PATH=/home/ec2-user/builds/build/libs/
+CURRENT_CONTAINER_ID=$(docker ps -q -f name=$CONTAINER_NAME)
 
-CURRENT_PID=$(pgrep -f $JAR_NAME)
-if [ -z $CURRENT_PID ]
+if [ ! -z "$CURRENT_CONTAINER_ID" ]
 then
-  echo "현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다."
-else
-  echo "> kill -15 $CURRENT_PID"
-  kill -15 $CURRENT_PID
-  sleep 5
+  echo "현재 구동 중인 컨테이너가 있습니다. 중지하고 삭제합니다."
+  docker stop $CONTAINER_NAME
+  docker rm $CONTAINER_NAME
 fi
 
-DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
+cd /home/ec2-user/builds/
+docker build -t $IMAGE_NAME .
 
-chmod +x $DEPLOY_JAR
-
-nohup java -jar $DEPLOY_JAR --spring.profiles.active=dev 1>/dev/null 2>&1 &
+docker run -d --name $CONTAINER_NAME -p 8080:8080 $IMAGE_NAME --spring.profiles.active=dev
