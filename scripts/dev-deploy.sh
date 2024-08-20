@@ -5,7 +5,7 @@ BUILD_JAR=/home/ec2-user/builds/build/libs/hellogsm-server-24-0.0.1-SNAPSHOT.jar
 JAR_NAME=hellogsm-server-24-0.0.1-SNAPSHOT.jar
 IMAGE_NAME=hellogsm-stage-server:latest
 CONTAINER_NAME=hellogsm-stage-server
-DOCKERFILE_PATH=/home/ec2-user/builds/DockerfileStage
+DOCKERFILE_NAME=DockerfileStage
 
 CURRENT_CONTAINER_ID=$(docker ps -q -f name=$CONTAINER_NAME)
 
