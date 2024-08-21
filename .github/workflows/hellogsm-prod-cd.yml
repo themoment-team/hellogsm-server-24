@@ -27,7 +27,7 @@ jobs:
         run : chmod +x gradlew
 
       - name: Make yml file
-        run: touch ./src/main/resources/application-dev.yml
+        run: touch ./src/main/resources/application-prod.yml
           echo "${{ secrets.PROD_WEB_YML }}" > ./src/main/resources/application-prod.yml
         shell: bash
         
@@ -52,4 +52,4 @@ jobs:
         run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/prod/$GITHUB_SHA.zip
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name hellogsm-prod-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name hellogsm-prod-deploy-group --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=dev/$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name hellogsm-prod-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name api-prod-hellogsm-kr --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=prod/$GITHUB_SHA.zip
