@@ -14,7 +14,6 @@ else
   echo "> sudo docker stop $CURRENT_CONTAINER_ID"
   sudo docker stop $CURRENT_CONTAINER_ID
   sudo docker rm $CURRENT_CONTAINER_ID
-  sleep 5
 fi
 
 cd /home/ec2-user/builds/
