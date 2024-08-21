@@ -3,7 +3,7 @@ name: HelloGSM prod CD workflow
 on:
   push:
     branches:
-      - '*'
+      - 'cd/test-prod-cd'
 
 jobs:
   deploy:
