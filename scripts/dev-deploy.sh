@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# 변수 설정
-BUILD_JAR=/home/ec2-user/builds/build/libs/hellogsm-server-24-0.0.1-SNAPSHOT.jar
-JAR_NAME=hellogsm-server-24-0.0.1-SNAPSHOT.jar
 IMAGE_NAME=hellogsm-stage-server-img
 CONTAINER_NAME=hellogsm-stage-server
 DOCKERFILE_NAME=DockerfileStage
