@@ -1,9 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,11 +38,10 @@ public class CreateOneseoService {
     private final MemberService memberService;
     private final CalculateGradeService calculateGradeService;
     private final CalculateGedService calculateGedService;
-    private final CacheManager cacheManager;
 
     @Transactional
-    @CacheEvict(value = OneseoService.ONESEO_CACHE_VALUE, key = "#memberId")
-    public void execute(OneseoReqDto reqDto, Long memberId) {
+    @CachePut(value = OneseoService.ONESEO_CACHE_VALUE, key = "#memberId")
+    public FoundOneseoResDto execute(OneseoReqDto reqDto, Long memberId) {
         Member currentMember = memberService.findByIdOrThrow(memberId);
 
         isExistOneseo(currentMember);
@@ -59,16 +56,11 @@ public class CreateOneseoService {
 
         OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto = buildOneseoPrivacyDetailResDto(currentMember, oneseoPrivacyDetail);
         MiddleSchoolAchievementResDto middleSchoolAchievementResDto = buildMiddleSchoolAchievementResDto(middleSchoolAchievement);
-        FoundOneseoResDto oneseoResDto = buildOneseoResDto(
+        return buildOneseoResDto(
                 oneseo,
                 oneseoPrivacyDetailResDto,
                 middleSchoolAchievementResDto
         );
-
-        Cache cache = cacheManager.getCache(ONESEO_CACHE_VALUE);
-        if (cache != null) {
-            cache.put(memberId, oneseoResDto);
-        }
     }
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(
