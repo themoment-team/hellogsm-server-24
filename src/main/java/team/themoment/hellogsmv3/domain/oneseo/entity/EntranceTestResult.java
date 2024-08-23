@@ -48,10 +48,6 @@ public class EntranceTestResult {
     @Column(name = "second_test_pass_yn")
     private YesNo secondTestPassYn;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "decided_major")
-    private Major decidedMajor;
-
     public void modifyAptitudeEvaluationScore(BigDecimal aptitudeEvaluationScore) {
         this.aptitudeEvaluationScore = aptitudeEvaluationScore;
     }
