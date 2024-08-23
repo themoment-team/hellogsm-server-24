@@ -1,6 +1,5 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +14,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.ScreeningChangeHistory;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
@@ -36,8 +36,6 @@ import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Major.*;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.GENERAL;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.SPECIAL;
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.NO;
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.YES;
 
 @DisplayName("ModifyOneseoService 클래스의")
 class ModifyOneseoServiceTest {
@@ -116,6 +114,11 @@ class ModifyOneseoServiceTest {
         String schoolName = "금호중앙중학교";
         String schoolAddress = "광주 어딘가";
         Screening screening = GENERAL;
+        DesiredMajors desiredMajors = DesiredMajors.builder()
+                .firstDesiredMajor(firstDesiredMajor)
+                .secondDesiredMajor(secondDesiredMajor)
+                .thirdDesiredMajor(thirdDesiredMajor)
+                .build();
 
         OneseoReqDto oneseoReqDto = new OneseoReqDto(
                 guardianName,
@@ -146,6 +149,7 @@ class ModifyOneseoServiceTest {
 
                 Oneseo oneseo = Oneseo.builder()
                         .id(1L)
+                        .desiredMajors(desiredMajors)
                         .build();
 
                 OneseoPrivacyDetail oneseoPrivacyDetail = OneseoPrivacyDetail.builder()
@@ -226,23 +230,27 @@ class ModifyOneseoServiceTest {
                 Screening beforeScreening = SPECIAL;
                 Screening afterScreening = GENERAL;
 
+                Oneseo oneseo = Oneseo.builder()
+                        .id(1L)
+                        .appliedScreening(beforeScreening)
+                        .desiredMajors(desiredMajors)
+                        .build();
+
                 Member existingMember = mock(Member.class);
-                Oneseo existingOneseo = mock(Oneseo.class);
                 OneseoPrivacyDetail existingPrivacyDetail = mock(OneseoPrivacyDetail.class);
                 MiddleSchoolAchievement existingAchievement = mock(MiddleSchoolAchievement.class);
 
                 given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
-                given(oneseoService.findByMemberOrThrow(existingMember)).willReturn(existingOneseo);
-                given(oneseoPrivacyDetailRepository.findByOneseo(existingOneseo)).willReturn(existingPrivacyDetail);
-                given(middleSchoolAchievementRepository.findByOneseo(existingOneseo)).willReturn(existingAchievement);
-                given(existingOneseo.getAppliedScreening()).willReturn(beforeScreening);
+                given(oneseoService.findByMemberOrThrow(existingMember)).willReturn(oneseo);
+                given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(existingPrivacyDetail);
+                given(middleSchoolAchievementRepository.findByOneseo(oneseo)).willReturn(existingAchievement);
                 given(existingPrivacyDetail.getGraduationType()).willReturn(GED);
 
                 modifyOneseoService.execute(oneseoReqDto, memberId);
                 ArgumentCaptor<ScreeningChangeHistory> screeningChangeHistoryArgumentCaptor = ArgumentCaptor.forClass(ScreeningChangeHistory.class);
 
                 verify(screeningChangeHistoryRepository).save(screeningChangeHistoryArgumentCaptor.capture());
-                verify(calculateGedService).execute(any(MiddleSchoolAchievementReqDto.class), eq(existingOneseo), eq(GED));
+                verify(calculateGedService).execute(any(MiddleSchoolAchievementReqDto.class), eq(oneseo), eq(GED));
 
                 ScreeningChangeHistory capturedScreeningChangeHistory = screeningChangeHistoryArgumentCaptor.getValue();
 
