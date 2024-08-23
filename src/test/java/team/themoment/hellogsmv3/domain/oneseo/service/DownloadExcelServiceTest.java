@@ -154,7 +154,7 @@ public class DownloadExcelServiceTest {
                     String.valueOf(entranceTestResult.getAptitudeEvaluationScore()),
                     String.valueOf(entranceTestResult.getInterviewScore()),
                     String.valueOf(46.334),
-                    String.valueOf(entranceTestResult.getDecidedMajor()),
+                    String.valueOf(oneseo.getDecidedMajor()),
                     oneseo.getMember().getPhoneNumber(),
                     oneseoPrivacyDetail.getGuardianPhoneNumber(),
                     oneseoPrivacyDetail.getSchoolTeacherPhoneNumber()
@@ -196,6 +196,7 @@ public class DownloadExcelServiceTest {
                     .oneseoSubmitCode(submitCode)
                     .desiredMajors(desiredMajors)
                     .appliedScreening(screening)
+                    .decidedMajor(Major.IOT)
                     .build();
         }
 
@@ -217,7 +218,6 @@ public class DownloadExcelServiceTest {
                     .secondTestPassYn(yn)
                     .aptitudeEvaluationScore(BigDecimal.valueOf(70))
                     .interviewScore(BigDecimal.valueOf(60))
-                    .decidedMajor(Major.IOT)
                     .build();
         }
 

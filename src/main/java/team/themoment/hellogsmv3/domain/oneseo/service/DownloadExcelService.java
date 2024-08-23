@@ -164,7 +164,7 @@ public class DownloadExcelService {
                     String.valueOf(entranceTestResult.getAptitudeEvaluationScore()),
                     String.valueOf(entranceTestResult.getInterviewScore()),
                     String.valueOf(finalScore),
-                    String.valueOf(entranceTestResult.getDecidedMajor()),
+                    String.valueOf(oneseo.getDecidedMajor()),
                     oneseo.getMember().getPhoneNumber(),
                     oneseoPrivacyDetail.getGuardianPhoneNumber(),
                     oneseoPrivacyDetail.getSchoolTeacherPhoneNumber()

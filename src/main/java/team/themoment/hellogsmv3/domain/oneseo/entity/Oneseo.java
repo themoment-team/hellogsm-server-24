@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
@@ -54,6 +55,14 @@ public class Oneseo {
     @Enumerated(EnumType.STRING)
     @Column(name = "applied_screening", nullable = false)
     private Screening appliedScreening;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "entrance_intention_yn")
+    private YesNo entranceIntentionYn;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "decided_major")
+    private Major decidedMajor;
 
     public Oneseo setOneseoSubmitCode(String submitCode) {
         this.oneseoSubmitCode = submitCode;
