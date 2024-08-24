@@ -2,7 +2,7 @@
 
 IMAGE_NAME=hellogsm-prod-server-img
 CONTAINER_NAME=hellogsm-prod-server
-DOCKERFILE_NAME=Dockerfile
+DOCKERFILE_NAME=DockerfileProd
 
 echo "> 현재 실행 중인 Docker 컨테이너 ID 확인" >> /home/ec2-user/deploy.log
 CURRENT_CONTAINER_ID=$(docker ps -q -f name=$CONTAINER_NAME)
