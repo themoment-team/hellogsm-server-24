@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.QOneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -46,8 +47,9 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                                 oneseo.oneseoSubmitCode
                         )
                 )
-                .from(oneseo, oneseoPrivacyDetail)
+                .from(oneseo)
                 .join(oneseo.member, member)
+                .join(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
                 .fetch();
     }
 
