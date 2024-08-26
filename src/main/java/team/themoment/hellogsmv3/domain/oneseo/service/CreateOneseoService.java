@@ -167,7 +167,6 @@ public class CreateOneseoService {
                         .build())
                 .realOneseoArrivedYn(NO)
                 .wantedScreening(reqDto.screening())
-                .appliedScreening(reqDto.screening())
                 .build();
     }
 

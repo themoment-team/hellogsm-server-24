@@ -1,7 +1,6 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.response.OneseoPrivacyDetailR
 import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
-import team.themoment.hellogsmv3.domain.oneseo.entity.ScreeningChangeHistory;
+import team.themoment.hellogsmv3.domain.oneseo.entity.WantedScreeningChangeHistory;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
@@ -28,8 +27,6 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.ScreeningChangeHistory
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.List;
-
-import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.*;
 
 @Service
 @RequiredArgsConstructor
@@ -171,7 +168,6 @@ public class ModifyOneseoService {
                         .build())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .wantedScreening(reqDto.screening())
-                .appliedScreening(reqDto.screening())
                 .build();
     }
 
@@ -224,8 +220,8 @@ public class ModifyOneseoService {
     }
 
     private void saveHistoryIfScreeningChange(Screening afterScreening, Oneseo oneseo) {
-        if (oneseo.getAppliedScreening() != afterScreening) {
-            ScreeningChangeHistory screeningChangeHistory = ScreeningChangeHistory.builder()
+        if (oneseo.getWantedScreening() != afterScreening) {
+            WantedScreeningChangeHistory screeningChangeHistory = WantedScreeningChangeHistory.builder()
                     .beforeScreening(oneseo.getAppliedScreening())
                     .afterScreening(afterScreening)
                     .oneseo(oneseo).build();

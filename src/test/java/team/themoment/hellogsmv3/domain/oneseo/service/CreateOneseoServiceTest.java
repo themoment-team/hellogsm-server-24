@@ -165,7 +165,6 @@ class CreateOneseoServiceTest {
                 assertEquals(thirdDesiredMajor, capturedOneseo.getDesiredMajors().getThirdDesiredMajor());
                 assertEquals(NO, capturedOneseo.getRealOneseoArrivedYn());
                 assertEquals(screening, capturedOneseo.getWantedScreening());
-                assertEquals(screening, capturedOneseo.getAppliedScreening());
 
                 assertEquals(graduationType, capturedPrivacyDetail.getGraduationType());
                 assertEquals(address, capturedPrivacyDetail.getAddress());

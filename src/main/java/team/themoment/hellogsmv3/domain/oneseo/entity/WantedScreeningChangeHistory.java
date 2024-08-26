@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Table(name = "tb_screening_change_history")
+@Table(name = "tb_wanted_screening_change_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @Builder
-public class ScreeningChangeHistory {
+public class WantedScreeningChangeHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
