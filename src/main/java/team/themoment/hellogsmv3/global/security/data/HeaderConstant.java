@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum HeaderConstant {
-    X_H_ENV("X-HG-ENV");
+    X_HG_ENV("X-HG-ENV");
 
     private final String content;
 }
