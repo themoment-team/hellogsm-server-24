@@ -32,7 +32,7 @@ public class DownloadExcelService {
 
     private static final List<String> HEADER_NAMES = List.of(
             "순번", "접수번호", "성명", "1지망", "2지망", "3지망", "생년월일", "성별", "상세주소", "출신학교",
-            "학력", "적용전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
+            "학력", "전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
             "직무적성소양평가점수", "심층면접점수", "최종점수", "최종학과", "지원자연락처", "보호자연락처", "담임연락처"
     );
 
@@ -88,14 +88,14 @@ public class DownloadExcelService {
     }
 
     private List<List<String>> getOneseoData(Screening screening) {
-        List<Oneseo> oneseoList = oneseoRepository.findAllByAppliedScreening(screening);
+        List<Oneseo> oneseoList = oneseoRepository.findAllByWantedScreening(screening);
         return oneseoToExcelDataList(oneseoList);
     }
 
     private List<List<String>> getCombinedExtraScreeningData() {
         List<Oneseo> extraOneseoList = Stream.concat(
-                oneseoRepository.findAllByAppliedScreening(Screening.EXTRA_VETERANS).stream(),
-                oneseoRepository.findAllByAppliedScreening(Screening.EXTRA_ADMISSION).stream()
+                oneseoRepository.findAllByWantedScreening(Screening.EXTRA_VETERANS).stream(),
+                oneseoRepository.findAllByWantedScreening(Screening.EXTRA_ADMISSION).stream()
         ).collect(Collectors.toList());
 
         return oneseoToExcelDataList(extraOneseoList);
@@ -123,7 +123,7 @@ public class DownloadExcelService {
 
             String sex = null;
             String graduationType = null;
-            String appliedScreening = null;
+            String wantedScreening = null;
 
             switch (oneseo.getMember().getSex()) {
                 case MALE -> sex = "남자";
@@ -136,11 +136,11 @@ public class DownloadExcelService {
                 case GED -> graduationType = "검정고시";
             }
 
-            switch (oneseo.getAppliedScreening()) {
-                case GENERAL -> appliedScreening = "일반전형";
-                case SPECIAL -> appliedScreening = "특별전형";
-                case EXTRA_VETERANS -> appliedScreening = "국가보훈대상자";
-                case EXTRA_ADMISSION -> appliedScreening = "특례입학대상자";
+            switch (oneseo.getWantedScreening()) {
+                case GENERAL -> wantedScreening = "일반전형";
+                case SPECIAL -> wantedScreening = "특별전형";
+                case EXTRA_VETERANS -> wantedScreening = "국가보훈대상자";
+                case EXTRA_ADMISSION -> wantedScreening = "특례입학대상자";
             }
 
             List<String> rowData = List.of(
@@ -155,7 +155,7 @@ public class DownloadExcelService {
                     (oneseoPrivacyDetail.getAddress() + oneseoPrivacyDetail.getDetailAddress()),
                     String.valueOf(oneseoPrivacyDetail.getSchoolName()),
                     String.valueOf(graduationType),
-                    String.valueOf(appliedScreening),
+                    String.valueOf(wantedScreening),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getGeneralSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getArtsPhysicalSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getAttendanceScore()),
