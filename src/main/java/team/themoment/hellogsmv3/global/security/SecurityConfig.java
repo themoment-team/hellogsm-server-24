@@ -35,17 +35,17 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final LoggingFilter loggingFilter;
 
-//    public Filter timeBasedFilter() {
-//        LocalDateTime startReception = scheduleEnv.startReceptionDate();
-//        LocalDateTime endReception = scheduleEnv.endReceptionDate();
-//
-//        return new TimeBasedFilter()
-//                .addFilter(HttpMethod.POST, "/oneseo/v3/temp-storage", startReception, endReception)
-//                .addFilter(HttpMethod.POST, "/oneseo/v3/oneseo/me", startReception, endReception)
-//                .addFilter(HttpMethod.GET, "/oneseo/v3/oneseo/me", startReception, endReception)
-//                .addFilter(HttpMethod.POST, "/oneseo/v3/image", startReception, endReception);
-//    }
-//    @Bean
+    @Bean
+    public Filter timeBasedFilter() {
+        LocalDateTime startReception = scheduleEnv.startReceptionDate();
+        LocalDateTime endReception = scheduleEnv.endReceptionDate();
+
+        return new TimeBasedFilter()
+                .addFilter(HttpMethod.POST, "/oneseo/v3/temp-storage", startReception, endReception)
+                .addFilter(HttpMethod.POST, "/oneseo/v3/oneseo/me", startReception, endReception)
+                .addFilter(HttpMethod.GET, "/oneseo/v3/oneseo/me", startReception, endReception)
+                .addFilter(HttpMethod.POST, "/oneseo/v3/image", startReception, endReception);
+    }
 
     @Configuration
     @EnableWebSecurity
