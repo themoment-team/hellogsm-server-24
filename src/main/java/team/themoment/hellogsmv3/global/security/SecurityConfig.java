@@ -99,8 +99,8 @@ public class SecurityConfig {
                         .authorizationEndpoint(authorizationEndpointConfig ->
                                 authorizationEndpointConfig.baseUri(authEnv.loginEndPointBaseUri()))
                         .loginProcessingUrl(authEnv.loginProcessingUri())
-                        .successHandler(new CustomUrlAuthenticationSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri()))
-                        .failureHandler(new SimpleUrlAuthenticationFailureHandler(authEnv.redirectLoginFailureUri()))
+                        .successHandler(new CustomUrlAuthenticationSuccessHandler(authEnv.dryRun(), authEnv.hgStudent(), authEnv.hgAdmin()))
+                        .failureHandler(new SimpleUrlAuthenticationFailureHandler(authEnv.hgStudent()))
 
         );
     }

@@ -12,11 +12,14 @@ import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 
 import java.io.IOException;
 
+import static team.themoment.hellogsmv3.global.security.data.HeaderConstant.*;
+
 @RequiredArgsConstructor
 public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final String redirectBaseUri;
-    private final String redirectAdminUri;
+    private final String redirectDryRunBaseUrl;
+    private final String redirectStudentUrl;
+    private final String redirectAdminUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -27,23 +30,26 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(authority -> Role.ADMIN.name().equals(authority.getAuthority()));
 
+        String dryrun = request.getHeader(X_H_ENV.getContent());
+        boolean isDryrun = Boolean.parseBoolean(dryrun != null ? dryrun : "false");
+
         String redirectUrlWithParameter = UriComponentsBuilder
-                .fromUriString(getTargetUrl(isAdmin))
+                .fromUriString(getTargetUrl(isAdmin, isDryrun))
                 .queryParam("verification", !isUnAuthentication)
                 .build()
                 .toUriString();
+
 
         response.sendRedirect(redirectUrlWithParameter);
 
         clearAuthenticationAttributes(request);
     }
 
-    protected final String getTargetUrl(boolean isAdmin) {
-        if (isAdmin) {
-            return redirectAdminUri;
-        } else {
-            return redirectBaseUri;
-        }
+    protected final String getTargetUrl(boolean isAdmin, boolean isDryrun) {
+        if (isDryrun) return redirectDryRunBaseUrl;
+        return isAdmin
+                ? redirectAdminUrl
+                : redirectStudentUrl;
     }
 
     protected final void clearAuthenticationAttributes(HttpServletRequest request) {
