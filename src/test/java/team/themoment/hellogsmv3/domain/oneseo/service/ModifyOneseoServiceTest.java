@@ -231,7 +231,7 @@ class ModifyOneseoServiceTest {
 
                 Oneseo oneseo = Oneseo.builder()
                         .id(1L)
-                        .appliedScreening(beforeScreening)
+                        .wantedScreening(beforeScreening)
                         .desiredMajors(desiredMajors)
                         .build();
 

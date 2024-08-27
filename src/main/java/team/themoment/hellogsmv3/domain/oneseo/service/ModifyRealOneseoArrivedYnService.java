@@ -38,11 +38,11 @@ public class ModifyRealOneseoArrivedYnService {
             return;
         }
 
-        Integer maxSubmitCodeNumber = oneseoRepository.findMaxSubmitCodeByScreening(oneseo.getAppliedScreening());
+        Integer maxSubmitCodeNumber = oneseoRepository.findMaxSubmitCodeByScreening(oneseo.getWantedScreening());
         int newSubmitCodeNumber = (maxSubmitCodeNumber != null ? maxSubmitCodeNumber : 0) + 1;
 
         String submitCode;
-        ScreeningCategory screeningCategory = oneseo.getAppliedScreening().getScreeningCategory();
+        ScreeningCategory screeningCategory = oneseo.getWantedScreening().getScreeningCategory();
         switch (screeningCategory) {
             case GENERAL -> submitCode = "A-" + newSubmitCodeNumber;
             case SPECIAL -> submitCode = "B-" + newSubmitCodeNumber;
