@@ -10,6 +10,8 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
+
 @Getter
 @Entity
 @Table(name = "tb_oneseo", indexes = {
@@ -70,7 +72,11 @@ public class Oneseo {
         return this;
     }
 
+    public void modifyEntranceIntentionYn(YesNo yn) {
+        this.entranceIntentionYn = yn;
+    }
+
     public void switchRealOneseoArrivedYn() {
-        this.realOneseoArrivedYn = this.realOneseoArrivedYn == YesNo.YES ? YesNo.NO : YesNo.YES;
+        this.realOneseoArrivedYn = this.realOneseoArrivedYn == YES ? NO : YES;
     }
 }
