@@ -34,7 +34,7 @@ public class ModifyEntranceIntentionService {
 
     private void isAfterFinalTest(Oneseo oneseo) {
         if (oneseo.getDecidedMajor() == null) {
-            throw new ExpectedException("최종 합격자 산출 이전에는 입학등록 동의서 제출 여부를 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
+            throw new ExpectedException("최종 합격한 지원자의 원서만 입학등록 동의서 제출여부를 수정할 수 있습니다.", HttpStatus.BAD_REQUEST);
         }
     }
 }
