@@ -14,6 +14,8 @@ import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +48,8 @@ public class TimeBasedFilter extends OncePerRequestFilter {
             return;
         }
 
-        LocalDateTime currentTime = LocalDateTime.now();
+        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime currentTime = currentDateTime.toLocalDateTime();
         String requestPeriodKey = requestUri + ":" + requestMethod;
 
         if (urlRequestPeriods.containsKey(requestPeriodKey)) {
