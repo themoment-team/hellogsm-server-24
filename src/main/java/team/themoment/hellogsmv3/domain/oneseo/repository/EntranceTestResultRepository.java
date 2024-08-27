@@ -10,4 +10,5 @@ import java.util.List;
 public interface EntranceTestResultRepository extends JpaRepository<EntranceTestResult, Long> {
     EntranceTestResult findByOneseo(Oneseo oneseo);
     List<EntranceTestResult> findAllByFirstTestPassYnOrSecondTestPassYn(YesNo firstTestPassYn, YesNo secondTestPassYn);
+    boolean existsByFirstTestPassYnIsNotNull();
 }

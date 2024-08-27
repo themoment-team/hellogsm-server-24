@@ -271,6 +271,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/oneseo/v3/admission-tickets").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/oneseo/v3//editability").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
 
                 // mock score calculate
                 .requestMatchers(HttpMethod.POST, "/oneseo/v3/calculate-mock-score").permitAll()

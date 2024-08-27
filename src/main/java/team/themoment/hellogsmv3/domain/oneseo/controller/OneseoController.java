@@ -10,18 +10,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.*;
 import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.AdmissionTicketsResDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.ArrivedStatusResDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.*;
 import team.themoment.hellogsmv3.domain.oneseo.service.*;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseosResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.service.CreateOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyOneseoService;
 import team.themoment.hellogsmv3.domain.oneseo.service.SearchOneseoService;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.CalculateMockScoreService;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.service.QueryOneseoByIdService;
 import team.themoment.hellogsmv3.domain.oneseo.service.ModifyRealOneseoArrivedYnService;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
@@ -51,6 +47,7 @@ public class OneseoController {
     private final CalculateMockScoreService calculateMockScoreService;
     private final OneseoTempStorageService oneseoTempStorageService;
     private final ModifyEntranceIntentionService modifyEntranceIntentionService;
+    private final QueryOneseoEditabilityService queryOneseoEditabilityService;
 
     @Operation(summary = "내 원서 등록", description = "원서를 등록합니다.")
     @PostMapping("/oneseo/me")
@@ -182,5 +179,12 @@ public class OneseoController {
     ) {
         modifyEntranceIntentionService.execute(memberId, reqDto);
         return CommonApiResponse.success("수정되었습니다.");
+    }
+
+    @Operation(summary = "원서 수정 가능여부", description = "원서 수정이 가능한지에 대해 반환합니다.")
+    @GetMapping("/editability")
+    public OneseoEditabilityResDto getOneseoEditability(
+    ) {
+        return queryOneseoEditabilityService.execute();
     }
 }
