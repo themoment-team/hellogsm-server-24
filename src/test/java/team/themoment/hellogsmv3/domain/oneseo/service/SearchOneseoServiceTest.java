@@ -123,7 +123,7 @@ class SearchOneseoServiceTest {
                 assertEquals(oneseo.getOneseoSubmitCode(), searchOneseoResDto.submitCode());
                 assertEquals(oneseo.getRealOneseoArrivedYn(), searchOneseoResDto.realOneseoArrivedYn());
                 assertEquals(member.getName(), searchOneseoResDto.name());
-                assertEquals(oneseo.getAppliedScreening(), searchOneseoResDto.screening());
+                assertEquals(oneseo.getWantedScreening(), searchOneseoResDto.screening());
                 assertEquals(oneseoPrivacyDetail.getSchoolName(), searchOneseoResDto.schoolName());
                 assertEquals(member.getPhoneNumber(), searchOneseoResDto.phoneNumber());
                 assertEquals(oneseoPrivacyDetail.getGuardianPhoneNumber(), searchOneseoResDto.guardianPhoneNumber());
@@ -157,7 +157,7 @@ class SearchOneseoServiceTest {
                 .id(1L)
                 .oneseoSubmitCode("A-1")
                 .realOneseoArrivedYn(YES)
-                .appliedScreening(GENERAL)
+                .wantedScreening(GENERAL)
                 .build();
     }
 
@@ -167,7 +167,7 @@ class SearchOneseoServiceTest {
                 .submitCode(oneseo.getOneseoSubmitCode())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .name(member.getName())
-                .screening(oneseo.getAppliedScreening())
+                .screening(oneseo.getWantedScreening())
                 .schoolName(oneseoPrivacyDetail.getSchoolName())
                 .phoneNumber(member.getPhoneNumber())
                 .guardianPhoneNumber(oneseoPrivacyDetail.getGuardianPhoneNumber())
