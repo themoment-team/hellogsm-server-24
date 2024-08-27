@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
+import team.themoment.hellogsmv3.global.security.data.ZoneIdConstant;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -18,6 +19,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
+import static team.themoment.hellogsmv3.global.security.data.ZoneIdConstant.*;
 
 @Slf4j
 public class TimeBasedFilter extends OncePerRequestFilter {
@@ -48,7 +51,7 @@ public class TimeBasedFilter extends OncePerRequestFilter {
             return;
         }
 
-        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of(KOREA.getContent()));
         LocalDateTime currentTime = currentDateTime.toLocalDateTime();
         String requestPeriodKey = requestUri + ":" + requestMethod;
 
