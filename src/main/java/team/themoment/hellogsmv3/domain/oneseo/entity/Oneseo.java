@@ -53,7 +53,7 @@ public class Oneseo {
     private Screening wantedScreening;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "applied_screening", nullable = false)
+    @Column(name = "applied_screening")
     private Screening appliedScreening;
 
     @Enumerated(EnumType.STRING)
