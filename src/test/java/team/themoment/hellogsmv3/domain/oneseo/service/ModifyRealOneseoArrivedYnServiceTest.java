@@ -62,7 +62,7 @@ public class ModifyRealOneseoArrivedYnServiceTest {
                 oneseo = Oneseo.builder()
                         .member(member)
                         .realOneseoArrivedYn(YesNo.NO)
-                        .appliedScreening(Screening.GENERAL)
+                        .wantedScreening(Screening.GENERAL)
                         .build();
 
                 given(memberService.findByIdOrThrow(memberId)).willReturn(member);

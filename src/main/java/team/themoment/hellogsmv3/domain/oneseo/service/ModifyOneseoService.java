@@ -49,7 +49,7 @@ public class ModifyOneseoService {
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
 
-        saveHistoryIfScreeningChange(reqDto.screening(), oneseo);
+        saveHistoryIfWantedScreeningChange(reqDto.screening(), oneseo);
 
         Oneseo modifiedOneseo = buildOneseo(reqDto, oneseo, currentMember);
         OneseoPrivacyDetail modifiedOneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseoPrivacyDetail, oneseo);
@@ -174,7 +174,6 @@ public class ModifyOneseoService {
                         .build())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .wantedScreening(reqDto.screening())
-                .appliedScreening(reqDto.screening())
                 .build();
     }
 
@@ -226,10 +225,10 @@ public class ModifyOneseoService {
         middleSchoolAchievementRepository.save(modifiedMiddleSchoolAchievement);
     }
 
-    private void saveHistoryIfScreeningChange(Screening afterScreening, Oneseo oneseo) {
-        if (oneseo.getAppliedScreening() != afterScreening) {
-            ScreeningChangeHistory screeningChangeHistory = ScreeningChangeHistory.builder()
-                    .beforeScreening(oneseo.getAppliedScreening())
+    private void saveHistoryIfWantedScreeningChange(Screening afterScreening, Oneseo oneseo) {
+        if (oneseo.getWantedScreening() != afterScreening) {
+            WantedScreeningChangeHistory screeningChangeHistory = WantedScreeningChangeHistory.builder()
+                    .beforeScreening(oneseo.getWantedScreening())
                     .afterScreening(afterScreening)
                     .oneseo(oneseo).build();
 

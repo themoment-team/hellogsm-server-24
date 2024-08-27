@@ -190,7 +190,6 @@ class ModifyOneseoServiceTest {
                 assertEquals(secondDesiredMajor, capturedOneseo.getDesiredMajors().getSecondDesiredMajor());
                 assertEquals(thirdDesiredMajor, capturedOneseo.getDesiredMajors().getThirdDesiredMajor());
                 assertEquals(screening, capturedOneseo.getWantedScreening());
-                assertEquals(screening, capturedOneseo.getAppliedScreening());
 
                 assertEquals(oneseoPrivacyDetail.getId(), capturedPrivacyDetail.getId());
                 assertEquals(oneseoPrivacyDetail.getOneseo(), capturedPrivacyDetail.getOneseo());
@@ -233,7 +232,7 @@ class ModifyOneseoServiceTest {
 
                 Oneseo oneseo = Oneseo.builder()
                         .id(1L)
-                        .appliedScreening(beforeScreening)
+                        .wantedScreening(beforeScreening)
                         .desiredMajors(desiredMajors)
                         .entranceTestResult(EntranceTestResult.builder()
                                 .firstTestPassYn(null)
@@ -251,12 +250,12 @@ class ModifyOneseoServiceTest {
                 given(existingPrivacyDetail.getGraduationType()).willReturn(GED);
 
                 modifyOneseoService.execute(oneseoReqDto, memberId);
-                ArgumentCaptor<ScreeningChangeHistory> screeningChangeHistoryArgumentCaptor = ArgumentCaptor.forClass(ScreeningChangeHistory.class);
+                ArgumentCaptor<WantedScreeningChangeHistory> screeningChangeHistoryArgumentCaptor = ArgumentCaptor.forClass(WantedScreeningChangeHistory.class);
 
                 verify(screeningChangeHistoryRepository).save(screeningChangeHistoryArgumentCaptor.capture());
                 verify(calculateGedService).execute(any(MiddleSchoolAchievementReqDto.class), eq(oneseo), eq(GED));
 
-                ScreeningChangeHistory capturedScreeningChangeHistory = screeningChangeHistoryArgumentCaptor.getValue();
+                WantedScreeningChangeHistory capturedScreeningChangeHistory = screeningChangeHistoryArgumentCaptor.getValue();
 
                 assertEquals(beforeScreening, capturedScreeningChangeHistory.getBeforeScreening());
                 assertEquals(afterScreening, capturedScreeningChangeHistory.getAfterScreening());

@@ -58,7 +58,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
         return queryFactory
                 .select(oneseo.oneseoSubmitCode.substring(2).castToNum(Integer.class))
                 .from(oneseo)
-                .where(oneseo.appliedScreening.eq(screening))
+                .where(oneseo.wantedScreening.eq(screening))
                 .orderBy(oneseo.oneseoSubmitCode.substring(2).castToNum(Integer.class).desc())
                 .fetchFirst();
     }
@@ -86,7 +86,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                         oneseo.oneseoSubmitCode,
                         oneseo.realOneseoArrivedYn,
                         oneseo.member.name,
-                        oneseo.appliedScreening,
+                        oneseo.wantedScreening,
                         oneseo.oneseoPrivacyDetail.schoolName,
                         oneseo.member.phoneNumber,
                         oneseo.oneseoPrivacyDetail.guardianPhoneNumber,
@@ -157,16 +157,16 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
         switch (screeningTag) {
             case GENERAL ->
                     builder.and(
-                            oneseo.appliedScreening.eq(Screening.GENERAL)
+                            oneseo.wantedScreening.eq(Screening.GENERAL)
                     );
             case SPECIAL ->
                     builder.and(
-                            oneseo.appliedScreening.eq(Screening.SPECIAL)
+                            oneseo.wantedScreening.eq(Screening.SPECIAL)
                     );
             case EXTRA ->
                     builder.andAnyOf(
-                            oneseo.appliedScreening.eq(Screening.EXTRA_ADMISSION),
-                            oneseo.appliedScreening.eq(Screening.EXTRA_VETERANS)
+                            oneseo.wantedScreening.eq(Screening.EXTRA_ADMISSION),
+                            oneseo.wantedScreening.eq(Screening.EXTRA_VETERANS)
                     );
         }
     }
