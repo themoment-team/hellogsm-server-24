@@ -13,10 +13,7 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.response.DesiredMajorsResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.MiddleSchoolAchievementResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.OneseoPrivacyDetailResDto;
-import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
-import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
-import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
-import team.themoment.hellogsmv3.domain.oneseo.entity.WantedScreeningChangeHistory;
+import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
@@ -47,6 +44,8 @@ public class ModifyOneseoService {
         Member currentMember = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(currentMember);
 
+        isBeforeFirstTest(oneseo);
+
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(oneseo);
 
@@ -67,6 +66,13 @@ public class ModifyOneseoService {
                 oneseoPrivacyDetailResDto,
                 middleSchoolAchievementResDto
         );
+    }
+
+    private static void isBeforeFirstTest(Oneseo oneseo) {
+        EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();
+        if (entranceTestResult.getFirstTestPassYn() != null) {
+            throw new ExpectedException("1차 전형 결과 산출 이후에는 원서를 수정할 수 없습니다.", HttpStatus.FORBIDDEN);
+        }
     }
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(
