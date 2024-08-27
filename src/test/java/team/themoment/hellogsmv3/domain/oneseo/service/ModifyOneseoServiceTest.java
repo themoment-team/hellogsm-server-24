@@ -10,10 +10,7 @@ import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
-import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
-import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
-import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
-import team.themoment.hellogsmv3.domain.oneseo.entity.ScreeningChangeHistory;
+import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
@@ -150,6 +147,9 @@ class ModifyOneseoServiceTest {
                 Oneseo oneseo = Oneseo.builder()
                         .id(1L)
                         .desiredMajors(desiredMajors)
+                        .entranceTestResult(EntranceTestResult.builder()
+                                .firstTestPassYn(null)
+                                .build())
                         .build();
 
                 OneseoPrivacyDetail oneseoPrivacyDetail = OneseoPrivacyDetail.builder()
@@ -168,6 +168,7 @@ class ModifyOneseoServiceTest {
                 given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
                 given(oneseoService.findByMemberOrThrow(existingMember)).willReturn(oneseo);
                 given(oneseoPrivacyDetailRepository.findByOneseo(oneseo)).willReturn(oneseoPrivacyDetail);
+                given(middleSchoolAchievementRepository.findByOneseo(oneseo)).willReturn(middleSchoolAchievement);
                 given(middleSchoolAchievementRepository.findByOneseo(oneseo)).willReturn(middleSchoolAchievement);
 
                 modifyOneseoService.execute(oneseoReqDto, memberId);
@@ -234,6 +235,9 @@ class ModifyOneseoServiceTest {
                         .id(1L)
                         .appliedScreening(beforeScreening)
                         .desiredMajors(desiredMajors)
+                        .entranceTestResult(EntranceTestResult.builder()
+                                .firstTestPassYn(null)
+                                .build())
                         .build();
 
                 Member existingMember = mock(Member.class);
