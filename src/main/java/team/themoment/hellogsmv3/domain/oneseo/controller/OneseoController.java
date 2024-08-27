@@ -136,7 +136,7 @@ public class OneseoController {
     public MockScoreResDto calcMockScore(
             @RequestBody MiddleSchoolAchievementReqDto dto,
             @RequestParam("graduationType") GraduationType graduationType
-        ) {
+    ) {
         return calculateMockScoreService.execute(dto, graduationType);
     }
 

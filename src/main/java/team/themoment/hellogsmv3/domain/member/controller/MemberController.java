@@ -50,7 +50,8 @@ public class MemberController {
     @PostMapping("/member/me/send-code-test")
     public CommonApiResponse sendCodeTest(
             @AuthRequest Long memberId,
-            @RequestBody @Valid GenerateCodeReqDto reqDto) {
+            @RequestBody @Valid GenerateCodeReqDto reqDto
+    ) {
         String code = generateTestCodeService.execute(memberId, reqDto);
         return CommonApiResponse.success("전송되었습니다. : " + code);
     }
@@ -107,6 +108,5 @@ public class MemberController {
             @PathVariable Long memberId
     ) {
         return queryMemberAuthInfoByIdService.execute(memberId);
-
     }
 }
