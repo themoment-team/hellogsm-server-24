@@ -1,13 +1,16 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.EntranceIntentionReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
+import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +25,16 @@ public class ModifyEntranceIntentionService {
         Member member = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
+        isAfterFinalTest(oneseo);
+
         oneseo.modifyEntranceIntentionYn(reqDto.entranceIntentionYn());
 
         oneseoRepository.save(oneseo);
+    }
+
+    private void isAfterFinalTest(Oneseo oneseo) {
+        if (oneseo.getDecidedMajor() == null) {
+            throw new ExpectedException("최종 합격자 산출 이전에는 입학등록 동의서 제출 여부를 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -50,6 +50,7 @@ public class OneseoController {
     private final QueryOneseoByIdService queryOneseoByIdService;
     private final CalculateMockScoreService calculateMockScoreService;
     private final OneseoTempStorageService oneseoTempStorageService;
+    private final ModifyEntranceIntentionService modifyEntranceIntentionService;
 
     @Operation(summary = "내 원서 등록", description = "원서를 등록합니다.")
     @PostMapping("/oneseo/me")
@@ -171,5 +172,15 @@ public class OneseoController {
         } catch (IOException ex) {
             throw new RuntimeException("파일 작성과정에서 예외가 발생하였습니다.", ex);
         }
+    }
+
+    @Operation(summary = "입학등록 동의서 제출여부 수정", description = "맴버 id로 원서의 입학등록 동의서 제출여부를 수정합니다.")
+    @PatchMapping("/entrance-intention/{memberId}")
+    public CommonApiResponse modifyEntranceIntention(
+            @PathVariable Long memberId,
+            @RequestBody @Valid EntranceIntentionReqDto reqDto
+    ) {
+        modifyEntranceIntentionService.execute(memberId, reqDto);
+        return CommonApiResponse.success("수정되었습니다.");
     }
 }

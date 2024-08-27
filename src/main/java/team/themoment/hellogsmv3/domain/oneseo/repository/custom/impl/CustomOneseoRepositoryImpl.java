@@ -94,7 +94,8 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                         oneseo.entranceTestResult.firstTestPassYn,
                         oneseo.entranceTestResult.aptitudeEvaluationScore,
                         oneseo.entranceTestResult.interviewScore,
-                        oneseo.entranceTestResult.secondTestPassYn
+                        oneseo.entranceTestResult.secondTestPassYn,
+                        oneseo.entranceIntentionYn
                 ))
                 .from(oneseo)
                 .join(oneseo.member, member)
