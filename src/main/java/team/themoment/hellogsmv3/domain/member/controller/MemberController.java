@@ -39,8 +39,8 @@ public class MemberController {
     @Operation(summary = "인증코드 전송", description = "전화번호를 요청받아 인증코드를 전송합니다.")
     @PostMapping("/member/me/send-code")
     public CommonApiResponse sendCode(
-        @AuthRequest Long memberId, 
-        @RequestBody GenerateCodeReqDto reqDto
+            @AuthRequest Long memberId,
+            @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
         generateCodeService.execute(memberId, reqDto);
         return CommonApiResponse.success("전송되었습니다.");
@@ -48,7 +48,10 @@ public class MemberController {
 
     @Operation(summary = "인증코드 테스트 전송", description = "전화번호를 요청받아 인증코드를 반환합니다. 횟수가 제한이 없습니다.")
     @PostMapping("/member/me/send-code-test")
-    public CommonApiResponse sendCodeTest(@AuthRequest Long memberId, @RequestBody GenerateCodeReqDto reqDto) {
+    public CommonApiResponse sendCodeTest(
+            @AuthRequest Long memberId,
+            @RequestBody @Valid GenerateCodeReqDto reqDto
+    ) {
         String code = generateTestCodeService.execute(memberId, reqDto);
         return CommonApiResponse.success("전송되었습니다. : " + code);
     }
@@ -105,6 +108,5 @@ public class MemberController {
             @PathVariable Long memberId
     ) {
         return queryMemberAuthInfoByIdService.execute(memberId);
-
     }
 }

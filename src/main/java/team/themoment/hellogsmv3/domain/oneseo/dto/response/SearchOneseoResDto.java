@@ -21,6 +21,7 @@ public record SearchOneseoResDto(
         YesNo firstTestPassYn,
         BigDecimal aptitudeEvaluationScore,
         BigDecimal interviewScore,
-        YesNo secondTestPassYn
+        YesNo secondTestPassYn,
+        YesNo entranceIntentionYn
 ) {
 }

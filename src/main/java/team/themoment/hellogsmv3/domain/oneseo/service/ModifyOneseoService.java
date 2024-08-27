@@ -68,7 +68,7 @@ public class ModifyOneseoService {
         );
     }
 
-    private static void isBeforeFirstTest(Oneseo oneseo) {
+    private void isBeforeFirstTest(Oneseo oneseo) {
         EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();
         if (entranceTestResult.getFirstTestPassYn() != null) {
             throw new ExpectedException("1차 전형 결과 산출 이후에는 원서를 수정할 수 없습니다.", HttpStatus.FORBIDDEN);
