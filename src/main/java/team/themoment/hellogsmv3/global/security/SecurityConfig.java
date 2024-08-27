@@ -43,7 +43,7 @@ public class SecurityConfig {
         return new TimeBasedFilter()
                 .addFilter(HttpMethod.POST, "/oneseo/v3/temp-storage", startReception, endReception)
                 .addFilter(HttpMethod.POST, "/oneseo/v3/oneseo/me", startReception, endReception)
-                .addFilter(HttpMethod.PATCH, "/oneseo/v3/oneseo/{memberId}", startReception, endReception)
+                .addFilter(HttpMethod.PUT, "/oneseo/v3/oneseo/{memberId}", startReception, endReception)
                 .addFilter(HttpMethod.GET, "/oneseo/v3/oneseo/me", startReception, endReception)
                 .addFilter(HttpMethod.POST, "/oneseo/v3/image", startReception, endReception);
     }
