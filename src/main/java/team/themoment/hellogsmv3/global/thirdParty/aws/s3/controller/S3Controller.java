@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
+import team.themoment.hellogsmv3.global.thirdParty.aws.s3.dto.response.UploadImageResDto;
 import team.themoment.hellogsmv3.global.thirdParty.aws.s3.service.UploadImageService;
 
 @Tag(name = "ThirdParty API", description = "증명사진 등록 관련 API입니다.")
@@ -21,10 +22,10 @@ public class S3Controller {
 
     @Operation(summary = "증명사진 등록", description = "증명사진 이미지를 요청받아 등록합니다.")
     @PostMapping("/image")
-    public CommonApiResponse uploadImage(
+    public UploadImageResDto uploadImage(
             @RequestParam(value = "file") MultipartFile multipartFile
     ) {
         String fileUrl = uploadImageService.execute(multipartFile);
-        return CommonApiResponse.success(fileUrl);
+        return new UploadImageResDto(fileUrl);
     }
 }
