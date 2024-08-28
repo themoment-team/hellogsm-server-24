@@ -32,7 +32,7 @@ class QueryOneseoEditabilityServiceTest {
     class Describe_execute {
 
         @Nested
-        @DisplayName("첫 번째 시험이 종료되지 않은 경우")
+        @DisplayName("1차 전형이 종료되지 않은 경우")
         class Context_when_first_test_not_finished {
 
             @BeforeEach
@@ -49,7 +49,7 @@ class QueryOneseoEditabilityServiceTest {
         }
 
         @Nested
-        @DisplayName("첫 번째 시험이 종료된 경우")
+        @DisplayName("1차 전형이 종료된 경우")
         class Context_when_first_test_finished {
 
             @BeforeEach
