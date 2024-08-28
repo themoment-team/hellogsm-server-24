@@ -271,7 +271,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/oneseo/v3/admission-tickets").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
-                .requestMatchers(HttpMethod.GET, "/oneseo/v3//editability").hasAnyAuthority(
+                .requestMatchers(HttpMethod.GET, "/oneseo/v3/editability").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
 
