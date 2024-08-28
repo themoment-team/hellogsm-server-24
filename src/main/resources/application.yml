@@ -7,6 +7,9 @@ server:
       enabled: true
       force: true
 
+logging:
+  config: classpath:logback-spring.xml
+
 spring:
   datasource:
     url: ${DB_URL}

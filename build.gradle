@@ -72,6 +72,9 @@ dependencies {
 
     /** actuator **/
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    /** logging **/
+    implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.6.0'
 }
 
 def querydslSrcDir = "$projectDir/build/generated"
