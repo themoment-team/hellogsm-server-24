@@ -3,6 +3,7 @@
 IMAGE_NAME=hellogsm-prod-server-img
 CONTAINER_NAME=hellogsm-prod-server
 DOCKERFILE_NAME=DockerfileProd
+NETWORK_NAME=hellogsm-prod-network
 
 echo "> 현재 실행 중인 Docker 컨테이너 ID 확인" >> /home/ec2-user/deploy.log
 CURRENT_CONTAINER_ID=$(docker ps -q -f name=$CONTAINER_NAME)
@@ -18,4 +19,4 @@ fi
 
 cd /home/ec2-user/builds/
 docker build -t $IMAGE_NAME -f $DOCKERFILE_NAME .
-docker run -d --name $CONTAINER_NAME -p 8080:8080 $IMAGE_NAME
+docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p 8080:8080 $IMAGE_NAME
