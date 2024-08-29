@@ -147,7 +147,7 @@ public class OneseoController {
     @Operation(summary = "원서 임시 저장", description = "원서 정보를 임시 저장합니다.")
     @PostMapping("/temp-storage")
     public CommonApiResponse temp(
-            @RequestBody @Valid OneseoReqDto reqDto,
+            @RequestBody @Valid OneseoTempReqDto reqDto,
             @RequestParam Integer step,
             @AuthRequest Long memberId
     ) {
