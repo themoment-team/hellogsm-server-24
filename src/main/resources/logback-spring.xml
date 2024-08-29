@@ -15,6 +15,19 @@
         <retentionTimeDays>0</retentionTimeDays>
     </appender>
 
+    <appender name="prod_aws_cloud_watch_log" class="ca.pjer.logback.AwsLogsAppender">
+        <layout>
+            <pattern>[%thread] [%date] [%level] [%file:%line] - %msg%n</pattern>
+        </layout>
+        <logGroupName>hellogsm-prod-log</logGroupName>
+        <logStreamUuidPrefix>[hello-gsm]-</logStreamUuidPrefix>
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>50</maxBatchLogEvents>
+        <maxFlushTimeMillis>10000</maxFlushTimeMillis>
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis>
+        <retentionTimeDays>0</retentionTimeDays>
+    </appender>
+
     <property name="CONSOLE_LOG_PATTERN" value="%highlight(%-5level) %date [%thread] %cyan([%C{0} :: %M :: %L]) - %msg%n"/>
     <appender name="console_log" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -33,4 +46,11 @@
             <appender-ref ref="stage_aws_cloud_watch_log"/>
         </root>
     </springProfile>
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="prod_aws_cloud_watch_log"/>
+        </root>
+    </springProfile>
+
 </configuration>
