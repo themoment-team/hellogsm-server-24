@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoTempReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.DesiredMajorsResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.MiddleSchoolAchievementResDto;
@@ -21,7 +21,7 @@ public class OneseoTempStorageService {
     private final MemberService memberService;
 
     @CachePut(value = ONESEO_CACHE_VALUE, key = "#memberId")
-    public FoundOneseoResDto execute(OneseoReqDto reqDto,Integer step, Long memberId) {
+    public FoundOneseoResDto execute(OneseoTempReqDto reqDto, Integer step, Long memberId) {
         Member member = memberService.findByIdOrThrow(memberId);
 
         OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto = buildOneseoPrivacyDetailResDto(member, reqDto);
@@ -37,7 +37,7 @@ public class OneseoTempStorageService {
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(
             Member member,
-            OneseoReqDto reqDto
+            OneseoTempReqDto reqDto
     ) {
 
         return OneseoPrivacyDetailResDto.builder()
@@ -60,7 +60,7 @@ public class OneseoTempStorageService {
     }
 
     private MiddleSchoolAchievementResDto buildMiddleSchoolAchievementResDto(
-            OneseoReqDto reqDto
+            OneseoTempReqDto reqDto
     ) {
         MiddleSchoolAchievementReqDto middleSchoolAchievement = reqDto.middleSchoolAchievement();
 
@@ -84,7 +84,7 @@ public class OneseoTempStorageService {
     }
 
     private FoundOneseoResDto buildFoundOneseoResDto(
-            OneseoReqDto reqDto,
+            OneseoTempReqDto reqDto,
             OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto,
             MiddleSchoolAchievementResDto middleSchoolAchievementResDto,
             Integer step
