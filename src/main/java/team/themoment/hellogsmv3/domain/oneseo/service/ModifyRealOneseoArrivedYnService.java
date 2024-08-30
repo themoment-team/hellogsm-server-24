@@ -26,30 +26,8 @@ public class ModifyRealOneseoArrivedYnService {
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
         oneseo.switchRealOneseoArrivedYn();
-        assignSubmitCode(oneseo);
         Oneseo modifiedOneseo = oneseoRepository.save(oneseo);
 
         return new ArrivedStatusResDto(modifiedOneseo.getRealOneseoArrivedYn());
-    }
-
-    private void assignSubmitCode(Oneseo oneseo) {
-        if (oneseo.getRealOneseoArrivedYn().equals(YesNo.NO)) {
-            oneseo.setOneseoSubmitCode(null);
-            return;
-        }
-
-        Integer maxSubmitCodeNumber = oneseoRepository.findMaxSubmitCodeByScreening(oneseo.getWantedScreening());
-        int newSubmitCodeNumber = (maxSubmitCodeNumber != null ? maxSubmitCodeNumber : 0) + 1;
-
-        String submitCode;
-        ScreeningCategory screeningCategory = oneseo.getWantedScreening().getScreeningCategory();
-        switch (screeningCategory) {
-            case GENERAL -> submitCode = "A-" + newSubmitCodeNumber;
-            case SPECIAL -> submitCode = "B-" + newSubmitCodeNumber;
-            case EXTRA -> submitCode = "C-" + newSubmitCodeNumber;
-            default -> throw new IllegalArgumentException("Unexpected value: " + screeningCategory);
-        }
-
-        oneseo.setOneseoSubmitCode(submitCode);
     }
 }
