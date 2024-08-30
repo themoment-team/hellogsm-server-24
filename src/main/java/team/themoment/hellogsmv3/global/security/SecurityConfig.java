@@ -231,6 +231,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/member/v3/auth-info/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/member/v3/test-result/me").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ROOT.name()
+                )
 
                 // oneseo
                 .requestMatchers("/oneseo/v3/oneseo/me").hasAnyAuthority(
