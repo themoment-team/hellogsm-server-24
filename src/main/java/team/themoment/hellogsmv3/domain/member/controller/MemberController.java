@@ -7,15 +7,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.member.dto.request.CreateMemberReqDto;
+import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberTestRequestResDto;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
-import team.themoment.hellogsmv3.domain.member.service.CreateMemberService;
+import team.themoment.hellogsmv3.domain.member.service.*;
 import team.themoment.hellogsmv3.domain.member.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.request.GenerateCodeReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberAuthInfoResDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberResDto;
-import team.themoment.hellogsmv3.domain.member.service.AuthenticateCodeService;
-import team.themoment.hellogsmv3.domain.member.service.QueryMemberAuthInfoByIdService;
-import team.themoment.hellogsmv3.domain.member.service.QueryMemberByIdService;
 import team.themoment.hellogsmv3.domain.member.service.impl.GenerateCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.member.service.impl.GenerateTestCodeServiceImpl;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
@@ -35,6 +33,7 @@ public class MemberController {
     private final QueryMemberByIdService queryMemberByIdService;
     private final CreateMemberService createMemberService;
     private final QueryMemberAuthInfoByIdService queryMemberAuthInfoByIdService;
+    private final QueryTestResultService queryTestResultService;
 
     @Operation(summary = "인증코드 전송", description = "전화번호를 요청받아 인증코드를 전송합니다.")
     @PostMapping("/member/me/send-code")
@@ -108,5 +107,13 @@ public class MemberController {
             @PathVariable Long memberId
     ) {
         return queryMemberAuthInfoByIdService.execute(memberId);
+    }
+
+    @Operation(summary = "전형 결과 조회", description = "본인의 1차 전형, 2차 전형의 결과를 조회합니다.")
+    @GetMapping("/test-result/me")
+    public FoundMemberTestRequestResDto testResult(
+            @AuthRequest Long memberId
+    ) {
+        return queryTestResultService.execute(memberId);
     }
 }
