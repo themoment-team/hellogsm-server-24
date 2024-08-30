@@ -5,6 +5,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
@@ -26,7 +27,6 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import java.util.List;
 
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
-import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.ONESEO_CACHE_VALUE;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +50,7 @@ public class CreateOneseoService {
         OneseoPrivacyDetail oneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, oneseo);
 
+        assignSubmitCode(oneseo);
         saveEntities(oneseo, oneseoPrivacyDetail, middleSchoolAchievement);
 
         calculateMiddleSchoolAchievement(oneseoPrivacyDetail.getGraduationType(), middleSchoolAchievement, oneseo);
@@ -61,6 +62,22 @@ public class CreateOneseoService {
                 oneseoPrivacyDetailResDto,
                 middleSchoolAchievementResDto
         );
+    }
+
+    private void assignSubmitCode(Oneseo oneseo) {
+        Integer maxSubmitCodeNumber = oneseoRepository.findMaxSubmitCodeByScreening(oneseo.getWantedScreening());
+        int newSubmitCodeNumber = (maxSubmitCodeNumber != null ? maxSubmitCodeNumber : 0) + 1;
+
+        String submitCode;
+        ScreeningCategory screeningCategory = oneseo.getWantedScreening().getScreeningCategory();
+        switch (screeningCategory) {
+            case GENERAL -> submitCode = "A-" + newSubmitCodeNumber;
+            case SPECIAL -> submitCode = "B-" + newSubmitCodeNumber;
+            case EXTRA -> submitCode = "C-" + newSubmitCodeNumber;
+            default -> throw new IllegalArgumentException("Unexpected value: " + screeningCategory);
+        }
+
+        oneseo.setOneseoSubmitCode(submitCode);
     }
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(
