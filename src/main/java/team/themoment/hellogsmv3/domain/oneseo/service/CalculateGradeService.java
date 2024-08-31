@@ -106,12 +106,9 @@ public class CalculateGradeService {
             return null;
         } else {
             return MockScoreResDto.builder()
-                    .generalSubjectsScore(generalSubjectsScore)
-                    .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
                     .totalSubjectsScore(totalSubjectsScore)
                     .volunteerScore(volunteerScore)
                     .attendanceScore(attendanceScore)
-                    .totalNonSubjectsScore(totalNonSubjectsScore)
                     .totalScore(totalScore)
                     .build();
         }

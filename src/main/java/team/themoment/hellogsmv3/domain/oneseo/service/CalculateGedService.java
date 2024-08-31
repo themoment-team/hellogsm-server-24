@@ -85,7 +85,6 @@ public class CalculateGedService {
                     .totalSubjectsScore(gedTotalSubjectsScore)
                     .volunteerScore(gedVolunteerScore)
                     .attendanceScore(gedAttendanceScore)
-                    .totalNonSubjectsScore(gedTotalNonSubjectsScore)
                     .totalScore(totalScore)
                     .build();
         }
