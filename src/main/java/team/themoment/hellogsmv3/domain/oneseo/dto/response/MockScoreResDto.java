@@ -8,14 +8,9 @@ import java.math.BigDecimal;
 @Builder
 public record MockScoreResDto(
 
-		@JsonInclude(JsonInclude.Include.NON_NULL)
-		BigDecimal generalSubjectsScore,
-		@JsonInclude(JsonInclude.Include.NON_NULL)
-		BigDecimal artsPhysicalSubjectsScore,
 		BigDecimal totalSubjectsScore,
 		BigDecimal attendanceScore,
 		BigDecimal volunteerScore,
-		BigDecimal totalNonSubjectsScore,
 		BigDecimal totalScore
 ) {
 }
