@@ -83,8 +83,8 @@ public class CalculateGedService {
         } else {
             return MockScoreResDto.builder()
                     .totalSubjectsScore(gedTotalSubjectsScore)
-                    .volunteerScore(gedVolunteerScore)
                     .attendanceScore(gedAttendanceScore)
+                    .volunteerScore(gedVolunteerScore)
                     .totalScore(totalScore)
                     .build();
         }
