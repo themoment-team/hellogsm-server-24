@@ -159,7 +159,7 @@ class CreateOneseoServiceTest {
                 OneseoPrivacyDetail capturedPrivacyDetail = oneseoPrivacyDetailCaptor.getValue();
                 MiddleSchoolAchievement capturedAchievement = middleSchoolAchievementCaptor.getValue();
 
-                assertEquals(null, capturedOneseo.getOneseoSubmitCode());
+                assertEquals("A-1", capturedOneseo.getOneseoSubmitCode());
                 assertEquals(firstDesiredMajor, capturedOneseo.getDesiredMajors().getFirstDesiredMajor());
                 assertEquals(secondDesiredMajor, capturedOneseo.getDesiredMajors().getSecondDesiredMajor());
                 assertEquals(thirdDesiredMajor, capturedOneseo.getDesiredMajors().getThirdDesiredMajor());
