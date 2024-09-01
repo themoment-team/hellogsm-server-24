@@ -7,7 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.member.dto.request.CreateMemberReqDto;
-import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberTestRequestResDto;
+import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberTestResDto;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.service.*;
 import team.themoment.hellogsmv3.domain.member.dto.request.AuthenticateCodeReqDto;
@@ -111,7 +111,7 @@ public class MemberController {
 
     @Operation(summary = "전형 결과 조회", description = "본인의 1차 전형, 2차 전형의 결과를 조회합니다.")
     @GetMapping("/test-result/me")
-    public FoundMemberTestRequestResDto testResult(
+    public FoundMemberTestResDto testResult(
             @AuthRequest Long memberId
     ) {
         return queryTestResultService.execute(memberId);

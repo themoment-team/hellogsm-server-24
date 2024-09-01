@@ -2,7 +2,7 @@ package team.themoment.hellogsmv3.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberTestRequestResDto;
+import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberTestResDto;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
@@ -15,13 +15,13 @@ public class QueryTestResultService {
     private final MemberService memberService;
     private final OneseoService oneseoService;
 
-    public FoundMemberTestRequestResDto execute(Long memberId) {
+    public FoundMemberTestResDto execute(Long memberId) {
         Member member = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
         EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();
 
-        return new FoundMemberTestRequestResDto(
+        return new FoundMemberTestResDto(
                 entranceTestResult.getFirstTestPassYn(),
                 entranceTestResult.getSecondTestPassYn()
         );

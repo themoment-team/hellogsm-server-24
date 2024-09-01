@@ -4,7 +4,7 @@ import lombok.Builder;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
 @Builder
-public record FoundMemberTestRequestResDto(
+public record FoundMemberTestResDto(
         YesNo firstTestPassYn,
         YesNo secondTestPassYn
 ) {
