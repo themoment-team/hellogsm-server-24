@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
@@ -8,6 +9,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
+import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +30,9 @@ public class CalculateGedService {
 
         BigDecimal gedTotalScore = dto.gedTotalScore();
         BigDecimal gedMaxScore = BigDecimal.valueOf(600);
+
+        if (gedTotalScore.compareTo(BigDecimal.ZERO) < 0 || gedTotalScore.compareTo(gedMaxScore) > 0)
+            throw new ExpectedException("검정고시 총점은 0점 이상, 600점 이하여야 합니다.", HttpStatus.BAD_REQUEST);
 
         // 검정고시 평균 점수
         BigDecimal averageScore = gedTotalScore.divide(gedMaxScore, 5, RoundingMode.HALF_UP)
