@@ -13,6 +13,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,4 +80,40 @@ public class OneseoServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("calcAbsentDaysCount 메소드는")
+    class Describe_calcAbsentDaysCount {
+
+        @Nested
+        @DisplayName("결석 횟수 list와 지각, 조퇴, 결과 횟수 list를 보내면")
+        class Context_with_absent_attendance_days {
+
+            List<Integer> absentDays = List.of(3, 0, 0);
+            List<Integer> attendanceDays = List.of(0, 0, 0, 1, 0, 1, 0, 2, 2);
+
+            @Test
+            @DisplayName("환산일수를 반환한다.")
+            void it_returns_oneseo() {
+                Integer absentDaysCount = OneseoService.calcAbsentDaysCount(absentDays, attendanceDays);
+                assertEquals(absentDaysCount, 5);
+            }
+        }
+
+        @Nested
+        @DisplayName("null 값이 결석 횟수 list와 지각, 조퇴, 결과 횟수 list를 보내면")
+        class Context_with_null_absent_attendance_days {
+
+            List<Integer> nullAbsentDays = null;
+            List<Integer> nullAttendanceDays = null;
+
+            @Test
+            @DisplayName("null 값을 반환한다.")
+            void it_returns_oneseo() {
+                Integer absentDaysCount = OneseoService.calcAbsentDaysCount(nullAbsentDays, nullAttendanceDays);
+                assertEquals(absentDaysCount, null);
+            }
+        }
+    }
+
 }
