@@ -49,6 +49,7 @@ public class QueryOneseoByIdService {
                 .birth(member.getBirth())
                 .phoneNumber(member.getPhoneNumber())
                 .graduationType(oneseoPrivacyDetail.getGraduationType())
+                .graduationDate(oneseoPrivacyDetail.getGraduationDate())
                 .address(oneseoPrivacyDetail.getAddress())
                 .detailAddress(oneseoPrivacyDetail.getDetailAddress())
                 .guardianName(oneseoPrivacyDetail.getGuardianName())
