@@ -111,7 +111,7 @@ class CreateOneseoServiceTest {
         String schoolName = "금호중앙중학교";
         String schoolAddress = "광주 어딘가";
         Screening screening = GENERAL;
-        LocalDate graduationDate = LocalDate.MAX;
+        String graduationDate = "2020-02";
 
         OneseoReqDto oneseoReqDto = new OneseoReqDto(
                 guardianName,

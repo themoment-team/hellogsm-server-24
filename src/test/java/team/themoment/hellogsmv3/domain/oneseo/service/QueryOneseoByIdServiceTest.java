@@ -202,7 +202,7 @@ class QueryOneseoByIdServiceTest {
     private OneseoPrivacyDetail buildOneseoPrivacyDetail() {
         return OneseoPrivacyDetail.builder()
                 .graduationType(GraduationType.GRADUATE)
-                .graduationDate(LocalDate.MAX)
+                .graduationDate("2020-02")
                 .address("거주 주소")
                 .detailAddress("상세 주소")
                 .guardianName("홍길동")

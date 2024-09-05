@@ -75,8 +75,9 @@ public record OneseoReqDto(
         @NotNull
         Screening screening,
 
-        @Schema(description = "중학교 졸업연월", defaultValue = "2006-03-01")
+        @Schema(description = "중학교 졸업연월", defaultValue = "2006-03")
+        @Pattern(regexp = "^\\d{4}-(0[1-9]|1[0-2])$")
         @NotNull
-        LocalDate graduationDate
+        String graduationDate
 ) {
 }

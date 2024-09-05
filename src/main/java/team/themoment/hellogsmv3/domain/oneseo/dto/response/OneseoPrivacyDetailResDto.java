@@ -32,9 +32,6 @@ public record OneseoPrivacyDetailResDto(
         String schoolTeacherName,
         String schoolTeacherPhoneNumber,
         String profileImg,
-        @JsonSerialize(using = LocalDateSerializer.class)
-        @JsonDeserialize(using = LocalDateDeserializer.class)
-        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-        LocalDate graduationDate
+        String graduationDate
 ) {
 }

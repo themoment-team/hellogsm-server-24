@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
@@ -29,8 +30,8 @@ public class OneseoPrivacyDetail {
     @Column(name = "graduation_type", nullable = false)
     private GraduationType graduationType;
 
-    @Column(name = "graduation_date", nullable = false)
-    private LocalDate graduationDate;
+    @Column(name = "graduation_date", nullable = false, columnDefinition = "CHAR(7)")
+    private String graduationDate;
 
     @Column(name = "address", nullable = false)
     private String address;

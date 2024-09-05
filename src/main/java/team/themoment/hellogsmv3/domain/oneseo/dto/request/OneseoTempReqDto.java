@@ -62,7 +62,8 @@ public record OneseoTempReqDto(
         @Schema(description = "자원자 전형", defaultValue = "GENERAL", allowableValues = {"GENERAL", "SPECIAL", "EXTRA_VETERANS", "EXTRA_ADMISSION"})
         Screening screening,
 
-        @Schema(description = "중학교 졸업연월", defaultValue = "2006-03-01")
-        LocalDate graduationDate
+        @Schema(description = "중학교 졸업연월", defaultValue = "2006-03")
+        @Pattern(regexp = "^\\d{4}-(0[1-9]|1[0-2])$")
+        String graduationDate
 ) {
 }
