@@ -5,6 +5,9 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+
 @Getter
 @Entity
 @Table(name = "tb_oneseo_privacy_detail")
@@ -25,6 +28,9 @@ public class OneseoPrivacyDetail {
     @Enumerated(EnumType.STRING)
     @Column(name = "graduation_type", nullable = false)
     private GraduationType graduationType;
+
+    @Column(name = "graduation_date", nullable = false)
+    private LocalDate graduationDate;
 
     @Column(name = "address", nullable = false)
     private String address;
