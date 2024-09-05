@@ -12,6 +12,8 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.MiddleSchoolAchievementResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.OneseoPrivacyDetailResDto;
 
+import java.util.List;
+
 import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.*;
 
 @Service
@@ -65,6 +67,10 @@ public class OneseoTempStorageService {
     ) {
         MiddleSchoolAchievementReqDto middleSchoolAchievement = reqDto.middleSchoolAchievement();
 
+        List<Integer> absentDays = middleSchoolAchievement.absentDays();
+        List<Integer> attendanceDays = middleSchoolAchievement.attendanceDays();
+        Integer absentDaysCount = OneseoService.calcAbsentDaysCount(absentDays, attendanceDays);
+
         return MiddleSchoolAchievementResDto.builder()
                 .achievement1_2(middleSchoolAchievement.achievement1_2())
                 .achievement2_1(middleSchoolAchievement.achievement2_1())
@@ -75,8 +81,9 @@ public class OneseoTempStorageService {
                 .newSubjects(middleSchoolAchievement.newSubjects())
                 .artsPhysicalAchievement(middleSchoolAchievement.artsPhysicalAchievement())
                 .artsPhysicalSubjects(middleSchoolAchievement.artsPhysicalSubjects())
-                .absentDays(middleSchoolAchievement.absentDays())
-                .attendanceDays(middleSchoolAchievement.attendanceDays())
+                .absentDays(absentDays)
+                .absentDaysCount(absentDaysCount)
+                .attendanceDays(attendanceDays)
                 .volunteerTime(middleSchoolAchievement.volunteerTime())
                 .liberalSystem(middleSchoolAchievement.liberalSystem())
                 .freeSemester(middleSchoolAchievement.freeSemester())
