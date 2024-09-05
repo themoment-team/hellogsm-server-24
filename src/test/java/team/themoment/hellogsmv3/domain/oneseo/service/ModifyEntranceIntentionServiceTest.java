@@ -46,7 +46,8 @@ public class ModifyEntranceIntentionServiceTest {
     class Describe_execute {
 
         private final Long memberId = 1L;
-        private final YesNo entranceIntentionYn = YesNo.YES;
+        private final YesNo defaultYn = YesNo.YES;
+        private final YesNo targetYn = YesNo.NO;
 
         @Nested
         @DisplayName("존재하는 회원 ID가 주어지면")
@@ -78,6 +79,7 @@ public class ModifyEntranceIntentionServiceTest {
                         oneseo = Oneseo.builder()
                                 .member(member)
                                 .decidedMajor(Major.SW)
+                                .entranceIntentionYn(defaultYn)
                                 .build();
 
                         given(oneseoService.findByMemberOrThrow(member)).willReturn(oneseo);
@@ -86,7 +88,7 @@ public class ModifyEntranceIntentionServiceTest {
                     @Test
                     @DisplayName("입학 의사 여부를 수정하고 저장한다.")
                     void it_saves_entrance_intention() {
-                        EntranceIntentionReqDto reqDto = new EntranceIntentionReqDto(entranceIntentionYn);
+                        EntranceIntentionReqDto reqDto = new EntranceIntentionReqDto(targetYn);
                         modifyEntranceIntentionService.execute(memberId, reqDto);
 
                         ArgumentCaptor<Oneseo> oneseoCaptor = ArgumentCaptor.forClass(Oneseo.class);
@@ -95,7 +97,7 @@ public class ModifyEntranceIntentionServiceTest {
 
                         Oneseo capturedOneseo = oneseoCaptor.getValue();
 
-                        assertEquals(entranceIntentionYn, capturedOneseo.getEntranceIntentionYn());
+                        assertEquals(targetYn, capturedOneseo.getEntranceIntentionYn());
                     }
                 }
 
@@ -116,7 +118,7 @@ public class ModifyEntranceIntentionServiceTest {
                     @Test
                     @DisplayName("ExpectedException을 던진다")
                     void it_throws_expected_exception() {
-                        EntranceIntentionReqDto reqDto = new EntranceIntentionReqDto(entranceIntentionYn);
+                        EntranceIntentionReqDto reqDto = new EntranceIntentionReqDto(defaultYn);
 
                         ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyEntranceIntentionService.execute(memberId, reqDto));
 
@@ -138,7 +140,7 @@ public class ModifyEntranceIntentionServiceTest {
                 @Test
                 @DisplayName("ExpectedException을 던진다")
                 void it_throws_expected_exception() {
-                    EntranceIntentionReqDto reqDto = new EntranceIntentionReqDto(entranceIntentionYn);
+                    EntranceIntentionReqDto reqDto = new EntranceIntentionReqDto(defaultYn);
 
                     ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyEntranceIntentionService.execute(memberId, reqDto));
 
@@ -160,7 +162,7 @@ public class ModifyEntranceIntentionServiceTest {
             @Test
             @DisplayName("ExpectedException을 던진다")
             void it_throws_expected_exception() {
-                EntranceIntentionReqDto reqDto = new EntranceIntentionReqDto(entranceIntentionYn);
+                EntranceIntentionReqDto reqDto = new EntranceIntentionReqDto(defaultYn);
 
                 ExpectedException exception = assertThrows(ExpectedException.class, () -> modifyEntranceIntentionService.execute(memberId, reqDto));
 
