@@ -76,6 +76,7 @@ public record OneseoReqDto(
         Screening screening,
 
         @Schema(description = "중학교 졸업연월", defaultValue = "2006-03-01")
+        @NotNull
         LocalDate graduationDate
 ) {
 }
