@@ -24,6 +24,7 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRep
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -110,6 +111,7 @@ class CreateOneseoServiceTest {
         String schoolName = "금호중앙중학교";
         String schoolAddress = "광주 어딘가";
         Screening screening = GENERAL;
+        LocalDate graduationDate = LocalDate.MAX;
 
         OneseoReqDto oneseoReqDto = new OneseoReqDto(
                 guardianName,
@@ -127,7 +129,8 @@ class CreateOneseoServiceTest {
                 middleSchoolAchievementReqDto,
                 schoolName,
                 schoolAddress,
-                screening
+                screening,
+                graduationDate
         );
 
         @Nested
@@ -167,6 +170,7 @@ class CreateOneseoServiceTest {
                 assertEquals(screening, capturedOneseo.getWantedScreening());
 
                 assertEquals(graduationType, capturedPrivacyDetail.getGraduationType());
+                assertEquals(graduationDate, capturedPrivacyDetail.getGraduationDate());
                 assertEquals(address, capturedPrivacyDetail.getAddress());
                 assertEquals(detailAddress, capturedPrivacyDetail.getDetailAddress());
                 assertEquals(profileImg, capturedPrivacyDetail.getProfileImg());

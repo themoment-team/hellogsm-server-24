@@ -102,6 +102,7 @@ class QueryOneseoByIdServiceTest {
                 assertEquals(member.getBirth(), oneseoPrivacyDetailResDto.birth());
                 assertEquals(member.getPhoneNumber(), oneseoPrivacyDetailResDto.phoneNumber());
                 assertEquals(oneseoPrivacyDetail.getGraduationType(), oneseoPrivacyDetailResDto.graduationType());
+                assertEquals(oneseoPrivacyDetail.getGraduationDate(), oneseoPrivacyDetailResDto.graduationDate());
                 assertEquals(oneseoPrivacyDetail.getAddress(), oneseoPrivacyDetailResDto.address());
                 assertEquals(oneseoPrivacyDetail.getDetailAddress(), oneseoPrivacyDetailResDto.detailAddress());
                 assertEquals(oneseoPrivacyDetail.getGuardianName(), oneseoPrivacyDetailResDto.guardianName());
@@ -201,6 +202,7 @@ class QueryOneseoByIdServiceTest {
     private OneseoPrivacyDetail buildOneseoPrivacyDetail() {
         return OneseoPrivacyDetail.builder()
                 .graduationType(GraduationType.GRADUATE)
+                .graduationDate(LocalDate.MAX)
                 .address("거주 주소")
                 .detailAddress("상세 주소")
                 .guardianName("홍길동")
