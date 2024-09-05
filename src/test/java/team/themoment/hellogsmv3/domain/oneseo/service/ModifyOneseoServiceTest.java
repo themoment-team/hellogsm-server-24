@@ -21,6 +21,7 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.ScreeningChangeHistoryRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -111,6 +112,7 @@ class ModifyOneseoServiceTest {
         String schoolName = "금호중앙중학교";
         String schoolAddress = "광주 어딘가";
         Screening screening = GENERAL;
+        String graduationDate = "2020-02";
         DesiredMajors desiredMajors = DesiredMajors.builder()
                 .firstDesiredMajor(firstDesiredMajor)
                 .secondDesiredMajor(secondDesiredMajor)
@@ -133,7 +135,8 @@ class ModifyOneseoServiceTest {
                 middleSchoolAchievementReqDto,
                 schoolName,
                 schoolAddress,
-                screening
+                screening,
+                graduationDate
         );
 
         @Nested
@@ -194,6 +197,7 @@ class ModifyOneseoServiceTest {
                 assertEquals(oneseoPrivacyDetail.getId(), capturedPrivacyDetail.getId());
                 assertEquals(oneseoPrivacyDetail.getOneseo(), capturedPrivacyDetail.getOneseo());
                 assertEquals(graduationType, capturedPrivacyDetail.getGraduationType());
+                assertEquals(graduationDate, capturedPrivacyDetail.getGraduationDate());
                 assertEquals(address, capturedPrivacyDetail.getAddress());
                 assertEquals(detailAddress, capturedPrivacyDetail.getDetailAddress());
                 assertEquals(profileImg, capturedPrivacyDetail.getProfileImg());

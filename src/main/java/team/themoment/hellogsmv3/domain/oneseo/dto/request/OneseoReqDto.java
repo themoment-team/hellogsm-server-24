@@ -9,6 +9,8 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 
+import java.time.LocalDate;
+
 @ValidDesiredMajors
 public record OneseoReqDto(
         @Schema(description = "보호자 이름", defaultValue = "김보호")
@@ -71,6 +73,11 @@ public record OneseoReqDto(
 
         @Schema(description = "자원자 전형", defaultValue = "GENERAL", allowableValues = {"GENERAL", "SPECIAL", "EXTRA_VETERANS", "EXTRA_ADMISSION"})
         @NotNull
-        Screening screening
+        Screening screening,
+
+        @Schema(description = "중학교 졸업연월", defaultValue = "2006-03")
+        @Pattern(regexp = "^\\d{4}-(0[1-9]|1[0-2])$")
+        @NotNull
+        String graduationDate
 ) {
 }

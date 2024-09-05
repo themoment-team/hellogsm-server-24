@@ -46,6 +46,7 @@ public class OneseoTempStorageService {
                 .birth(member.getBirth())
                 .phoneNumber(member.getPhoneNumber())
                 .graduationType(reqDto.graduationType())
+                .graduationDate(reqDto.graduationDate())
                 .address(reqDto.address())
                 .detailAddress(reqDto.detailAddress())
                 .guardianName(reqDto.guardianName())
