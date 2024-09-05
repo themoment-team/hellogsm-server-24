@@ -35,8 +35,7 @@ public class CalculateGedService {
             throw new ExpectedException("검정고시 총점은 0점 이상, 600점 이하여야 합니다.", HttpStatus.BAD_REQUEST);
 
         // 검정고시 평균 점수
-        BigDecimal averageScore = gedTotalScore.divide(gedMaxScore, 5, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100));
+        BigDecimal averageScore = calcGedAvgScore(gedTotalScore, gedMaxScore);
 
         // 검정고시 교과 성적 환산 점수 (총점: 240점)
         BigDecimal gedTotalSubjectsScore = calcGedTotalSubjectsScore(averageScore);
@@ -95,18 +94,36 @@ public class CalculateGedService {
         }
     }
 
+    private static BigDecimal calcGedAvgScore(BigDecimal gedTotalScore, BigDecimal gedMaxScore) {
+        BigDecimal avgScore = gedTotalScore.divide(gedMaxScore, 5, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+
+        // 검정고시 평균 점수가 0점 미만이라면 0점 처리
+        return avgScore.compareTo(BigDecimal.ZERO) < 0
+                ? BigDecimal.ZERO
+                : avgScore;
+    }
+
     private BigDecimal calcGedTotalSubjectsScore(BigDecimal averageScore) {
-        return averageScore.subtract(BigDecimal.valueOf(50))
+        BigDecimal totalSubjectsScore = averageScore.subtract(BigDecimal.valueOf(50))
                 .divide(BigDecimal.valueOf(50), 5, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(240))
                 .setScale(3, RoundingMode.HALF_UP);
+
+        return totalSubjectsScore.compareTo(BigDecimal.ZERO) < 0
+                ? BigDecimal.ZERO
+                : totalSubjectsScore;
     }
 
     private BigDecimal calcGedVolunteerScore(BigDecimal averageScore) {
-        return averageScore.subtract(BigDecimal.valueOf(40))
+        BigDecimal volunteerScore = averageScore.subtract(BigDecimal.valueOf(40))
                 .divide(BigDecimal.valueOf(60), 5, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(30))
                 .setScale(3, RoundingMode.HALF_UP);
+
+        return volunteerScore.compareTo(BigDecimal.ZERO) < 0
+                ? BigDecimal.ZERO
+                : volunteerScore;
     }
 
 }
