@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberTestResDto;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
@@ -30,6 +31,11 @@ public class QueryTestResultServiceTest {
     private OneseoService oneseoService;
     @InjectMocks
     private QueryTestResultService queryTestResultService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Nested
     @DisplayName("execute 메소드는")
