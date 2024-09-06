@@ -102,6 +102,11 @@ public class ModifyOneseoService {
     private MiddleSchoolAchievementResDto buildMiddleSchoolAchievementResDto(
             MiddleSchoolAchievement middleSchoolAchievement
     ) {
+
+        List<Integer> absentDays = middleSchoolAchievement.getAbsentDays();
+        List<Integer> attendanceDays = middleSchoolAchievement.getAttendanceDays();
+        Integer absentDaysCount = OneseoService.calcAbsentDaysCount(absentDays, attendanceDays);
+
         return MiddleSchoolAchievementResDto.builder()
                 .achievement1_2(middleSchoolAchievement.getAchievement1_2())
                 .achievement2_1(middleSchoolAchievement.getAchievement2_1())
@@ -112,8 +117,9 @@ public class ModifyOneseoService {
                 .newSubjects(middleSchoolAchievement.getNewSubjects())
                 .artsPhysicalAchievement(middleSchoolAchievement.getArtsPhysicalAchievement())
                 .artsPhysicalSubjects(middleSchoolAchievement.getArtsPhysicalSubjects())
-                .absentDays(middleSchoolAchievement.getAbsentDays())
-                .attendanceDays(middleSchoolAchievement.getAttendanceDays())
+                .absentDays(absentDays)
+                .absentDaysCount(absentDaysCount)
+                .attendanceDays(attendanceDays)
                 .volunteerTime(middleSchoolAchievement.getVolunteerTime())
                 .liberalSystem(middleSchoolAchievement.getLiberalSystem())
                 .freeSemester(middleSchoolAchievement.getFreeSemester())
