@@ -153,7 +153,7 @@ public class CreateOneseoService {
                         .build())
                 .privacyDetail(oneseoPrivacyDetailResDto)
                 .middleSchoolAchievement(middleSchoolAchievementResDto)
-                .calculatedScoreResDto(calculatedScoreResDto)
+                .calculatedScore(calculatedScoreResDto)
                 .build();
     }
 

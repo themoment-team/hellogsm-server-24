@@ -14,7 +14,7 @@ public record FoundOneseoResDto(
         OneseoPrivacyDetailResDto privacyDetail,
         MiddleSchoolAchievementResDto middleSchoolAchievement,
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        CalculatedScoreResDto calculatedScoreResDto,
+        CalculatedScoreResDto calculatedScore,
         @JsonInclude(JsonInclude.Include.NON_NULL)
         Integer step
 ) {

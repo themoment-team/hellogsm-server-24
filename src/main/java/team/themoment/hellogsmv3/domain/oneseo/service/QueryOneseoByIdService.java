@@ -138,7 +138,7 @@ public class QueryOneseoByIdService {
                         .build())
                 .privacyDetail(oneseoPrivacyDetailResDto)
                 .middleSchoolAchievement(middleSchoolAchievementResDto)
-                .calculatedScoreResDto(calculatedScoreResDto)
+                .calculatedScore(calculatedScoreResDto)
                 .build();
     }
 }
