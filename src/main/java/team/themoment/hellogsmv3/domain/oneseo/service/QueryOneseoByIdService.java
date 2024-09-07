@@ -9,7 +9,6 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.response.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
-import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 
@@ -23,7 +22,6 @@ public class QueryOneseoByIdService {
 
     private final OneseoPrivacyDetailRepository oneseoPrivacyDetailRepository;
     private final MiddleSchoolAchievementRepository middleSchoolAchievementRepository;
-    private final EntranceTestFactorsDetailRepository entranceTestFactorsDetailRepository;
     private final MemberService memberService;
     private final OneseoService oneseoService;
 
