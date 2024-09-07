@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
@@ -19,6 +20,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.GED;
 
 @DisplayName("OneseoService 클래스의")
 public class OneseoServiceTest {
@@ -112,6 +115,73 @@ public class OneseoServiceTest {
             void it_returns_oneseo() {
                 Integer absentDaysCount = OneseoService.calcAbsentDaysCount(nullAbsentDays, nullAttendanceDays);
                 assertEquals(absentDaysCount, null);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("isValidMiddleSchoolInfo 메소드는")
+    class Describe_isValidMiddleSchoolInfo {
+
+        private final OneseoReqDto validCandidateReqDto = OneseoReqDto.builder()
+                .schoolName("금호중앙중학교")
+                .schoolAddress("어딘가")
+                .schoolTeacherName("김선생")
+                .schoolTeacherPhoneNumber("01000000000")
+                .graduationType(CANDIDATE)
+                .build();
+
+        private final OneseoReqDto validGedReqDto = OneseoReqDto.builder()
+                .schoolName("")
+                .schoolAddress("")
+                .schoolTeacherName("")
+                .schoolTeacherPhoneNumber("")
+                .graduationType(GED)
+                .build();
+
+        private final OneseoReqDto invalidCandidateReqDto = OneseoReqDto.builder()
+                .schoolName("")
+                .schoolAddress("")
+                .schoolTeacherName("")
+                .schoolTeacherPhoneNumber("")
+                .graduationType(CANDIDATE)
+                .build();
+
+        @Nested
+        @DisplayName("졸업 예정자(CANDIDATE)이고 모든 중학교 정보가 유효하면")
+        class Context_with_valid_candidate {
+
+            @Test
+            @DisplayName("예외를 던지지 않는다.")
+            void it_does_not_throw_exception() {
+                OneseoService.isValidMiddleSchoolInfo(validCandidateReqDto);
+            }
+        }
+
+        @Nested
+        @DisplayName("검정고시 지원자(GED)이고 중학교 정보를 작성하지 않았다면")
+        class Context_with_valid_ged {
+
+            @Test
+            @DisplayName("예외를 던지지 않는다.")
+            void it_does_not_throw_exception() {
+                OneseoService.isValidMiddleSchoolInfo(validGedReqDto);
+            }
+        }
+
+        @Nested
+        @DisplayName("졸업 예정자(CANDIDATE)이고 필수 중학교 정보가 비어 있으면")
+        class Context_with_invalid_candidate {
+
+            @Test
+            @DisplayName("ExpectedException을 던진다.")
+            void it_throws_expected_exception() {
+                ExpectedException exception = assertThrows(ExpectedException.class, () ->
+                        OneseoService.isValidMiddleSchoolInfo(invalidCandidateReqDto)
+                );
+
+                assertEquals("중학교 졸업예정인 지원자는 현재 재학 중인 중학교 정보를 필수로 입력해야 합니다.", exception.getMessage());
+                assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             }
         }
     }

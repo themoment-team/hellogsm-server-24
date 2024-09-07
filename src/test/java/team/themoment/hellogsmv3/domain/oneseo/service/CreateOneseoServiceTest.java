@@ -206,6 +206,8 @@ class CreateOneseoServiceTest {
 
             @BeforeEach
             void setUp() {
+                given(reqDto.graduationType()).willReturn(GRADUATE);
+
                 doThrow(new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND))
                         .when(memberService).findByIdOrThrow(memberId);
             }
@@ -228,6 +230,7 @@ class CreateOneseoServiceTest {
             void setUp() {
                 Member existingMember = mock(Member.class);
 
+                given(reqDto.graduationType()).willReturn(GRADUATE);
                 given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
                 given(oneseoRepository.existsByMember(any(Member.class))).willReturn(true);
             }
@@ -253,6 +256,7 @@ class CreateOneseoServiceTest {
             void setUp() {
                 Member existingMember = mock(Member.class);
 
+                given(reqDto.graduationType()).willReturn(GRADUATE);
                 given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
                 given(oneseoRepository.existsByMember(existingMember)).willReturn(false);
                 given(reqDto.middleSchoolAchievement()).willReturn(invalidMiddleSchoolAchievementReqDto);
