@@ -68,6 +68,23 @@ public class CreateOneseoService {
         );
     }
 
+    private void isValidMiddleSchoolInfo(OneseoReqDto reqDto) {
+        if (
+                reqDto.graduationType().equals(CANDIDATE) && (
+                        isBlankString(reqDto.schoolTeacherName()) ||
+                                isBlankString(reqDto.schoolTeacherPhoneNumber()) ||
+                                isBlankString(reqDto.schoolName()) ||
+                                isBlankString(reqDto.schoolAddress())
+                )
+        ) {
+            throw new ExpectedException("중학교 졸업예정인 지원자는 현재 재학 중인 중학교 정보를 필수로 입력해야 합니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean isBlankString(String target) {
+        return target == null || target.isBlank();
+    }
+
     private void assignSubmitCode(Oneseo oneseo) {
         Integer maxSubmitCodeNumber = oneseoRepository.findMaxSubmitCodeByScreening(oneseo.getWantedScreening());
         int newSubmitCodeNumber = (maxSubmitCodeNumber != null ? maxSubmitCodeNumber : 0) + 1;
@@ -243,23 +260,6 @@ public class CreateOneseoService {
         if (oneseoRepository.existsByMember(currentMember)) {
             throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
         }
-    }
-
-    private void isValidMiddleSchoolInfo(OneseoReqDto reqDto) {
-        if (
-                reqDto.graduationType().equals(CANDIDATE) && (
-                        isBlankString(reqDto.schoolTeacherName()) ||
-                        isBlankString(reqDto.schoolTeacherPhoneNumber()) ||
-                        isBlankString(reqDto.schoolName()) ||
-                        isBlankString(reqDto.schoolAddress())
-                )
-        ) {
-            throw new ExpectedException("중학교 졸업예정인 지원자는 현재 재학 중인 중학교 정보를 필수로 입력해야 합니다.", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    private boolean isBlankString(String target) {
-        return target == null || target.isBlank();
     }
 
     private List<Integer> validationGeneralAchievement(List<Integer> achievements)  {
