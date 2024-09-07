@@ -3,7 +3,7 @@ package team.themoment.hellogsmv3.domain.oneseo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.MockScoreResDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.CalculatedScoreResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
@@ -30,7 +30,7 @@ public class CalculateGradeService {
     private BigDecimal score3_1 = BigDecimal.ZERO;
     private BigDecimal score3_2 = BigDecimal.ZERO;
 
-    public MockScoreResDto execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
+    public CalculatedScoreResDto execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
 
         if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
@@ -102,17 +102,15 @@ public class CalculateGradeService {
                 entranceTestFactorsDetailRepository.save(findEntranceTestFactorsDetail);
                 entranceTestResultRepository.save(findEntranceTestResult);
             }
-
-            return null;
-        } else {
-            return MockScoreResDto.builder()
-                    .generalSubjectsScore(generalSubjectsScore)
-                    .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
-                    .attendanceScore(attendanceScore)
-                    .volunteerScore(volunteerScore)
-                    .totalScore(totalScore)
-                    .build();
         }
+
+        return CalculatedScoreResDto.builder()
+                .generalSubjectsScore(generalSubjectsScore)
+                .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
+                .attendanceScore(attendanceScore)
+                .volunteerScore(volunteerScore)
+                .totalScore(totalScore)
+                .build();
     }
 
     private BigDecimal calcGeneralSubjectsScore(MiddleSchoolAchievementReqDto dto, GraduationType graduationType, String liberalSystem, String freeSemester) {
