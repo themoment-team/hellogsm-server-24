@@ -196,7 +196,12 @@ class QueryOneseoByIdServiceTest {
                 .oneseoSubmitCode("submitCode")
                 .wantedScreening(Screening.GENERAL)
                 .desiredMajors(new DesiredMajors(Major.SW, Major.IOT, Major.AI))
-                .build();
+                .entranceTestResult(
+                        EntranceTestResult.builder()
+                                .entranceTestFactorsDetail(
+                                        EntranceTestFactorsDetail.builder().build()
+                                ).build()
+                ).build();
     }
 
     private OneseoPrivacyDetail buildOneseoPrivacyDetail() {
