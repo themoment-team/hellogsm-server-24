@@ -6,8 +6,7 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record MockScoreResDto(
-
+public record CalculatedScoreResDto(
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		BigDecimal generalSubjectsScore,
 		@JsonInclude(JsonInclude.Include.NON_NULL)

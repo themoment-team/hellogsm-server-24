@@ -10,10 +10,7 @@ import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.DesiredMajorsResDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.FoundOneseoResDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.MiddleSchoolAchievementResDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.OneseoPrivacyDetailResDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.MiddleSchoolAchievement;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
@@ -53,14 +50,15 @@ public class CreateOneseoService {
         assignSubmitCode(oneseo);
         saveEntities(oneseo, oneseoPrivacyDetail, middleSchoolAchievement);
 
-        calculateMiddleSchoolAchievement(oneseoPrivacyDetail.getGraduationType(), middleSchoolAchievement, oneseo);
+        CalculatedScoreResDto calculatedScoreResDto = calculateMiddleSchoolAchievement(oneseoPrivacyDetail.getGraduationType(), middleSchoolAchievement, oneseo);
 
         OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto = buildOneseoPrivacyDetailResDto(currentMember, oneseoPrivacyDetail);
         MiddleSchoolAchievementResDto middleSchoolAchievementResDto = buildMiddleSchoolAchievementResDto(middleSchoolAchievement);
         return buildOneseoResDto(
                 oneseo,
                 oneseoPrivacyDetailResDto,
-                middleSchoolAchievementResDto
+                middleSchoolAchievementResDto,
+                calculatedScoreResDto
         );
     }
 
@@ -135,7 +133,8 @@ public class CreateOneseoService {
     private FoundOneseoResDto buildOneseoResDto(
             Oneseo oneseo,
             OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto,
-            MiddleSchoolAchievementResDto middleSchoolAchievementResDto
+            MiddleSchoolAchievementResDto middleSchoolAchievementResDto,
+            CalculatedScoreResDto calculatedScoreResDto
     ) {
         DesiredMajors desiredMajors = oneseo.getDesiredMajors();
 
@@ -150,10 +149,11 @@ public class CreateOneseoService {
                         .build())
                 .privacyDetail(oneseoPrivacyDetailResDto)
                 .middleSchoolAchievement(middleSchoolAchievementResDto)
+                .calculatedScoreResDto(calculatedScoreResDto)
                 .build();
     }
 
-    private void calculateMiddleSchoolAchievement(GraduationType graduationType, MiddleSchoolAchievement middleSchoolAchievement, Oneseo oneseo) {
+    private CalculatedScoreResDto calculateMiddleSchoolAchievement(GraduationType graduationType, MiddleSchoolAchievement middleSchoolAchievement, Oneseo oneseo) {
         MiddleSchoolAchievementReqDto data = MiddleSchoolAchievementReqDto.builder()
                 .achievement1_2(middleSchoolAchievement.getAchievement1_2())
                 .achievement2_1(middleSchoolAchievement.getAchievement2_1())
@@ -169,10 +169,10 @@ public class CreateOneseoService {
                 .gedTotalScore(middleSchoolAchievement.getGedTotalScore())
                 .build();
 
-        switch (graduationType) {
+        return switch (graduationType) {
             case CANDIDATE, GRADUATE -> calculateGradeService.execute(data, oneseo, graduationType);
             case GED -> calculateGedService.execute(data, oneseo, graduationType);
-        }
+        };
     }
 
     private void saveEntities(Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail, MiddleSchoolAchievement middleSchoolAchievement) {

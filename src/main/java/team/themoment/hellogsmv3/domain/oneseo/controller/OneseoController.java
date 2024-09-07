@@ -130,7 +130,7 @@ public class OneseoController {
 
     @Operation(summary = "모의 성적 계산", description = "성적 점수를 입력받아 모의 성적 환산값을 반환합니다.")
     @PostMapping("/calculate-mock-score")
-    public MockScoreResDto calcMockScore(
+    public CalculatedScoreResDto calcMockScore(
             @RequestBody MiddleSchoolAchievementReqDto dto,
             @RequestParam("graduationType") GraduationType graduationType
     ) {
