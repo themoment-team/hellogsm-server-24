@@ -189,6 +189,16 @@ class QueryOneseoByIdServiceTest {
                 .build();
     }
 
+    private EntranceTestFactorsDetail buildEntranceTestFactorsDetail() {
+        return EntranceTestFactorsDetail.builder().build();
+    }
+
+    private EntranceTestResult buildEntranceTestResult() {
+        return EntranceTestResult.builder()
+                .entranceTestFactorsDetail(buildEntranceTestFactorsDetail())
+                .build();
+    }
+
     private Oneseo buildOneseo(Member member) {
         return Oneseo.builder()
                 .member(member)
@@ -196,12 +206,8 @@ class QueryOneseoByIdServiceTest {
                 .oneseoSubmitCode("submitCode")
                 .wantedScreening(Screening.GENERAL)
                 .desiredMajors(new DesiredMajors(Major.SW, Major.IOT, Major.AI))
-                .entranceTestResult(
-                        EntranceTestResult.builder()
-                                .entranceTestFactorsDetail(
-                                        EntranceTestFactorsDetail.builder().build()
-                                ).build()
-                ).build();
+                .entranceTestResult(buildEntranceTestResult())
+                .build();
     }
 
     private OneseoPrivacyDetail buildOneseoPrivacyDetail() {
