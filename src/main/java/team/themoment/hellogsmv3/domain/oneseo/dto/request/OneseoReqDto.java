@@ -44,7 +44,6 @@ public record OneseoReqDto(
         GraduationType graduationType,
 
         @Schema(description = "담임선생님 이름", defaultValue = "김선생")
-        @NotBlank
         String schoolTeacherName,
 
         @Schema(description = "담임선생님 전화번호", nullable = true, defaultValue = "01000000000")

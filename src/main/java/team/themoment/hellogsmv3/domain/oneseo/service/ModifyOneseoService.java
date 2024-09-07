@@ -25,6 +25,8 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.List;
 
+import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.isValidMiddleSchoolInfo;
+
 @Service
 @RequiredArgsConstructor
 public class ModifyOneseoService {
@@ -41,6 +43,9 @@ public class ModifyOneseoService {
     @Transactional
     @CachePut(value = OneseoService.ONESEO_CACHE_VALUE, key = "#memberId")
     public FoundOneseoResDto execute(OneseoReqDto reqDto, Long memberId) {
+
+        isValidMiddleSchoolInfo(reqDto);
+
         Member currentMember = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(currentMember);
 

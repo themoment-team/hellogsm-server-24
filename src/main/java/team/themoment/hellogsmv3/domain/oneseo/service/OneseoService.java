@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
+import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.List;
+
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,23 @@ public class OneseoService {
         int totalAttendanceDays = attendanceDays.stream().mapToInt(Integer::intValue).sum();
 
         return totalAbsentDays + (totalAttendanceDays / 3);
+    }
+
+    public static void isValidMiddleSchoolInfo(OneseoReqDto reqDto) {
+        if (
+                reqDto.graduationType().equals(CANDIDATE) && (
+                        isBlankString(reqDto.schoolTeacherName()) ||
+                        isBlankString(reqDto.schoolTeacherPhoneNumber()) ||
+                        isBlankString(reqDto.schoolName()) ||
+                        isBlankString(reqDto.schoolAddress())
+                )
+        ) {
+            throw new ExpectedException("중학교 졸업예정인 지원자는 현재 재학 중인 중학교 정보를 필수로 입력해야 합니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private static boolean isBlankString(String target) {
+        return target == null || target.isBlank();
     }
 
     public Oneseo findByMemberOrThrow(Member member) {
