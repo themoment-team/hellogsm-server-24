@@ -26,6 +26,7 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.List;
 
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.*;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @Service
@@ -42,6 +43,9 @@ public class CreateOneseoService {
     @Transactional
     @CachePut(value = OneseoService.ONESEO_CACHE_VALUE, key = "#memberId")
     public FoundOneseoResDto execute(OneseoReqDto reqDto, Long memberId) {
+
+        isValidMiddleSchoolInfo(reqDto);
+
         Member currentMember = memberService.findByIdOrThrow(memberId);
 
         isExistOneseo(currentMember);
@@ -239,6 +243,23 @@ public class CreateOneseoService {
         if (oneseoRepository.existsByMember(currentMember)) {
             throw new ExpectedException("이미 원서가 존재합니다.", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private void isValidMiddleSchoolInfo(OneseoReqDto reqDto) {
+        if (
+                reqDto.graduationType().equals(CANDIDATE) && (
+                        isBlankString(reqDto.schoolTeacherName()) ||
+                        isBlankString(reqDto.schoolTeacherPhoneNumber()) ||
+                        isBlankString(reqDto.schoolName()) ||
+                        isBlankString(reqDto.schoolAddress())
+                )
+        ) {
+            throw new ExpectedException("중학교 졸업예정인 지원자는 현재 재학 중인 중학교 정보를 필수로 입력해야 합니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean isBlankString(String target) {
+        return target == null || target.isBlank();
     }
 
     private List<Integer> validationGeneralAchievement(List<Integer> achievements)  {
