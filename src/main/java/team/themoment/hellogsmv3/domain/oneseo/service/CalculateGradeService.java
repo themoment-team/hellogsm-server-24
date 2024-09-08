@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.CalculatedScoreResDto;
-import team.themoment.hellogsmv3.domain.oneseo.dto.response.GeneralSubjectsScoreDetailResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestFactorsDetailRepository;
@@ -103,23 +102,6 @@ public class CalculateGradeService {
                 entranceTestFactorsDetailRepository.save(findEntranceTestFactorsDetail);
                 entranceTestResultRepository.save(findEntranceTestResult);
             }
-
-            return CalculatedScoreResDto.builder()
-                    .generalSubjectsScore(generalSubjectsScore)
-                    .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
-                    .attendanceScore(attendanceScore)
-                    .volunteerScore(volunteerScore)
-                    .totalScore(totalScore)
-                    .generalSubjectsScoreDetail(
-                            GeneralSubjectsScoreDetailResDto.builder()
-                                    .score1_2(score1_2)
-                                    .score2_1(score2_1)
-                                    .score2_2(score2_2)
-                                    .score3_1(score3_1)
-                                    .score3_2(score3_2)
-                                    .build()
-                    )
-                    .build();
         }
 
         return CalculatedScoreResDto.builder()

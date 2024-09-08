@@ -10,8 +10,6 @@ public record CalculatedScoreResDto(
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		BigDecimal generalSubjectsScore,
 		@JsonInclude(JsonInclude.Include.NON_NULL)
-		GeneralSubjectsScoreDetailResDto generalSubjectsScoreDetail,
-		@JsonInclude(JsonInclude.Include.NON_NULL)
 		BigDecimal artsPhysicalSubjectsScore,
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		BigDecimal totalSubjectsScore,
