@@ -56,6 +56,15 @@ public class QueryOneseoByIdService {
                         .attendanceScore(entranceTestFactorsDetail.getAttendanceScore())
                         .volunteerScore(entranceTestFactorsDetail.getVolunteerScore())
                         .totalScore(entranceTestResult.getDocumentEvaluationScore())
+                        .generalSubjectsScoreDetail(
+                                GeneralSubjectsScoreDetailResDto.builder()
+                                        .score1_2(entranceTestFactorsDetail.getScore1_2())
+                                        .score2_1(entranceTestFactorsDetail.getScore2_1())
+                                        .score2_2(entranceTestFactorsDetail.getScore2_2())
+                                        .score3_1(entranceTestFactorsDetail.getScore3_1())
+                                        .score3_2(entranceTestFactorsDetail.getScore3_2())
+                                        .build()
+                        )
                         .build();
             case GED ->
                 CalculatedScoreResDto.builder()
