@@ -283,9 +283,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/oneseo/v3/calculate-mock-score").permitAll()
 
                 // common / get date api
-                .requestMatchers(HttpMethod.GET, "/date").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
+                .requestMatchers(HttpMethod.GET, "/date").permitAll()
 
                 .anyRequest().permitAll()
         );
