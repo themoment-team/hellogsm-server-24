@@ -94,8 +94,8 @@ auth:
       - '*'
 
 schedule:
-  startReceptionDate: ${START_RECEPTION_DATE}
-  endReceptionDate: ${END_RECEPTION_DATE}
+  oneseoSubmissionStart: ${ONESEO_SUBMISSION_START}
+  oneseoSubmissionEnd: ${ONESEO_SUBMISSION_END}
 
 springdoc:
   api-docs:
