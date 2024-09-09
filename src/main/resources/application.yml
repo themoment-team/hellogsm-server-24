@@ -97,8 +97,8 @@ schedule:
   oneseoSubmissionStart: ${ONESEO_SUBMISSION_START}
   oneseoSubmissionEnd: ${ONESEO_SUBMISSION_END}
   firstResultsAnnouncement: ${FIRST_RESULTS_ANNOUNCEMENT}
-  jobFitAssessment: ${JOB_FIT_ASSESSMENT}
-  inDepthInterview: ${IN_DEPTH_INTERVIEW}
+  aptitudeEvaluation: ${APTITUDE_EVALUATION}
+  interview: ${INTERVIEW}
   finalResultsAnnouncement: ${FINAL_RESULTS_ANNOUNCEMENT}
 
 springdoc:
