@@ -6,7 +6,11 @@ import java.time.LocalDateTime;
 
 @ConfigurationProperties(prefix = "schedule")
 public record ScheduleEnvironment(
-    LocalDateTime startReceptionDate,
-    LocalDateTime endReceptionDate
+    LocalDateTime oneseoSubmissionStart,
+    LocalDateTime oneseoSubmissionEnd,
+    LocalDateTime firstResultsAnnouncement,
+    LocalDateTime aptitudeEvaluation,
+    LocalDateTime interview,
+    LocalDateTime finalResultsAnnouncement
 ) {
 }
