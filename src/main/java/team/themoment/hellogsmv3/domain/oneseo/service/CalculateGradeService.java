@@ -195,7 +195,7 @@ public class CalculateGradeService {
 
     private void validSemester(String freeSemester) {
         // "" 공백은 1-1학기로 계산
-        List<String> validSemesterList = List.of("", "1-2", "2-2", "3-1", "3-2");
+        List<String> validSemesterList = List.of("", "1-2", "2-1", "2-2", "3-1", "3-2");
         if (validSemesterList.stream().noneMatch(s -> s.equals(freeSemester)))
             throw new ExpectedException(String.format("%s(은)는 유효한 학기가 아닙니다.", freeSemester), HttpStatus.BAD_REQUEST);
     }
