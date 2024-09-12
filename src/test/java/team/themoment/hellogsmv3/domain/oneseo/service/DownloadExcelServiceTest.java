@@ -155,9 +155,9 @@ public class DownloadExcelServiceTest {
                     String.valueOf(entranceTestResult.getInterviewScore()),
                     String.valueOf(46.334),
                     String.valueOf(oneseo.getDecidedMajor()),
-                    oneseo.getMember().getPhoneNumber(),
-                    oneseoPrivacyDetail.getGuardianPhoneNumber(),
-                    oneseoPrivacyDetail.getSchoolTeacherPhoneNumber()
+                    String.valueOf(oneseo.getMember().getPhoneNumber()),
+                    String.valueOf(oneseoPrivacyDetail.getGuardianPhoneNumber()),
+                    String.valueOf(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber())
             );
 
             Row headerRow = sheet.getRow(0);
