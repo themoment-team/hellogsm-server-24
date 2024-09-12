@@ -41,7 +41,12 @@ public class CalculateGradeService {
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
 
         String liberalSystem = dto.liberalSystem();
-        String freeSemester = dto.freeSemester() != null ? dto.freeSemester() : "";
+        // freeSemester가 NULL이라면 "" 공백으로 변경, "" 공백이라면 "1-1"로 변경
+        String freeSemester = dto.freeSemester() == null
+                ? ""
+                : dto.freeSemester().equals("")
+                ? "1-1"
+                : dto.freeSemester();
 
         // 일반 교과 성적 환산값 (총점: 180점)
         BigDecimal generalSubjectsScore = calcGeneralSubjectsScore(dto, graduationType, liberalSystem, freeSemester);
@@ -155,7 +160,7 @@ public class CalculateGradeService {
                 );
                 score3_1 = calcGeneralSubjectsScore(
                         dto.achievement3_1(), BigDecimal.valueOf(
-                                (freeSemester.equals("3-1") || freeSemester.equals("")) ? 0 : 72)
+                                (freeSemester.equals("3-1") || freeSemester.equals("1-1")) ? 0 : 72)
                 );
             }
             case GRADUATE -> {
@@ -170,7 +175,7 @@ public class CalculateGradeService {
                 score2_2 = calcGeneralSubjectsScore(
                         dto.achievement2_2(), BigDecimal.valueOf(
                                 freeSemester.equals("2-2") ? 0 :
-                                        (freeSemester.equals("3-1") || freeSemester.equals("3-2")) || freeSemester.equals("") ? 54 : 36)
+                                        (freeSemester.equals("3-1") || freeSemester.equals("3-2")) || freeSemester.equals("1-1") ? 54 : 36)
                 );
                 score3_1 = calcGeneralSubjectsScore(
                         dto.achievement3_1(), BigDecimal.valueOf(
@@ -178,7 +183,7 @@ public class CalculateGradeService {
                 );
                 score3_2 = calcGeneralSubjectsScore(
                         dto.achievement3_2(), BigDecimal.valueOf(
-                                (freeSemester.equals("3-2") ||  freeSemester.equals("")) ? 0 : 54)
+                                (freeSemester.equals("3-2") ||  freeSemester.equals("1-1")) ? 0 : 54)
                 );
             }
         }
@@ -194,8 +199,7 @@ public class CalculateGradeService {
     }
 
     private void validSemester(String freeSemester) {
-        // "" 공백은 1-1학기로 계산
-        List<String> validSemesterList = List.of("", "1-2", "2-1", "2-2", "3-1", "3-2");
+        List<String> validSemesterList = List.of("", "1-1", "1-2", "2-1", "2-2", "3-1", "3-2");
         if (validSemesterList.stream().noneMatch(s -> s.equals(freeSemester)))
             throw new ExpectedException(String.format("%s(은)는 유효한 학기가 아닙니다.", freeSemester), HttpStatus.BAD_REQUEST);
     }
