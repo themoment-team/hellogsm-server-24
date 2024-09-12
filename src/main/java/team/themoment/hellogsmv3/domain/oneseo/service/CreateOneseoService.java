@@ -5,7 +5,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
@@ -16,6 +15,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -36,6 +36,7 @@ public class CreateOneseoService {
     private final MemberService memberService;
     private final CalculateGradeService calculateGradeService;
     private final CalculateGedService calculateGedService;
+    private final OneseoService oneseoService;
 
     @Transactional
     @CachePut(value = OneseoService.ONESEO_CACHE_VALUE, key = "#memberId")
@@ -51,7 +52,8 @@ public class CreateOneseoService {
         OneseoPrivacyDetail oneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, oneseo);
 
-        assignSubmitCode(oneseo);
+        oneseoService.assignSubmitCode(oneseo);
+
         saveEntities(oneseo, oneseoPrivacyDetail, middleSchoolAchievement);
 
         CalculatedScoreResDto calculatedScoreResDto = calculateMiddleSchoolAchievement(oneseoPrivacyDetail.getGraduationType(), middleSchoolAchievement, oneseo);
@@ -64,22 +66,6 @@ public class CreateOneseoService {
                 middleSchoolAchievementResDto,
                 calculatedScoreResDto
         );
-    }
-
-    private void assignSubmitCode(Oneseo oneseo) {
-        Integer maxSubmitCodeNumber = oneseoRepository.findMaxSubmitCodeByScreening(oneseo.getWantedScreening());
-        int newSubmitCodeNumber = (maxSubmitCodeNumber != null ? maxSubmitCodeNumber : 0) + 1;
-
-        String submitCode;
-        ScreeningCategory screeningCategory = oneseo.getWantedScreening().getScreeningCategory();
-        switch (screeningCategory) {
-            case GENERAL -> submitCode = "A-" + newSubmitCodeNumber;
-            case SPECIAL -> submitCode = "B-" + newSubmitCodeNumber;
-            case EXTRA -> submitCode = "C-" + newSubmitCodeNumber;
-            default -> throw new IllegalArgumentException("Unexpected value: " + screeningCategory);
-        }
-
-        oneseo.setOneseoSubmitCode(submitCode);
     }
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(

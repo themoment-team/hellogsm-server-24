@@ -54,6 +54,8 @@ public class ModifyOneseoService {
         saveHistoryIfWantedScreeningChange(reqDto.screening(), oneseo);
 
         Oneseo modifiedOneseo = buildOneseo(reqDto, oneseo, currentMember);
+        oneseoService.assignSubmitCode(modifiedOneseo);
+
         OneseoPrivacyDetail modifiedOneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseoPrivacyDetail, oneseo);
         MiddleSchoolAchievement modifiedMiddleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, middleSchoolAchievement, oneseo);
 
