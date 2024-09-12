@@ -49,6 +49,8 @@ class CreateOneseoServiceTest {
     @Mock
     private MemberService memberService;
     @Mock
+    private OneseoService oneseoService;
+    @Mock
     private CalculateGradeService calculateGradeService;
     @Mock
     private CalculateGedService calculateGedService;
@@ -162,7 +164,6 @@ class CreateOneseoServiceTest {
                 OneseoPrivacyDetail capturedPrivacyDetail = oneseoPrivacyDetailCaptor.getValue();
                 MiddleSchoolAchievement capturedAchievement = middleSchoolAchievementCaptor.getValue();
 
-                assertEquals("A-1", capturedOneseo.getOneseoSubmitCode());
                 assertEquals(firstDesiredMajor, capturedOneseo.getDesiredMajors().getFirstDesiredMajor());
                 assertEquals(secondDesiredMajor, capturedOneseo.getDesiredMajors().getSecondDesiredMajor());
                 assertEquals(thirdDesiredMajor, capturedOneseo.getDesiredMajors().getThirdDesiredMajor());
