@@ -165,9 +165,9 @@ public class DownloadExcelService {
                     String.valueOf(entranceTestResult.getInterviewScore()),
                     String.valueOf(finalScore),
                     String.valueOf(oneseo.getDecidedMajor()),
-                    oneseo.getMember().getPhoneNumber(),
-                    oneseoPrivacyDetail.getGuardianPhoneNumber(),
-                    oneseoPrivacyDetail.getSchoolTeacherPhoneNumber()
+                    String.valueOf(oneseo.getMember().getPhoneNumber()),
+                    String.valueOf(oneseoPrivacyDetail.getGuardianPhoneNumber()),
+                    String.valueOf(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber())
             );
 
             sheetData.add(rowData.stream().map(data -> data.equals("null")? "" : data).collect(Collectors.toList()));
