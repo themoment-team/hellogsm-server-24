@@ -3,6 +3,7 @@ package team.themoment.hellogsmv3.domain.oneseo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
@@ -19,6 +20,22 @@ public class OneseoService {
 
     public static final String ONESEO_CACHE_VALUE = "oneseo";
     private final OneseoRepository oneseoRepository;
+
+    public void assignSubmitCode(Oneseo oneseo) {
+        Integer maxSubmitCodeNumber = oneseoRepository.findMaxSubmitCodeByScreening(oneseo.getWantedScreening());
+        int newSubmitCodeNumber = (maxSubmitCodeNumber != null ? maxSubmitCodeNumber : 0) + 1;
+
+        String submitCode;
+        ScreeningCategory screeningCategory = oneseo.getWantedScreening().getScreeningCategory();
+        switch (screeningCategory) {
+            case GENERAL -> submitCode = "A-" + newSubmitCodeNumber;
+            case SPECIAL -> submitCode = "B-" + newSubmitCodeNumber;
+            case EXTRA -> submitCode = "C-" + newSubmitCodeNumber;
+            default -> throw new IllegalArgumentException("Unexpected value: " + screeningCategory);
+        }
+
+        oneseo.setOneseoSubmitCode(submitCode);
+    }
 
     public static Integer calcAbsentDaysCount(List<Integer> absentDays, List<Integer> attendanceDays) {
         if (absentDays == null || attendanceDays == null) {
