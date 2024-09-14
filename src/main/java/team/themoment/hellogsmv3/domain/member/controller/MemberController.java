@@ -101,7 +101,7 @@ public class MemberController {
         return queryMemberAuthInfoByIdService.execute(memberId);
     }
 
-    @Operation(summary = "인정 정보 조회", description = "맴버 id로 인증 정보를 조회합니다.")
+    @Operation(summary = "인증 정보 조회", description = "맴버 id로 인증 정보를 조회합니다.")
     @GetMapping("/auth-info/{memberId}")
     public FoundMemberAuthInfoResDto findAuthInfoByMemberId(
             @PathVariable Long memberId
