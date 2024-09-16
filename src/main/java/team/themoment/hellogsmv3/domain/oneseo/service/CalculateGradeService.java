@@ -37,8 +37,8 @@ public class CalculateGradeService {
 
     public CalculatedScoreResDto execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
 
-        if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
-            throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
+        validationGraduationType(graduationType);
+        validationFreeSemester(dto.liberalSystem(), dto.freeSemester());
 
         String liberalSystem = dto.liberalSystem();
         // freeSemester가 NULL이라면 "" 공백으로 변경, "" 공백이라면 "1-1"로 변경
@@ -138,6 +138,16 @@ public class CalculateGradeService {
                 .volunteerScore(volunteerScore)
                 .totalScore(totalScore)
                 .build();
+    }
+
+    private void validationGraduationType(GraduationType graduationType) {
+        if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
+            throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
+    }
+
+    private void validationFreeSemester(String liberalSystem, String freeSemester) {
+        if (liberalSystem.equals("자유학기제") && freeSemester == null)
+            throw new ExpectedException("자유학기가 적용된 학기를 입력해주세요.", HttpStatus.BAD_REQUEST);
     }
 
     private BigDecimal calcGeneralSubjectsScore(MiddleSchoolAchievementReqDto dto, GraduationType graduationType, String liberalSystem, String freeSemester) {
