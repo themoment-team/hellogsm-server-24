@@ -156,7 +156,8 @@ public class CalculateGradeService {
                 );
                 score2_2 = calcGeneralSubjectsScore(
                         dto.achievement2_2(), BigDecimal.valueOf(
-                                freeSemester.equals("2-2") ? 0 : (freeSemester.equals("3-1") ? 72 : 54))
+                                freeSemester.equals("2-2") ? 0 :
+                                        (freeSemester.equals("3-1") || freeSemester.equals("1-1") ? 72 : 54))
                 );
                 score3_1 = calcGeneralSubjectsScore(
                         dto.achievement3_1(), BigDecimal.valueOf(
