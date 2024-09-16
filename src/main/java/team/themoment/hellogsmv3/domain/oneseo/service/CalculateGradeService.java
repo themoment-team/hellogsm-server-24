@@ -140,16 +140,6 @@ public class CalculateGradeService {
                 .build();
     }
 
-    private void validationGraduationType(GraduationType graduationType) {
-        if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
-            throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
-    }
-
-    private void validationFreeSemester(String liberalSystem, String freeSemester) {
-        if (liberalSystem.equals("자유학기제") && freeSemester == null)
-            throw new ExpectedException("자유학기가 적용된 학기를 입력해주세요.", HttpStatus.BAD_REQUEST);
-    }
-
     private BigDecimal calcGeneralSubjectsScore(MiddleSchoolAchievementReqDto dto, GraduationType graduationType, String liberalSystem, String freeSemester) {
 
         validSemester(freeSemester);
@@ -314,4 +304,13 @@ public class CalculateGradeService {
         });
     }
 
+    private void validationGraduationType(GraduationType graduationType) {
+        if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
+            throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
+    }
+
+    private void validationFreeSemester(String liberalSystem, String freeSemester) {
+        if (liberalSystem.equals("자유학기제") && freeSemester == null)
+            throw new ExpectedException("자유학기가 적용된 학기를 입력해주세요.", HttpStatus.BAD_REQUEST);
+    }
 }
