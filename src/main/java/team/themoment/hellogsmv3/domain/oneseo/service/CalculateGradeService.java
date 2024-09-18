@@ -1,7 +1,6 @@
 package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
@@ -16,7 +15,6 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -37,8 +35,8 @@ public class CalculateGradeService {
 
     public CalculatedScoreResDto execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
 
-        validationGraduationType(graduationType);
-        validationFreeSemester(dto.liberalSystem(), dto.freeSemester());
+        validGraduationType(graduationType);
+        validFreeSemester(dto.liberalSystem(), dto.freeSemester());
 
         String liberalSystem = dto.liberalSystem();
         // freeSemester가 NULL이라면 "" 공백으로 변경, "" 공백이라면 "1-1"로 변경
@@ -142,8 +140,6 @@ public class CalculateGradeService {
 
     private BigDecimal calcGeneralSubjectsScore(MiddleSchoolAchievementReqDto dto, GraduationType graduationType, String liberalSystem, String freeSemester) {
 
-        validSemester(freeSemester);
-
         switch (graduationType) {
             case CANDIDATE -> {
                 score1_2 = calcGeneralSubjectsScore(
@@ -197,12 +193,6 @@ public class CalculateGradeService {
                         score3_2)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(3, RoundingMode.HALF_UP);
-    }
-
-    private void validSemester(String freeSemester) {
-        List<String> validSemesterList = List.of("", "1-1", "1-2", "2-1", "2-2", "3-1", "3-2");
-        if (validSemesterList.stream().noneMatch(s -> s.equals(freeSemester)))
-            throw new ExpectedException(String.format("%s(은)는 유효한 학기가 아닙니다.", freeSemester), HttpStatus.BAD_REQUEST);
     }
 
     private BigDecimal calcGeneralSubjectsScore(List<Integer> achievements, BigDecimal maxPoint) {
@@ -304,13 +294,20 @@ public class CalculateGradeService {
         });
     }
 
-    private void validationGraduationType(GraduationType graduationType) {
+    private void validGraduationType(GraduationType graduationType) {
         if (!graduationType.equals(CANDIDATE) && !graduationType.equals(GRADUATE))
             throw new IllegalArgumentException("올바르지 않은 graduationType입니다.");
     }
 
-    private void validationFreeSemester(String liberalSystem, String freeSemester) {
+    private void validFreeSemester(String liberalSystem, String freeSemester) {
+        List<String> validSemesterList = List.of("", "1-1", "1-2", "2-1", "2-2", "3-1", "3-2");
+
+        // 자유학기제 && 자유학기제가 적용된 학기를 입력하지 않았다면 예외 발생
         if (liberalSystem.equals("자유학기제") && freeSemester == null)
             throw new ExpectedException("자유학기가 적용된 학기를 입력해주세요.", HttpStatus.BAD_REQUEST);
+
+        // 자유학기제 && 올바른 학기를 입력하지 않았다면 예외 발생
+        if (liberalSystem.equals("자유학기제") && validSemesterList.stream().noneMatch(s -> s.equals(freeSemester)))
+            throw new ExpectedException(String.format("%s(은)는 유효한 학기가 아닙니다.", freeSemester), HttpStatus.BAD_REQUEST);
     }
 }
