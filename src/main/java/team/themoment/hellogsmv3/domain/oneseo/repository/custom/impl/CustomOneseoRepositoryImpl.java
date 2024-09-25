@@ -7,15 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
-import team.themoment.hellogsmv3.domain.oneseo.entity.QOneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import team.themoment.hellogsmv3.domain.application.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.TestResultTag;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.AdmissionTicketsResDto;
-import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.ScreeningCategory;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.custom.CustomOneseoRepository;
 
@@ -24,7 +21,6 @@ import static team.themoment.hellogsmv3.domain.member.entity.QMember.member;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QEntranceTestResult.entranceTestResult;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseo.oneseo;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseoPrivacyDetail.oneseoPrivacyDetail;
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 import java.util.List;
 
