@@ -114,85 +114,12 @@ public class SecurityConfig {
 
     private void authorizeHttpRequests(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(httpRequests -> httpRequests
-                .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // for CORS
+
+                // for CORS
+                .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
+
+                // auth
                 .requestMatchers("/auth/v3/**").permitAll()
-                // authentication
-                .requestMatchers(HttpMethod.GET, "/authentication/v3/authentication/me").hasAnyAuthority(
-                        Role.UNAUTHENTICATED.name(),
-                        Role.APPLICANT.name(),
-                        Role.ADMIN.name(),
-                        Role.ROOT.name()
-                )
-                .requestMatchers("/authentication/v3/authentication/*").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
-                // applicant
-                .requestMatchers(HttpMethod.POST, "/applicant/v3/applicant/me").hasAnyAuthority(
-                        Role.UNAUTHENTICATED.name(),
-                        Role.APPLICANT.name(),
-                        Role.ADMIN.name(),
-                        Role.ROOT.name()
-                )
-                .requestMatchers(HttpMethod.PUT, "/applicant/v3/applicant/me").hasAnyAuthority(
-                        Role.APPLICANT.name(),
-                        Role.ADMIN.name(),
-                        Role.ROOT.name()
-                )
-                .requestMatchers(HttpMethod.GET, "/applicant/v3/applicant/me").hasAnyAuthority(
-                        Role.APPLICANT.name(),
-                        Role.ADMIN.name(),
-                        Role.ROOT.name()
-                )
-                .requestMatchers(HttpMethod.POST,
-                        "/applicant/v3/applicant/me/send-code",
-                        "/applicant/v3/applicant/me/auth-code").hasAnyAuthority(
-                        Role.UNAUTHENTICATED.name(),
-                        Role.APPLICANT.name(),
-                        Role.ADMIN.name(),
-                        Role.ROOT.name()
-                )
-                .requestMatchers(HttpMethod.GET, "/applicant/v3/applicant/{authenticationId}").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
-                .requestMatchers(HttpMethod.POST, "/applicant/v3/applicant/me/send-code-test").hasAnyAuthority(
-                        Role.ROOT.name()
-                )
-                // application
-                .requestMatchers("/application/v3/application/me").hasAnyAuthority(
-                        Role.APPLICANT.name()
-                )
-                .requestMatchers(HttpMethod.GET, "/application/v3/application/search").hasAnyAuthority(
-                        Role.UNAUTHENTICATED.name(),
-                        Role.APPLICANT.name(),
-                        Role.ADMIN.name()
-                )
-                .requestMatchers(HttpMethod.GET, "/application/v3/application/all").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
-                .requestMatchers(HttpMethod.PUT, "/application/v1/final-submit").hasAnyAuthority(
-                        Role.APPLICANT.name()
-                )
-                .requestMatchers(HttpMethod.GET, "application/v3/admission-tickets").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
-                .requestMatchers(HttpMethod.DELETE, "application/v3/application").hasAnyAuthority(
-                        Role.APPLICANT.name()
-                )
-                .requestMatchers(HttpMethod.POST, "application/v3/image").hasAnyAuthority(
-                        Role.APPLICANT.name(),
-                        Role.ADMIN.name(),
-                        Role.ROOT.name()
-                )
-                .requestMatchers(HttpMethod.GET, "/application/v3/application/{applicantId}").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
-                .requestMatchers(HttpMethod.PUT, "/application/v3/application/{applicantId}").hasAnyAuthority(
-                        Role.ADMIN.name(),
-                        Role.ROOT.name()
-                )
-                .requestMatchers(HttpMethod.PUT, "application/v3/status/{applicantId}").hasAnyAuthority(
-                        Role.ADMIN.name()
-                )
 
                 // member
                 .requestMatchers(HttpMethod.GET, "/member/v3/member/me").hasAnyAuthority(
