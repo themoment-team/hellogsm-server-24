@@ -21,6 +21,7 @@ import static team.themoment.hellogsmv3.domain.member.entity.QMember.member;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QEntranceTestResult.entranceTestResult;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseo.oneseo;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseoPrivacyDetail.oneseoPrivacyDetail;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 .from(oneseo)
                 .join(oneseo.member, member)
                 .join(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
+                .join(oneseo.entranceTestResult, entranceTestResult)
+                .where(entranceTestResult.firstTestPassYn.eq(YES))
                 .fetch();
     }
 
@@ -178,11 +181,11 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
         switch (isSubmitted) {
             case YES ->
                     builder.and(
-                            oneseo.realOneseoArrivedYn.eq(YesNo.YES)
+                            oneseo.realOneseoArrivedYn.eq(YES)
                     );
             case NO ->
                     builder.and(
-                            oneseo.realOneseoArrivedYn.eq(YesNo.NO)
+                            oneseo.realOneseoArrivedYn.eq(NO)
                     );
         }
     }
@@ -195,16 +198,16 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
         switch (testResultTag) {
             case FIRST_PASS ->
                     builder.and(
-                            entranceTestResult.firstTestPassYn.eq(YesNo.YES)
+                            entranceTestResult.firstTestPassYn.eq(YES)
                     );
             case FINAL_PASS ->
                     builder.and(
-                            entranceTestResult.secondTestPassYn.eq(YesNo.YES)
+                            entranceTestResult.secondTestPassYn.eq(YES)
                     );
             case FALL ->
                     builder.andAnyOf(
-                            entranceTestResult.firstTestPassYn.eq(YesNo.NO),
-                            entranceTestResult.secondTestPassYn.eq(YesNo.NO)
+                            entranceTestResult.firstTestPassYn.eq(NO),
+                            entranceTestResult.secondTestPassYn.eq(NO)
                     );
         }
     }
