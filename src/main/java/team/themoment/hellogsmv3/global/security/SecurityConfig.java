@@ -162,6 +162,10 @@ public class SecurityConfig {
                         Role.APPLICANT.name(),
                         Role.ROOT.name()
                 )
+                .requestMatchers(HttpMethod.GET, "/member/v3/check-duplicate").hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
+                        Role.ROOT.name()
+                )
 
                 // oneseo
                 .requestMatchers("/oneseo/v3/oneseo/me").hasAnyAuthority(

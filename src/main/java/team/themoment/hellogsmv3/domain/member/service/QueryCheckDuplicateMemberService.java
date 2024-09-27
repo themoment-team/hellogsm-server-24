@@ -10,7 +10,7 @@ import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @Service
 @RequiredArgsConstructor
-public class QueryDuplicatePhoneNumberService {
+public class QueryCheckDuplicateMemberService {
 
     private final MemberRepository memberRepository;
 
