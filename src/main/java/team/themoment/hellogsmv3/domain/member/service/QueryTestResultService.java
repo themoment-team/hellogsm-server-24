@@ -23,7 +23,8 @@ public class QueryTestResultService {
 
         return new FoundMemberTestResDto(
                 entranceTestResult.getFirstTestPassYn(),
-                entranceTestResult.getSecondTestPassYn()
+                entranceTestResult.getSecondTestPassYn(),
+                oneseo.getDecidedMajor()
         );
     }
 }
