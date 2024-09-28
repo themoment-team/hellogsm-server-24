@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import team.themoment.hellogsmv3.domain.member.dto.request.CheckDuplicatePhoneNumberReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.request.CreateMemberReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundDuplicateMemberResDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberTestResDto;
@@ -123,8 +122,8 @@ public class MemberController {
     @Operation(summary = "중복 회원가입 여부 확인", description = "중복 회원가입을 막기 위해 가입된 지원자의 전화번호인지 확인합니다.")
     @GetMapping("/check-duplicate")
     public FoundDuplicateMemberResDto duplicateCheck(
-            @AuthRequest CheckDuplicatePhoneNumberReqDto reqDto
+            @RequestParam String phoneNumber
     ) {
-        return queryCheckDuplicateMemberService.execute(reqDto);
+        return queryCheckDuplicateMemberService.execute(phoneNumber);
     }
 }

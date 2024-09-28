@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.repository.custom;
 
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,4 +25,6 @@ public interface CustomOneseoRepository {
     );
 
     List<AdmissionTicketsResDto> findAdmissionTickets();
+
+    void deleteDuplicateOneseoCascade(Oneseo oneseo);
 }

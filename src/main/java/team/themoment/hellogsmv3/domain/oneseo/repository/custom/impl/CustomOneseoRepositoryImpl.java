@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,9 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.custom.CustomOneseoRep
 import static com.querydsl.core.types.ExpressionUtils.anyOf;
 import static team.themoment.hellogsmv3.domain.member.entity.QMember.member;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QEntranceTestResult.entranceTestResult;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.QEntranceTestFactorsDetail.entranceTestFactorsDetail;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.QMiddleSchoolAchievement.middleSchoolAchievement;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.QWantedScreeningChangeHistory.wantedScreeningChangeHistory;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseo.oneseo;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseoPrivacyDetail.oneseoPrivacyDetail;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
@@ -50,6 +54,28 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 .join(oneseo.entranceTestResult, entranceTestResult)
                 .where(entranceTestResult.firstTestPassYn.eq(YES))
                 .fetch();
+    }
+
+    @Override
+    public void deleteDuplicateOneseoCascade(Oneseo duplicateOneseo) {
+        queryFactory.delete(entranceTestResult)
+                .where(entranceTestResult.oneseo.eq(duplicateOneseo))
+                .execute();
+        queryFactory.delete(entranceTestFactorsDetail)
+                .where(entranceTestFactorsDetail.eq(duplicateOneseo.getEntranceTestResult().getEntranceTestFactorsDetail()))
+                .execute();
+        queryFactory.delete(middleSchoolAchievement)
+                .where(middleSchoolAchievement.oneseo.eq(duplicateOneseo))
+                .execute();
+        queryFactory.delete(oneseoPrivacyDetail)
+                .where(oneseoPrivacyDetail.oneseo.eq(duplicateOneseo))
+                .execute();
+        queryFactory.delete(wantedScreeningChangeHistory)
+                .where(wantedScreeningChangeHistory.oneseo.eq(duplicateOneseo))
+                .execute();
+        queryFactory.delete(oneseo)
+                .where(oneseo.eq(duplicateOneseo))
+                .execute();
     }
 
     @Override
