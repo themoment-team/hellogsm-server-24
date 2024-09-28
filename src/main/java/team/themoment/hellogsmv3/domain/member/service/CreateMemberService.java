@@ -60,7 +60,7 @@ public class CreateMemberService {
     }
 
     private void deleteCascadeOneseo(Member duplicateMember) {
-        oneseoRepository.findByMember(duplicateMember).ifPresent(oneseoRepository::deleteDuplicateOneseoCascade);
+        oneseoRepository.findByMember(duplicateMember).ifPresent(oneseoRepository::delete);
     }
 
     private void deleteMember(Member duplicateMember) {

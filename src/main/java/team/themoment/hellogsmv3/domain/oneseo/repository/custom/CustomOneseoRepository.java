@@ -25,6 +25,4 @@ public interface CustomOneseoRepository {
     );
 
     List<AdmissionTicketsResDto> findAdmissionTickets();
-
-    void deleteDuplicateOneseoCascade(Oneseo oneseo);
 }
