@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.member.dto.request.CreateMemberReqDto;
+import team.themoment.hellogsmv3.domain.member.dto.response.FoundDuplicateMemberResDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberTestResDto;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.service.*;
@@ -34,6 +35,7 @@ public class MemberController {
     private final CreateMemberService createMemberService;
     private final QueryMemberAuthInfoByIdService queryMemberAuthInfoByIdService;
     private final QueryTestResultService queryTestResultService;
+    private final QueryCheckDuplicateMemberService queryCheckDuplicateMemberService;
 
     @Operation(summary = "인증코드 전송", description = "전화번호를 요청받아 인증코드를 전송합니다.")
     @PostMapping("/member/me/send-code")
@@ -115,5 +117,13 @@ public class MemberController {
             @AuthRequest Long memberId
     ) {
         return queryTestResultService.execute(memberId);
+    }
+
+    @Operation(summary = "중복 회원가입 여부 확인", description = "중복 회원가입을 막기 위해 가입된 지원자의 전화번호인지 확인합니다.")
+    @GetMapping("/check-duplicate")
+    public FoundDuplicateMemberResDto duplicateCheck(
+            @RequestParam String phoneNumber
+    ) {
+        return queryCheckDuplicateMemberService.execute(phoneNumber);
     }
 }

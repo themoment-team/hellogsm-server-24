@@ -10,6 +10,9 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.Major;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @Getter
@@ -33,11 +36,17 @@ public class Oneseo {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "oneseo")
+    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
     private EntranceTestResult entranceTestResult;
 
-    @OneToOne(mappedBy = "oneseo")
+    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
     private OneseoPrivacyDetail oneseoPrivacyDetail;
+
+    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private MiddleSchoolAchievement middleSchoolAchievement;
+
+    @OneToMany(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WantedScreeningChangeHistory> wantedScreeningChangeHistory = new ArrayList<>();
 
     @Column(name = "oneseo_submit_code")
     private String oneseoSubmitCode;
