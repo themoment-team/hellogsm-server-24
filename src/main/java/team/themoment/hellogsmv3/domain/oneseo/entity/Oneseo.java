@@ -42,6 +42,10 @@ public class Oneseo {
     @Column(name = "oneseo_submit_code")
     private String oneseoSubmitCode;
 
+    @Column(name = "pass_yn")
+    @Enumerated(EnumType.STRING)
+    private YesNo passYn;
+
     @NotNull
     @Embedded
     protected DesiredMajors desiredMajors;
