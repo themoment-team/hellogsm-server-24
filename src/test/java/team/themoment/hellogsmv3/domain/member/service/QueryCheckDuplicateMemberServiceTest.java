@@ -43,7 +43,7 @@ class QueryCheckDuplicateMemberServiceTest {
                 // when
                 FoundDuplicateMemberResDto resDto = queryCheckDuplicateMemberService.execute(phoneNumber);
                 // then
-                assertEquals(YES, resDto.DuplicateMemberYn());
+                assertEquals(YES, resDto.duplicateMemberYn());
             }
 
             @Test
@@ -54,7 +54,7 @@ class QueryCheckDuplicateMemberServiceTest {
                 // when
                 FoundDuplicateMemberResDto resDto = queryCheckDuplicateMemberService.execute(phoneNumber);
                 // then
-                assertEquals(NO, resDto.DuplicateMemberYn());
+                assertEquals(NO, resDto.duplicateMemberYn());
             }
 
         }
