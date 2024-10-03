@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.MiddleSchoolAchievementReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.dto.response.ArtsPhysicalSubjectsScoreDetailResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.CalculatedScoreResDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.GeneralSubjectsScoreDetailResDto;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
@@ -111,21 +112,33 @@ public class CalculateGradeService {
                 entranceTestResultRepository.save(findEntranceTestResult);
             }
 
+            GeneralSubjectsScoreDetailResDto generalSubjectsScoreDetailResDto = GeneralSubjectsScoreDetailResDto.builder()
+                    .score1_2(score1_2)
+                    .score2_1(score2_1)
+                    .score2_2(score2_2)
+                    .score3_1(score3_1)
+                    .score3_2(score3_2)
+                    .build();
+
+            ArtsPhysicalSubjectsScoreDetailResDto artsPhysicalSubjectsScoreDetailResDto = null;
+            if (graduationType.equals(CANDIDATE)) {
+
+                // 예체능 점수 List는 학기를 기준으로 3개 단위로 끊어서 체육,음악,미술 점수를 의미
+                artsPhysicalSubjectsScoreDetailResDto = ArtsPhysicalSubjectsScoreDetailResDto.builder()
+                        .score2_1(calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 0, 3))
+                        .score2_2(calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 3, 6))
+                        .score3_1(calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 6, 9))
+                        .build();
+            }
+
             return CalculatedScoreResDto.builder()
                     .generalSubjectsScore(generalSubjectsScore)
                     .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
                     .attendanceScore(attendanceScore)
                     .volunteerScore(volunteerScore)
                     .totalScore(totalScore)
-                    .generalSubjectsScoreDetail(
-                            GeneralSubjectsScoreDetailResDto.builder()
-                                    .score1_2(score1_2)
-                                    .score2_1(score2_1)
-                                    .score2_2(score2_2)
-                                    .score3_1(score3_1)
-                                    .score3_2(score3_2)
-                                    .build()
-                    )
+                    .generalSubjectsScoreDetail(generalSubjectsScoreDetailResDto)
+                    .artsPhysicalSubjectsScoreDetail(artsPhysicalSubjectsScoreDetailResDto)
                     .build();
         }
 
@@ -136,6 +149,25 @@ public class CalculateGradeService {
                 .volunteerScore(volunteerScore)
                 .totalScore(totalScore)
                 .build();
+    }
+
+    private BigDecimal calculateIndividualArtsPhysicalScore(List<Integer> achievementList, int start, int end) {
+        List<Integer> subList = achievementList.subList(start, end);
+
+        int sum = subList.stream()
+                .reduce(0, Integer::sum);
+
+        int achievementCount = (int) subList.stream()
+                .filter(achievement -> achievement != 0)
+                .count();
+
+        if (achievementCount == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        return BigDecimal.valueOf(sum)
+                .divide(BigDecimal.valueOf(achievementCount).multiply(BigDecimal.valueOf(5)), 3, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(20));
     }
 
     private BigDecimal calcGeneralSubjectsScore(MiddleSchoolAchievementReqDto dto, GraduationType graduationType, String liberalSystem, String freeSemester) {

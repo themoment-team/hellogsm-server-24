@@ -12,6 +12,8 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.ONESEO_CACHE_VALUE;
@@ -48,23 +50,41 @@ public class QueryOneseoByIdService {
         EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();
         EntranceTestFactorsDetail entranceTestFactorsDetail = entranceTestResult.getEntranceTestFactorsDetail();
 
+        GeneralSubjectsScoreDetailResDto generalSubjectsScoreDetailResDto = GeneralSubjectsScoreDetailResDto.builder()
+                .score1_2(entranceTestFactorsDetail.getScore1_2())
+                .score2_1(entranceTestFactorsDetail.getScore2_1())
+                .score2_2(entranceTestFactorsDetail.getScore2_2())
+                .score3_1(entranceTestFactorsDetail.getScore3_1())
+                .score3_2(entranceTestFactorsDetail.getScore3_2())
+                .build();
+
         return switch (graduationType) {
-            case CANDIDATE, GRADUATE ->
+            case CANDIDATE -> {
+                MiddleSchoolAchievement middleSchoolAchievement = oneseo.getMiddleSchoolAchievement();
+                ArtsPhysicalSubjectsScoreDetailResDto artsPhysicalSubjectsScoreDetailResDto = ArtsPhysicalSubjectsScoreDetailResDto.builder()
+                        .score2_1(calculateIndividualArtsPhysicalScore(middleSchoolAchievement.getArtsPhysicalAchievement(), 0, 3))
+                        .score2_2(calculateIndividualArtsPhysicalScore(middleSchoolAchievement.getArtsPhysicalAchievement(), 3, 6))
+                        .score3_1(calculateIndividualArtsPhysicalScore(middleSchoolAchievement.getArtsPhysicalAchievement(), 6, 9))
+                        .build();
+
+                yield CalculatedScoreResDto.builder()
+                        .generalSubjectsScore(entranceTestFactorsDetail.getGeneralSubjectsScore())
+                        .artsPhysicalSubjectsScore(entranceTestFactorsDetail.getArtsPhysicalSubjectsScore())
+                        .attendanceScore(entranceTestFactorsDetail.getAttendanceScore())
+                        .volunteerScore(entranceTestFactorsDetail.getVolunteerScore())
+                        .totalScore(entranceTestResult.getDocumentEvaluationScore())
+                        .generalSubjectsScoreDetail(generalSubjectsScoreDetailResDto)
+                        .artsPhysicalSubjectsScoreDetail(artsPhysicalSubjectsScoreDetailResDto)
+                        .build();
+            }
+            case GRADUATE ->
                 CalculatedScoreResDto.builder()
                         .generalSubjectsScore(entranceTestFactorsDetail.getGeneralSubjectsScore())
                         .artsPhysicalSubjectsScore(entranceTestFactorsDetail.getArtsPhysicalSubjectsScore())
                         .attendanceScore(entranceTestFactorsDetail.getAttendanceScore())
                         .volunteerScore(entranceTestFactorsDetail.getVolunteerScore())
                         .totalScore(entranceTestResult.getDocumentEvaluationScore())
-                        .generalSubjectsScoreDetail(
-                                GeneralSubjectsScoreDetailResDto.builder()
-                                        .score1_2(entranceTestFactorsDetail.getScore1_2())
-                                        .score2_1(entranceTestFactorsDetail.getScore2_1())
-                                        .score2_2(entranceTestFactorsDetail.getScore2_2())
-                                        .score3_1(entranceTestFactorsDetail.getScore3_1())
-                                        .score3_2(entranceTestFactorsDetail.getScore3_2())
-                                        .build()
-                        )
+                        .generalSubjectsScoreDetail(generalSubjectsScoreDetailResDto)
                         .build();
             case GED ->
                 CalculatedScoreResDto.builder()
@@ -74,6 +94,25 @@ public class QueryOneseoByIdService {
                         .totalScore(entranceTestResult.getDocumentEvaluationScore())
                         .build();
         };
+    }
+
+    private BigDecimal calculateIndividualArtsPhysicalScore(List<Integer> achievementList, int start, int end) {
+        List<Integer> subList = achievementList.subList(start, end);
+
+        int sum = subList.stream()
+                .reduce(0, Integer::sum);
+
+        int achievementCount = (int) subList.stream()
+                .filter(achievement -> achievement != 0)
+                .count();
+
+        if (achievementCount == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        return BigDecimal.valueOf(sum)
+                .divide(BigDecimal.valueOf(achievementCount).multiply(BigDecimal.valueOf(5)), 3, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(20));
     }
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(
