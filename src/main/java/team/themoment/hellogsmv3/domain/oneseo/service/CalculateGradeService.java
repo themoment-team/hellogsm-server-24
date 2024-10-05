@@ -208,15 +208,16 @@ public class CalculateGradeService {
 
         // 개별 학기별 예체능 점수 배점은 60 * (해당 학기의 성적이 있는 예체능 교과 수 / 성적이 있는 총 예체능 교과 수)으로 계산
         BigDecimal allocation = BigDecimal.valueOf(60)
-                .multiply(BigDecimal.valueOf(achievementCount)
-                        .divide(BigDecimal.valueOf(allAchievementCount), 4, RoundingMode.HALF_UP));
+                .multiply(
+                        BigDecimal.valueOf(achievementCount).divide(BigDecimal.valueOf(allAchievementCount), 10, RoundingMode.HALF_UP)
+                );
 
         if (achievementCount == 0) {
             return BigDecimal.ZERO;
         }
 
         return BigDecimal.valueOf(sum)
-                .divide(BigDecimal.valueOf(achievementCount).multiply(BigDecimal.valueOf(5)), 4, RoundingMode.HALF_UP)
+                .divide(BigDecimal.valueOf(achievementCount).multiply(BigDecimal.valueOf(5)), 10, RoundingMode.HALF_UP)
                 .multiply(allocation)
                 .setScale(4, RoundingMode.HALF_UP);
     }
@@ -280,7 +281,7 @@ public class CalculateGradeService {
 
     private BigDecimal calcGeneralSubjectsScore(List<Integer> achievements, BigDecimal maxPoint) {
         // 해당 학기의 등급별 점수 배열이 비어있거나 해당 학기의 배점이 없다면 0.000을 반환
-        if (achievements == null || achievements.isEmpty() || maxPoint.equals(BigDecimal.ZERO)) return BigDecimal.valueOf(0).setScale(3, RoundingMode.HALF_UP);
+        if (achievements == null || achievements.isEmpty() || maxPoint.equals(BigDecimal.ZERO)) return BigDecimal.valueOf(0).setScale(4, RoundingMode.HALF_UP);
 
         // Integer 리스트를 BigDecimal 리스트로 변경 & 등급 유효성 검사
         List<BigDecimal> convertedAchievements = new ArrayList<>();
@@ -292,14 +293,14 @@ public class CalculateGradeService {
         // 해당 학기에 수강하지 않은 과목이 있다면 제거한 리스트를 반환 (점수가 0인 원소 제거)
         List<BigDecimal> noZeroAchievements = convertedAchievements.stream().filter(score -> score.compareTo(BigDecimal.ZERO) != 0).toList();
         // 위에서 구한 리스트가 비어있다면 0.000을 반환
-        if (noZeroAchievements.isEmpty()) return BigDecimal.valueOf(0).setScale(3, RoundingMode.HALF_UP);
+        if (noZeroAchievements.isEmpty()) return BigDecimal.valueOf(0).setScale(4, RoundingMode.HALF_UP);
 
         // 1. 점수로 환산된 등급을 모두 더한다.
         BigDecimal reduceResult = convertedAchievements.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         // 2. 더한값 / (과목 수 * 5) (소수점 6째자리에서 반올림)
-        BigDecimal divideResult = reduceResult.divide(BigDecimal.valueOf(noZeroAchievements.size() * 5L), 5, RoundingMode.HALF_UP);
+        BigDecimal divideResult = reduceResult.divide(BigDecimal.valueOf(noZeroAchievements.size() * 5L), 6, RoundingMode.HALF_UP);
         // 3. 각 학기당 배점 * 나눈값 (소수점 4째자리에서 반올림)
-        return divideResult.multiply(maxPoint).setScale(3, RoundingMode.HALF_UP);
+        return divideResult.multiply(maxPoint).setScale(4, RoundingMode.HALF_UP);
     }
 
     private BigDecimal calcArtSportsScore(List<Integer> achievements) {
@@ -316,7 +317,7 @@ public class CalculateGradeService {
 
         // 과목 수가 0일시 0점 반환
         if (achievementCount == 0) {
-            return BigDecimal.ZERO.setScale(3, RoundingMode.HALF_UP);
+            return BigDecimal.ZERO.setScale(4, RoundingMode.HALF_UP);
         }
 
         BigDecimal averageOfAchievementScale = BigDecimal.valueOf(totalScores).divide(BigDecimal.valueOf(maxScore), 4, RoundingMode.HALF_UP);
