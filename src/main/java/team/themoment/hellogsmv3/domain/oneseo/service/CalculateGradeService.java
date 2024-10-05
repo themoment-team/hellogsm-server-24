@@ -156,14 +156,14 @@ public class CalculateGradeService {
                 .build();
     }
 
-    private String getFreeSemesterKey(String liberalSystem, String freeSemester) {
+    public static String getFreeSemesterKey(String liberalSystem, String freeSemester) {
         if (liberalSystem.equals("자유학년제") || freeSemester.equals("1-1") || freeSemester.equals("1-2")) {
             return "free";
         }
         return freeSemester;
     }
 
-    private BigDecimal assignIndividualArtsPhysicalScore(
+    public static BigDecimal assignIndividualArtsPhysicalScore(
             String freeSemesterKey, String currentSemester,
             BigDecimal score_1, BigDecimal score_2, BigDecimal score_3
     ) {
@@ -192,7 +192,7 @@ public class CalculateGradeService {
         return null;
     }
 
-    private BigDecimal calculateIndividualArtsPhysicalScore(List<Integer> achievementList, int start, int end) {
+    public static BigDecimal calculateIndividualArtsPhysicalScore(List<Integer> achievementList, int start, int end) {
         List<Integer> subList = achievementList.subList(start, end);
 
         int sum = subList.stream()
