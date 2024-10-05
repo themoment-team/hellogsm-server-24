@@ -13,10 +13,8 @@ import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievemen
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
 import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.ONESEO_CACHE_VALUE;
 
 @Service
