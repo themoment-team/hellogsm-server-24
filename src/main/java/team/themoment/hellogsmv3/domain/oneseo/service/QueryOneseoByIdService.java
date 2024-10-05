@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
 import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.ONESEO_CACHE_VALUE;
 
 @Service
@@ -61,10 +62,17 @@ public class QueryOneseoByIdService {
         return switch (graduationType) {
             case CANDIDATE -> {
                 MiddleSchoolAchievement middleSchoolAchievement = oneseo.getMiddleSchoolAchievement();
+                BigDecimal score_1 = calculateIndividualArtsPhysicalScore(middleSchoolAchievement.getArtsPhysicalAchievement(), 0, 3);
+                BigDecimal score_2 = calculateIndividualArtsPhysicalScore(middleSchoolAchievement.getArtsPhysicalAchievement(), 3, 6);
+                BigDecimal score_3 = calculateIndividualArtsPhysicalScore(middleSchoolAchievement.getArtsPhysicalAchievement(), 6, 9);
+
+                String freeSemesterKey = getFreeSemesterKey(middleSchoolAchievement.getLiberalSystem(), middleSchoolAchievement.getFreeSemester());
+
                 ArtsPhysicalSubjectsScoreDetailResDto artsPhysicalSubjectsScoreDetailResDto = ArtsPhysicalSubjectsScoreDetailResDto.builder()
-                        .score2_1(calculateIndividualArtsPhysicalScore(middleSchoolAchievement.getArtsPhysicalAchievement(), 0, 3))
-                        .score2_2(calculateIndividualArtsPhysicalScore(middleSchoolAchievement.getArtsPhysicalAchievement(), 3, 6))
-                        .score3_1(calculateIndividualArtsPhysicalScore(middleSchoolAchievement.getArtsPhysicalAchievement(), 6, 9))
+                        .score1_2(assignIndividualArtsPhysicalScore(freeSemesterKey, "1-2", score_1, score_2, score_3))
+                        .score2_1(assignIndividualArtsPhysicalScore(freeSemesterKey, "2-1", score_1, score_2, score_3))
+                        .score2_2(assignIndividualArtsPhysicalScore(freeSemesterKey, "2-2", score_1, score_2, score_3))
+                        .score3_1(assignIndividualArtsPhysicalScore(freeSemesterKey, "3-1", score_1, score_2, score_3))
                         .build();
 
                 yield CalculatedScoreResDto.builder()
@@ -96,6 +104,42 @@ public class QueryOneseoByIdService {
         };
     }
 
+    private String getFreeSemesterKey(String liberalSystem, String freeSemester) {
+        if (liberalSystem.equals("자유학년제") || freeSemester.equals("1-1") || freeSemester.equals("1-2")) {
+            return "free";
+        }
+        return freeSemester;
+    }
+
+    private BigDecimal assignIndividualArtsPhysicalScore(
+            String freeSemesterKey, String currentSemester,
+            BigDecimal score_1, BigDecimal score_2, BigDecimal score_3
+    ) {
+        switch (freeSemesterKey) {
+            case "free", "1-1", "1-2" -> {
+                if (currentSemester.equals("2-1")) return score_1;
+                if (currentSemester.equals("2-2")) return score_2;
+                if (currentSemester.equals("3-1")) return score_3;
+            }
+            case "2-1" -> {
+                if (currentSemester.equals("1-2")) return score_1;
+                if (currentSemester.equals("2-2")) return score_2;
+                if (currentSemester.equals("3-1")) return score_3;
+            }
+            case "2-2" -> {
+                if (currentSemester.equals("1-2")) return score_1;
+                if (currentSemester.equals("2-1")) return score_2;
+                if (currentSemester.equals("3-1")) return score_3;
+            }
+            case "3-1" -> {
+                if (currentSemester.equals("1-2")) return score_1;
+                if (currentSemester.equals("2-1")) return score_2;
+                if (currentSemester.equals("2-2")) return score_3;
+            }
+        }
+        return null;
+    }
+
     private BigDecimal calculateIndividualArtsPhysicalScore(List<Integer> achievementList, int start, int end) {
         List<Integer> subList = achievementList.subList(start, end);
 
@@ -106,13 +150,23 @@ public class QueryOneseoByIdService {
                 .filter(achievement -> achievement != 0)
                 .count();
 
+        int allAchievementCount = (int) achievementList.stream()
+                .filter(achievement -> achievement != 0)
+                .count();
+
+        // 개별 학기별 예체능 점수 배점은 60 * (해당 학기의 성적이 있는 예체능 교과 수 / 성적이 있는 총 예체능 교과 수)으로 계산
+        BigDecimal allocation = BigDecimal.valueOf(60)
+                .multiply(BigDecimal.valueOf(achievementCount)
+                        .divide(BigDecimal.valueOf(allAchievementCount), 4, RoundingMode.HALF_UP));
+
         if (achievementCount == 0) {
             return BigDecimal.ZERO;
         }
 
         return BigDecimal.valueOf(sum)
-                .divide(BigDecimal.valueOf(achievementCount).multiply(BigDecimal.valueOf(5)), 3, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(20));
+                .divide(BigDecimal.valueOf(achievementCount).multiply(BigDecimal.valueOf(5)), 4, RoundingMode.HALF_UP)
+                .multiply(allocation)
+                .setScale(4, RoundingMode.HALF_UP);
     }
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(
