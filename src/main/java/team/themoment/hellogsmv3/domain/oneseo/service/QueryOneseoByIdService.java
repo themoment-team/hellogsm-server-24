@@ -167,7 +167,7 @@ public class QueryOneseoByIdService {
         return BigDecimal.valueOf(sum)
                 .divide(BigDecimal.valueOf(achievementCount).multiply(BigDecimal.valueOf(5)), 10, RoundingMode.HALF_UP)
                 .multiply(allocation)
-                .setScale(4, RoundingMode.HALF_UP);
+                .setScale(3, RoundingMode.HALF_UP);
     }
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(
