@@ -36,16 +36,16 @@ public class Oneseo {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL)
     private EntranceTestResult entranceTestResult;
 
-    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL)
     private OneseoPrivacyDetail oneseoPrivacyDetail;
 
-    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL)
     private MiddleSchoolAchievement middleSchoolAchievement;
 
-    @OneToMany(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "oneseo", cascade = CascadeType.ALL)
     private List<WantedScreeningChangeHistory> wantedScreeningChangeHistory = new ArrayList<>();
 
     @Column(name = "oneseo_submit_code")
