@@ -188,6 +188,13 @@ public class ModifyOneseoService {
                         .build())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .wantedScreening(reqDto.screening())
+                .entranceTestResult(oneseo.getEntranceTestResult())
+                .oneseoPrivacyDetail(oneseo.getOneseoPrivacyDetail())
+                .middleSchoolAchievement(oneseo.getMiddleSchoolAchievement())
+                .wantedScreeningChangeHistory(oneseo.getWantedScreeningChangeHistory())
+                .passYn(oneseo.getPassYn())
+                .decidedMajor(oneseo.getDecidedMajor())
+                .entranceIntentionYn(oneseo.getEntranceIntentionYn())
                 .build();
     }
 
