@@ -120,6 +120,8 @@ public class CalculateGradeService {
                     .score3_2(score3_2)
                     .build();
 
+            validateArtPhysicalAchievement(graduationType, dto.artsPhysicalAchievement());
+
             BigDecimal score_1 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 0, 3);
             BigDecimal score_2 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 3, 6);
             BigDecimal score_3 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 6, 9);
@@ -156,6 +158,14 @@ public class CalculateGradeService {
                 .volunteerScore(volunteerScore)
                 .totalScore(totalScore)
                 .build();
+    }
+
+    private static void validateArtPhysicalAchievement(GraduationType graduationType, List<Integer> achievementList) {
+        // 졸업예정자는 예체능 점수를 9개, 졸업자는 예체능 점수를 12개를 보내야 함
+        int size = graduationType.equals(CANDIDATE) ? 9 : 12;
+        if (achievementList.size() != size) {
+            throw new ExpectedException("achievementList의 size가 유효하지 않습니다. " + achievementList.size(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     public static String getFreeSemesterKey(String liberalSystem, String freeSemester) {
