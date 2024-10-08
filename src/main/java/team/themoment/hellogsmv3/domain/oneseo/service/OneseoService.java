@@ -56,6 +56,12 @@ public class OneseoService {
         }
     }
 
+    public static void isBeforeSecondTest(YesNo yn) {
+        if (yn != null) {
+            throw new ExpectedException("2차 전형 결과 산출 이후에는 작업을 진행할 수 없습니다.", HttpStatus.FORBIDDEN);
+        }
+    }
+
     public static void isValidMiddleSchoolInfo(OneseoReqDto reqDto) {
         if (
                 reqDto.graduationType().equals(CANDIDATE) && (
