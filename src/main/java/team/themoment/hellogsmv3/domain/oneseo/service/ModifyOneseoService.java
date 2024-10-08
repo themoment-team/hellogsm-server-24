@@ -186,6 +186,10 @@ public class ModifyOneseoService {
                         .secondDesiredMajor(reqDto.secondDesiredMajor())
                         .thirdDesiredMajor(reqDto.thirdDesiredMajor())
                         .build())
+                .wantedScreeningChangeHistory(oneseo.getWantedScreeningChangeHistory())
+                .oneseoPrivacyDetail(oneseo.getOneseoPrivacyDetail())
+                .middleSchoolAchievement(oneseo.getMiddleSchoolAchievement())
+                .entranceTestResult(oneseo.getEntranceTestResult())
                 .realOneseoArrivedYn(oneseo.getRealOneseoArrivedYn())
                 .wantedScreening(reqDto.screening())
                 .build();
