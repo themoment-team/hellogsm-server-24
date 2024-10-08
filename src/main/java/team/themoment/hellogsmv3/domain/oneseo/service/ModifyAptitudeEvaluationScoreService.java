@@ -24,7 +24,6 @@ public class ModifyAptitudeEvaluationScoreService {
 
     public void execute(Long memberId, AptitudeEvaluationScoreReqDto aptitudeEvaluationScoreReqDto) {
         Member member = memberService.findByIdOrThrow(memberId);
-
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
         EntranceTestResult entranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);

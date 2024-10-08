@@ -22,7 +22,6 @@ public class ModifyInterviewScoreService {
 
     @Transactional
     public void execute(Long memberId, InterviewScoreReqDto reqDto) {
-
         Member member = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
