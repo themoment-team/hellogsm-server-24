@@ -36,16 +36,16 @@ public class Oneseo {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
     private EntranceTestResult entranceTestResult;
 
-    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
     private OneseoPrivacyDetail oneseoPrivacyDetail;
 
-    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
     private MiddleSchoolAchievement middleSchoolAchievement;
 
-    @OneToMany(mappedBy = "oneseo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WantedScreeningChangeHistory> wantedScreeningChangeHistory = new ArrayList<>();
 
     @Column(name = "oneseo_submit_code")
@@ -78,6 +78,22 @@ public class Oneseo {
     @Enumerated(EnumType.STRING)
     @Column(name = "decided_major")
     private Major decidedMajor;
+
+    public void addWantedScreeningChangeHistory(WantedScreeningChangeHistory wantedScreeningChangeHistory) {
+        this.wantedScreeningChangeHistory.add(wantedScreeningChangeHistory);
+    }
+
+    public void modifyOneseoPrivacyDetail(OneseoPrivacyDetail oneseoPrivacyDetail) {
+        this.oneseoPrivacyDetail = oneseoPrivacyDetail;
+    }
+
+    public void modifyMiddleSchoolAchievement(MiddleSchoolAchievement middleSchoolAchievement) {
+        this.middleSchoolAchievement = middleSchoolAchievement;
+    }
+
+    public void modifyEntranceTestResult(EntranceTestResult entranceTestResult) {
+        this.entranceTestResult = entranceTestResult;
+    }
 
     public Oneseo setOneseoSubmitCode(String submitCode) {
         this.oneseoSubmitCode = submitCode;

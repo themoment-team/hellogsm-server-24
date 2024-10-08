@@ -27,7 +27,7 @@ public class EntranceTestResult {
     @JoinColumn(name = "oneseo_id")
     private Oneseo oneseo;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "entrance_test_factors_detail_id")
     private EntranceTestFactorsDetail entranceTestFactorsDetail;
 
