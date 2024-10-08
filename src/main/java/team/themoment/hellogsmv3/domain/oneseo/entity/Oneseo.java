@@ -79,6 +79,22 @@ public class Oneseo {
     @Column(name = "decided_major")
     private Major decidedMajor;
 
+    public void addWantedScreeningChangeHistory(WantedScreeningChangeHistory wantedScreeningChangeHistory) {
+        this.wantedScreeningChangeHistory.add(wantedScreeningChangeHistory);
+    }
+
+    public void modifyOneseoPrivacyDetail(OneseoPrivacyDetail oneseoPrivacyDetail) {
+        this.oneseoPrivacyDetail = oneseoPrivacyDetail;
+    }
+
+    public void modifyMiddleSchoolAchievement(MiddleSchoolAchievement middleSchoolAchievement) {
+        this.middleSchoolAchievement = middleSchoolAchievement;
+    }
+
+    public void modifyEntranceTestResult(EntranceTestResult entranceTestResult) {
+        this.entranceTestResult = entranceTestResult;
+    }
+
     public Oneseo setOneseoSubmitCode(String submitCode) {
         this.oneseoSubmitCode = submitCode;
 

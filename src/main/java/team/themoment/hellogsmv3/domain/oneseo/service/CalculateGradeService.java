@@ -108,6 +108,7 @@ public class CalculateGradeService {
 
                 findEntranceTestResult.modifyDocumentEvaluationScore(totalScore);
 
+                oneseo.modifyEntranceTestResult(findEntranceTestResult);
                 entranceTestFactorsDetailRepository.save(findEntranceTestFactorsDetail);
                 entranceTestResultRepository.save(findEntranceTestResult);
             }
