@@ -108,6 +108,7 @@ public class CalculateGradeService {
 
                 findEntranceTestResult.modifyDocumentEvaluationScore(totalScore);
 
+                oneseo.modifyEntranceTestResult(findEntranceTestResult);
                 entranceTestFactorsDetailRepository.save(findEntranceTestFactorsDetail);
                 entranceTestResultRepository.save(findEntranceTestResult);
             }
@@ -120,21 +121,25 @@ public class CalculateGradeService {
                     .score3_2(score3_2)
                     .build();
 
-            ArtsPhysicalSubjectsScoreDetailResDto artsPhysicalSubjectsScoreDetailResDto = null;
-            if (graduationType.equals(CANDIDATE)) {
-                BigDecimal score_1 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 0, 3);
-                BigDecimal score_2 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 3, 6);
-                BigDecimal score_3 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 6, 9);
+            validateArtPhysicalAchievement(graduationType, dto.artsPhysicalAchievement());
 
-                String freeSemesterKey = getFreeSemesterKey(liberalSystem, freeSemester);
+            BigDecimal score_1 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 0, 3);
+            BigDecimal score_2 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 3, 6);
+            BigDecimal score_3 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 6, 9);
+            BigDecimal score_4 = BigDecimal.ZERO;
 
-                artsPhysicalSubjectsScoreDetailResDto = ArtsPhysicalSubjectsScoreDetailResDto.builder()
-                        .score1_2(assignIndividualArtsPhysicalScore(freeSemesterKey, "1-2", score_1, score_2, score_3))
-                        .score2_1(assignIndividualArtsPhysicalScore(freeSemesterKey, "2-1", score_1, score_2, score_3))
-                        .score2_2(assignIndividualArtsPhysicalScore(freeSemesterKey, "2-2", score_1, score_2, score_3))
-                        .score3_1(assignIndividualArtsPhysicalScore(freeSemesterKey, "3-1", score_1, score_2, score_3))
-                        .build();
-            }
+            if (graduationType.equals(GRADUATE))
+                score_4 = calculateIndividualArtsPhysicalScore(dto.artsPhysicalAchievement(), 9, 12);
+
+            String freeSemesterKey = getFreeSemesterKey(liberalSystem, freeSemester);
+
+            ArtsPhysicalSubjectsScoreDetailResDto artsPhysicalSubjectsScoreDetailResDto = ArtsPhysicalSubjectsScoreDetailResDto.builder()
+                    .score1_2(assignIndividualArtsPhysicalScore(freeSemesterKey, "1-2", graduationType, score_1, score_2, score_3, score_4))
+                    .score2_1(assignIndividualArtsPhysicalScore(freeSemesterKey, "2-1", graduationType, score_1, score_2, score_3, score_4))
+                    .score2_2(assignIndividualArtsPhysicalScore(freeSemesterKey, "2-2", graduationType, score_1, score_2, score_3, score_4))
+                    .score3_1(assignIndividualArtsPhysicalScore(freeSemesterKey, "3-1", graduationType, score_1, score_2, score_3, score_4))
+                    .score3_2(assignIndividualArtsPhysicalScore(freeSemesterKey, "3-2", graduationType, score_1, score_2, score_3, score_4))
+                    .build();
 
             return CalculatedScoreResDto.builder()
                     .generalSubjectsScore(generalSubjectsScore)
@@ -156,6 +161,14 @@ public class CalculateGradeService {
                 .build();
     }
 
+    private static void validateArtPhysicalAchievement(GraduationType graduationType, List<Integer> achievementList) {
+        // 졸업예정자는 예체능 점수를 9개, 졸업자는 예체능 점수를 12개를 보내야 함
+        int size = graduationType.equals(CANDIDATE) ? 9 : 12;
+        if (achievementList.size() != size) {
+            throw new ExpectedException("achievementList의 size가 유효하지 않습니다. " + achievementList.size(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     public static String getFreeSemesterKey(String liberalSystem, String freeSemester) {
         if (liberalSystem.equals("자유학년제") || freeSemester.equals("1-1") || freeSemester.equals("1-2")) {
             return "free";
@@ -164,29 +177,39 @@ public class CalculateGradeService {
     }
 
     public static BigDecimal assignIndividualArtsPhysicalScore(
-            String freeSemesterKey, String currentSemester,
-            BigDecimal score_1, BigDecimal score_2, BigDecimal score_3
+            String freeSemesterKey, String currentSemester, GraduationType graduationType,
+            BigDecimal score_1, BigDecimal score_2, BigDecimal score_3, BigDecimal score_4
     ) {
         switch (freeSemesterKey) {
             case "free", "1-1", "1-2" -> {
                 if (currentSemester.equals("2-1")) return score_1;
                 if (currentSemester.equals("2-2")) return score_2;
                 if (currentSemester.equals("3-1")) return score_3;
+                if (currentSemester.equals("3-2") && graduationType.equals(GRADUATE)) return score_4;
             }
             case "2-1" -> {
                 if (currentSemester.equals("1-2")) return score_1;
                 if (currentSemester.equals("2-2")) return score_2;
                 if (currentSemester.equals("3-1")) return score_3;
+                if (currentSemester.equals("3-2") && graduationType.equals(GRADUATE)) return score_4;
             }
             case "2-2" -> {
                 if (currentSemester.equals("1-2")) return score_1;
                 if (currentSemester.equals("2-1")) return score_2;
                 if (currentSemester.equals("3-1")) return score_3;
+                if (currentSemester.equals("3-2") && graduationType.equals(GRADUATE)) return score_4;
             }
             case "3-1" -> {
                 if (currentSemester.equals("1-2")) return score_1;
                 if (currentSemester.equals("2-1")) return score_2;
                 if (currentSemester.equals("2-2")) return score_3;
+                if (currentSemester.equals("3-2") && graduationType.equals(GRADUATE)) return score_4;
+            }
+            case "3-2" -> {
+                if (currentSemester.equals("1-2")) return score_1;
+                if (currentSemester.equals("2-1")) return score_2;
+                if (currentSemester.equals("2-2")) return score_3;
+                if (currentSemester.equals("3-1") && graduationType.equals(GRADUATE)) return score_4;
             }
         }
         return null;

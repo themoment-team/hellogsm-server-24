@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RedisHash(timeToLive = 3600L)
+@RedisHash(timeToLive = 180L)
 public class AuthenticationCode {
     @Id
     @Indexed
