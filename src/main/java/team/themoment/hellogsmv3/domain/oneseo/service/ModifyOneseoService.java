@@ -47,7 +47,8 @@ public class ModifyOneseoService {
         Member currentMember = memberService.findByIdOrThrow(memberId);
         Oneseo currentOneseo = oneseoService.findByMemberOrThrow(currentMember);
 
-        isBeforeFirstTest(currentOneseo);
+        EntranceTestResult entranceTestResult = currentOneseo.getEntranceTestResult();
+        OneseoService.isBeforeFirstTest(entranceTestResult.getFirstTestPassYn());
 
         OneseoPrivacyDetail oneseoPrivacyDetail = oneseoPrivacyDetailRepository.findByOneseo(currentOneseo);
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(currentOneseo);
@@ -71,13 +72,6 @@ public class ModifyOneseoService {
                 middleSchoolAchievementResDto,
                 calculatedScoreResDto
         );
-    }
-
-    private void isBeforeFirstTest(Oneseo oneseo) {
-        EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();
-        if (entranceTestResult.getFirstTestPassYn() != null) {
-            throw new ExpectedException("1차 전형 결과 산출 이후에는 원서를 수정할 수 없습니다.", HttpStatus.FORBIDDEN);
-        }
     }
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(

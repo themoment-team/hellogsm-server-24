@@ -5,11 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.OneseoReqDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.ScreeningCategory;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType.CANDIDATE;
@@ -46,6 +49,26 @@ public class OneseoService {
         int totalAttendanceDays = attendanceDays.stream().mapToInt(Integer::intValue).sum();
 
         return totalAbsentDays + (totalAttendanceDays / 3);
+    }
+
+    public static void isBeforeFirstTest(YesNo yn) {
+        if (yn != null) {
+            throw new ExpectedException("1차 전형 결과 산출 이후에는 작업을 진행할 수 없습니다.", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public static void isBeforeSecondTest(YesNo yn) {
+        if (yn != null) {
+            throw new ExpectedException("2차 전형 결과 산출 이후에는 작업을 진행할 수 없습니다.", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public static void validateEvaluationScore(BigDecimal aptitudeEvaluationScore) {
+        BigDecimal minValue = BigDecimal.ZERO;
+        BigDecimal maxValue = new BigDecimal(100);
+        if (aptitudeEvaluationScore.compareTo(minValue) < 0 || aptitudeEvaluationScore.compareTo(maxValue) > 0) {
+            throw new ExpectedException("0부터 100사이의 값만 할당할 수 있습니다.", HttpStatus.BAD_REQUEST);
+        }
     }
 
     public static void isValidMiddleSchoolInfo(OneseoReqDto reqDto) {
