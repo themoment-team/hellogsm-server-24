@@ -10,6 +10,8 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class ModifyInterviewScoreService {
@@ -26,7 +28,10 @@ public class ModifyInterviewScoreService {
         EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();
         OneseoService.isBeforeSecondTest(entranceTestResult.getSecondTestPassYn());
 
-        entranceTestResult.modifyInterviewScore(reqDto.interviewScore());
+        BigDecimal interviewScore = reqDto.interviewScore();
+        OneseoService.validateEvaluationScore(interviewScore);
+
+        entranceTestResult.modifyInterviewScore(interviewScore);
         entranceTestResultRepository.save(entranceTestResult);
     }
 
