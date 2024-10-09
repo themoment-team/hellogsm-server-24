@@ -102,14 +102,24 @@ public class OneseoController {
     public SearchOneseosResDto search(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size,
-            @RequestParam(name = "testResultTag") TestResultTag testResultTag,
-            @RequestParam(name = "screeningTag", required = false) ScreeningCategory screeningTag,
-            @RequestParam(name = "isSubmitted", required = false) YesNo isSubmitted,
+            @RequestParam(name = "testResultTag") String testResultParam,
+            @RequestParam(name = "screeningTag", required = false) String screeningParam,
+            @RequestParam(name = "isSubmitted", required = false) String isSubmittedParam,
             @RequestParam(name = "keyword", required = false) String keyword
     ) {
-        if (page < 0 || size < 0)
+        if (page < 0 || size < 0) {
             throw new ExpectedException("page, size는 0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
-        return searchOneseoService.execute(page, size, testResultTag, screeningTag, isSubmitted, keyword);
+        }
+
+        try {
+            TestResultTag tag = TestResultTag.valueOf(testResultParam);
+            ScreeningCategory screeningCategory = (screeningParam != null) ? ScreeningCategory.valueOf(screeningParam) : null;
+            YesNo isSubmitted = (isSubmittedParam != null) ? YesNo.valueOf(isSubmittedParam) : null;
+
+            return searchOneseoService.execute(page, size, tag, screeningCategory, isSubmitted, keyword);
+        } catch (IllegalArgumentException e) {
+            throw new ExpectedException("유효하지 않은 매개변수 값입니다.", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Operation(summary = "내 원서 조회", description = "내 원서 정보를 조회합니다. 임시 저장된 원서가 있다면 임시 저장된 원서를 조회합니다.")
