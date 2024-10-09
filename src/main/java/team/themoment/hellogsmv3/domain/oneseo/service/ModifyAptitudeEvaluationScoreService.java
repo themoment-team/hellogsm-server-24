@@ -9,7 +9,6 @@ import team.themoment.hellogsmv3.domain.oneseo.dto.request.AptitudeEvaluationSco
 import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
-import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.math.BigDecimal;
@@ -24,12 +23,15 @@ public class ModifyAptitudeEvaluationScoreService {
 
     public void execute(Long memberId, AptitudeEvaluationScoreReqDto aptitudeEvaluationScoreReqDto) {
         Member member = memberService.findByIdOrThrow(memberId);
-
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
-        EntranceTestResult entranceTestResult = entranceTestResultRepository.findByOneseo(oneseo);
+        EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();
+        OneseoService.isBeforeSecondTest(entranceTestResult.getSecondTestPassYn());
 
-        entranceTestResult.modifyAptitudeEvaluationScore(aptitudeEvaluationScoreReqDto.aptitudeEvaluationScore());
+        BigDecimal aptitudeEvaluationScore = aptitudeEvaluationScoreReqDto.aptitudeEvaluationScore();
+        OneseoService.validateEvaluationScore(aptitudeEvaluationScore);
+
+        entranceTestResult.modifyAptitudeEvaluationScore(aptitudeEvaluationScore);
 
         entranceTestResultRepository.save(entranceTestResult);
     }

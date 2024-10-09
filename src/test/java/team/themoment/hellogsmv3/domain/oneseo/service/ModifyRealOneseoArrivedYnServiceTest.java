@@ -12,11 +12,14 @@ import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
 import team.themoment.hellogsmv3.domain.oneseo.dto.request.AptitudeEvaluationScoreReqDto;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.ArrivedStatusResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -59,10 +62,15 @@ public class ModifyRealOneseoArrivedYnServiceTest {
                         .id(memberId)
                         .build();
 
+                EntranceTestResult entranceTestResult = EntranceTestResult.builder()
+                        .firstTestPassYn(null)
+                        .build();
+
                 oneseo = Oneseo.builder()
                         .member(member)
                         .realOneseoArrivedYn(YesNo.NO)
                         .wantedScreening(Screening.GENERAL)
+                        .entranceTestResult(entranceTestResult)
                         .build();
 
                 given(memberService.findByIdOrThrow(memberId)).willReturn(member);
