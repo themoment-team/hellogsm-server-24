@@ -309,7 +309,7 @@ public class CalculateGradeService {
         // Integer 리스트를 BigDecimal 리스트로 변경 & 등급 유효성 검사
         List<BigDecimal> convertedAchievements = new ArrayList<>();
         achievements.forEach(achievement -> {
-            if (achievement > 5 || achievement < 0) throw new IllegalArgumentException("올바르지 않은 일반교과 등급이 입력되었습니다.");
+            if (achievement > 5 || achievement < 0) throw new ExpectedException("올바르지 않은 일반교과 등급이 입력되었습니다.", HttpStatus.BAD_REQUEST);
             convertedAchievements.add(BigDecimal.valueOf(achievement));
         });
 
@@ -327,8 +327,12 @@ public class CalculateGradeService {
     }
 
     private BigDecimal calcArtSportsScore(List<Integer> achievements) {
+        if (achievements == null || achievements.isEmpty()) {
+            throw new ExpectedException("예체능 등급을 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+
         achievements.forEach(achievement -> {
-            if (achievement != 0 && (achievement > 5 || achievement < 3)) throw new IllegalArgumentException("올바르지 않은 예체능 등급이 입력되었습니다.");
+            if (achievement != 0 && (achievement > 5 || achievement < 3)) throw new ExpectedException("올바르지 않은 예체능 등급이 입력되었습니다.", HttpStatus.BAD_REQUEST);
         });
 
         // 1. 각 등급별 갯수에 등급별 배점을 곱한 값을 더한다.
@@ -408,6 +412,10 @@ public class CalculateGradeService {
 
     private void validFreeSemester(String liberalSystem, String freeSemester) {
         List<String> validSemesterList = List.of("", "1-1", "1-2", "2-1", "2-2", "3-1", "3-2");
+
+        // liberalSystem가 null이거나 자유학기제 or 자유학년제가 아니라면 예외 발생
+        if (liberalSystem == null || (!liberalSystem.equals("자유학기제") && !liberalSystem.equals("자유학년제")))
+            throw new ExpectedException("올바른 liberalSystem을 입력해주세요.", HttpStatus.BAD_REQUEST);
 
         // 자유학기제 && 자유학기제가 적용된 학기를 입력하지 않았다면 예외 발생
         if (liberalSystem.equals("자유학기제") && freeSemester == null)
