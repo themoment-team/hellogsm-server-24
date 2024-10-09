@@ -36,6 +36,9 @@ public class CalculateGradeService {
 
     public CalculatedScoreResDto execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
 
+        // 교과 성적 필드 초기화
+        initScore();
+
         validGraduationType(graduationType);
         validFreeSemester(dto.liberalSystem(), dto.freeSemester());
 
@@ -424,5 +427,13 @@ public class CalculateGradeService {
         // 자유학기제 && 올바른 학기를 입력하지 않았다면 예외 발생
         if (liberalSystem.equals("자유학기제") && validSemesterList.stream().noneMatch(s -> s.equals(freeSemester)))
             throw new ExpectedException(String.format("%s(은)는 유효한 학기가 아닙니다.", freeSemester), HttpStatus.BAD_REQUEST);
+    }
+
+    private void initScore() {
+        score1_2 = BigDecimal.ZERO;
+        score2_1 = BigDecimal.ZERO;
+        score2_2 = BigDecimal.ZERO;
+        score3_1 = BigDecimal.ZERO;
+        score3_2 = BigDecimal.ZERO;
     }
 }
