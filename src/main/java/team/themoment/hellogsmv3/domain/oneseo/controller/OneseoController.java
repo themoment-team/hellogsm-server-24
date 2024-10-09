@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -102,8 +103,11 @@ public class OneseoController {
     public SearchOneseosResDto search(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size,
+            @Schema(description = "합격, 불합격 여부", defaultValue = "ALL", allowableValues = {"ALL", "FIRST_PASS", "FINAL_PASS", "FALL"})
             @RequestParam(name = "testResultTag") String testResultParam,
+            @Schema(description = "지원 전형", defaultValue = "GENERAL", allowableValues = {"GENERAL", "SPECIAL", "EXTRA"})
             @RequestParam(name = "screeningTag", required = false) String screeningParam,
+            @Schema(description = "서류 제출 여부", defaultValue = "YES", allowableValues = {"YES", "NO"})
             @RequestParam(name = "isSubmitted", required = false) String isSubmittedParam,
             @RequestParam(name = "keyword", required = false) String keyword
     ) {
