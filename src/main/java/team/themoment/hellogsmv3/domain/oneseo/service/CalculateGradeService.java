@@ -232,15 +232,15 @@ public class CalculateGradeService {
                 .filter(achievement -> achievement != 0)
                 .count();
 
+        if (achievementCount == 0) {
+            return BigDecimal.ZERO;
+        }
+
         // 개별 학기별 예체능 점수 배점은 60 * (해당 학기의 성적이 있는 예체능 교과 수 / 성적이 있는 총 예체능 교과 수)으로 계산
         BigDecimal allocation = BigDecimal.valueOf(60)
                 .multiply(
                         BigDecimal.valueOf(achievementCount).divide(BigDecimal.valueOf(allAchievementCount), 10, RoundingMode.HALF_UP)
                 );
-
-        if (achievementCount == 0) {
-            return BigDecimal.ZERO;
-        }
 
         return BigDecimal.valueOf(sum)
                 .divide(BigDecimal.valueOf(achievementCount).multiply(BigDecimal.valueOf(5)), 10, RoundingMode.HALF_UP)
