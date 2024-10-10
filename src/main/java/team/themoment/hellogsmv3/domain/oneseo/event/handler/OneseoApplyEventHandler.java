@@ -5,8 +5,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import team.themoment.hellogsmv3.domain.oneseo.event.OneseoApplyEvent;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.thirdParty.feign.client.dto.request.DiscordAlarmReqDto;
