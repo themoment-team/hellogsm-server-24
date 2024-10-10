@@ -29,9 +29,8 @@ public class ModifyInterviewScoreService {
         OneseoService.isBeforeSecondTest(entranceTestResult.getSecondTestPassYn());
 
         BigDecimal interviewScore = reqDto.interviewScore();
-        OneseoService.validateEvaluationScore(interviewScore);
-
         entranceTestResult.modifyInterviewScore(interviewScore);
+
         entranceTestResultRepository.save(entranceTestResult);
     }
 
