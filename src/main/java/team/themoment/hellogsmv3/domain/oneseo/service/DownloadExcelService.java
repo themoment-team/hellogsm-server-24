@@ -177,7 +177,15 @@ public class DownloadExcelService {
     }
 
     private BigDecimal calculateFinalScore(EntranceTestResult entranceTestResult) {
-        if (entranceTestResult.getSecondTestPassYn() == null) {
+
+        BigDecimal aptitudeEvaluationScore = entranceTestResult.getAptitudeEvaluationScore();
+        BigDecimal interviewScore = entranceTestResult.getInterviewScore();
+
+        if (
+                entranceTestResult.getSecondTestPassYn() == null
+                        || aptitudeEvaluationScore == null
+                        || interviewScore == null
+        ) {
             return null;
         }
 
@@ -185,8 +193,8 @@ public class DownloadExcelService {
                 .divide(BigDecimal.valueOf(3), 3, RoundingMode.HALF_UP);
 
         return documentEvaluationScore.multiply(BigDecimal.valueOf(0.5))
-                .add(entranceTestResult.getAptitudeEvaluationScore().multiply(BigDecimal.valueOf(0.3)))
-                .add(entranceTestResult.getInterviewScore().multiply(BigDecimal.valueOf(0.2)))
+                .add(aptitudeEvaluationScore.multiply(BigDecimal.valueOf(0.3)))
+                .add(interviewScore.multiply(BigDecimal.valueOf(0.2)))
                 .setScale(3, RoundingMode.HALF_UP);
     }
 }
