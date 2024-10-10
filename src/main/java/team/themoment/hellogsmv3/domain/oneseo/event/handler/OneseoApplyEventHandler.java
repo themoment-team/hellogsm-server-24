@@ -23,7 +23,7 @@ public class OneseoApplyEventHandler {
     private final OneseoRepository oneseoRepository;
     private final DiscordAlarmFeignClientService discordAlarmFeignClientService;
 
-    @Value("${spring.profiles.active:}")
+    @Value("${spring.profiles.active:default}")
     private String activeProfile;
 
     @Async
