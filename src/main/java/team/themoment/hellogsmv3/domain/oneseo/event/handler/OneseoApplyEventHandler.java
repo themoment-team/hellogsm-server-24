@@ -1,6 +1,7 @@
 package team.themoment.hellogsmv3.domain.oneseo.event.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -21,6 +22,9 @@ public class OneseoApplyEventHandler {
 
     private final OneseoRepository oneseoRepository;
     private final DiscordAlarmFeignClientService discordAlarmFeignClientService;
+
+    @Value("${spring.profiles.active:}")
+    private String activeProfile;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -78,8 +82,7 @@ public class OneseoApplyEventHandler {
     }
 
     private Env getEnv() {
-        String profile = System.getProperty("spring.profiles.active");
-        Env env = profile.equals("prod") ? prod : dev;
+        Env env = activeProfile.equals("prod") ? prod : dev;
         return env;
     }
 }
