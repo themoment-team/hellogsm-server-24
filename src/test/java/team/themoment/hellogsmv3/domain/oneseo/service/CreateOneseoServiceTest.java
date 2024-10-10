@@ -8,6 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.member.service.MemberService;
@@ -50,6 +51,8 @@ class CreateOneseoServiceTest {
     private MemberService memberService;
     @Mock
     private OneseoService oneseoService;
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
     @Mock
     private CalculateGradeService calculateGradeService;
     @Mock

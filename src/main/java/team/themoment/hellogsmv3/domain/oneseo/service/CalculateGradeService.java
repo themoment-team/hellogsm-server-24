@@ -168,7 +168,7 @@ public class CalculateGradeService {
         // 졸업예정자는 예체능 점수를 9개, 졸업자는 예체능 점수를 12개를 보내야 함
         int size = graduationType.equals(CANDIDATE) ? 9 : 12;
         if (achievementList.size() != size) {
-            throw new ExpectedException("achievementList의 size가 유효하지 않습니다. " + achievementList.size(), HttpStatus.BAD_REQUEST);
+            throw new ExpectedException("예체능 성취도 개수가 유효하지 않습니다. " + achievementList.size(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -232,15 +232,15 @@ public class CalculateGradeService {
                 .filter(achievement -> achievement != 0)
                 .count();
 
+        if (achievementCount == 0) {
+            return BigDecimal.ZERO;
+        }
+
         // 개별 학기별 예체능 점수 배점은 60 * (해당 학기의 성적이 있는 예체능 교과 수 / 성적이 있는 총 예체능 교과 수)으로 계산
         BigDecimal allocation = BigDecimal.valueOf(60)
                 .multiply(
                         BigDecimal.valueOf(achievementCount).divide(BigDecimal.valueOf(allAchievementCount), 10, RoundingMode.HALF_UP)
                 );
-
-        if (achievementCount == 0) {
-            return BigDecimal.ZERO;
-        }
 
         return BigDecimal.valueOf(sum)
                 .divide(BigDecimal.valueOf(achievementCount).multiply(BigDecimal.valueOf(5)), 10, RoundingMode.HALF_UP)
@@ -330,13 +330,8 @@ public class CalculateGradeService {
     }
 
     private BigDecimal calcArtSportsScore(List<Integer> achievements) {
-        if (achievements == null || achievements.isEmpty()) {
-            throw new ExpectedException("예체능 등급을 입력해주세요", HttpStatus.BAD_REQUEST);
-        }
 
-        achievements.forEach(achievement -> {
-            if (achievement != 0 && (achievement > 5 || achievement < 3)) throw new ExpectedException("올바르지 않은 예체능 등급이 입력되었습니다.", HttpStatus.BAD_REQUEST);
-        });
+        validateArtSportsScore(achievements);
 
         // 1. 각 등급별 갯수에 등급별 배점을 곱한 값을 더한다.
         int totalScores = achievements.stream().reduce(0, Integer::sum);
@@ -358,8 +353,16 @@ public class CalculateGradeService {
         // Integer 리스트를 BigDecimal 리스트로 변경
         List<BigDecimal> convertedAbsentDays = new ArrayList<>();
         List<BigDecimal> convertedAttendanceDays = new ArrayList<>();
-        absentDays.forEach(absentDay -> convertedAbsentDays.add(BigDecimal.valueOf(absentDay)));
-        attendanceDays.forEach(attendanceDay -> convertedAttendanceDays.add(BigDecimal.valueOf(attendanceDay)));
+        absentDays.forEach(absentDay -> {
+            if (absentDay < 0)  throw new ExpectedException("결석일수는 음수가 될 수 없습니다.", HttpStatus.BAD_REQUEST);
+            convertedAbsentDays.add(BigDecimal.valueOf(absentDay));
+        });
+        attendanceDays.forEach(attendanceDay -> {
+            if (attendanceDay < 0)  throw new ExpectedException("출결일수는 음수가 될 수 없습니다.", HttpStatus.BAD_REQUEST);
+            convertedAttendanceDays.add(BigDecimal.valueOf(attendanceDay));
+        });
+
+        validateAttendanceScore(convertedAbsentDays, convertedAttendanceDays);
 
         // 결석 횟수를 더함
         BigDecimal absentDay = convertedAbsentDays.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -382,7 +385,12 @@ public class CalculateGradeService {
     private BigDecimal calcVolunteerScore(List<Integer> volunteerHours) {
         // Integer 리스트를 BigDecimal 리스트로 변경
         List<BigDecimal> convertedVolunteerHours = new ArrayList<>();
-        volunteerHours.forEach(volunteerHour -> convertedVolunteerHours.add(BigDecimal.valueOf(volunteerHour)));
+        volunteerHours.forEach(volunteerHour -> {
+            if (volunteerHour < 0)  throw new ExpectedException("봉사일수는 음수가 될 수 없습니다.", HttpStatus.BAD_REQUEST);
+            convertedVolunteerHours.add(BigDecimal.valueOf(volunteerHour));
+        });
+
+        validateVolunteerScore(convertedVolunteerHours);
 
         return convertedVolunteerHours.stream().reduce(BigDecimal.valueOf(0), (current, hour) -> {
             // 연간 7시간 이상
@@ -427,6 +435,29 @@ public class CalculateGradeService {
         // 자유학기제 && 올바른 학기를 입력하지 않았다면 예외 발생
         if (liberalSystem.equals("자유학기제") && validSemesterList.stream().noneMatch(s -> s.equals(freeSemester)))
             throw new ExpectedException(String.format("%s(은)는 유효한 학기가 아닙니다.", freeSemester), HttpStatus.BAD_REQUEST);
+    }
+
+    private void validateArtSportsScore(List<Integer> achievements) {
+        if (achievements == null || achievements.isEmpty()) {
+            throw new ExpectedException("예체능 등급을 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+
+        achievements.forEach(achievement -> {
+            if (achievement != 0 && (achievement > 5 || achievement < 3)) throw new ExpectedException("올바르지 않은 예체능 등급이 입력되었습니다.", HttpStatus.BAD_REQUEST);
+        });
+    }
+
+    private void validateAttendanceScore(List<BigDecimal> convertedAbsentDays, List<BigDecimal> convertedAttendanceDays) {
+        if (convertedAbsentDays.size() != 3)
+            throw new ExpectedException("결석일수 개수가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
+
+        if (convertedAttendanceDays.size() != 9)
+            throw new ExpectedException("출결일수 개수가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
+    }
+
+    private void validateVolunteerScore(List<BigDecimal> convertedVolunteerHours) {
+        if (convertedVolunteerHours.size() != 3)
+            throw new ExpectedException("봉사일수 개수가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
     }
 
     private void initScore() {
