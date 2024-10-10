@@ -6,9 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum NoticeLevel {
-    INFO("info"),
-    WARN("warn"),
-    ERROR("error");
-
-    private final String content;
+    info,
+    dev,
+    prod
 }

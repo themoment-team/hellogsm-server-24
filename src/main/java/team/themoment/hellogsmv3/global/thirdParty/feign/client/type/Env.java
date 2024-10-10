@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Env {
-    DEV("dev"),
-    PROD("prod");
-
-    private final String content;
+    dev,
+    prod
 }

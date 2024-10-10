@@ -126,3 +126,4 @@ management:
 
 discord-alarm:
   url: ${DISCORD_RELAY_SERVER_URL}
+  api-key: ${DISCORD_RELAY_SERVER_API_KEY}
