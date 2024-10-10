@@ -2,6 +2,7 @@ package team.themoment.hellogsmv3.domain.oneseo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.OneseoPrivacyDetail;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.DesiredMajors;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.GraduationType;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.event.OneseoApplyEvent;
 import team.themoment.hellogsmv3.domain.oneseo.repository.MiddleSchoolAchievementRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -37,6 +39,7 @@ public class CreateOneseoService {
     private final CalculateGradeService calculateGradeService;
     private final CalculateGedService calculateGedService;
     private final OneseoService oneseoService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     @CachePut(value = OneseoService.ONESEO_CACHE_VALUE, key = "#memberId")
@@ -60,12 +63,26 @@ public class CreateOneseoService {
 
         OneseoPrivacyDetailResDto oneseoPrivacyDetailResDto = buildOneseoPrivacyDetailResDto(currentMember, oneseoPrivacyDetail);
         MiddleSchoolAchievementResDto middleSchoolAchievementResDto = buildMiddleSchoolAchievementResDto(middleSchoolAchievement);
+
+        sendOneseoApplyEvent(currentMember, oneseo, oneseoPrivacyDetail);
+
         return buildOneseoResDto(
                 oneseo,
                 oneseoPrivacyDetailResDto,
                 middleSchoolAchievementResDto,
                 calculatedScoreResDto
         );
+    }
+
+    private void sendOneseoApplyEvent(Member currentMember, Oneseo oneseo, OneseoPrivacyDetail oneseoPrivacyDetail) {
+        OneseoApplyEvent oneseoApplyEvent = OneseoApplyEvent.builder()
+                .name(currentMember.getName())
+                .summitCode(oneseo.getOneseoSubmitCode())
+                .graduationType(oneseoPrivacyDetail.getGraduationType())
+                .screening(oneseo.getWantedScreening())
+                .build();
+
+        applicationEventPublisher.publishEvent(oneseoApplyEvent);
     }
 
     private OneseoPrivacyDetailResDto buildOneseoPrivacyDetailResDto(
