@@ -168,7 +168,7 @@ public class CalculateGradeService {
         // 졸업예정자는 예체능 점수를 9개, 졸업자는 예체능 점수를 12개를 보내야 함
         int size = graduationType.equals(CANDIDATE) ? 9 : 12;
         if (achievementList.size() != size) {
-            throw new ExpectedException("achievementList의 size가 유효하지 않습니다. " + achievementList.size(), HttpStatus.BAD_REQUEST);
+            throw new ExpectedException("예체능 성취도 개수가 유효하지 않습니다. " + achievementList.size(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -358,8 +358,20 @@ public class CalculateGradeService {
         // Integer 리스트를 BigDecimal 리스트로 변경
         List<BigDecimal> convertedAbsentDays = new ArrayList<>();
         List<BigDecimal> convertedAttendanceDays = new ArrayList<>();
-        absentDays.forEach(absentDay -> convertedAbsentDays.add(BigDecimal.valueOf(absentDay)));
-        attendanceDays.forEach(attendanceDay -> convertedAttendanceDays.add(BigDecimal.valueOf(attendanceDay)));
+        absentDays.forEach(absentDay -> {
+            if (absentDay < 0)  throw new ExpectedException("결석일수는 음수가 될 수 없습니다.", HttpStatus.BAD_REQUEST);
+            convertedAbsentDays.add(BigDecimal.valueOf(absentDay));
+        });
+        attendanceDays.forEach(attendanceDay -> {
+            if (attendanceDay < 0)  throw new ExpectedException("출결일수는 음수가 될 수 없습니다.", HttpStatus.BAD_REQUEST);
+            convertedAttendanceDays.add(BigDecimal.valueOf(attendanceDay));
+        });
+
+        if (convertedAbsentDays.size() != 3)
+            throw new ExpectedException("결석일수 개수가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
+
+        if (convertedAttendanceDays.size() != 9)
+            throw new ExpectedException("출결일수 개수가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
 
         // 결석 횟수를 더함
         BigDecimal absentDay = convertedAbsentDays.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -382,7 +394,10 @@ public class CalculateGradeService {
     private BigDecimal calcVolunteerScore(List<Integer> volunteerHours) {
         // Integer 리스트를 BigDecimal 리스트로 변경
         List<BigDecimal> convertedVolunteerHours = new ArrayList<>();
-        volunteerHours.forEach(volunteerHour -> convertedVolunteerHours.add(BigDecimal.valueOf(volunteerHour)));
+        volunteerHours.forEach(volunteerHour -> {
+            if (volunteerHour < 0)  throw new ExpectedException("봉사일수는 음수가 될 수 없습니다.", HttpStatus.BAD_REQUEST);
+            convertedVolunteerHours.add(BigDecimal.valueOf(volunteerHour));
+        });
 
         return convertedVolunteerHours.stream().reduce(BigDecimal.valueOf(0), (current, hour) -> {
             // 연간 7시간 이상
