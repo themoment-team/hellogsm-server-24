@@ -14,6 +14,7 @@ import team.themoment.hellogsmv3.domain.member.entity.type.AuthReferrerType;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.entity.type.Sex;
 import team.themoment.hellogsmv3.domain.member.repo.MemberRepository;
+import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 import team.themoment.hellogsmv3.global.security.data.ScheduleEnvironment;
@@ -40,6 +41,8 @@ class CreateMemberServiceTest {
     private ScheduleEnvironment scheduleEnvironment;
     @Mock
     private OneseoRepository oneseoRepository;
+    @Mock
+    private EntranceTestResultRepository entranceTestResultRepository;
     @Mock
     private CommonCodeService commonCodeService;
     @InjectMocks
@@ -81,6 +84,7 @@ class CreateMemberServiceTest {
                 given(memberService.findByIdOrThrow(memberId)).willReturn(existingMember);
                 given(scheduleEnvironment.oneseoSubmissionEnd()).willReturn(LocalDateTime.of(9999, Month.OCTOBER, 10, 10, 10));
                 given(memberRepository.findByPhoneNumber(reqDto.phoneNumber())).willReturn(Optional.empty());
+                given(entranceTestResultRepository.existsByFirstTestPassYnIsNotNull()).willReturn(false);
                 willDoNothing().given(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
             }
 

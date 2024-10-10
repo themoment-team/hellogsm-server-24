@@ -28,6 +28,7 @@ public class CreateMemberService {
     private final ScheduleEnvironment scheduleEnv;
 
     private final OneseoRepository oneseoRepository;
+    private final EntranceTestResultRepository entranceTestResultRepository;
 
     @Transactional
     public Role execute(CreateMemberReqDto reqDto, Long memberId) {
@@ -48,7 +49,7 @@ public class CreateMemberService {
     }
 
     private void ifDuplicateMemberDeleteMemberInfo(String phoneNumber) {
-        if (LocalDateTime.now().isAfter(scheduleEnv.oneseoSubmissionEnd()))
+        if (LocalDateTime.now().isAfter(scheduleEnv.oneseoSubmissionEnd()) || entranceTestResultRepository.existsByFirstTestPassYnIsNotNull())
             throw new ExpectedException("원서접수 기간 이후에는 기존 회원정보를 삭제하고 회원가입할 수 없습니다.", HttpStatus.BAD_REQUEST);
 
         memberRepository.findByPhoneNumber(phoneNumber).ifPresent(
