@@ -6,6 +6,13 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+    session:
+      timeout: 3600
+      cookie:
+        name: SESSION
+        http-only: true
+        path: /
+        max-age: 3600
 
 logging:
   config: classpath:logback-spring.xml
