@@ -123,3 +123,6 @@ management:
       exposure:
         include: health
       base-path: ${ACTUATOR_BASE_PATH}
+
+discord-alarm:
+  url: ${DISCORD_RELAY_SERVER_URL}

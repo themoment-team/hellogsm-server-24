@@ -75,6 +75,19 @@ dependencies {
 
     /** logging **/
     implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.6.0'
+
+    /** open feign **/
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+}
+
+ext {
+    set('springCloudVersion', "2021.0.1")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 def querydslSrcDir = "$projectDir/build/generated"
