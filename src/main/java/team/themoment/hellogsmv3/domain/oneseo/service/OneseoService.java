@@ -63,14 +63,6 @@ public class OneseoService {
         }
     }
 
-    public static void validateEvaluationScore(BigDecimal aptitudeEvaluationScore) {
-        BigDecimal minValue = BigDecimal.ZERO;
-        BigDecimal maxValue = new BigDecimal(100);
-        if (aptitudeEvaluationScore.compareTo(minValue) < 0 || aptitudeEvaluationScore.compareTo(maxValue) > 0) {
-            throw new ExpectedException("0부터 100사이의 값만 할당할 수 있습니다.", HttpStatus.BAD_REQUEST);
-        }
-    }
-
     public static void isValidMiddleSchoolInfo(OneseoReqDto reqDto) {
         if (
                 reqDto.graduationType().equals(CANDIDATE) && (
