@@ -9,12 +9,13 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import team.themoment.hellogsmv3.domain.oneseo.event.OneseoApplyEvent;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
 import team.themoment.hellogsmv3.global.thirdParty.feign.client.dto.request.DiscordAlarmReqDto;
+import team.themoment.hellogsmv3.global.thirdParty.feign.client.type.Channel;
 import team.themoment.hellogsmv3.global.thirdParty.feign.client.type.Env;
+import team.themoment.hellogsmv3.global.thirdParty.feign.client.type.NoticeLevel;
 import team.themoment.hellogsmv3.global.thirdParty.feign.service.DiscordAlarmFeignClientService;
 
 import static team.themoment.hellogsmv3.global.thirdParty.feign.client.type.Env.prod;
 import static team.themoment.hellogsmv3.global.thirdParty.feign.client.type.Env.dev;
-import static team.themoment.hellogsmv3.global.thirdParty.feign.client.type.NoticeLevel.*;
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +44,8 @@ public class OneseoApplyEventHandler {
         return DiscordAlarmReqDto.builder()
                 .title(title)
                 .content(content)
-                .noticeLevel(info)
+                .noticeLevel(NoticeLevel.info)
+                .channel(Channel.info)
                 .env(env)
                 .build();
     }
