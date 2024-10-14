@@ -45,6 +45,7 @@ public class Oneseo {
     @OneToOne(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
     private MiddleSchoolAchievement middleSchoolAchievement;
 
+    @Builder.Default
     @OneToMany(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WantedScreeningChangeHistory> wantedScreeningChangeHistory = new ArrayList<>();
 
