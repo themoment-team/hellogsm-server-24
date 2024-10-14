@@ -54,7 +54,7 @@ public class ModifyOneseoService {
         MiddleSchoolAchievement middleSchoolAchievement = middleSchoolAchievementRepository.findByOneseo(currentOneseo);
 
         Oneseo modifiedOneseo = buildOneseo(reqDto, currentOneseo, currentMember);
-        oneseoService.assignSubmitCode(modifiedOneseo);
+        oneseoService.assignSubmitCode(modifiedOneseo, currentOneseo.getWantedScreening());
 
         saveOneseoPrivacyDetail(reqDto, oneseoPrivacyDetail, modifiedOneseo);
         saveMiddleSchoolAchievement(reqDto, middleSchoolAchievement, modifiedOneseo);
@@ -67,7 +67,7 @@ public class ModifyOneseoService {
         MiddleSchoolAchievementResDto middleSchoolAchievementResDto = buildMiddleSchoolAchievementResDto(middleSchoolAchievement);
 
         return buildOneseoResDto(
-                currentOneseo,
+                modifiedOneseo,
                 oneseoPrivacyDetailResDto,
                 middleSchoolAchievementResDto,
                 calculatedScoreResDto
@@ -189,6 +189,7 @@ public class ModifyOneseoService {
                 .passYn(oneseo.getPassYn())
                 .decidedMajor(oneseo.getDecidedMajor())
                 .entranceIntentionYn(oneseo.getEntranceIntentionYn())
+                .oneseoSubmitCode(oneseo.getOneseoSubmitCode())
                 .build();
     }
 
