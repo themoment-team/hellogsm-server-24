@@ -17,13 +17,7 @@ public class SendCodeNotificationServiceImpl implements SendCodeNotificationServ
     }
 
     private static String createContentMessage(String code) {
-        return String.format(
-                """
-                [Hello, GSM]
-                
-                인증번호 [%s]를 입력해주세요.
-                """, code
-        );
+        return String.format("[Hello, GSM] 인증번호 [%s]를 입력해주세요.", code);
     }
 
     private static String createFooterMessage() {
