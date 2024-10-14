@@ -24,6 +24,8 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        System.out.println(principal);
+
         if (principal instanceof OAuth2User) {
             return Long.valueOf(((OAuth2User) principal).getName());
         } else {
