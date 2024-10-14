@@ -55,7 +55,7 @@ public class CreateOneseoService {
         OneseoPrivacyDetail oneseoPrivacyDetail = buildOneseoPrivacyDetail(reqDto, oneseo);
         MiddleSchoolAchievement middleSchoolAchievement = buildMiddleSchoolAchievement(reqDto, oneseo);
 
-        oneseoService.assignSubmitCode(oneseo);
+        oneseoService.assignSubmitCode(oneseo, null);
 
         saveEntities(oneseo, oneseoPrivacyDetail, middleSchoolAchievement);
 

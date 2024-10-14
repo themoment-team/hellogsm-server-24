@@ -209,7 +209,7 @@ public class OneseoServiceTest {
             @Test
             @DisplayName("A-N 번대의 접수번호가 생성된다.")
             void it_returns_oneseo() {
-                oneseoService.assignSubmitCode(oneseo);
+                oneseoService.assignSubmitCode(oneseo, null);
                 verify(oneseo).setOneseoSubmitCode("A-" + (maxSubmitCodeNumber + 1));
             }
         }
