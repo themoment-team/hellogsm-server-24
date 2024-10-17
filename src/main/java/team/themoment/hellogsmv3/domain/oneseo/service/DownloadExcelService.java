@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -143,9 +145,11 @@ public class DownloadExcelService {
                 case EXTRA_ADMISSION -> wantedScreening = "특례입학대상자";
             }
 
+            String submitCode = oneseo.getOneseoSubmitCode();
+
             List<String> rowData = List.of(
                     String.valueOf(index++),
-                    String.valueOf(oneseo.getOneseoSubmitCode()),
+                    formatSubmitCode(submitCode),
                     String.valueOf(oneseo.getMember().getName()),
                     String.valueOf(oneseo.getDesiredMajors().getFirstDesiredMajor()),
                     String.valueOf(oneseo.getDesiredMajors().getSecondDesiredMajor()),
@@ -174,6 +178,14 @@ public class DownloadExcelService {
         }
 
         return sheetData;
+    }
+
+    private String formatSubmitCode(String submitCode) {
+        // submitCode format: A-001
+        String[] parts = submitCode.split("-");
+        String prefix = parts[0];
+        String number = String.format("%03d", Integer.parseInt(parts[1]));
+        return prefix + "-" + number;
     }
 
     private BigDecimal calculateFinalScore(EntranceTestResult entranceTestResult) {
