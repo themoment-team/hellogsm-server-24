@@ -72,10 +72,10 @@ public class DownloadExcelServiceTest {
             Long extraId = 3L;
             Long fallenId = 4L;
 
-            oneseoGeneral = createOneseo(generalId, Screening.GENERAL, "A-01");
-            oneseoSpecial = createOneseo(specialId, Screening.SPECIAL, "B-02");
-            oneseoExtra = createOneseo(extraId, Screening.EXTRA_VETERANS, "C-03");
-            oneseoFallen = createOneseo(fallenId, Screening.GENERAL, "A-04");
+            oneseoGeneral = createOneseo(generalId, Screening.GENERAL, "A-1");
+            oneseoSpecial = createOneseo(specialId, Screening.SPECIAL, "B-2");
+            oneseoExtra = createOneseo(extraId, Screening.EXTRA_VETERANS, "C-3");
+            oneseoFallen = createOneseo(fallenId, Screening.GENERAL, "A-4");
 
             generalEntranceTestResult = createEntranceTestResult(generalId, oneseoGeneral, YesNo.YES);
             specialEntranceTestResult = createEntranceTestResult(specialId, oneseoSpecial, YesNo.YES);
@@ -111,13 +111,13 @@ public class DownloadExcelServiceTest {
             assertNotNull(workbook);
             assertEquals(4, workbook.getNumberOfSheets());
 
-            assertSheetData(workbook.getSheetAt(0), oneseoGeneral, generalEntranceTestResult, generalPrivacyDetail);
-            assertSheetData(workbook.getSheetAt(1), oneseoSpecial, specialEntranceTestResult, specialPrivacyDetail);
-            assertSheetData(workbook.getSheetAt(2), oneseoExtra, extraEntranceTestResult, extraPrivacyDetail);
-            assertSheetData(workbook.getSheetAt(3), oneseoFallen, fallenEntranceTestResult, fallenPrivacyDetail);
+            assertSheetData(workbook.getSheetAt(0), oneseoGeneral, generalEntranceTestResult, generalPrivacyDetail, 0);
+            assertSheetData(workbook.getSheetAt(1), oneseoSpecial, specialEntranceTestResult, specialPrivacyDetail, 1);
+            assertSheetData(workbook.getSheetAt(2), oneseoExtra, extraEntranceTestResult, extraPrivacyDetail, 2);
+            assertSheetData(workbook.getSheetAt(3), oneseoFallen, fallenEntranceTestResult, fallenPrivacyDetail, 3);
         }
 
-        private void assertSheetData(Sheet sheet, Oneseo oneseo, EntranceTestResult entranceTestResult, OneseoPrivacyDetail oneseoPrivacyDetail) {
+        private void assertSheetData(Sheet sheet, Oneseo oneseo, EntranceTestResult entranceTestResult, OneseoPrivacyDetail oneseoPrivacyDetail, int idx) {
             List<String> expectedHeader = List.of(
                     "순번", "접수번호", "성명", "1지망", "2지망", "3지망", "생년월일", "성별", "상세주소", "출신학교",
                     "학력", "전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
@@ -135,7 +135,7 @@ public class DownloadExcelServiceTest {
 
             List<String> expectedData = Arrays.asList(
                     "1",
-                    String.valueOf(oneseo.getOneseoSubmitCode()),
+                    null,
                     String.valueOf(oneseo.getMember().getName()),
                     String.valueOf(oneseo.getDesiredMajors().getFirstDesiredMajor()),
                     String.valueOf(oneseo.getDesiredMajors().getSecondDesiredMajor()),
@@ -171,7 +171,17 @@ public class DownloadExcelServiceTest {
             for (int i = 0; i < expectedData.size(); i++) {
                 Cell cell = dataRow.getCell(i);
                 assertNotNull(cell);
-                assertEquals(expectedData.get(i), cell.getStringCellValue());
+                if (i == 1) {
+                    String submitCode =
+                            idx == 0 ? "A-001" :
+                            idx == 1 ? "B-002" :
+                            idx == 2 ? "C-003" :
+                            idx == 3 ? "A-004" : null;
+
+                    assertEquals(submitCode, cell.getStringCellValue());
+                } else {
+                    assertEquals(expectedData.get(i), cell.getStringCellValue());
+                }
             }
         }
 
