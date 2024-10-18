@@ -26,6 +26,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @DisplayName("DownloadExcelService 클래스의")
 public class DownloadExcelServiceTest {
@@ -77,10 +78,10 @@ public class DownloadExcelServiceTest {
             oneseoExtra = createOneseo(extraId, Screening.EXTRA_VETERANS, "C-3");
             oneseoFallen = createOneseo(fallenId, Screening.GENERAL, "A-4");
 
-            generalEntranceTestResult = createEntranceTestResult(generalId, oneseoGeneral, YesNo.YES);
-            specialEntranceTestResult = createEntranceTestResult(specialId, oneseoSpecial, YesNo.YES);
-            extraEntranceTestResult = createEntranceTestResult(extraId, oneseoExtra, YesNo.YES);
-            fallenEntranceTestResult = createEntranceTestResult(fallenId, oneseoFallen, YesNo.NO);
+            generalEntranceTestResult = createEntranceTestResult(generalId, oneseoGeneral, YES);
+            specialEntranceTestResult = createEntranceTestResult(specialId, oneseoSpecial, YES);
+            extraEntranceTestResult = createEntranceTestResult(extraId, oneseoExtra, YES);
+            fallenEntranceTestResult = createEntranceTestResult(fallenId, oneseoFallen, NO);
 
             generalPrivacyDetail = createOneseoPrivacyDetail(generalId, oneseoGeneral);
             specialPrivacyDetail = createOneseoPrivacyDetail(specialId, oneseoSpecial);
@@ -90,7 +91,7 @@ public class DownloadExcelServiceTest {
             given(oneseoRepository.findAllByWantedScreening(Screening.GENERAL)).willReturn(List.of(oneseoGeneral));
             given(oneseoRepository.findAllByWantedScreening(Screening.SPECIAL)).willReturn(List.of(oneseoSpecial));
             given(oneseoRepository.findAllByWantedScreening(Screening.EXTRA_VETERANS)).willReturn(List.of(oneseoExtra));
-            given(entranceTestResultRepository.findAllByFirstTestPassYnOrSecondTestPassYn(YesNo.NO, YesNo.NO)).willReturn(List.of(fallenEntranceTestResult));
+            given(entranceTestResultRepository.findAllByFirstTestPassYnOrSecondTestPassYn(NO, NO)).willReturn(List.of(fallenEntranceTestResult));
 
             given(entranceTestResultRepository.findByOneseo(oneseoGeneral)).willReturn(generalEntranceTestResult);
             given(entranceTestResultRepository.findByOneseo(oneseoSpecial)).willReturn(specialEntranceTestResult);
@@ -121,7 +122,7 @@ public class DownloadExcelServiceTest {
             List<String> expectedHeader = List.of(
                     "순번", "접수번호", "성명", "1지망", "2지망", "3지망", "생년월일", "성별", "상세주소", "출신학교",
                     "학력", "전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
-                    "직무적성소양평가점수", "심층면접점수", "최종점수", "최종학과", "지원자연락처", "보호자연락처", "담임연락처"
+                    "직무적성소양평가점수", "심층면접점수", "최종점수", "최종학과", "지원자연락처", "보호자연락처", "담임연락처", "1차전형결과", "2차전형결과"
             );
 
             String wantedScreening = null;
@@ -157,7 +158,9 @@ public class DownloadExcelServiceTest {
                     String.valueOf(oneseo.getDecidedMajor()),
                     String.valueOf(oneseo.getMember().getPhoneNumber()),
                     String.valueOf(oneseoPrivacyDetail.getGuardianPhoneNumber()),
-                    String.valueOf(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber())
+                    String.valueOf(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber()),
+                    entranceTestResult.getFirstTestPassYn().equals(YES) ? "합격" : "불합격",
+                    entranceTestResult.getSecondTestPassYn().equals(YES) ? "합격" : "불합격"
             );
 
             Row headerRow = sheet.getRow(0);

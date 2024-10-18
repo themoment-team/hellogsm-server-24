@@ -9,6 +9,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsmv3.domain.oneseo.entity.*;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
+import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoPrivacyDetailRepository;
 import team.themoment.hellogsmv3.domain.oneseo.repository.OneseoRepository;
@@ -35,7 +36,7 @@ public class DownloadExcelService {
     private static final List<String> HEADER_NAMES = List.of(
             "순번", "접수번호", "성명", "1지망", "2지망", "3지망", "생년월일", "성별", "상세주소", "출신학교",
             "학력", "전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
-            "직무적성소양평가점수", "심층면접점수", "최종점수", "최종학과", "지원자연락처", "보호자연락처", "담임연락처"
+            "직무적성소양평가점수", "심층면접점수", "최종점수", "최종학과", "지원자연락처", "보호자연락처", "담임연락처", "1차전형결과", "2차전형결과"
     );
 
     public Workbook execute() {
@@ -171,10 +172,12 @@ public class DownloadExcelService {
                     String.valueOf(oneseo.getDecidedMajor()),
                     String.valueOf(oneseo.getMember().getPhoneNumber()),
                     String.valueOf(oneseoPrivacyDetail.getGuardianPhoneNumber()),
-                    String.valueOf(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber())
+                    String.valueOf(oneseoPrivacyDetail.getSchoolTeacherPhoneNumber()),
+                    String.valueOf(convertTestPassYn(entranceTestResult.getFirstTestPassYn())),
+                    String.valueOf(convertTestPassYn(entranceTestResult.getSecondTestPassYn()))
             );
 
-            sheetData.add(rowData.stream().map(data -> data.equals("null")? "" : data).collect(Collectors.toList()));
+            sheetData.add(rowData.stream().map(data -> data.equals("null") ? "" : data).collect(Collectors.toList()));
         }
 
         return sheetData;
@@ -186,6 +189,13 @@ public class DownloadExcelService {
         String prefix = parts[0];
         String number = String.format("%03d", Integer.parseInt(parts[1]));
         return prefix + "-" + number;
+    }
+
+    private String convertTestPassYn(YesNo yn) {
+        return switch (yn) {
+            case YES -> "합격";
+            case NO -> "불합격";
+        };
     }
 
     private BigDecimal calculateFinalScore(EntranceTestResult entranceTestResult) {
