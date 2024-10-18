@@ -21,6 +21,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.custom.CustomOneseoRepository;
 
 import static com.querydsl.core.types.ExpressionUtils.anyOf;
+import static com.querydsl.core.types.ExpressionUtils.eq;
 import static team.themoment.hellogsmv3.domain.member.entity.QMember.member;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QEntranceTestResult.entranceTestResult;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseo.oneseo;
@@ -65,10 +66,13 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 .fetchFirst() != null;
 
         return queryFactory
-                .selectFrom(oneseo)
+                .select(oneseo)
+                .from(oneseo)
+                .join(oneseo.entranceTestResult, entranceTestResult)
                 .where(isExistAppliedScreening
                         ? oneseo.appliedScreening.eq(screening)
                         : oneseo.wantedScreening.eq(screening))
+                .orderBy(entranceTestResult.documentEvaluationScore.desc())
                 .fetch();
     }
 
