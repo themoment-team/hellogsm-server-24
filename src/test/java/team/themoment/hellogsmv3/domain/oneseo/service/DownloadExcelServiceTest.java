@@ -88,9 +88,9 @@ public class DownloadExcelServiceTest {
             extraPrivacyDetail = createOneseoPrivacyDetail(extraId, oneseoExtra);
             fallenPrivacyDetail = createOneseoPrivacyDetail(fallenId, oneseoFallen);
 
-            given(oneseoRepository.findAllByWantedScreening(Screening.GENERAL)).willReturn(List.of(oneseoGeneral));
-            given(oneseoRepository.findAllByWantedScreening(Screening.SPECIAL)).willReturn(List.of(oneseoSpecial));
-            given(oneseoRepository.findAllByWantedScreening(Screening.EXTRA_VETERANS)).willReturn(List.of(oneseoExtra));
+            given(oneseoRepository.findAllByScreeningDynamic(Screening.GENERAL)).willReturn(List.of(oneseoGeneral));
+            given(oneseoRepository.findAllByScreeningDynamic(Screening.SPECIAL)).willReturn(List.of(oneseoSpecial));
+            given(oneseoRepository.findAllByScreeningDynamic(Screening.EXTRA_VETERANS)).willReturn(List.of(oneseoExtra));
             given(entranceTestResultRepository.findAllByFirstTestPassYnOrSecondTestPassYn(NO, NO)).willReturn(List.of(fallenEntranceTestResult));
 
             given(entranceTestResultRepository.findByOneseo(oneseoGeneral)).willReturn(generalEntranceTestResult);
@@ -121,7 +121,7 @@ public class DownloadExcelServiceTest {
         private void assertSheetData(Sheet sheet, Oneseo oneseo, EntranceTestResult entranceTestResult, OneseoPrivacyDetail oneseoPrivacyDetail, int idx) {
             List<String> expectedHeader = List.of(
                     "순번", "접수번호", "성명", "1지망", "2지망", "3지망", "생년월일", "성별", "상세주소", "출신학교",
-                    "학력", "전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
+                    "학력", "초기전형", "적용되는 전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
                     "직무적성소양평가점수", "심층면접점수", "최종점수", "최종학과", "지원자연락처", "보호자연락처", "담임연락처", "1차전형결과", "2차전형결과"
             );
 
@@ -147,6 +147,7 @@ public class DownloadExcelServiceTest {
                     String.valueOf(oneseoPrivacyDetail.getSchoolName()),
                     "졸업자",
                     String.valueOf(wantedScreening),
+                    "",
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getGeneralSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getArtsPhysicalSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getAttendanceScore()),

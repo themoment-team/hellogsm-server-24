@@ -2,11 +2,15 @@ package team.themoment.hellogsmv3.domain.oneseo.repository.custom.impl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.SearchOneseoResDto;
+import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
+import team.themoment.hellogsmv3.domain.oneseo.entity.QOneseo;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,6 +53,22 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                 .join(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
                 .join(oneseo.entranceTestResult, entranceTestResult)
                 .where(entranceTestResult.firstTestPassYn.eq(YES))
+                .fetch();
+    }
+
+    @Override
+    public List<Oneseo> findAllByScreeningDynamic(Screening screening) {
+        boolean isExistAppliedScreening = queryFactory
+                .selectOne()
+                .from(oneseo)
+                .where(oneseo.appliedScreening.isNotNull())
+                .fetchFirst() != null;
+
+        return queryFactory
+                .selectFrom(oneseo)
+                .where(isExistAppliedScreening
+                        ? oneseo.appliedScreening.eq(screening)
+                        : oneseo.wantedScreening.eq(screening))
                 .fetch();
     }
 

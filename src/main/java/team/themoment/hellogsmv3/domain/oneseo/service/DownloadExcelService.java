@@ -18,11 +18,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.Screening.*;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.NO;
 
 @Service
@@ -35,7 +34,7 @@ public class DownloadExcelService {
 
     private static final List<String> HEADER_NAMES = List.of(
             "순번", "접수번호", "성명", "1지망", "2지망", "3지망", "생년월일", "성별", "상세주소", "출신학교",
-            "학력", "전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
+            "학력", "초기전형", "적용되는 전형", "일반교과점수", "예체능점수", "출석점수", "봉사점수", "1차전형총점",
             "직무적성소양평가점수", "심층면접점수", "최종점수", "최종학과", "지원자연락처", "보호자연락처", "담임연락처", "1차전형결과", "2차전형결과"
     );
 
@@ -91,14 +90,14 @@ public class DownloadExcelService {
     }
 
     private List<List<String>> getOneseoData(Screening screening) {
-        List<Oneseo> oneseoList = oneseoRepository.findAllByWantedScreening(screening);
+        List<Oneseo> oneseoList = oneseoRepository.findAllByScreeningDynamic(screening);
         return oneseoToExcelDataList(oneseoList);
     }
 
     private List<List<String>> getCombinedExtraScreeningData() {
         List<Oneseo> extraOneseoList = Stream.concat(
-                oneseoRepository.findAllByWantedScreening(Screening.EXTRA_VETERANS).stream(),
-                oneseoRepository.findAllByWantedScreening(Screening.EXTRA_ADMISSION).stream()
+                oneseoRepository.findAllByScreeningDynamic(EXTRA_VETERANS).stream(),
+                oneseoRepository.findAllByScreeningDynamic(Screening.EXTRA_ADMISSION).stream()
         ).collect(Collectors.toList());
 
         return oneseoToExcelDataList(extraOneseoList);
@@ -126,7 +125,6 @@ public class DownloadExcelService {
 
             String sex = null;
             String graduationType = null;
-            String wantedScreening = null;
 
             switch (oneseo.getMember().getSex()) {
                 case MALE -> sex = "남자";
@@ -139,12 +137,8 @@ public class DownloadExcelService {
                 case GED -> graduationType = "검정고시";
             }
 
-            switch (oneseo.getWantedScreening()) {
-                case GENERAL -> wantedScreening = "일반전형";
-                case SPECIAL -> wantedScreening = "특별전형";
-                case EXTRA_VETERANS -> wantedScreening = "국가보훈대상자";
-                case EXTRA_ADMISSION -> wantedScreening = "특례입학대상자";
-            }
+            String wantedScreening = convertScreening(oneseo.getWantedScreening());
+            String appliedScreening = convertScreening(oneseo.getAppliedScreening());
 
             String submitCode = oneseo.getOneseoSubmitCode();
 
@@ -161,6 +155,7 @@ public class DownloadExcelService {
                     String.valueOf(oneseoPrivacyDetail.getSchoolName()),
                     String.valueOf(graduationType),
                     String.valueOf(wantedScreening),
+                    String.valueOf(appliedScreening),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getGeneralSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getArtsPhysicalSubjectsScore()),
                     String.valueOf(entranceTestResult.getEntranceTestFactorsDetail().getAttendanceScore()),
@@ -191,7 +186,20 @@ public class DownloadExcelService {
         return prefix + "-" + number;
     }
 
+    private String convertScreening(Screening screening) {
+        if (screening == null) return null;
+
+        return switch (screening) {
+            case GENERAL -> "일반전형";
+            case SPECIAL -> "특별전형";
+            case EXTRA_VETERANS -> "국가보훈대상자";
+            case EXTRA_ADMISSION -> "특례입학대상자";
+        };
+    }
+
     private String convertTestPassYn(YesNo yn) {
+        if (yn == null) return null;
+
         return switch (yn) {
             case YES -> "합격";
             case NO -> "불합격";
