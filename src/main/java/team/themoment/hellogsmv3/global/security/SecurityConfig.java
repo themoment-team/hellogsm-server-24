@@ -210,6 +210,11 @@ public class SecurityConfig {
                         Role.ADMIN.name()
                 )
 
+                // operation test result
+                .requestMatchers("/operation/**").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
+
                 // mock score calculate
                 .requestMatchers(HttpMethod.POST, "/oneseo/v3/calculate-mock-score").permitAll()
 
