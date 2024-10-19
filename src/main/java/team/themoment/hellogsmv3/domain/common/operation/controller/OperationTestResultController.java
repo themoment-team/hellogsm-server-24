@@ -13,7 +13,7 @@ import team.themoment.hellogsmv3.domain.common.operation.service.AnnounceSecondT
 import team.themoment.hellogsmv3.domain.common.operation.service.QueryAnnounceTestResultService;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 
-@Tag(name = "operation API", description = "결과 발표 관련 operation API입니다.")
+@Tag(name = "Operation API", description = "결과 발표 관련 operation API입니다.")
 @RestController
 @RequestMapping("/operation/v3")
 @RequiredArgsConstructor

@@ -158,7 +158,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/member/v3/auth-info/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
-                .requestMatchers(HttpMethod.GET, "/member/v3/test-result/me").hasAnyAuthority(
+                .requestMatchers(HttpMethod.GET, "/member/v3/first-test-result/me").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/member/v3/second-test-result/me").hasAnyAuthority(
                         Role.APPLICANT.name(),
                         Role.ROOT.name()
                 )
