@@ -6,5 +6,5 @@ import team.themoment.hellogsmv3.domain.common.operation.entity.OperationTestRes
 
 public interface OperationTestResultRepository extends JpaRepository<OperationTestResult, Long> {
     @Query("SELECT o FROM OperationTestResult o LIMIT 1")
-    OperationTestResult getTestResult();
+    OperationTestResult findTestResult();
 }

@@ -27,4 +27,13 @@ public class OperationTestResult {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private YesNo secondTestResultAnnouncementYn = NO;
+
+    public void announceFirstTestResult() {
+        this.firstTestResultAnnouncementYn = YES;
+    }
+
+    public void announceSecondTestResult() {
+        this.secondTestResultAnnouncementYn = YES;
+    }
+
 }
