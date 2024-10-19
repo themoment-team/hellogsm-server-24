@@ -18,15 +18,13 @@ public class OperationTestResult {
     @Id @Column(name = "operarion_test_result_id")
     private Long id;
 
-    @Column(name = "first_test_result_announcement_yn")
-    @Builder.Default
+    @Column(name = "first_test_result_announcement_yn", nullable = false, columnDefinition = "enum ('NO','YES') DEFAULT 'NO'")
     @Enumerated(EnumType.STRING)
-    private YesNo firstTestResultAnnouncementYn = NO;
+    private YesNo firstTestResultAnnouncementYn;
 
-    @Column(name = "second_test_result_announcement_yn")
-    @Builder.Default
+    @Column(name = "second_test_result_announcement_yn", nullable = false, columnDefinition = "enum ('NO','YES') DEFAULT 'NO'")
     @Enumerated(EnumType.STRING)
-    private YesNo secondTestResultAnnouncementYn = NO;
+    private YesNo secondTestResultAnnouncementYn;
 
     public void announceFirstTestResult() {
         this.firstTestResultAnnouncementYn = YES;
