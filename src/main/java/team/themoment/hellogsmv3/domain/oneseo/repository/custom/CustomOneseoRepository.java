@@ -25,4 +25,6 @@ public interface CustomOneseoRepository {
     );
 
     List<AdmissionTicketsResDto> findAdmissionTickets();
+
+    List<Oneseo> findAllByScreeningDynamic(Screening screening);
 }
