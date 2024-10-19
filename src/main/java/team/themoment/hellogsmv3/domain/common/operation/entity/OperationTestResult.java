@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
+
 @Getter
 @Builder
 @Table(name = "tb_operation_test_result")
@@ -17,10 +19,12 @@ public class OperationTestResult {
     private Long id;
 
     @Column(name = "first_test_result_announcement_yn")
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private YesNo firstTestResultAnnouncementYn;
+    private YesNo firstTestResultAnnouncementYn = NO;
 
     @Column(name = "second_test_result_announcement_yn")
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private YesNo secondTestResultAnnouncementYn;
+    private YesNo secondTestResultAnnouncementYn = NO;
 }

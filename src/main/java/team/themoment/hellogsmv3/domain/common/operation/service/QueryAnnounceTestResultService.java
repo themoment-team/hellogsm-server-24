@@ -8,7 +8,7 @@ import team.themoment.hellogsmv3.domain.common.operation.repo.OperationTestResul
 
 @Service
 @RequiredArgsConstructor
-public class QueryAnnounceTestResult {
+public class QueryAnnounceTestResultService {
 
     private final OperationTestResultRepository operationTestResultRepository;
 
