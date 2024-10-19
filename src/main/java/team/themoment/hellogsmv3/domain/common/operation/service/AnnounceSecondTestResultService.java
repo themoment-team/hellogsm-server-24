@@ -12,11 +12,11 @@ import team.themoment.hellogsmv3.global.security.data.ScheduleEnvironment;
 
 import java.time.LocalDateTime;
 
-import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
+import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.YES;
 
 @Service
 @RequiredArgsConstructor
-public class AnnounceFirstTestResultService {
+public class AnnounceSecondTestResultService {
 
     private final OperationTestResultRepository operationTestResultRepository;
     private final EntranceTestResultRepository entranceTestResultRepository;
@@ -24,25 +24,25 @@ public class AnnounceFirstTestResultService {
 
     @Transactional
     public void execute() {
-        validateFirstTestResultAnnouncementPeriod();
+        validateSecondTestResultAnnouncementPeriod();
 
         OperationTestResult testResult = operationTestResultRepository.findTestResult();
         validateDuplicateAnnouncement(testResult);
 
-        testResult.announceFirstTestResult();
+        testResult.announceSecondTestResult();
 
         operationTestResultRepository.save(testResult);
     }
 
-    private void validateFirstTestResultAnnouncementPeriod() {
-        if (LocalDateTime.now().isBefore(scheduleEnv.firstResultsAnnouncement()) || !entranceTestResultRepository.existsByFirstTestPassYnIsNotNull()) {
-            throw new ExpectedException("1차 결과 발표 기간 이전에 발표 여부를 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
+    private void validateSecondTestResultAnnouncementPeriod() {
+        if (LocalDateTime.now().isBefore(scheduleEnv.finalResultsAnnouncement()) || !entranceTestResultRepository.existsBySecondTestPassYnIsNotNull()) {
+            throw new ExpectedException("2차 결과 발표 기간 이전에 발표 여부를 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
 
     private void validateDuplicateAnnouncement(OperationTestResult testResult) {
-        if (testResult.getFirstTestResultAnnouncementYn().equals(YES)) {
-            throw new ExpectedException("이미 1차 결과를 발표했습니다.", HttpStatus.BAD_REQUEST);
+        if (testResult.getSecondTestResultAnnouncementYn().equals(YES)) {
+            throw new ExpectedException("이미 2차 결과를 발표했습니다.", HttpStatus.BAD_REQUEST);
         }
     }
 
