@@ -14,13 +14,13 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 @EntityListeners(AuditingEntityListener.class)
 public class OperationTestResult {
     @Id @Column(name = "operarion_test_result_id")
-    public Long id;
+    private Long id;
 
     @Column(name = "first_test_result_announcement_yn")
     @Enumerated(EnumType.STRING)
-    public YesNo firstTestResultAnnouncementYn;
+    private YesNo firstTestResultAnnouncementYn;
 
     @Column(name = "second_test_result_announcement_yn")
     @Enumerated(EnumType.STRING)
-    public YesNo secondTestResultAnnouncementYn;
+    private YesNo secondTestResultAnnouncementYn;
 }
