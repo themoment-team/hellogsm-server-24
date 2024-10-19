@@ -35,7 +35,7 @@ public class AnnounceFirstTestResultService {
     }
 
     private void validateFirstTestResultAnnouncementPeriod() {
-        if (LocalDateTime.now().isBefore(scheduleEnv.firstResultsAnnouncement()) || !entranceTestResultRepository.existsByFirstTestPassYnIsNotNull()) {
+        if (LocalDateTime.now().isBefore(scheduleEnv.firstResultsAnnouncement()) || entranceTestResultRepository.existsBySecondTestPassYnIsNull()) {
             throw new ExpectedException("1차 결과 발표 기간 이전에 발표 여부를 수정할 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
