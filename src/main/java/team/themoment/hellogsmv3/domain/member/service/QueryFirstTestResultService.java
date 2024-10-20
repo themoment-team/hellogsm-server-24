@@ -8,7 +8,6 @@ import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberFirstTest
 import team.themoment.hellogsmv3.domain.member.entity.Member;
 import team.themoment.hellogsmv3.domain.oneseo.entity.EntranceTestResult;
 import team.themoment.hellogsmv3.domain.oneseo.entity.Oneseo;
-import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.repository.EntranceTestResultRepository;
 import team.themoment.hellogsmv3.domain.oneseo.service.OneseoService;
 import team.themoment.hellogsmv3.global.security.data.ScheduleEnvironment;
@@ -31,6 +30,7 @@ public class QueryFirstTestResultService {
         Member member = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
+        // no content response status
         if (validateFirstTestResultAnnouncement()) return null;
 
         EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();

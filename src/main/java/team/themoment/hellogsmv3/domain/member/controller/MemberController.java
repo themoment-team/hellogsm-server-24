@@ -1,6 +1,9 @@
 package team.themoment.hellogsmv3.domain.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -111,6 +114,10 @@ public class MemberController {
     }
 
     @Operation(summary = "1차 전형 결과 조회", description = "본인의 1차 전형의 결과를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "1차 전형 결과 조회 성공"),
+            @ApiResponse(responseCode = "204", description = "1차 전형 결과가 아직 발표되지 않았습니다.", content = @Content())
+    })
     @GetMapping("/first-test-result/me")
     public FoundMemberFirstTestResDto firstTestResult(
             @AuthRequest Long memberId
@@ -118,7 +125,11 @@ public class MemberController {
         return queryFirstTestResultService.execute(memberId);
     }
 
-    @Operation(summary = "2차 전형 결과 조회", description = "본인의 2차 전형의 결과를 조회합니다.")
+    @Operation(summary = "2차 전형 결과 조회", description = "본인의 2차 전형 결과를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "2차 전형 결과 조회 성공"),
+            @ApiResponse(responseCode = "204", description = "2차 전형 결과가 아직 발표되지 않았습니다.", content = @Content())
+    })
     @GetMapping("/second-test-result/me")
     public FoundMemberSecondTestResDto secondTestResult(
             @AuthRequest Long memberId

@@ -30,6 +30,7 @@ public class QuerySecondTestResultService {
         Member member = memberService.findByIdOrThrow(memberId);
         Oneseo oneseo = oneseoService.findByMemberOrThrow(member);
 
+        // no content response status
         if (validateSecondTestResultAnnouncement()) return null;
 
         EntranceTestResult entranceTestResult = oneseo.getEntranceTestResult();

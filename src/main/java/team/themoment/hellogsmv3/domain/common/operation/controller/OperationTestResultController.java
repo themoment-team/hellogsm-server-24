@@ -1,6 +1,10 @@
 package team.themoment.hellogsmv3.domain.common.operation.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,16 +34,24 @@ public class OperationTestResultController {
     }
 
     @Operation(summary = "1차 결과 발표", description = "1차 결과를 발표합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "1차 결과 발표 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "1차 결과 발표 기간 이전이거나 이미 발표된 상태입니다.", content = @Content())
+    })
     @PostMapping("/operation/announce-first-teat-result")
     public CommonApiResponse announceFirstTestResult() {
         announceFirstTestResultService.execute();
-        return CommonApiResponse.success("1차 결과 발표 여부를 수정하였습니다.");
+        return CommonApiResponse.success("1차 결과 발표 성공했습니다.");
     }
 
     @Operation(summary = "2차 결과 발표", description = "2차 결과를 발표합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "2차 결과 발표 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "2차 결과 발표 기간 이전이거나 이미 발표된 상태입니다.", content = @Content())
+    })
     @PostMapping("/operation/announce-second-teat-result")
     public CommonApiResponse announceSecondTestResult() {
         announceSecondTestResultService.execute();
-        return CommonApiResponse.success("2차 결과 발표 여부를 수정하였습니다.");
+        return CommonApiResponse.success("2차 결과 발표 성공했습니다.");
     }
 }
