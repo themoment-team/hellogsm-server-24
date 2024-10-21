@@ -38,7 +38,7 @@ public class OperationTestResultController {
             @ApiResponse(responseCode = "200", description = "1차 결과 발표 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "1차 결과 발표 기간 이전이거나 이미 발표된 상태입니다.", content = @Content())
     })
-    @PostMapping("/operation/announce-first-teat-result")
+    @PostMapping("/operation/announce-first-test-result")
     public CommonApiResponse announceFirstTestResult() {
         announceFirstTestResultService.execute();
         return CommonApiResponse.success("1차 결과 발표 성공했습니다.");
@@ -49,7 +49,7 @@ public class OperationTestResultController {
             @ApiResponse(responseCode = "200", description = "2차 결과 발표 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "2차 결과 발표 기간 이전이거나 이미 발표된 상태입니다.", content = @Content())
     })
-    @PostMapping("/operation/announce-second-teat-result")
+    @PostMapping("/operation/announce-second-test-result")
     public CommonApiResponse announceSecondTestResult() {
         announceSecondTestResultService.execute();
         return CommonApiResponse.success("2차 결과 발표 성공했습니다.");
