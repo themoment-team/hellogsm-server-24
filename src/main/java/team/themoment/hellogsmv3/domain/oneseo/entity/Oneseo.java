@@ -52,7 +52,7 @@ public class Oneseo {
     @Column(name = "oneseo_submit_code", unique = true)
     private String oneseoSubmitCode;
 
-    @Column(name = "examination_number", unique = true)
+    @Column(name = "examination_number", length = 4, unique = true)
     private String examinationNumber;
 
     @Column(name = "pass_yn")
