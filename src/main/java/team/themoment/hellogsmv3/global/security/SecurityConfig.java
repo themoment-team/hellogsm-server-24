@@ -44,7 +44,6 @@ public class SecurityConfig {
                 .addFilter(HttpMethod.POST, "/oneseo/v3/temp-storage", oneseoSubmissionStart, oneseoSubmissionEnd)
                 .addFilter(HttpMethod.POST, "/oneseo/v3/oneseo/me", oneseoSubmissionStart, oneseoSubmissionEnd)
                 .addFilter(HttpMethod.PUT, "/oneseo/v3/oneseo/{memberId}", oneseoSubmissionStart, oneseoSubmissionEnd)
-                .addFilter(HttpMethod.GET, "/oneseo/v3/oneseo/me", oneseoSubmissionStart, oneseoSubmissionEnd)
                 .addFilter(HttpMethod.POST, "/oneseo/v3/image", oneseoSubmissionStart, oneseoSubmissionEnd);
     }
 
@@ -158,7 +157,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/member/v3/auth-info/{memberId}").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
-                .requestMatchers(HttpMethod.GET, "/member/v3/test-result/me").hasAnyAuthority(
+                .requestMatchers(HttpMethod.GET, "/member/v3/first-test-result/me").hasAnyAuthority(
+                        Role.APPLICANT.name(),
+                        Role.ROOT.name()
+                )
+                .requestMatchers(HttpMethod.GET, "/member/v3/second-test-result/me").hasAnyAuthority(
                         Role.APPLICANT.name(),
                         Role.ROOT.name()
                 )
@@ -200,13 +203,18 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/oneseo/v3/final-submit").hasAnyAuthority(
                         Role.APPLICANT.name()
                 )
-                .requestMatchers(HttpMethod.GET, "oneseo/v3/excel").hasAnyAuthority(
+                .requestMatchers(HttpMethod.GET, "/oneseo/v3/excel").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.GET, "/oneseo/v3/admission-tickets").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
                 .requestMatchers(HttpMethod.GET, "/oneseo/v3/editability").hasAnyAuthority(
+                        Role.ADMIN.name()
+                )
+
+                // operation test result
+                .requestMatchers("/operation/**").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
 

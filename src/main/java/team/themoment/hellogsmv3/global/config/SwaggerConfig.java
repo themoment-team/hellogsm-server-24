@@ -32,7 +32,7 @@ public class SwaggerConfig {
     public GroupedOpenApi api(OperationCustomizer operationCustomizer) {
         return GroupedOpenApi.builder()
                 .group("Hello, GSM 2024 API")
-                .pathsToMatch("/member/**", "/oneseo/**", "/auth/**", "/date")
+                .pathsToMatch("/member/**", "/oneseo/**", "/auth/**", "/date", "/operation/**")
                 .addOperationCustomizer(operationCustomizer)
                 .build();
     }

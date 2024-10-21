@@ -1,20 +1,21 @@
 package team.themoment.hellogsmv3.domain.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.member.dto.request.CreateMemberReqDto;
-import team.themoment.hellogsmv3.domain.member.dto.response.FoundDuplicateMemberResDto;
-import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberTestResDto;
+import team.themoment.hellogsmv3.domain.member.dto.response.*;
 import team.themoment.hellogsmv3.domain.member.entity.type.Role;
 import team.themoment.hellogsmv3.domain.member.service.*;
 import team.themoment.hellogsmv3.domain.member.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.request.GenerateCodeReqDto;
-import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberAuthInfoResDto;
-import team.themoment.hellogsmv3.domain.member.dto.response.FoundMemberResDto;
 import team.themoment.hellogsmv3.domain.member.service.impl.GenerateCodeServiceImpl;
 import team.themoment.hellogsmv3.domain.member.service.impl.GenerateTestCodeServiceImpl;
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
@@ -34,7 +35,8 @@ public class MemberController {
     private final QueryMemberByIdService queryMemberByIdService;
     private final CreateMemberService createMemberService;
     private final QueryMemberAuthInfoByIdService queryMemberAuthInfoByIdService;
-    private final QueryTestResultService queryTestResultService;
+    private final QueryFirstTestResultService queryFirstTestResultService;
+    private final QuerySecondTestResultService querySecondTestResultService;
     private final QueryCheckDuplicateMemberService queryCheckDuplicateMemberService;
 
     @Operation(summary = "인증코드 전송", description = "전화번호를 요청받아 인증코드를 전송합니다.")
@@ -111,12 +113,28 @@ public class MemberController {
         return queryMemberAuthInfoByIdService.execute(memberId);
     }
 
-    @Operation(summary = "전형 결과 조회", description = "본인의 1차 전형, 2차 전형의 결과를 조회합니다.")
-    @GetMapping("/test-result/me")
-    public FoundMemberTestResDto testResult(
+    @Operation(summary = "1차 전형 결과 조회", description = "본인의 1차 전형의 결과를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "1차 전형 결과 조회 성공"),
+            @ApiResponse(responseCode = "204", description = "1차 전형 결과가 아직 발표되지 않았습니다.", content = @Content())
+    })
+    @GetMapping("/first-test-result/me")
+    public FoundMemberFirstTestResDto firstTestResult(
             @AuthRequest Long memberId
     ) {
-        return queryTestResultService.execute(memberId);
+        return queryFirstTestResultService.execute(memberId);
+    }
+
+    @Operation(summary = "2차 전형 결과 조회", description = "본인의 2차 전형 결과를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "2차 전형 결과 조회 성공"),
+            @ApiResponse(responseCode = "204", description = "2차 전형 결과가 아직 발표되지 않았습니다.", content = @Content())
+    })
+    @GetMapping("/second-test-result/me")
+    public FoundMemberSecondTestResDto secondTestResult(
+            @AuthRequest Long memberId
+    ) {
+        return querySecondTestResultService.execute(memberId);
     }
 
     @Operation(summary = "중복 회원가입 여부 확인", description = "중복 회원가입을 막기 위해 가입된 지원자의 전화번호인지 확인합니다.")
