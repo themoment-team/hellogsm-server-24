@@ -49,8 +49,11 @@ public class Oneseo {
     @OneToMany(mappedBy = "oneseo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WantedScreeningChangeHistory> wantedScreeningChangeHistory = new ArrayList<>();
 
-    @Column(name = "oneseo_submit_code")
+    @Column(name = "oneseo_submit_code", unique = true)
     private String oneseoSubmitCode;
+
+    @Column(name = "examination_number", length = 4, unique = true)
+    private String examinationNumber;
 
     @Column(name = "pass_yn")
     @Enumerated(EnumType.STRING)

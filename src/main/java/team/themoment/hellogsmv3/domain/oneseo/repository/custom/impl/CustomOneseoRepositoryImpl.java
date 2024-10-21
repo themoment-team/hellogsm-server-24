@@ -45,7 +45,7 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                                 oneseo.member.birth,
                                 oneseoPrivacyDetail.profileImg,
                                 oneseoPrivacyDetail.schoolName,
-                                oneseo.appliedScreening,
+                                oneseo.examinationNumber,
                                 oneseo.oneseoSubmitCode
                         )
                 )
