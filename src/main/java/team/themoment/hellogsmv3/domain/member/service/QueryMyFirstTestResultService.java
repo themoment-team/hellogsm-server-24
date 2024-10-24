@@ -18,7 +18,7 @@ import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 @Service
 @RequiredArgsConstructor
-public class QueryFirstTestResultService {
+public class QueryMyFirstTestResultService {
 
     private final MemberService memberService;
     private final OneseoService oneseoService;

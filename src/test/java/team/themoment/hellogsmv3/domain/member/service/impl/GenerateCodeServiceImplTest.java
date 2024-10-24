@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@DisplayName("GenerateCodeServiceImpl 클래스의")
+@DisplayName("GenerateTestResultCodeServiceImpl 클래스의")
 class GenerateCodeServiceImplTest {
 
     @Mock

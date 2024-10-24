@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
+import team.themoment.hellogsmv3.domain.member.entity.type.AuthCodeType;
 
 import java.time.LocalDateTime;
 
@@ -16,12 +17,15 @@ public class AuthenticationCode {
     @Id
     @Indexed
     private Long memberId;
+    @Id
+    @Indexed
+    private String phoneNumber;
     @Indexed
     private String code;
     private Boolean authenticated;
-    private String phoneNumber;
     private LocalDateTime createdAt;
     private int count;
+    private AuthCodeType authCodeType;
 
     public AuthenticationCode updatedCode(String code, LocalDateTime createdAt, boolean isTest) {
         this.code = code;
@@ -30,12 +34,13 @@ public class AuthenticationCode {
         return this;
     }
 
-    public AuthenticationCode(Long memberId, String code, String phoneNumber, LocalDateTime createdAt, boolean isTest) {
+    public AuthenticationCode(Long memberId, String code, String phoneNumber, LocalDateTime createdAt, AuthCodeType authCodeType, boolean isTest) {
         this.memberId = memberId;
         this.code = code;
         this.authenticated = false;
         this.phoneNumber = phoneNumber;
         this.createdAt = createdAt;
+        this.authCodeType = authCodeType;
         this.count = !isTest ? 1 : 0;
     }
 

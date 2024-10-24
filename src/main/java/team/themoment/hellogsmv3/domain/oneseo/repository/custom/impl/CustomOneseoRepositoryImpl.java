@@ -29,6 +29,7 @@ import static team.themoment.hellogsmv3.domain.oneseo.entity.QOneseoPrivacyDetai
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -74,6 +75,19 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
                         : oneseo.wantedScreening.eq(screening))
                 .orderBy(entranceTestResult.documentEvaluationScore.desc())
                 .fetch();
+    }
+
+    @Override
+    public Optional<Oneseo> findByGuardianOrTeacherPhoneNumberAndSubmitCode(String phoneNumber, String submitCode) {
+         return Optional.ofNullable(
+                 queryFactory.selectFrom(oneseo)
+                    .join(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
+                    .where(
+                            oneseoPrivacyDetail.guardianPhoneNumber.eq(phoneNumber)
+                                    .or(oneseoPrivacyDetail.schoolTeacherPhoneNumber.eq(phoneNumber))
+                                    .and(oneseo.oneseoSubmitCode.eq(submitCode))
+                    ).fetchOne()
+         );
     }
 
     @Override

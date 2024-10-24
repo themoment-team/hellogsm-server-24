@@ -1,4 +1,4 @@
-package team.themoment.hellogsmv3.domain.member.service.impl;
+package team.themoment.hellogsmv3.domain.common.testResult.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,20 +12,20 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.Random;
 
-import static team.themoment.hellogsmv3.domain.member.entity.type.AuthCodeType.*;
+import static team.themoment.hellogsmv3.domain.member.entity.type.AuthCodeType.TEST_RESULT;
 
 @Service
 @RequiredArgsConstructor
-public class GenerateCodeServiceImpl extends GenerateCodeService {
+public class GenerateTestResultCodeServiceImpl extends GenerateCodeService {
 
     private final CodeRepository codeRepository;
     private final SendCodeNotificationService sendCodeNotificationService;
     private static final Random RANDOM = new Random();
 
     @Override
-    public String execute(Long memberId, GenerateCodeReqDto reqDto) {
+    protected String execute(Long memberId, GenerateCodeReqDto reqDto) {
 
-        AuthenticationCode authenticationCode = codeRepository.findByMemberId(memberId)
+        AuthenticationCode authenticationCode = codeRepository.findByMemberIdAndAuthCodeType(memberId, TEST_RESULT)
                 .orElse(null);
 
         if (isLimitedRequest(authenticationCode))
@@ -42,7 +42,7 @@ public class GenerateCodeServiceImpl extends GenerateCodeService {
                 memberId,
                 code,
                 phoneNumber,
-                SIGNUP,
+                TEST_RESULT,
                 false));
 
         sendCodeNotificationService.execute(phoneNumber, code);
