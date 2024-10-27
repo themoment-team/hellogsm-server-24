@@ -17,6 +17,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static team.themoment.hellogsmv3.domain.member.entity.type.AuthCodeType.*;
 
 @DisplayName("GenerateTestResultCodeServiceImpl 클래스의")
 class GenerateCodeServiceImplTest {
@@ -48,7 +49,7 @@ class GenerateCodeServiceImplTest {
 
             @BeforeEach
             void setUp() {
-                given(codeRepository.findByMemberId(memberId)).willReturn(Optional.empty());
+                given(codeRepository.findByMemberIdAndAuthCodeType(memberId, SIGNUP)).willReturn(Optional.empty());
                 given(codeRepository.findByCode(anyString())).willReturn(Optional.empty());
             }
 
@@ -83,7 +84,7 @@ class GenerateCodeServiceImplTest {
             @BeforeEach
             void setUp() {
                 existingCode = mock(AuthenticationCode.class);
-                given(codeRepository.findByMemberId(memberId)).willReturn(Optional.of(existingCode));
+                given(codeRepository.findByMemberIdAndAuthCodeType(memberId, SIGNUP)).willReturn(Optional.of(existingCode));
                 given(existingCode.getCount()).willReturn(5);
             }
 
