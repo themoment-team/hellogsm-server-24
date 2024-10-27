@@ -22,7 +22,7 @@ public class GenerateTestCodeServiceImpl extends GenerateCodeService {
     public String execute(Long memberId, GenerateCodeReqDto reqDto) {
         final String code = generateUniqueCode(RANDOM, codeRepository);
 
-        AuthenticationCode authenticationCode = codeRepository.findByMemberId(memberId)
+        AuthenticationCode authenticationCode = codeRepository.findByMemberIdAndAuthCodeType(memberId, SIGNUP)
                 .orElse(null);
 
         codeRepository.save(createAuthenticationCode(

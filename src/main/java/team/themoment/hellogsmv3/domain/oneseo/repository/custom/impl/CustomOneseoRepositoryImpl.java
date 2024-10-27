@@ -79,13 +79,26 @@ public class CustomOneseoRepositoryImpl implements CustomOneseoRepository {
 
     @Override
     public Optional<Oneseo> findByGuardianOrTeacherPhoneNumberAndSubmitCode(String phoneNumber, String submitCode) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(oneseo)
+                        .join(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
+                        .where(
+                                oneseoPrivacyDetail.guardianPhoneNumber.eq(phoneNumber)
+                                        .or(oneseoPrivacyDetail.schoolTeacherPhoneNumber.eq(phoneNumber))
+                                        .and(oneseo.oneseoSubmitCode.eq(submitCode))
+                        ).fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<Oneseo> findByGuardianOrTeacherPhoneNumberAndExaminationNumber(String phoneNumber, String examinationNumber) {
          return Optional.ofNullable(
                  queryFactory.selectFrom(oneseo)
                     .join(oneseo.oneseoPrivacyDetail, oneseoPrivacyDetail)
                     .where(
                             oneseoPrivacyDetail.guardianPhoneNumber.eq(phoneNumber)
                                     .or(oneseoPrivacyDetail.schoolTeacherPhoneNumber.eq(phoneNumber))
-                                    .and(oneseo.oneseoSubmitCode.eq(submitCode))
+                                    .and(oneseo.examinationNumber.eq(examinationNumber))
                     ).fetchOne()
          );
     }

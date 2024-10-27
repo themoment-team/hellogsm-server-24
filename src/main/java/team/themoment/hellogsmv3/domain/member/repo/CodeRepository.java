@@ -7,7 +7,6 @@ import team.themoment.hellogsmv3.domain.member.entity.type.AuthCodeType;
 import java.util.Optional;
 
 public interface CodeRepository extends CrudRepository<AuthenticationCode, String> {
-    Optional<AuthenticationCode> findByMemberId(Long memberId);
-    Optional<AuthenticationCode> findByPhoneNumberAndAuthCodeType(String phoneNumber, AuthCodeType authCodeType);
+    Optional<AuthenticationCode> findByMemberIdAndAuthCodeType(Long memberId, AuthCodeType authCodeType);
     Optional<AuthenticationCode> findByCode(String code);
 }

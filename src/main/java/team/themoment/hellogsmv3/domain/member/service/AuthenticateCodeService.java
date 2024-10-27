@@ -18,8 +18,7 @@ public class AuthenticateCodeService {
 
     @Transactional
     public void execute(Long memberId, AuthenticateCodeReqDto reqDto, AuthCodeType authCodeType) {
-
-        AuthenticationCode code = codeRepository.findByMemberId(memberId)
+        AuthenticationCode code = codeRepository.findByMemberIdAndAuthCodeType(memberId, authCodeType)
                 .orElseThrow(() -> new ExpectedException("사용자의 code가 존재하지 않습니다. member ID : " + memberId, HttpStatus.NOT_FOUND));
 
         if (!code.getCode().equals(reqDto.code()))

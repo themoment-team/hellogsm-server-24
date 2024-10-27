@@ -3,6 +3,7 @@ package team.themoment.hellogsmv3.domain.member.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
@@ -17,15 +18,14 @@ public class AuthenticationCode {
     @Id
     @Indexed
     private Long memberId;
-    @Id
-    @Indexed
-    private String phoneNumber;
     @Indexed
     private String code;
+    @Indexed
+    private AuthCodeType authCodeType;
+    private String phoneNumber;
     private Boolean authenticated;
     private LocalDateTime createdAt;
     private int count;
-    private AuthCodeType authCodeType;
 
     public AuthenticationCode updatedCode(String code, LocalDateTime createdAt, boolean isTest) {
         this.code = code;

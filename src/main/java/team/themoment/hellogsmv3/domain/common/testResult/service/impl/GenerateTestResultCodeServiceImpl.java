@@ -23,7 +23,7 @@ public class GenerateTestResultCodeServiceImpl extends GenerateCodeService {
     private static final Random RANDOM = new Random();
 
     @Override
-    protected String execute(Long memberId, GenerateCodeReqDto reqDto) {
+    public String execute(Long memberId, GenerateCodeReqDto reqDto) {
 
         AuthenticationCode authenticationCode = codeRepository.findByMemberIdAndAuthCodeType(memberId, TEST_RESULT)
                 .orElse(null);
@@ -34,7 +34,6 @@ public class GenerateTestResultCodeServiceImpl extends GenerateCodeService {
                     LIMIT_COUNT_CODE_REQUEST), HttpStatus.BAD_REQUEST);
 
         String phoneNumber = reqDto.phoneNumber();
-
         final String code = generateUniqueCode(RANDOM, codeRepository);
 
         codeRepository.save(createAuthenticationCode(
@@ -45,7 +44,7 @@ public class GenerateTestResultCodeServiceImpl extends GenerateCodeService {
                 TEST_RESULT,
                 false));
 
-        sendCodeNotificationService.execute(phoneNumber, code);
+//        sendCodeNotificationService.execute(phoneNumber, code);
 
         return code;
     }

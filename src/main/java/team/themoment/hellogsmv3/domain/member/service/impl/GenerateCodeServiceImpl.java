@@ -25,7 +25,7 @@ public class GenerateCodeServiceImpl extends GenerateCodeService {
     @Override
     public String execute(Long memberId, GenerateCodeReqDto reqDto) {
 
-        AuthenticationCode authenticationCode = codeRepository.findByMemberId(memberId)
+        AuthenticationCode authenticationCode = codeRepository.findByMemberIdAndAuthCodeType(memberId, SIGNUP)
                 .orElse(null);
 
         if (isLimitedRequest(authenticationCode))
