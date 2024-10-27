@@ -34,8 +34,8 @@ public class TestResultController {
             @AuthRequest Long memberId,
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
-        String code = generateTestResultCodeService.execute(memberId, reqDto);
-        return CommonApiResponse.success("전송되었습니다." + code);
+        generateTestResultCodeService.execute(memberId, reqDto);
+        return CommonApiResponse.success("전송되었습니다.");
     }
 
     @Operation(summary = "인증코드 인증", description = "인증코드를 요청받아 인증을 진행합니다.")

@@ -44,7 +44,7 @@ public class GenerateTestResultCodeServiceImpl extends GenerateCodeService {
                 TEST_RESULT,
                 false));
 
-//        sendCodeNotificationService.execute(phoneNumber, code);
+        sendCodeNotificationService.execute(phoneNumber, code);
 
         return code;
     }
