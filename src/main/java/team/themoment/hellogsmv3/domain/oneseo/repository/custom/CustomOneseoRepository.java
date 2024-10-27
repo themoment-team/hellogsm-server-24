@@ -11,6 +11,7 @@ import team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo;
 import team.themoment.hellogsmv3.domain.oneseo.dto.response.AdmissionTicketsResDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomOneseoRepository {
 
@@ -27,4 +28,8 @@ public interface CustomOneseoRepository {
     List<AdmissionTicketsResDto> findAdmissionTickets();
 
     List<Oneseo> findAllByScreeningDynamic(Screening screening);
+
+    Optional<Oneseo> findByGuardianOrTeacherPhoneNumberAndSubmitCode(String phoneNumber, String submitCode);
+    Optional<Oneseo> findByGuardianOrTeacherPhoneNumberAndExaminationNumber(String phoneNumber, String examinationNumber);
+
 }

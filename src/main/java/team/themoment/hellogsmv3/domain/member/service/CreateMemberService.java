@@ -15,6 +15,7 @@ import team.themoment.hellogsmv3.global.security.data.ScheduleEnvironment;
 
 import java.time.LocalDateTime;
 
+import static team.themoment.hellogsmv3.domain.member.entity.type.AuthCodeType.*;
 import static team.themoment.hellogsmv3.domain.member.entity.type.Role.*;
 
 @Service
@@ -33,7 +34,7 @@ public class CreateMemberService {
     @Transactional
     public Role execute(CreateMemberReqDto reqDto, Long memberId) {
 
-        commonCodeService.validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
+        commonCodeService.validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber(), SIGNUP);
 
         Member member = memberService.findByIdOrThrow(memberId);
 

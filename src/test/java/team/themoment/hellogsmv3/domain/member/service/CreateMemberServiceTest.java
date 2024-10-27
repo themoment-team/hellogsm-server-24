@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
+import static team.themoment.hellogsmv3.domain.member.entity.type.AuthCodeType.*;
 
 @DisplayName("CreateMemberService 클래스의")
 class CreateMemberServiceTest {
@@ -85,7 +86,7 @@ class CreateMemberServiceTest {
                 given(scheduleEnvironment.oneseoSubmissionEnd()).willReturn(LocalDateTime.of(9999, Month.OCTOBER, 10, 10, 10));
                 given(memberRepository.findByPhoneNumber(reqDto.phoneNumber())).willReturn(Optional.empty());
                 given(entranceTestResultRepository.existsByFirstTestPassYnIsNotNull()).willReturn(false);
-                willDoNothing().given(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
+                willDoNothing().given(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber(), SIGNUP);
             }
 
             @Test
@@ -115,7 +116,7 @@ class CreateMemberServiceTest {
             void setUp() {
                 when(memberService.findByIdOrThrow(memberId))
                         .thenThrow(new ExpectedException("존재하지 않는 지원자입니다. member ID: " + memberId, HttpStatus.NOT_FOUND));
-                willDoNothing().given(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber());
+                willDoNothing().given(commonCodeService).validateAndDelete(memberId, reqDto.code(), reqDto.phoneNumber(), SIGNUP);
             }
 
             @Test
