@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.themoment.hellogsmv3.domain.member.dto.request.CreateMemberReqDto;
 import team.themoment.hellogsmv3.domain.member.dto.response.*;
@@ -21,6 +20,8 @@ import team.themoment.hellogsmv3.domain.member.service.impl.GenerateTestCodeServ
 import team.themoment.hellogsmv3.global.common.handler.annotation.AuthRequest;
 import team.themoment.hellogsmv3.global.common.response.CommonApiResponse;
 import team.themoment.hellogsmv3.global.security.auth.AuthenticatedUserManager;
+
+import static team.themoment.hellogsmv3.domain.member.entity.type.AuthCodeType.*;
 
 @Tag(name = "Member API", description = "맴버 관련 API입니다.")
 @RestController
@@ -35,8 +36,8 @@ public class MemberController {
     private final QueryMemberByIdService queryMemberByIdService;
     private final CreateMemberService createMemberService;
     private final QueryMemberAuthInfoByIdService queryMemberAuthInfoByIdService;
-    private final QueryFirstTestResultService queryFirstTestResultService;
-    private final QuerySecondTestResultService querySecondTestResultService;
+    private final QueryMyFirstTestResultService queryMyFirstTestResultService;
+    private final QueryMySecondTestResultService queryMySecondTestResultService;
     private final QueryCheckDuplicateMemberService queryCheckDuplicateMemberService;
 
     @Operation(summary = "인증코드 전송", description = "전화번호를 요청받아 인증코드를 전송합니다.")
@@ -65,7 +66,7 @@ public class MemberController {
             @AuthRequest Long memberId,
             @RequestBody @Valid AuthenticateCodeReqDto reqDto
     ) {
-        authenticateCodeService.execute(memberId, reqDto);
+        authenticateCodeService.execute(memberId, reqDto, SIGNUP);
         return CommonApiResponse.success("인증되었습니다.");
     }
 
@@ -122,7 +123,7 @@ public class MemberController {
     public FoundMemberFirstTestResDto firstTestResult(
             @AuthRequest Long memberId
     ) {
-        return queryFirstTestResultService.execute(memberId);
+        return queryMyFirstTestResultService.execute(memberId);
     }
 
     @Operation(summary = "2차 전형 결과 조회", description = "본인의 2차 전형 결과를 조회합니다.")
@@ -134,7 +135,7 @@ public class MemberController {
     public FoundMemberSecondTestResDto secondTestResult(
             @AuthRequest Long memberId
     ) {
-        return querySecondTestResultService.execute(memberId);
+        return queryMySecondTestResultService.execute(memberId);
     }
 
     @Operation(summary = "중복 회원가입 여부 확인", description = "중복 회원가입을 막기 위해 가입된 지원자의 전화번호인지 확인합니다.")

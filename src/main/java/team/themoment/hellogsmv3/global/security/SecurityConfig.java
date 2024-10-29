@@ -213,12 +213,18 @@ public class SecurityConfig {
                         Role.ADMIN.name()
                 )
 
-                // operation test result
+                // operation test result api
                 .requestMatchers("/operation/**").hasAnyAuthority(
                         Role.ADMIN.name()
                 )
 
-                // mock score calculate
+                // test result api
+                .requestMatchers("/test-result/v3/**").hasAnyAuthority(
+                        Role.UNAUTHENTICATED.name(),
+                        Role.APPLICANT.name()
+                )
+
+                // mock score calculate api
                 .requestMatchers(HttpMethod.POST, "/oneseo/v3/calculate-mock-score").permitAll()
 
                 // common / get date api
