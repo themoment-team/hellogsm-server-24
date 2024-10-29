@@ -69,6 +69,7 @@ public class QueryTestResultService {
     private FoundTestResultResDto buildSecondTestResultResDto(Oneseo findOneseo) {
         return FoundTestResultResDto.builder()
                 .name(findOneseo.getMember().getName())
+                .firstTestPassYn(findOneseo.getEntranceTestResult().getFirstTestPassYn())
                 .secondTestPassYn(findOneseo.getEntranceTestResult().getSecondTestPassYn())
                 .decidedMajor(findOneseo.getDecidedMajor())
                 .build();
