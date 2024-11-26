@@ -39,4 +39,4 @@ jobs:
 
       # Run build and tests without packaging
       - name: Run Build and Tests
-        run: ./gradlew assemble
+        run: ./gradlew clean assemble
