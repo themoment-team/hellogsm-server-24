@@ -1,6 +1,8 @@
 package team.themoment.hellogsmv3.domain.member.repo;
 
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
@@ -16,4 +18,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("DELETE FROM Member m WHERE m = :member")
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     void deleteDuplicate(Member member);
+
+    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    Optional<Member> findById(Long memberId);
 }
