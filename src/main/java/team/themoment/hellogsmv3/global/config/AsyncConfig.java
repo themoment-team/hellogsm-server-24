@@ -22,6 +22,9 @@ public class AsyncConfig implements AsyncConfigurer {
     @Bean(name = "discordTaskExecutor")
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(1);
+        executor.setQueueCapacity(Integer.MAX_VALUE);
+        executor.setMaxPoolSize(Integer.MAX_VALUE);
         executor.setThreadNamePrefix("Discord-Task");
         executor.initialize();
         return executor;
