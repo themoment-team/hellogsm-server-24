@@ -3,10 +3,7 @@ package team.themoment.hellogsmv3.domain.oneseo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.http.HttpStatus;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsmv3.domain.member.entity.Member;
@@ -27,7 +24,6 @@ import team.themoment.hellogsmv3.global.exception.error.ExpectedException;
 
 import java.util.List;
 
-import static org.springframework.transaction.annotation.Isolation.*;
 import static team.themoment.hellogsmv3.domain.oneseo.entity.type.YesNo.*;
 import static team.themoment.hellogsmv3.domain.oneseo.service.OneseoService.isValidMiddleSchoolInfo;
 
@@ -44,11 +40,7 @@ public class CreateOneseoService {
     private final OneseoService oneseoService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Retryable(
-            value = {CannotAcquireLockException.class},
-            maxAttempts = 2,
-            backoff = @Backoff(delay = 1000))
-    @Transactional(isolation = SERIALIZABLE)
+    @Transactional
     @CachePut(value = OneseoService.ONESEO_CACHE_VALUE, key = "#memberId")
     public FoundOneseoResDto execute(OneseoReqDto reqDto, Long memberId) {
 
