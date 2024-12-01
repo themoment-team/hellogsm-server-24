@@ -46,7 +46,7 @@ public class CreateOneseoService {
 
         isValidMiddleSchoolInfo(reqDto);
 
-        Member currentMember = memberService.findByIdOrThrow(memberId);
+        Member currentMember = memberService.findByIdForUpdateOrThrow(memberId);
 
         isExistOneseo(currentMember);
 

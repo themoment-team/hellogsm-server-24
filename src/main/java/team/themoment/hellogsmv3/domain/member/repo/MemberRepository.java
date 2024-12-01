@@ -20,5 +20,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     void deleteDuplicate(Member member);
 
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
-    Optional<Member> findById(Long memberId);
+    @Query("SELECT m FROM Member m WHERE m.id = :memberId")
+    Optional<Member> findByIdForUpdate(Long memberId);
 }
