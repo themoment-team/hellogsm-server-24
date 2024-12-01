@@ -37,9 +37,8 @@ jobs:
 
         shell: bash
 
-      # Run build and tests without packaging
-      - name: Run Build and Tests
-        run: ./gradlew clean assemble
+      - name: Build with Gradle
+        run: ./gradlew clean build
 
       - name: CI Success Notification
         uses: sarisia/actions-status-discord@v1
