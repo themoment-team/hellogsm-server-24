@@ -28,16 +28,13 @@ public class CalculateGradeService {
     private final EntranceTestResultRepository entranceTestResultRepository;
     private final EntranceTestFactorsDetailRepository entranceTestFactorsDetailRepository;
 
-    private BigDecimal score1_2 = BigDecimal.ZERO;
-    private BigDecimal score2_1 = BigDecimal.ZERO;
-    private BigDecimal score2_2 = BigDecimal.ZERO;
-    private BigDecimal score3_1 = BigDecimal.ZERO;
-    private BigDecimal score3_2 = BigDecimal.ZERO;
+    private ThreadLocal<BigDecimal> score1_2 = ThreadLocal.withInitial(() -> BigDecimal.ZERO);
+    private ThreadLocal<BigDecimal> score2_1 = ThreadLocal.withInitial(() -> BigDecimal.ZERO);
+    private ThreadLocal<BigDecimal> score2_2 = ThreadLocal.withInitial(() -> BigDecimal.ZERO);
+    private ThreadLocal<BigDecimal> score3_1 = ThreadLocal.withInitial(() -> BigDecimal.ZERO);
+    private ThreadLocal<BigDecimal> score3_2 = ThreadLocal.withInitial(() -> BigDecimal.ZERO);
 
     public CalculatedScoreResDto execute(MiddleSchoolAchievementReqDto dto, Oneseo oneseo, GraduationType graduationType) {
-
-        // 교과 성적 필드 초기화
-        initScore();
 
         validGraduationType(graduationType);
         validFreeSemester(dto.liberalSystem(), dto.freeSemester());
@@ -89,11 +86,11 @@ public class CalculateGradeService {
                         .attendanceScore(attendanceScore)
                         .volunteerScore(volunteerScore)
                         .totalNonSubjectsScore(totalNonSubjectsScore)
-                        .score1_2(score1_2)
-                        .score2_1(score2_1)
-                        .score2_2(score2_2)
-                        .score3_1(score3_1)
-                        .score3_2(score3_2)
+                        .score1_2(score1_2.get())
+                        .score2_1(score2_1.get())
+                        .score2_2(score2_2.get())
+                        .score3_1(score3_1.get())
+                        .score3_2(score3_2.get())
                         .build();
 
                 EntranceTestResult entranceTestResult = new EntranceTestResult(oneseo, entranceTestFactorsDetail, totalScore);
@@ -106,7 +103,7 @@ public class CalculateGradeService {
                 findEntranceTestFactorsDetail.updateGradeEntranceTestFactorsDetail(
                         generalSubjectsScore, artsPhysicalSubjectsScore, totalSubjectsScore,
                         attendanceScore, volunteerScore, totalNonSubjectsScore,
-                        score1_2, score2_1, score2_2, score3_1, score3_2
+                        score1_2.get(), score2_1.get(), score2_2.get(), score3_1.get(), score3_2.get()
                 );
 
                 findEntranceTestResult.modifyDocumentEvaluationScore(totalScore);
@@ -117,11 +114,11 @@ public class CalculateGradeService {
             }
 
             GeneralSubjectsScoreDetailResDto generalSubjectsScoreDetailResDto = GeneralSubjectsScoreDetailResDto.builder()
-                    .score1_2(score1_2)
-                    .score2_1(score2_1)
-                    .score2_2(score2_2)
-                    .score3_1(score3_1)
-                    .score3_2(score3_2)
+                    .score1_2(score1_2.get())
+                    .score2_1(score2_1.get())
+                    .score2_2(score2_2.get())
+                    .score3_1(score3_1.get())
+                    .score3_2(score3_2.get())
                     .build();
 
             validateArtPhysicalAchievement(graduationType, dto.artsPhysicalAchievement());
@@ -252,55 +249,55 @@ public class CalculateGradeService {
 
         switch (graduationType) {
             case CANDIDATE -> {
-                score1_2 = calcGeneralSubjectsScore(
+                score1_2.set(calcGeneralSubjectsScore(
                         dto.achievement1_2(), BigDecimal.valueOf(
                                 (liberalSystem.equals("자유학년제") || freeSemester.equals("1-2") || freeSemester.equals("1-1")) ? 0 : 54)
-                );
-                score2_1 = calcGeneralSubjectsScore(
+                ));
+                score2_1.set(calcGeneralSubjectsScore(
                         dto.achievement2_1(), BigDecimal.valueOf(
                                 freeSemester.equals("2-1") ? 0 : 54)
-                );
-                score2_2 = calcGeneralSubjectsScore(
+                ));
+                score2_2.set(calcGeneralSubjectsScore(
                         dto.achievement2_2(), BigDecimal.valueOf(
                                 freeSemester.equals("2-2") ? 0 :
                                         (freeSemester.equals("3-1") ? 72 : 54))
-                );
-                score3_1 = calcGeneralSubjectsScore(
+                ));
+                score3_1.set(calcGeneralSubjectsScore(
                         dto.achievement3_1(), BigDecimal.valueOf(
                                 (freeSemester.equals("3-1") ? 0 : 72))
-                );
+                ));
             }
             case GRADUATE -> {
-                score1_2 = calcGeneralSubjectsScore(
+                score1_2.set(calcGeneralSubjectsScore(
                         dto.achievement1_2(), BigDecimal.valueOf(
                                 (liberalSystem.equals("자유학년제") || freeSemester.equals("1-2")) ? 0 : 36)
-                );
-                score2_1 = calcGeneralSubjectsScore(
+                ));
+                score2_1.set(calcGeneralSubjectsScore(
                         dto.achievement2_1(), BigDecimal.valueOf(
                                 freeSemester.equals("2-1") ? 0 : 36)
-                );
-                score2_2 = calcGeneralSubjectsScore(
+                ));
+                score2_2.set(calcGeneralSubjectsScore(
                         dto.achievement2_2(), BigDecimal.valueOf(
                                 freeSemester.equals("2-2") ? 0 :
                                         (freeSemester.equals("3-1") || freeSemester.equals("3-2")) || freeSemester.equals("1-1") ? 54 : 36)
-                );
-                score3_1 = calcGeneralSubjectsScore(
+                ));
+                score3_1.set(calcGeneralSubjectsScore(
                         dto.achievement3_1(), BigDecimal.valueOf(
                                 freeSemester.equals("3-1") ? 0 : 54)
-                );
-                score3_2 = calcGeneralSubjectsScore(
+                ));
+                score3_2.set(calcGeneralSubjectsScore(
                         dto.achievement3_2(), BigDecimal.valueOf(
                                 (freeSemester.equals("3-2") ||  freeSemester.equals("1-1")) ? 0 : 54)
-                );
+                ));
             }
         }
 
         return Stream.of(
-                        score1_2,
-                        score2_1,
-                        score2_2,
-                        score3_1,
-                        score3_2)
+                        score1_2.get(),
+                        score2_1.get(),
+                        score2_2.get(),
+                        score3_1.get(),
+                        score3_2.get())
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(3, RoundingMode.HALF_UP);
     }
@@ -458,13 +455,5 @@ public class CalculateGradeService {
     private void validateVolunteerScore(List<BigDecimal> convertedVolunteerHours) {
         if (convertedVolunteerHours.size() != 3)
             throw new ExpectedException("봉사일수 개수가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
-    }
-
-    private void initScore() {
-        score1_2 = BigDecimal.ZERO;
-        score2_1 = BigDecimal.ZERO;
-        score2_2 = BigDecimal.ZERO;
-        score3_1 = BigDecimal.ZERO;
-        score3_2 = BigDecimal.ZERO;
     }
 }
