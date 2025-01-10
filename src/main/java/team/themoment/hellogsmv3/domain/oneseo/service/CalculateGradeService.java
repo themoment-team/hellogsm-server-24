@@ -141,6 +141,8 @@ public class CalculateGradeService {
                     .score3_2(assignIndividualArtsPhysicalScore(freeSemesterKey, "3-2", graduationType, score_1, score_2, score_3, score_4))
                     .build();
 
+            clearThreadLocalValues();
+
             return CalculatedScoreResDto.builder()
                     .generalSubjectsScore(generalSubjectsScore)
                     .artsPhysicalSubjectsScore(artsPhysicalSubjectsScore)
@@ -151,6 +153,8 @@ public class CalculateGradeService {
                     .artsPhysicalSubjectsScoreDetail(artsPhysicalSubjectsScoreDetailResDto)
                     .build();
         }
+
+        clearThreadLocalValues();
 
         return CalculatedScoreResDto.builder()
                 .generalSubjectsScore(generalSubjectsScore)
@@ -455,5 +459,12 @@ public class CalculateGradeService {
     private void validateVolunteerScore(List<BigDecimal> convertedVolunteerHours) {
         if (convertedVolunteerHours.size() != 3)
             throw new ExpectedException("봉사일수 개수가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
+    }
+
+    private void clearThreadLocalValues() {
+        score2_1.remove();
+        score2_2.remove();
+        score3_1.remove();
+        score3_2.remove();
     }
 }
