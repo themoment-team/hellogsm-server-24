@@ -34,7 +34,9 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run : ./gradlew clean build
+        # 배포 산출물은 server 의 boot jar 하나뿐이고, 전체 그래프 검증은 같은 커밋에서 CI 가 맡는다.
+        # server 는 persistence 만 의존하므로 entrance 모듈은 빌드 대상에서 빠진다.
+        run: ./gradlew :server:build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
