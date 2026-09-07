@@ -77,6 +77,9 @@ public class OneseoTempStorageService {
 
     private MiddleSchoolAchievementResDto buildMiddleSchoolAchievementResDto(OneseoTempReqDto reqDto) {
         MiddleSchoolAchievementReqDto middleSchoolAchievement = reqDto.middleSchoolAchievement();
+        if (middleSchoolAchievement == null) {
+            return MiddleSchoolAchievementResDto.builder().build();
+        }
 
         List<Integer> absentDays = middleSchoolAchievement.absentDays();
         List<Integer> attendanceDays = middleSchoolAchievement.attendanceDays();
