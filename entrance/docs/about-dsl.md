@@ -10,7 +10,7 @@ entrance-batch    DB 러너, go-hellogsm 대체
 entrance-lambda   모의 성적 계산 API, go-hellogsm-score-calculator 대체
 ```
 
-- 개발 규칙: [`.claude/rules/entrance.md`](../../.claude/rules/entrance.md) · 아키텍처 문서: [`docs/entrance/`](detailed/README.md)
+- 개발 규칙: [`.claude/skills/project-rules/references/entrance.md`](../../.claude/skills/project-rules/references/entrance.md) · 아키텍처 문서: [`docs/entrance/`](detailed/README.md)
 
 ## 빠른 시작
 

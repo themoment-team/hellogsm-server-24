@@ -218,5 +218,5 @@ java -jar entrance/entrance-batch/build/libs/entrance-batch-*.jar --job=<job> [�
 | [`docs/introduce.md`](introduce.md) | entrance 엔진 전체 소개, DSL 개념, 아키텍처 |
 | [`docs/entrance/local-schema.sql`](detailed/local-schema.sql) | 로컬 DB 스키마 DDL 스냅샷(1.2에서 적용하는 파일) |
 | [`docs/entrance/batch.md`](detailed/batch.md) | `entrance-batch` 잡별 상세 동작, DB↔엔진 매핑 |
-| [`.claude/rules/entrance.md`](../../.claude/rules/entrance.md) | 개발 규칙 (DSL 설계 원칙, BigDecimal 정책, plan 파일 절차) |
+| [`.claude/skills/project-rules/references/entrance.md`](../../.claude/skills/project-rules/references/entrance.md) | 개발 규칙 (DSL 설계 원칙, BigDecimal 정책, plan 파일 절차) |
 | [`.agents/skills/migration-guide`](../../.agents/skills/migration-guide/SKILL.md) | 엔티티 컬럼 추가/삭제 시 DDL 반영 절차 |

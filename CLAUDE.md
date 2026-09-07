@@ -30,11 +30,7 @@ Gradle multi-module monorepo. The core is a Spring Boot 4 / Java 25 REST API ser
 
 **Hard rule carried over from the migration:** `entrance-dsl`/`entrance-plans`/`entrance-engine` never declare `server` or `persistence` as a dependency — this keeps "the engine doesn't know about the DB" enforced at compile time. Only `entrance-batch` is allowed to depend on `persistence`; `entrance-lambda` never depends on `server` or `persistence` either.
 
-For anything inside `entrance/`, read [`.claude/rules/entrance.md`](./.claude/rules/entrance.md) first — its conventions (Kotlin DSL design principles, `BigDecimal`-only scoring, Korean-backtick `kotlin.test` naming, plan-file-per-year policy) are **module-specific and differ from** the Java/Spring rules below. Usage guide: [`entrance/README.md`](entrance/docs/about-dsl.md). Architecture docs: [`docs/entrance/`](entrance/docs/detailed/README.md).
-
-## Rules Files
-
-Full rule specifications live in `.claude/rules/` — read the files there for detailed rules on coding style, logging, exception handling, testing, commit conventions, and API conventions. **These rules apply to the Java/Spring modules (`server`, `persistence`) only** — Kotlin `entrance-*` modules follow [`.claude/rules/entrance.md`](./.claude/rules/entrance.md) instead.
+`entrance/` conventions (Kotlin DSL design principles, `BigDecimal`-only scoring, Korean-backtick `kotlin.test` naming, plan-file-per-year policy) are **module-specific and differ from** the Java/Spring ones. Usage guide: [`entrance/README.md`](entrance/docs/about-dsl.md). Architecture docs: [`docs/entrance/`](entrance/docs/detailed/README.md).
 
 ## Development Commands
 
@@ -51,7 +47,7 @@ Full rule specifications live in `.claude/rules/` — read the files there for d
 # Run a specific server test class
 ./gradlew :server:test --tests "team.themoment.hellogsmv3.domain.member.service.CreateMemberServiceTest"
 
-# Run entrance engine tests (see .claude/rules/entrance.md for module-scoped commands)
+# Run entrance engine tests
 ./gradlew :entrance-engine:test
 
 # Format code

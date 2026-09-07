@@ -280,4 +280,4 @@ export BATCH_DB_PASSWORD=
 | [`docs/entrance/engine.md`](detailed/engine.md) | scoring·evaluation·assignment 엔진의 입출력 상세 |
 | [`docs/entrance/batch.md`](detailed/batch.md) | `entrance-batch` 잡 전체 목록, DB↔엔진 매핑 |
 | [`docs/entrance/glossary.md`](detailed/glossary.md) | 전형·학과·동점자 등 도메인 용어집 |
-| [`.claude/rules/entrance.md`](../../.claude/rules/entrance.md) | 개발 규칙 (DSL 설계 원칙, BigDecimal 정책, plan 파일 절차) |
+| [`.claude/skills/project-rules/references/entrance.md`](../../.claude/skills/project-rules/references/entrance.md) | 개발 규칙 (DSL 설계 원칙, BigDecimal 정책, plan 파일 절차) |
