@@ -30,7 +30,7 @@ Gradle multi-module monorepo. The core is a Spring Boot 4 / Java 25 REST API ser
 
 **Hard rule carried over from the migration:** `entrance-dsl`/`entrance-plans`/`entrance-engine` never declare `server` or `persistence` as a dependency — this keeps "the engine doesn't know about the DB" enforced at compile time. Only `entrance-batch` is allowed to depend on `persistence`; `entrance-lambda` never depends on `server` or `persistence` either.
 
-`entrance/` conventions (Kotlin DSL design principles, `BigDecimal`-only scoring, Korean-backtick `kotlin.test` naming, plan-file-per-year policy) are **module-specific and differ from** the Java/Spring ones. Usage guide: [`entrance/README.md`](entrance/docs/about-dsl.md). Architecture docs: [`docs/entrance/`](entrance/docs/detailed/README.md).
+`entrance/` conventions (Kotlin DSL design principles, `BigDecimal`-only scoring, Korean-backtick `kotlin.test` naming, plan-file-per-year policy) are **module-specific and differ from** the Java/Spring ones. Module guide: [`entrance/README.md`](entrance/README.md) — the usage and architecture docs it links to live in Notion.
 
 ## Development Commands
 
