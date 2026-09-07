@@ -35,7 +35,7 @@ public class OperationTestResultController {
 
     @Operation(summary = "1차 결과 발표", description = "1차 결과를 발표합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "1차 결과 발표 성공했습니다."),
-            @ApiResponse(responseCode = "400", description = "1차 결과 발표 기간 이전이거나 이미 발표된 상태입니다.", content = @Content())})
+            @ApiResponse(responseCode = "400", description = "아직 입력되지 않은 1차 시험 결과가 있거나 이미 발표된 상태입니다.", content = @Content())})
     @PostMapping("/operation/announce-first-test-result")
     public CommonApiResponse announceFirstTestResult() {
         announceFirstTestResultService.execute();
